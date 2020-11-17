@@ -12,7 +12,7 @@
     // "esModuleInterop": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
+      "@": ["./*"],
       "@config": ["./config"],
       "@lib": ["./lib"],
       "@middlewares": ["./middlewares"],
