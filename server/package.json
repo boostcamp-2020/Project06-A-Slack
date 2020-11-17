@@ -4,18 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "cross-env MODE=dev nodemon --exec ts-node ./src/app.ts",
+    "dev2": "cross-env MODE=dev tsc-watch --onSuccess \" node dist/app.js\" ",
     "start": "pm2 start ./dist/app.js"
   },
   "_moduleAliases": {
-    "@": ".",
-    "@config": "./config",
-    "@lib": "./lib",
-    "@middlewares": "./middlewares",
-    "@models": "./models",
-    "@routes": "./routes",
-    "@services": "./services",
-    "@controllers": "./controllers",
-    "@types": "./types"
+    "@": "./dist",
+    "@config": "./dist/config",
+    "@lib": "./dist/lib",
+    "@middlewares": "./dist/middlewares",
+    "@models": "./dist/models",
+    "@routes": "./dist/routes",
+    "@services": "./dist/services",
+    "@controllers": "./dist/controllers",
+    "@types": "./dist/types"
   },
   "dependencies": {
     "@types/express-mysql-session": "^2.1.2",
