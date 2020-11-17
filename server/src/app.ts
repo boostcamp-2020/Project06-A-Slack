@@ -6,7 +6,6 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as createError from 'http-errors';
 import * as cors from 'cors';
-import pool from './lib/db';
 import { Error } from './types/index';
 
 const app = express();

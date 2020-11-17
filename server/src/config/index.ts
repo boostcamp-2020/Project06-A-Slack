@@ -4,11 +4,11 @@ import * as expressMySqlSession from 'express-mysql-session';
 const MySQLStore = expressMySqlSession(session);
 
 interface DB {
-  host: string;
-  user: string;
-  password: string;
-  port: number;
-  database: string;
+  host: string | undefined;
+  user: string | undefined;
+  password: string | undefined;
+  port: number | undefined;
+  database: string | undefined;
   connectionLimit: number;
   dateStrings: boolean | ('TIMESTAMP' | 'DATETIME' | 'DATE')[] | undefined;
   multipleStatements: boolean;
@@ -16,7 +16,7 @@ interface DB {
 
 interface Session {
   HttpOnly: boolean;
-  secret: string;
+  secret: string | undefined;
   resave: boolean;
   saveUninitialized: boolean;
   store: any;
@@ -31,28 +31,28 @@ interface Config {
 
 const config: Config = {
   devDB: {
-    host: process.env.DB_DEV_HOST!,
-    user: process.env.DB_DEV_USER!,
-    password: process.env.DB_DEV_PASS!,
+    host: process.env.DB_DEV_HOST,
+    user: process.env.DB_DEV_USER,
+    password: process.env.DB_DEV_PASS,
     port: Number(process.env.DB_DEV_PORT),
-    database: process.env.DB_DEV_NAME!,
+    database: process.env.DB_DEV_NAME,
     connectionLimit: 20,
     dateStrings: ['DATE'],
     multipleStatements: true,
   },
   DB: {
-    host: process.env.DB_HOST!,
-    user: process.env.DB_USER!,
-    password: process.env.DB_PASS!,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
     port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME!,
+    database: process.env.DB_NAME,
     connectionLimit: 20,
     dateStrings: ['DATE'],
     multipleStatements: true,
   },
   devSession: {
     HttpOnly: true,
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: new MySQLStore({
@@ -67,7 +67,7 @@ const config: Config = {
   },
   session: {
     HttpOnly: true,
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     store: new MySQLStore({

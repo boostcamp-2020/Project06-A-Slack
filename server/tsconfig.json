@@ -9,6 +9,7 @@
     "sourceMap": true,
     "rootDir": "./src",
     "outDir": "./dist",
+    "module": "CommonJS",
     // "esModuleInterop": true,
     "baseUrl": "./src",
     "paths": {
@@ -20,7 +21,6 @@
       "@routes/*": ["./routes/*"],
       "@services/*": ["./services/*"],
       "@controllers/*": ["./controllers/*"],
-      "@types/*": ["./types/*"]
     },
   },
   "include": ["./src/**/*"],
