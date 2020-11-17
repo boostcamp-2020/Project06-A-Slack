@@ -8,7 +8,20 @@
     "strict": true,
     "sourceMap": true,
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    // "esModuleInterop": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@config": ["./config"],
+      "@lib": ["./lib"],
+      "@middlewares": ["./middlewares"],
+      "@models": ["./models"],
+      "@routes": ["./routes"],
+      "@services": ["./services"],
+      "@controllers": ["./controllers"],
+      "@types": ["./types"]
+    }
   },
   "include": ["./src/**/*"],
   "exculde": ["node_modules"]

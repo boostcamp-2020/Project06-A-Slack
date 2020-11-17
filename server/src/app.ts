@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import 'dotenv/config';
 import * as express from 'express';
 import * as path from 'path';
