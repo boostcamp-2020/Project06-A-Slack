@@ -15,7 +15,7 @@
     "@models": "./dist/models",
     "@routes": "./dist/routes",
     "@services": "./dist/services",
-    "@controllers": "./dist/controllers",
+    "@controllers": "./dist/controllers"
   },
   "dependencies": {
     "@types/express-mysql-session": "^2.1.2",
