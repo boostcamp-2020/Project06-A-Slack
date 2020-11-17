@@ -20,7 +20,6 @@
       "@routes/*": ["./routes/*"],
       "@services/*": ["./services/*"],
       "@controllers/*": ["./controllers/*"],
-      "@types/*": ["./types/*"]
     },
   },
   "include": ["./src/**/*"],
