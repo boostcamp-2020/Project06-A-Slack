@@ -1,5 +1,5 @@
 import * as session from 'express-session';
-import * as expressMySqlSession from 'express-mysql-session';
+import expressMySqlSession from 'express-mysql-session';
 
 const MySQLStore = expressMySqlSession(session);
 

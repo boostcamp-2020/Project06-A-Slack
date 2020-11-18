@@ -8,8 +8,10 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
+    "@types/socket.io-client": "^1.4.34",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "socket.io-client": "^3.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
