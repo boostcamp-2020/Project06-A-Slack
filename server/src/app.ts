@@ -6,16 +6,10 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import cors from 'cors';
-import pool from '@lib/db';
 import { Error } from '@lib/types';
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-(async () => {
-  const [rows] = await pool.query('select * from user;');
-  console.log(rows);
-})();
 
 app.use(cors());
 app.use(logger('dev'));
