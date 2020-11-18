@@ -5,8 +5,12 @@ import io from 'socket.io-client';
 const domain = 'http://localhost:3000';
 
 const App = () => {
-  const socket1 = io(`${domain}/channel1`);
-  const socket2 = io(`${domain}/channel2`);
+  const socket1 = io(`${domain}/channel1`, {
+    transports: ['websocket', 'polling'],
+  });
+  const socket2 = io(`${domain}/channel2`, {
+    transports: ['websocket', 'polling'],
+  });
 
   const handleSend1 = () => {
     console.log('ch1 clicked');
