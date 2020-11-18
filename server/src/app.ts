@@ -1,15 +1,21 @@
 import 'module-alias/register';
 import 'dotenv/config';
-import * as express from 'express';
-import * as path from 'path';
-import * as logger from 'morgan';
-import * as cookieParser from 'cookie-parser';
-import * as createError from 'http-errors';
-import * as cors from 'cors';
+import express, { Request, Response, NextFunction } from 'express';
+import path from 'path';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import createError from 'http-errors';
+import cors from 'cors';
+import pool from '@lib/db';
 import { Error } from './types/index';
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+(async () => {
+  const [rows] = await pool.query('select * from user;');
+  console.log(rows);
+})();
 
 app.use(cors());
 app.use(logger('dev'));
@@ -26,7 +32,7 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
