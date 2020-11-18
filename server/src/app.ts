@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import cors from 'cors';
 import pool from '@lib/db';
-import { Error } from './types/index';
+import { Error } from '@lib/types';
 
 const app = express();
 const port = process.env.PORT || 3000;
