@@ -28,7 +28,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "CommonJS",
+    "module": "ES6",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",
