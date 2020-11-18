@@ -13,7 +13,10 @@ import http from 'http';
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
-const io = new SocketIO.Server(server, { transports: ['websocket', 'polling'] });
+const io = new SocketIO.Server(server, {
+  transports: ['websocket', 'polling'],
+  cors: { origin: '*' },
+});
 
 const channel1 = io.of('/channel1');
 const channel2 = io.of('/channel2');
