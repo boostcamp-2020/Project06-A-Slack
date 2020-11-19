@@ -25,10 +25,28 @@ const channel2 = io.of('/channel2');
 
 channel1.on('connection', (socket: Socket) => {
   console.log('채널 1 연결된 socketID : ', socket.id);
-  io.to(socket.id).emit('my socket id', { socketId: socket.id });
+  io.to(socket.id).emit('my id', { socketId: socket.id });
+  socket.emit('my id', `id ${socket.id}`);
 
   socket.on('msg', (data) => {
     console.log('channel 1 메시지', data);
+    if (data.target) {
+      channel1.to(data.target).emit('msg', data.msg);
+      return;
+    }
+    channel1.emit('msg', data.msg);
+  });
+
+  socket.on('enter', (data) => {
+    console.log(`enter room ${data}`);
+    socket.join(data);
+    console.log(socket.rooms);
+  });
+
+  socket.on('leave', (data) => {
+    console.log(`leave room ${data}`);
+    socket.leave(data);
+    console.log(socket.rooms);
   });
 
   socket.on('disconnect', () => {

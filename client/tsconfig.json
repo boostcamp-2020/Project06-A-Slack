@@ -4,7 +4,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "ES6"
     ],
     "baseUrl": "./src",
     "paths": {
@@ -28,7 +28,6 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ES6",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",
