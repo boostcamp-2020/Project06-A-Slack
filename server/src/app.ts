@@ -17,6 +17,24 @@ const io = new SocketIO.Server(server, { transports: ['websocket', 'polling'] })
 
 const channel1 = io.of('/channel1');
 const channel2 = io.of('/channel2');
+const mainNamespace = io.of('/mainNamespace'); //namespace는 우리가 만들 서비스를 통째로 생각하면 된다. 안 정하면 '/'가 기본으로 들어간다.
+
+mainNamespace.on('connection', (socket: Socket) => {
+  //룸에 가입먼저 시켜, 가입 시키는 이벤트 이름은 joinRoom이야, 인자는 상황에 맞게 받어
+  socket.on('joinRoom', (msg) => {
+    console.log(`${msg.room}에 ${msg.name}이 가입함`);
+    socket.emit('joinRoom', msg);
+  });
+
+  //채팅을 주고 받는 이벤트는 chat message야, 인자는 상황에 맞게 받어
+  socket.on('chat message', (msg) => {
+    const commentList = [...msg.commentList, msg.comment];
+    mainNamespace.emit('chat message', commentList);
+  });
+
+  //연결을 끝는 이벤트는 기본으로 disconnect로 되어있다.
+  socket.on('disconnect', () => {});
+});
 
 channel1.on('connection', (socket: Socket) => {
   console.log('채널 1 연결된 socketID : ', socket.id);
