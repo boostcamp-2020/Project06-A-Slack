@@ -6,11 +6,11 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import cors from 'cors';
-import { Error } from '@lib/types';
+import { Error } from '@/types';
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
 import session from 'express-session';
-import config from '@config/index';
+import config from '@/config';
 
 const port = process.env.PORT || 3000;
 const app = express();
