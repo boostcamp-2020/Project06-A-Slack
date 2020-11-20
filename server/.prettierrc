@@ -7,6 +7,5 @@
   "semi": true,
   "useTabs": false,
   "arrowParens": "always", 
-  "endOfLine": "auto",
-  "parser": "typescript"
+  "endOfLine": "auto"
 }
