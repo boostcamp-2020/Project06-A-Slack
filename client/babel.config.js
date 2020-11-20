@@ -14,7 +14,10 @@ module.exports = (api) => {
     '@babel/preset-react',
     '@babel/preset-typescript',
   ];
-  const plugins = [];
+  const plugins = [
+    ['@babel/plugin-transform-async-to-generator'],
+    ['@babel/plugin-transform-runtime'],
+  ];
 
   return {
     plugins,

@@ -1,32 +1,13 @@
 import * as session from 'express-session';
 import expressMySqlSession from 'express-mysql-session';
+import { PoolOptions } from 'mysql2/promise';
 
 const MySQLStore = expressMySqlSession(session);
-
-interface DB {
-  host: string | undefined;
-  user: string | undefined;
-  password: string | undefined;
-  port: number | undefined;
-  database: string | undefined;
-  connectionLimit: number;
-  dateStrings: boolean | ('TIMESTAMP' | 'DATETIME' | 'DATE')[] | undefined;
-  multipleStatements: boolean;
-}
-
-interface Session {
-  HttpOnly: boolean;
-  secret: string | undefined;
-  resave: boolean;
-  saveUninitialized: boolean;
-  store: any;
-}
-
 interface Config {
-  devDB: DB;
-  DB: DB;
-  devSession: Session;
-  session: Session;
+  devDB: PoolOptions;
+  DB: PoolOptions;
+  devSession: session.SessionOptions;
+  session: session.SessionOptions;
 }
 
 const config: Config = {
@@ -51,8 +32,7 @@ const config: Config = {
     multipleStatements: true,
   },
   devSession: {
-    HttpOnly: true,
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: true,
     store: new MySQLStore({
@@ -66,8 +46,7 @@ const config: Config = {
     }),
   },
   session: {
-    HttpOnly: true,
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: true,
     store: new MySQLStore({
