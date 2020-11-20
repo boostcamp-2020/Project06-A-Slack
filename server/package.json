@@ -3,23 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env MODE=dev nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
-    "dev2": "cross-env MODE=dev tsc-watch --onSuccess \" node dist/app.js\" ",
+    "dev": "cross-env MODE=dev nodemon ./src/app.ts",
+    "clear": "tsc --build --clean",
+    "build": "tsc -p tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "pm2 start ./dist/app.js"
   },
   "_moduleAliases": {
-    "@": "./dist"
+    "@": "./src"
   },
   "dependencies": {
-    "@types/cookie-parser": "^1.4.2",
-    "@types/cors": "^2.8.8",
-    "@types/express": "^4.17.9",
-    "@types/express-mysql-session": "^2.1.2",
-    "@types/express-session": "^1.17.3",
-    "@types/http-errors": "^1.8.0",
-    "@types/morgan": "^1.9.2",
-    "@types/node": "^14.14.9",
-    "@types/socket.io": "^2.1.11",
     "axios": "^0.21.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -35,7 +27,16 @@
     "socket.io": "^3.0.2"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.8",
+    "@types/express": "^4.17.9",
+    "@types/express-mysql-session": "^2.1.2",
+    "@types/express-session": "^1.17.3",
+    "@types/http-errors": "^1.8.0",
     "@types/module-alias": "^2.0.0",
+    "@types/morgan": "^1.9.2",
+    "@types/node": "^14.14.9",
+    "@types/socket.io": "^2.1.11",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.8.1",
     "cross-env": "^7.0.2",
@@ -49,8 +50,10 @@
     "nodemon": "^2.0.6",
     "prettier": "^2.1.2",
     "ts-node": "^9.0.0",
+    "tsc-alias": "^1.1.5",
     "tsc-watch": "^4.2.9",
     "tsconfig-paths": "^3.9.0",
+    "tscpaths": "0.0.9",
     "typescript": "^4.0.5"
   }
 }
