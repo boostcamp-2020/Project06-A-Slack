@@ -17,8 +17,8 @@
     "resolveJsonModule": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-    },
+      "@/*": ["./*"]
+    }
   },
   "ts-node": {
     "transpileOnly": true

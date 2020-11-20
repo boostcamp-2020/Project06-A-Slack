@@ -11,6 +11,7 @@ import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
 import session from 'express-session';
 import config from '@/config';
+import apiRouter from '@/routes/api';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -75,9 +76,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session(process.env.MODE === 'dev' ? config.devSession : config.session));
 
-app.get('/', (req, res, next) => {
-  res.json({ page: 'index' });
-});
+app.use('/api', apiRouter);
 
 app.use((req, res, next) => {
   next(createError(404));
