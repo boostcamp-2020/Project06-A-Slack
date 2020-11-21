@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": true, 
     "target": "es5",
+    "lib": ["ES6"],
     "noImplicitAny": true,
     "strict": true,
     "sourceMap": true,
@@ -13,17 +14,11 @@
     "allowSyntheticDefaultImports":true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames":true,
+    "resolveJsonModule": true,
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@config/*": ["./config/*"],
-      "@lib/*": ["./lib/*"],
-      "@middlewares/*": ["./middlewares/*"],
-      "@models/*": ["./models/*"],
-      "@routes/*": ["./routes/*"],
-      "@services/*": ["./services/*"],
-      "@controllers/*": ["./controllers/*"],
-    },
+      "@/*": ["./*"]
+    }
   },
   "ts-node": {
     "transpileOnly": true

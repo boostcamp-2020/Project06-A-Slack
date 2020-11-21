@@ -1,24 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "ES6"
-    ],
+    "lib": ["dom", "dom.iterable", "ES6"],
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@components/*": ["./components/*"],
-      "@pages/*": ["./pages/*"],
-      "@services/*": ["./services/*"],
-      "@lib/*": ["./lib/*"],
-      "@store/*": ["./store/*"],
-      "@constants/*": ["./constants/*"],
-      "@api/*": ["./api/*"],
-      "@imgs/*": ["./imgs/*"],
-      "@styles/*": ["./styles/*"],
-      "@hoc/*": ["./hoc/*"],
+      "@/*": ["./*"]
     },
     "allowJs": true,
     "skipLibCheck": true,
@@ -32,7 +18,7 @@
     "resolveJsonModule": true,
     "jsx": "react",
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./dist"
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]

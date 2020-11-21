@@ -1,8 +1,14 @@
 import React from 'react';
 import io from 'socket.io-client';
-import { Header } from '@components/index';
+import { Header } from '@/components';
+import axios from 'axios';
 
 const domain = 'http://localhost:3000';
+
+(async () => {
+  const { data, status } = await axios.get(domain);
+  console.log(status);
+})();
 
 const socket1 = io(`${domain}/channel1`, {
   transports: ['websocket', 'polling'],
