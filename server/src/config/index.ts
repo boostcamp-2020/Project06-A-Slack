@@ -8,6 +8,7 @@ interface Config {
   DB: PoolOptions;
   devSession: session.SessionOptions;
   session: session.SessionOptions;
+  swaggerDefinition: any;
 }
 
 const config: Config = {
@@ -58,6 +59,27 @@ const config: Config = {
       checkExpirationInterval: 1000 * 60 * 15, // 만료된 세션 체크 간격 15분
       expiration: 1000 * 60 * 60, // 세션 만료시간 60분
     }),
+  },
+  swaggerDefinition: {
+    info: {
+      // API informations (required)
+      title: 'Project-06-Slack', // Title (required)
+      version: '1.0.0', // Version (required)
+      description: 'Slack API', // Description (optional)
+    },
+    host: 'localhost:3000', // Host (optional)
+    basePath: '/', // Base path (optional)
+    consumes: 'application/json',
+    produces: 'application/json',
+    // TODO: 보안 옵션 설정하기
+    securityDefinitions: {
+      jwt: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+      },
+    },
+    security: [{ jwt: ['123'] }],
   },
 };
 

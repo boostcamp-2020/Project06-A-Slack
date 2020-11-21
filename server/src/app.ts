@@ -12,10 +12,22 @@ import http from 'http';
 import session from 'express-session';
 import config from '@/config';
 import apiRouter from '@/routes/api';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
 
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
+
+const options = {
+  // Import swaggerDefinitions
+  swaggerDefinition: config.swaggerDefinition,
+  // Path to the API docs
+  apis: ['./src/routes/**/*.yaml'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
 const io = new SocketIO.Server(server, {
   transports: ['websocket', 'polling'],
   cors: { origin: '*' },
@@ -68,6 +80,7 @@ channel2.on('connection', (socket: Socket) => {
   });
 });
 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
