@@ -1,12 +1,10 @@
 import express from 'express';
 import * as usersController from './users.controller';
+import userIdRouter from './[userId]';
 
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 
 router.get('/', usersController.getUsers);
-router.get('/:userId', usersController.getUser);
-router.post('/:userId', usersController.modifyUser);
-router.delete('/:userId', usersController.deleteUser);
-router.post('/:userId/last-channel', usersController.modifyLastChannel);
+router.use('/:userId', userIdRouter);
 
 export default router;
