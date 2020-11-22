@@ -6,23 +6,21 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import cors from 'cors';
-import { Error } from '@/types';
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
 import session from 'express-session';
-import config from '@/config';
-import apiRouter from '@/routes/api';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
+import { Error } from '@/types';
+import config from '@/config';
+import apiRouter from '@/routes/api';
 
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
 const options = {
-  // Import swaggerDefinitions
   swaggerDefinition: config.swaggerDefinition,
-  // Path to the API docs
   apis: ['./src/routes/**/*.yaml'],
 };
 

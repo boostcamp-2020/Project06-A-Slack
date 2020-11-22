@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verify } from '@/utils/utils';
+import { verifyRequestData } from '@/utils/utils';
 
 /**
  * GET /api/users/:userId
@@ -16,7 +16,7 @@ export const modifyUser = (req: Request, res: Response, next: NextFunction): voi
   const { userId } = req.params;
   // TODO : 아래 코드에서 수정할 유저 값 undefined인지 검증
   // const {} = req.body;
-  // if(verify[]) {}
+  // if(verifyRequestData[]) {}
   res.status(201).end();
 };
 
@@ -33,7 +33,7 @@ export const deleteUser = (req: Request, res: Response, next: NextFunction): voi
  */
 export const modifyLastChannel = (req: Request, res: Response, next: NextFunction): void => {
   const { channelId } = req.body;
-  if (verify([channelId])) {
+  if (verifyRequestData([channelId])) {
     res.status(200).end();
     return;
   }

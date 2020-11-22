@@ -1,1 +1,1 @@
-export const verify = (arr: any[]): boolean => arr.every((e) => e);
+export const verifyRequestData = (arr: any[]): boolean => arr.every((e) => e);
