@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
-import formidable, { IncomingForm } from 'formidable';
+import { IncomingForm } from 'formidable';
 
 /**
  * POST /api/auth/login
@@ -25,14 +25,30 @@ export const logout = (req: Request, res: Response, next: NextFunction) => {
  * POST /api/auth/signup
  */
 export const signup = (req: Request, res: Response, next: NextFunction) => {
-  // TODO : formidable 적용해서 form-data로 받기
-  res.status(201).end();
+  const form = new IncomingForm();
+  form.uploadDir = './src/public/imgs/';
+  form.keepExtensions = true;
+  form.multiples = true;
 
-  // const { email, pw, image } = req.body;
-  // console.log(email, pw, image);
-  // if (verifyRequestData([email, pw])) {
-  //   res.status(200).end();
-  //   return;
-  // }
-  // res.status(400).json({ message: '필수 값 누락' });
+  form.on('fileBegin', (name, file) => {
+    const imgSrc = `${Date.now()}_${file.name}`;
+    // eslint-disable-next-line no-param-reassign
+    file.path = `${form.uploadDir}${imgSrc}`;
+  });
+
+  const port = req.app.get('port');
+  const prefix = `${req.protocol}://${req.hostname}${port !== 80 ? `:${port}` : ''}`;
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      next(err);
+      return;
+    }
+
+    const { email, pw } = fields;
+    if (verifyRequestData([email, pw])) {
+      res.json({ email, image: `${prefix}/temp_name` });
+      return;
+    }
+    res.status(400).json({ message: '필수 값 누락' });
+  });
 };

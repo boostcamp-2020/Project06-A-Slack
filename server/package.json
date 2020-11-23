@@ -12,6 +12,7 @@
     "@": "./src"
   },
   "dependencies": {
+    "@types/formidable": "^1.0.31",
     "axios": "^0.21.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -20,6 +21,7 @@
     "express": "^4.17.1",
     "express-mysql-session": "^2.1.4",
     "express-session": "^1.17.1",
+    "formidable": "^1.2.2",
     "http-errors": "^1.8.0",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",

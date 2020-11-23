@@ -1,5 +1,5 @@
 node_modules
 .env
-public/imgs/*
-!public/imgs/.keep
+src/public/imgs/*
+!src/public/imgs/.keep
 dist
