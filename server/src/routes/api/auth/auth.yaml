@@ -21,9 +21,12 @@ paths:
         200:
           description: 로그인 성공
         default:
-          description: 로그인 실패
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/auth/logout:
     post:
       x-swagger-router-controller: auth.controller
@@ -35,9 +38,12 @@ paths:
         200:
           description: 로그아웃 성공
         default:
-          description: 로그아웃 실패
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/auth/signup:
     post:
       x-swagger-router-controller: auth.controller
@@ -58,10 +64,17 @@ paths:
                 image:
                   type: string
                   format: binary
+                displayName:
+                  type: string
+                phoneNumber:
+                  type: string
+                  nullable: true
       responses:
         201:
           description: 회원가입 성공
         default:
-          description: 회원가입 실패
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

@@ -13,10 +13,16 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - description: 유저
@@ -43,8 +49,10 @@ paths:
           description: OK
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - description: 유저
@@ -60,5 +68,7 @@ paths:
           description: OK
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

@@ -1,17 +1,20 @@
-definitions:
-  User:
-    properties:
-      id:
-        type: number
-      email:
-        type: string
-      image:
-        type: string
-      displayName:
-        type: string
-      phoneNumber:
-        type: string
-        nullable: true
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+        image:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+        phoneNumber:
+          type: string
+          nullable: true
 
 paths:
   /api/users:
@@ -22,14 +25,15 @@ paths:
       responses:
         200:
           description: 유저 리스트를 반환
-          schema:
-            type: object
-            properties:
-              users:
+          content:
+            application/json:
+              schema:
                 type: array
                 items:
-                  $ref: '#/definitions/User'
+                  $ref: '#/components/schemas/User'
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

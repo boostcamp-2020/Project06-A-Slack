@@ -1,41 +1,45 @@
-definitions:
-  Thread:
-    properties:
-      id:
-        type: number
-      userId:
-        type: number
-      channelId:
-        type: number
-      content:
-        type: string
-      url:
-        type: string
-      emoji:
-        type: json
-        nullable: true
-      isPinned:
-        type: number
-        nullable: true
-      subThreads:
-        type: array
-        items:
-          id:
-            type: number
-          userId:
-            type: number
-          channelId:
-            type: number
-          content:
-            type: string
-          url:
-            type: string
-          emoji:
-            type: json
-            nullable: true
-          isPinned:
-            type: number
-            nullable: true
+components:
+  schemas:
+    Thread:
+      type: object
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        channelId:
+          type: number
+        content:
+          type: string
+        url:
+          type: string
+        emoji:
+          type: json
+          nullable: true
+        isPinned:
+          type: number
+          nullable: true
+        subThreads:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              userId:
+                type: number
+              channelId:
+                type: number
+              content:
+                type: string
+              url:
+                type: string
+              emoji:
+                type: json
+                nullable: true
+              isPinned:
+                type: number
+                nullable: true
 
 paths:
   /api/threads/:
@@ -69,8 +73,10 @@ paths:
           description: OK
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /api/threads/channels/{channelId}:
     get:
@@ -88,14 +94,15 @@ paths:
       responses:
         200:
           description: OK
-          schema:
-            type: object
-            properties:
-              thread:
+          content:
+            application/json:
+              schema:
                 type: array
                 items:
-                  $ref: '#/definitions/Thread'
+                  $ref: '#/components/schemas/Thread'
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
