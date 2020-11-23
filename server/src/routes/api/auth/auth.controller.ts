@@ -70,10 +70,10 @@ export const signup = (req: Request, res: Response, next: NextFunction): void =>
 
     const { email, pw } = fields;
     const { image } = files;
-    console.log(image);
+    console.log(image.name);
     if (verifyRequestData([email, pw])) {
-      // TODO : 이미지 이름 처리하는 것 구현
-      res.json({ email, image: `${prefix}/temp_name` });
+      // TODO : DB에 회원정보 저장
+      res.json({ email, image: `${prefix}/${image.name}` });
       return;
     }
     res.status(400).json({ message: '필수 값 누락' });
