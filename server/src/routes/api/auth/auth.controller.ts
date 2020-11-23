@@ -50,7 +50,7 @@ export const logout = (req: Request, res: Response): void => {
  */
 export const signup = (req: Request, res: Response, next: NextFunction): void => {
   const form = new IncomingForm();
-  form.uploadDir = './src/public/imgs/';
+  form.uploadDir = './src/public/imgs/profile/';
   form.keepExtensions = true;
   form.multiples = true;
 
