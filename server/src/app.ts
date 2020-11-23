@@ -78,6 +78,7 @@ channel2.on('connection', (socket: Socket) => {
   });
 });
 
+app.set('port', port);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(cors());
 app.use(logger('dev'));
@@ -85,7 +86,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session(process.env.MODE === 'dev' ? config.devSession : config.session));
 
 app.use('/api', apiRouter);
 
