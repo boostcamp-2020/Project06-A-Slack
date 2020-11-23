@@ -94,9 +94,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  console.error(err);
   res.status(err.status || 500);
   res.json({ err });
 });
