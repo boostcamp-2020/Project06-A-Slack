@@ -6,19 +6,6 @@ paths:
         - description: 인증
       summary: 로그인
       operationId: login
-      # parameters:
-      #   - in: body
-      #     name: body
-      #     schema:
-      #       type: object
-      #       required:
-      #         - email
-      #         - pw
-      #       properties:
-      #         email:
-      #           type: string
-      #         pw:
-      #           type: string
       requestBody:
         content:
           application/json:

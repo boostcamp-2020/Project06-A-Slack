@@ -7,7 +7,6 @@ import formidable, { IncomingForm } from 'formidable';
  */
 export const login = (req: Request, res: Response, next: NextFunction) => {
   const { email, pw } = req.body;
-  console.log('??', email, pw);
   if (verifyRequestData([email, pw])) {
     res.status(200).end();
     return;
