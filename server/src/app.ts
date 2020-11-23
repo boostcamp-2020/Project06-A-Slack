@@ -6,16 +6,26 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import cors from 'cors';
-import { Error } from '@/types';
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
 import session from 'express-session';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJSDoc from 'swagger-jsdoc';
+import { Error } from '@/types';
 import config from '@/config';
 import apiRouter from '@/routes/api';
 
 const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
+
+const options = {
+  swaggerDefinition: config.swaggerDefinition,
+  apis: ['./src/routes/**/*.yaml'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
 const io = new SocketIO.Server(server, {
   transports: ['websocket', 'polling'],
   cors: { origin: '*' },
@@ -68,6 +78,7 @@ channel2.on('connection', (socket: Socket) => {
   });
 });
 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());

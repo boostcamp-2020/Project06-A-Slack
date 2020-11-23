@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "checkJs": true, 
+    "checkJs": true,
     "target": "es5",
     "lib": ["ES6"],
     "noImplicitAny": true,
@@ -11,17 +11,14 @@
     "outDir": "./dist",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports":true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames":true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"]
     }
-  },
-  "ts-node": {
-    "transpileOnly": true
   },
   "include": ["./src/**/*"],
   "exculde": ["node_modules"]

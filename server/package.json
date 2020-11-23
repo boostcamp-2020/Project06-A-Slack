@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env MODE=dev nodemon ./src/app.ts",
+    "dev": "cross-env MODE=dev nodemon -e yaml,ts,js,json ./src/app.ts",
     "clear": "tsc --build --clean",
     "build": "tsc -p tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "pm2 start ./dist/app.js"
@@ -24,7 +24,9 @@
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
-    "socket.io": "^3.0.2"
+    "socket.io": "^3.0.2",
+    "swagger-jsdoc": "^5.0.1",
+    "swagger-ui-express": "^4.1.5"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
@@ -37,6 +39,8 @@
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.9",
     "@types/socket.io": "^2.1.11",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@types/swagger-ui-express": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.8.1",
     "cross-env": "^7.0.2",

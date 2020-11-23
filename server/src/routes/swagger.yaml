@@ -1,0 +1,5 @@
+definitions:
+  ErrorResponse:
+    properties:
+      message:
+        type: string

@@ -10,16 +10,6 @@ module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@services': path.resolve(__dirname, './src/services'),
-      '@lib': path.resolve(__dirname, './src/lib'),
-      '@store': path.resolve(__dirname, './src/store'),
-      '@constants': path.resolve(__dirname, './src/constants'),
-      '@api': path.resolve(__dirname, './src/api'),
-      '@imgs': path.resolve(__dirname, './src/imgs'),
-      '@styles': path.resolve(__dirname, './src/styles'),
-      '@hoc': path.resolve(__dirname, './src/hoc'),
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
