@@ -4,6 +4,7 @@ import { PoolOptions } from 'mysql2/promise';
 
 const MySQLStore = expressMySqlSession(session);
 interface Config {
+  jwtSecret: string;
   devDB: PoolOptions;
   DB: PoolOptions;
   devSession: session.SessionOptions;
@@ -12,6 +13,7 @@ interface Config {
 }
 
 const config: Config = {
+  jwtSecret: process.env.JWT_SECRET as string,
   devDB: {
     host: process.env.DB_DEV_HOST,
     user: process.env.DB_DEV_USER,
@@ -63,7 +65,6 @@ const config: Config = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      // API informations (required)
       title: 'Project-06-Slack', // Title (required)
       version: '1.0.0', // Version (required)
       description: 'Slack API', // Description (optional)
@@ -72,15 +73,20 @@ const config: Config = {
     basePath: '/', // Base path (optional)
     consumes: 'application/json',
     produces: 'application/json',
-    // TODO: 보안 옵션 설정하기
-    securityDefinitions: {
-      jwt: {
-        type: 'apiKey',
-        name: 'Authorization',
-        in: 'header',
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
       },
     },
-    security: [{ jwt: ['123'] }],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
 };
 
