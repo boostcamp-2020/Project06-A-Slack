@@ -1,0 +1,67 @@
+paths:
+  /api/auth/login:
+    post:
+      x-swagger-router-controller: auth.controller
+      tags:
+        - description: 인증
+      summary: 로그인
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: true
+              properties:
+                email:
+                  type: string
+                pw:
+                  type: string
+      responses:
+        200:
+          description: 로그인 성공
+        default:
+          description: 로그인 실패
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /api/auth/logout:
+    post:
+      x-swagger-router-controller: auth.controller
+      tags:
+        - description: 인증
+      summary: 로그아웃
+      operationId: logout
+      responses:
+        200:
+          description: 로그아웃 성공
+        default:
+          description: 로그아웃 실패
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /api/auth/signup:
+    post:
+      x-swagger-router-controller: auth.controller
+      tags:
+        - description: 인증
+      summary: 회원가입
+      operationId: signup
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                pw:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: 회원가입 성공
+        default:
+          description: 회원가입 실패
+          schema:
+            $ref: '#/definitions/ErrorResponse'
