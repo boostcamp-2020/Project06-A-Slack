@@ -46,6 +46,7 @@ export const signup = (req: Request, res: Response, next: NextFunction) => {
 
     const { email, pw } = fields;
     if (verifyRequestData([email, pw])) {
+      // TODO : 이미지 이름 처리하는 것 구현
       res.json({ email, image: `${prefix}/temp_name` });
       return;
     }
