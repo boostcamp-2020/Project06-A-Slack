@@ -45,24 +45,25 @@ paths:
         - description: Thread
       summary: 쓰레드 추가
       operationId: createThread
-      parameters:
-        - in: body
-          name: thread
-          schema:
-            type: object
-            required:
-              - userId
-              - channelId
-              - content
-            properties:
-              userId:
-                type: number
-              channelId:
-                type: number
-              content:
-                type: string
-              parentId:
-                type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - channelId
+                - content
+              properties:
+                userId:
+                  type: number
+                channelId:
+                  type: number
+                content:
+                  type: string
+                parentId:
+                  type: number
       responses:
         201:
           description: OK
@@ -111,15 +112,17 @@ paths:
           schema:
             type: integer
           required: true
-        - in: body
-          name: thread
-          schema:
-            type: object
-            required:
-              - content
-            properties:
-              content:
-                type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
       responses:
         200:
           description: OK
