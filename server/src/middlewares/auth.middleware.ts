@@ -12,6 +12,7 @@ export const authenticated = async (req: Request, res: Response, next: NextFunct
       }
 
       if (decoded) {
+        res.locals.authToken = authToken;
         next();
       }
     });
