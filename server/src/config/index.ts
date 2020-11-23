@@ -61,6 +61,7 @@ const config: Config = {
     }),
   },
   swaggerDefinition: {
+    openapi: '3.0.0',
     info: {
       // API informations (required)
       title: 'Project-06-Slack', // Title (required)

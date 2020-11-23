@@ -16,16 +16,9 @@ definitions:
 paths:
   /api/users:
     get:
-      x-swagger-router-controller: index
       tags:
-        - description: 유저 리스트를 가져온다.
-      operationId: getUsers
-      # parameters:
-      #   - name: title
-      #     in: query
-      #     description: 변수 설명
-      #     required: false
-      #     type: string
+        - description: 유저
+      summary: 유저 리스트를 가져온다.
       responses:
         200:
           description: 유저 리스트를 반환
