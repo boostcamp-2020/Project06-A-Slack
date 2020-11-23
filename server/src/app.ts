@@ -8,7 +8,6 @@ import createError from 'http-errors';
 import cors from 'cors';
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
-import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Error } from '@/types';
