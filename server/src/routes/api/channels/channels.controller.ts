@@ -10,10 +10,13 @@ export const getChannels = async (req: Request, res: Response, next: NextFunctio
   res.json({ channels: [] });
 };
 
+/**
+ * POST /api/channels
+ */
 export const makeChannel = (req: Request, res: Response, next: NextFunction) => {
-  const [name, channelType, isPublic] = req.body;
+  const { name, channelType, isPublic } = req.body;
   if (verifyRequestData([name, channelType, isPublic])) {
-    res.status(201).end();
+    return res.status(201).end();
   }
   res.status(400).json({ message: '필수 값 누락' });
 };

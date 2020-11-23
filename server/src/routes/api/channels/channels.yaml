@@ -21,8 +21,8 @@ paths:
   /api/channels:
     get:
       tags:
-        - description: 채널 리스트를 가져온다.
-      operationId: getChannels
+        - description: Channels
+      summary: '채널 리스트를 반환'
       responses:
         200:
           description: 채널 리스트를 반환
@@ -33,6 +33,130 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Channel'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      tags:
+        - description: Channels
+      summary: '채널을 생성'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                channelType:
+                  type: number
+                isPublic:
+                  type: number
+                description:
+                  type: string
+      responses:
+        201:
+          description: 채널 생성 성공
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /api/channels/{channelId}:
+    get:
+      parameters:
+        - in: path
+          name: channelId
+          schema:
+            type: number
+          required: true
+      tags:
+        - description: Channels
+      summary: 채널을 한 개 반환
+      responses:
+        200:
+          description: 채널을 한 개 반환
+          schema:
+            type: object
+            properties:
+              channel:
+                $ref: '#/definitions/Channel'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      tags:
+        - description: Channels
+      summary: '채널 수정'
+      parameters:
+        - in: path
+          name: channelId
+          schema:
+            type: number
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+      responses:
+        200:
+          description: 채널 수정 성공
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      parameters:
+        - in: path
+          name: channelId
+          schema:
+            type: number
+          required: true
+      tags:
+        - description: Channels
+      summary: 채널 삭제
+      responses:
+        200:
+          description: 채널 삭제 성공
+          schema:
+            type: object
+            properties:
+              channel:
+                $ref: '#/definitions/Channel'
+        default:
+          description: Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /api/channels/{channelId}/invite:
+    post:
+      tags:
+        - description: Channels
+      summary: '유저를 초대'
+      parameters:
+        - in: path
+          name: channelId
+          schema:
+            type: number
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: number
+      responses:
+        200:
+          description: 채널 초대 성공
         default:
           description: Error
           schema:
