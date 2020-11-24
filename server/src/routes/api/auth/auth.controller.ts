@@ -48,9 +48,37 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 /**
  * POST /api/auth/logout
  */
-export const logout = (req: Request, res: Response): void => {
-  // TODO : authToken으로 로그아웃 처리
-  const authToken = req.headers.authorization?.split('Bearer ')[1];
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { accessToken, refreshToken } = req.body;
+  if (verifyRequestData([accessToken, refreshToken])) {
+    /* 로그아웃을 위해 access token을 블랙리스트에 추가 */
+    try {
+      await verifyToken(accessToken, TOKEN_TYPE.ACCESS);
+      await redisClient.set(accessToken, accessToken);
+      await redisClient.expire(accessToken, TIME.FIVE_MINUTE);
+    } catch (err) {
+      if (err instanceof JsonWebTokenError) {
+        console.log('유효하지 않은 access 토큰, pass');
+      } else {
+        next(err);
+        return;
+      }
+    }
+
+    /* 유저를 key으로 저장된 refresh token을 삭제 */
+    try {
+      const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
+      const { id } = decodedRefreshToken;
+      await redisClient.del(id);
+    } catch (err) {
+      if (err instanceof JsonWebTokenError) {
+        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
+        return;
+      }
+      next(err);
+      return;
+    }
+  }
   res.status(200).end();
 };
 
