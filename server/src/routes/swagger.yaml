@@ -5,3 +5,4 @@ components:
       properties:
         message:
           type: string
+          nullable: true
