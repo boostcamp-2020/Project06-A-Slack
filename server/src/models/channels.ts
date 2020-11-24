@@ -6,13 +6,3 @@ export const channelModel = {
     return pool.execute(sql, []);
   },
 };
-
-/**
- * channelType: string;
-  description: string;
-  id: number;
-  isPublic: number;
-  memberCount: number;
-  name: string;
-  ownerId: number;
- */
