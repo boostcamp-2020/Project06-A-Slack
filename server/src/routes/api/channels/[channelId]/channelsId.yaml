@@ -13,15 +13,16 @@ paths:
       responses:
         200:
           description: 채널을 한 개 반환
-          schema:
-            type: object
-            properties:
-              channel:
-                $ref: '#/definitions/Channel'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - description: Channels
@@ -46,8 +47,10 @@ paths:
           description: 채널 수정 성공
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       parameters:
         - in: path
@@ -61,15 +64,12 @@ paths:
       responses:
         200:
           description: 채널 삭제 성공
-          schema:
-            type: object
-            properties:
-              channel:
-                $ref: '#/definitions/Channel'
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/channels/{channelId}/invite:
     post:
       tags:
@@ -95,5 +95,7 @@ paths:
           description: 채널 초대 성공
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

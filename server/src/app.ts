@@ -8,7 +8,6 @@ import createError from 'http-errors';
 import cors from 'cors';
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
-import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Error } from '@/types';
@@ -94,9 +93,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  console.error(err);
   res.status(err.status || 500);
   res.json({ err });
 });

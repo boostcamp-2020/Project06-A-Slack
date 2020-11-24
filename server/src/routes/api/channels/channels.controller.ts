@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
-import pool from '@/utils/db';
+
 /**
  * GET /api/channels
  */
 export const getChannels = async (req: Request, res: Response, next: NextFunction) => {
-  const [rows] = await pool.query('select * from user');
-  console.log(rows);
   res.json({ channels: [] });
 };
 

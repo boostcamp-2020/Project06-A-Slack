@@ -1,5 +1,7 @@
 node_modules
 .env
-public/imgs/*
-!public/imgs/.keep
+src/public/imgs/etc/*
+src/public/imgs/profile/*
+!src/public/imgs/etc/.keep
+!src/public/imgs/profile/.keep
 dist

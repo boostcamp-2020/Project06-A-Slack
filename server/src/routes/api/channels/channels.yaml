@@ -1,46 +1,50 @@
-definitions:
-  Channel:
-    properties:
-      id:
-        type: number
-      ownerId:
-        type: number
-      name:
-        type: string
-      channelType:
-        type: number
-      isPublic:
-        type: number
-      memberCount:
-        type: number
-      description:
-        type: string
-        nullable: true
+components:
+  schemas:
+    Channel:
+      type: object
+      properties:
+        id:
+          type: number
+        ownerId:
+          type: number
+        name:
+          type: string
+        channelType:
+          type: number
+        isPublic:
+          type: number
+        memberCount:
+          type: number
+        description:
+          type: string
+          nullable: true
 
 paths:
   /api/channels:
     get:
       tags:
         - description: Channels
-      summary: '채널 리스트를 반환'
+      summary: 채널 리스트를 반환
       responses:
         200:
           description: 채널 리스트를 반환
-          schema:
-            type: object
-            properties:
-              channels:
+          content:
+            application/json:
+              schema:
                 type: array
                 items:
-                  $ref: '#/definitions/Channel'
+                  $ref: '#/components/schemas/Channel'
+
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - description: Channels
-      summary: '채널을 생성'
+      summary: 채널을 생성
       requestBody:
         required: true
         content:
@@ -61,5 +65,7 @@ paths:
           description: 채널 생성 성공
         default:
           description: Error
-          schema:
-            $ref: '#/definitions/ErrorResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
