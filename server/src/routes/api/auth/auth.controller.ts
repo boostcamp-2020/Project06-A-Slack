@@ -113,7 +113,7 @@ export const signup = (req: Request, res: Response, next: NextFunction): void =>
       res.json({ email, image: `${prefix}/${image.name}` });
       return;
     }
-    res.status(400).json({ message: '필수 값 누락' });
+    res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
   });
 };
 
