@@ -14,4 +14,5 @@ export const ERROR_MESSAGE = {
   WRONG_PW: '올바르지 않는 비밀번호',
   WRONG_USER: '올바르지 않는 유저 아이디',
   BLACKLIST_TOKEN: '블랙리스트 토큰',
+  LOGIN_REQUIRED: '로그인 필요',
 };
