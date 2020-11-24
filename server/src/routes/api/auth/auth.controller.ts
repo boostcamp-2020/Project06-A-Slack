@@ -116,3 +116,46 @@ export const signup = (req: Request, res: Response, next: NextFunction): void =>
     res.status(400).json({ message: '필수 값 누락' });
   });
 };
+
+/**
+ * POST /api/auth/token/refresh
+ */
+export const refreshAuthToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { accessToken, refreshToken } = req.body;
+  if (verifyRequestData([accessToken, refreshToken])) {
+    try {
+      /* 기존 access token은 블랙리스트에 추가 */
+      await redisClient.set(accessToken, accessToken);
+      await redisClient.expire(accessToken, TIME.FIVE_MINUTE);
+
+      const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
+      const { id, email } = decodedRefreshToken;
+      const claims = { id, email };
+
+      /* 유저 refresh 토큰 일치 여부 확인 */
+      const result = await redisClient.get(id);
+      if (result !== refreshToken) {
+        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
+        return;
+      }
+
+      /* refresh 검증되면 새로운 access 토큰 생성 */
+      const newAccessToken = jwt.sign(claims, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
+
+      res.json({ accessToken: newAccessToken });
+      return;
+    } catch (err) {
+      if (err instanceof JsonWebTokenError) {
+        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
+        return;
+      }
+      next(err);
+      return;
+    }
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
