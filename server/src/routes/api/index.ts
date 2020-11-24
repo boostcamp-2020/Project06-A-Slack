@@ -8,7 +8,8 @@ import threadRouter from './threads';
 const router = express.Router();
 
 router.use('/users', authenticated, userRouter);
-router.use('/channels', authenticated, channelRouter);
+// router.use('/channels', authenticated, channelRouter);
+router.use('/channels', channelRouter);
 router.use('/auth', authRouter);
 router.use('/threads', authenticated, threadRouter);
 
