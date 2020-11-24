@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   devtool: 'source-map',
@@ -85,6 +86,9 @@ module.exports = {
       },
     }),
     new CleanWebpackPlugin(),
+    new Dotenv({
+      path: process.env.MODE === 'dev' ? '.env' : '.env.prod',
+    }),
   ],
   optimization: {
     splitChunks: {
