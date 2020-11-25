@@ -7,7 +7,9 @@ function* login({ email, pw }: UserLoginPayload) {
     const { data, status } = yield call(authService.login, { email, pw });
     const { accessToken, refreshToken } = data;
     if (status === 200) {
-      yield put(AUTH_ACTIONS.loginSuccess({ accessToken, refreshToken }));
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      yield put(AUTH_ACTIONS.loginSuccess());
     }
   } catch (err) {
     yield put(AUTH_ACTIONS.loginFailure());
@@ -22,6 +24,8 @@ function* logout() {
   try {
     const { status } = yield call(authService.logout);
     if (status === 200) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       yield put(AUTH_ACTIONS.logoutSuccess());
     }
   } catch (err) {
@@ -34,8 +38,10 @@ function* watchAuthFlow() {
     const {
       payload: { email, pw },
     } = yield take(AUTH_ACTIONS.loginRequest);
+
     const loginTask = yield fork(login, { email, pw });
     const action = yield take([AUTH_ACTIONS.logoutRequest, AUTH_ACTIONS.loginFailure]);
+
     if (action.type === AUTH_ACTIONS.logoutRequest().type) {
       yield cancel(loginTask);
       yield fork(logout);

@@ -32,11 +32,7 @@ const authSlice = createSlice({
     loginRequest(state, action: PayloadAction<UserLoginPayload>) {
       state.isLoggingIn = true;
     },
-    loginSuccess(state, { payload }: PayloadAction<AuthTokenPayload>) {
-      const { accessToken, refreshToken } = payload;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-
+    loginSuccess(state) {
       state.isLoggingIn = false;
       state.isLogin = true;
     },
@@ -44,12 +40,9 @@ const authSlice = createSlice({
       state.isLoggingIn = false;
       state.isLogin = false;
     },
-    loginCancelled(state) {},
+    loginCancelled() {},
     logoutRequest() {},
     logoutSuccess(state) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-
       state.isLogin = false;
     },
     logoutFailure() {},

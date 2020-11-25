@@ -6,7 +6,6 @@ import { channelModel } from '@/models';
  */
 export const getChannels = async (req: Request, res: Response, next: NextFunction) => {
   const [channelList] = await channelModel.getChannels();
-  console.log(channelList);
   res.json({ channelList });
 };
 
