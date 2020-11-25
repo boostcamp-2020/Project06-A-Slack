@@ -21,10 +21,15 @@ const ThreadListBox = () => {
   //   dispatch(loadChannelsRequest());
   // }, []);
 
+  const channel = {
+    id: 1,
+    name: 'slack-클론-구현팀',
+  };
+
   return (
     <StyledThreadListBox>
       <div>BoxTop</div>
-      <ThreadListHeader />
+      <ThreadListHeader channel={channel} />
       <ThreadList />
       <ThreadInputBox />
     </StyledThreadListBox>

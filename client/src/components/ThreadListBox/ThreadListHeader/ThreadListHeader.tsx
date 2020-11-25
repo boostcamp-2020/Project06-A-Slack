@@ -1,7 +1,14 @@
 import React from 'react';
 
-const ThreadListHeader = () => {
-  return <header>ThreadListHeader</header>;
+interface Channel {
+  channel: {
+    id: number;
+    name: string;
+  };
+}
+
+const ThreadListHeader = ({ channel }: Channel) => {
+  return <div>{channel.name}</div>;
 };
 
 export default ThreadListHeader;
