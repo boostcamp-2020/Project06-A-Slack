@@ -49,23 +49,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
  * POST /api/auth/logout
  */
 export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { accessToken, refreshToken } = req.body;
-  if (verifyRequestData([accessToken, refreshToken])) {
-    /* 로그아웃을 위해 access token을 블랙리스트에 추가 */
-    try {
-      await verifyToken(accessToken, TOKEN_TYPE.ACCESS);
-      await redisClient.set(accessToken, accessToken);
-      await redisClient.expire(accessToken, TIME.FIVE_MINUTE);
-    } catch (err) {
-      if (err instanceof JsonWebTokenError) {
-        console.log('유효하지 않은 access 토큰, pass');
-      } else {
-        next(err);
-        return;
-      }
-    }
-
-    /* 유저를 key으로 저장된 refresh token을 삭제 */
+  const { refreshToken } = req.body;
+  if (verifyRequestData([refreshToken])) {
+    /* 유저id key 값으로 저장된 refresh token을 삭제 */
     try {
       const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
       const { id } = decodedRefreshToken;
@@ -125,13 +111,9 @@ export const refreshAuthToken = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const { accessToken, refreshToken } = req.body;
-  if (verifyRequestData([accessToken, refreshToken])) {
+  const { refreshToken } = req.body;
+  if (verifyRequestData([refreshToken])) {
     try {
-      /* 기존 access token은 블랙리스트에 추가 */
-      await redisClient.set(accessToken, accessToken);
-      await redisClient.expire(accessToken, TIME.FIVE_MINUTE);
-
       const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
       const { id, email } = decodedRefreshToken;
       const claims = { id, email };
