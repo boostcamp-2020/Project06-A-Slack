@@ -20,16 +20,16 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         const match = await bcrypt.compare(pw, user.pw);
         if (match) {
           // 비번 일치 할 때
-          const claims = { id: user.id, email: user.email };
-          const accessToken = jwt.sign(claims, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
-          const refreshToken = jwt.sign(claims, config.jwtRefreshSecret, {
+          const { pw: userPw, ...userInfo } = user;
+          const accessToken = jwt.sign(userInfo, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
+          const refreshToken = jwt.sign(userInfo, config.jwtRefreshSecret, {
             expiresIn: TIME.TWO_MONTH,
           });
           // 해당 유저의 refresh token 설정
           await redisClient.set(user.id, refreshToken);
           await redisClient.expire(user.id, TIME.TWO_MONTH);
 
-          res.json({ accessToken, refreshToken });
+          res.json({ accessToken, refreshToken, user: userInfo });
           return;
         }
         res.status(401).json({ message: ERROR_MESSAGE.WRONG_PW });
@@ -114,12 +114,10 @@ export const refreshAuthToken = async (
   const { refreshToken } = req.body;
   if (verifyRequestData([refreshToken])) {
     try {
-      const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
-      const { id, email } = decodedRefreshToken;
-      const claims = { id, email };
+      const claims = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
 
       /* 유저 refresh 토큰 일치 여부 확인 */
-      const result = await redisClient.get(id);
+      const result = await redisClient.get(claims.id);
       if (result !== refreshToken) {
         res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
         return;
