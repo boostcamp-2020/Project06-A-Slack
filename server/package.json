@@ -12,9 +12,7 @@
     "@": "./src"
   },
   "dependencies": {
-    "@types/bcrypt": "^3.0.0",
-    "@types/formidable": "^1.0.31",
-    "@types/jsonwebtoken": "^8.5.0",
+    "async-redis": "^1.1.7",
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
@@ -35,12 +33,16 @@
     "swagger-ui-express": "^4.1.5"
   },
   "devDependencies": {
+    "@types/async-redis": "^1.1.1",
+    "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.9",
     "@types/express-mysql-session": "^2.1.2",
     "@types/express-session": "^1.17.3",
+    "@types/formidable": "^1.0.31",
     "@types/http-errors": "^1.8.0",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/module-alias": "^2.0.0",
     "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.9",

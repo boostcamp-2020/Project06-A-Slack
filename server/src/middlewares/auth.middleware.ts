@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '@/config';
+import { ERROR_MESSAGE } from '@/utils/constants';
 
 export const authenticated = async (
   req: Request,
@@ -11,7 +12,7 @@ export const authenticated = async (
   if (authToken) {
     jwt.verify(authToken, config.jwtSecret, (err, decoded) => {
       if (err) {
-        res.status(401).json({ message: '유효하지 않는 토큰입니다.' });
+        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
         return;
       }
 
@@ -22,5 +23,5 @@ export const authenticated = async (
     });
     return;
   }
-  res.status(401).json({ message: '로그인이 필요합니다.' });
+  res.status(401).json({ message: ERROR_MESSAGE.LOGIN_REQUIRED });
 };

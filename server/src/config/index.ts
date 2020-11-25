@@ -2,6 +2,7 @@ import { PoolOptions } from 'mysql2/promise';
 
 interface Config {
   jwtSecret: string;
+  jwtRefreshSecret: string;
   devDB: PoolOptions;
   DB: PoolOptions;
   swaggerDefinition: any;
@@ -9,6 +10,7 @@ interface Config {
 
 const config: Config = {
   jwtSecret: process.env.JWT_SECRET as string,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET as string,
   devDB: {
     host: process.env.DB_DEV_HOST,
     user: process.env.DB_DEV_USER,

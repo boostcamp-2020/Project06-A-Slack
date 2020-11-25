@@ -18,6 +18,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 const server = http.createServer(app);
 
+/* Swagger */
 const options = {
   swaggerDefinition: config.swaggerDefinition,
   apis: ['./src/routes/**/*.yaml'],
@@ -25,6 +26,7 @@ const options = {
 
 const swaggerSpec = swaggerJSDoc(options);
 
+/* Socket.IO */
 const io = new SocketIO.Server(server, {
   transports: ['websocket', 'polling'],
   cors: { origin: '*' },
@@ -94,8 +96,7 @@ app.use((req, res, next) => {
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
-  res.status(err.status || 500);
-  res.json({ err });
+  res.status(err.status || 500).end();
 });
 
 server.listen(port, () => {
