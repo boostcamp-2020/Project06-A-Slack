@@ -29,7 +29,6 @@ const channelsSlice = createSlice({
       state.show = 'axios 요청을 보냄';
     },
     loadChannelsSuccess(state, action) {
-      console.log(state, action.payload);
       action.payload.channelList.map((channel: any) => console.log(channel));
       const channelList = action.payload.channelList.map((channel: Channel) => ({
         id: channel.id,
