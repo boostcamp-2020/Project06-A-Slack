@@ -16,12 +16,11 @@ const authState: AuthState = {
   isLoggingIn: false,
 };
 
-export interface LoginAction {
+export interface UserLoginPayload {
   email: string;
   pw: string;
 }
-
-export interface LogoutAction {
+export interface AuthTokenPayload {
   accessToken: string;
   refreshToken: string;
 }
@@ -30,10 +29,14 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: authState,
   reducers: {
-    loginRequest(state, action: PayloadAction<LoginAction>) {
+    loginRequest(state, action: PayloadAction<UserLoginPayload>) {
       state.isLoggingIn = true;
     },
-    loginSuccess(state) {
+    loginSuccess(state, { payload }: PayloadAction<AuthTokenPayload>) {
+      const { accessToken, refreshToken } = payload;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
       state.isLoggingIn = false;
       state.isLogin = true;
     },
@@ -42,7 +45,14 @@ const authSlice = createSlice({
       state.isLogin = false;
     },
     loginCancelled(state) {},
-    logoutRequest(state, action: PayloadAction<LogoutAction>) {},
+    logoutRequest() {},
+    logoutSuccess(state) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+
+      state.isLogin = false;
+    },
+    logoutFailure() {},
   },
 });
 
@@ -50,6 +60,6 @@ const selectAuthState = (state: RootState) => state.auth;
 
 export const selectAuth = createSelector([selectAuthState], (auth) => auth);
 export const AUTH = authSlice.name;
-export const authActions = authSlice.actions;
+export const AUTH_ACTIONS = authSlice.actions;
 
 export default authSlice.reducer;

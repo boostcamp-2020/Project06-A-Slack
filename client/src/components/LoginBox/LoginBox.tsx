@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { selectAuth, authActions } from '@/store/modules/auth';
+import { selectAuth, AUTH_ACTIONS } from '@/store/modules/auth';
 
 const Input = styled.input`
   display: block;
@@ -27,7 +27,7 @@ const LoginBox = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(authActions.loginRequest({ email, pw }));
+    dispatch(AUTH_ACTIONS.loginRequest({ email, pw }));
   };
 
   return (
@@ -38,7 +38,7 @@ const LoginBox = () => {
         <div>
           <form onSubmit={handleSubmit}>
             <Input type="text" placeholder="email" onChange={handleChangeEmail} value={email} />
-            <Input type="text" placeholder="********" onChange={handleChangePw} value={pw} />
+            <Input type="password" placeholder="********" onChange={handleChangePw} value={pw} />
             <Input type="submit" value="login" />
           </form>
         </div>
