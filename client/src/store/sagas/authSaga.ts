@@ -1,15 +1,15 @@
-import { put, all, call, take, fork, cancel, cancelled } from 'redux-saga/effects';
-import { AUTH_ACTIONS, UserLoginPayload } from '@/store/modules/auth';
+import { put, all, call, take, fork, cancel, cancelled, takeEvery } from 'redux-saga/effects';
+import { AUTH, AUTH_ACTIONS, LoginRequestPayload } from '@/store/modules/auth';
 import { authService } from '@/services';
 
-function* login({ email, pw }: UserLoginPayload) {
+function* login({ email, pw }: LoginRequestPayload) {
   try {
     const { data, status } = yield call(authService.login, { email, pw });
-    const { accessToken, refreshToken } = data;
+    const { accessToken, refreshToken, user } = data;
     if (status === 200) {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      yield put(AUTH_ACTIONS.loginSuccess());
+      yield put(AUTH_ACTIONS.loginSuccess({ accessToken, refreshToken, user }));
     }
   } catch (err) {
     yield put(AUTH_ACTIONS.loginFailure());
@@ -33,7 +33,7 @@ function* logout() {
   }
 }
 
-function* watchAuthFlow() {
+function* loginFlow() {
   while (true) {
     const {
       payload: { email, pw },
@@ -44,11 +44,17 @@ function* watchAuthFlow() {
 
     if (action.type === AUTH_ACTIONS.logoutRequest().type) {
       yield cancel(loginTask);
-      yield fork(logout);
     }
   }
 }
 
+function* logoutFlow() {
+  while (true) {
+    yield take(AUTH_ACTIONS.logoutRequest);
+    yield fork(logout);
+  }
+}
+
 export default function* authSaga() {
-  yield all([watchAuthFlow()]);
+  yield all([fork(loginFlow), fork(logoutFlow)]);
 }
