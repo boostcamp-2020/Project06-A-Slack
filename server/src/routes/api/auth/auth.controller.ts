@@ -114,7 +114,8 @@ export const refreshAuthToken = async (
   const { refreshToken } = req.body;
   if (verifyRequestData([refreshToken])) {
     try {
-      const claims = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
+      const decoded = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
+      const { iat, exp, ...claims } = decoded;
 
       /* 유저 refresh 토큰 일치 여부 확인 */
       const result = await redisClient.get(claims.id);
