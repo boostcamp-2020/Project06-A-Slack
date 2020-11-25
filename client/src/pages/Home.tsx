@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuth, AUTH_ACTIONS } from '@/store/modules/auth';
+import { ChannelListBox } from '@/components';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -16,9 +17,12 @@ const Home = () => {
     <div>
       <p>Home page</p>
       {isLogin ? (
-        <button type="button" onClick={handleLogout}>
-          Logout
-        </button>
+        <>
+          <ChannelListBox />
+          <button type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </>
       ) : (
         <Link to="/login">
           <button type="button">Login Page</button>
