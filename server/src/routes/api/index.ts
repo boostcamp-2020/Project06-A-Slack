@@ -10,6 +10,6 @@ const router = express.Router();
 router.use('/users', authenticated, userRouter);
 router.use('/channels', authenticated, channelRouter);
 router.use('/auth', authRouter);
-router.use('/threads', authenticated, threadRouter);
+router.use('/threads', threadRouter);
 
 export default router;
