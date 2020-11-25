@@ -26,15 +26,19 @@ instance.interceptors.response.use(
     if (err.response.status === 401 && err.response.data?.message === ERROR_MESSAGE.INVALID_TOKEN) {
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
-        const { data, status } = await axios.post('/api/auth/token/refresh', { refreshToken });
-        if (status === 200) {
-          const { accessToken } = data;
-          localStorage.setItem('accessToken', accessToken);
-          return instance.request(originalReq);
-        }
-        if (status === 401) {
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
+        try {
+          const { data, status } = await axios.post('/api/auth/token/refresh', { refreshToken });
+          if (status === 200) {
+            const { accessToken } = data;
+            localStorage.setItem('accessToken', accessToken);
+            return instance.request(originalReq);
+          }
+        } catch (error) {
+          if (error?.response?.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = '/login';
+          }
         }
       }
     }
