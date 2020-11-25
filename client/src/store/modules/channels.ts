@@ -11,7 +11,7 @@ interface Channel {
 }
 
 interface ChannelState {
-  channelList: Array<Channel>;
+  channelList: Channel[];
   show: string;
 }
 
@@ -21,7 +21,7 @@ const initialState: ChannelState = {
 };
 
 const channelsSlice = createSlice({
-  name: 'channel',
+  name: 'channels',
   initialState,
   reducers: {
     loadChannelsRequest(state) {
@@ -29,29 +29,28 @@ const channelsSlice = createSlice({
       state.show = 'axios 요청을 보냄';
     },
     loadChannelsSuccess(state, action) {
-      action.payload.channelList.map((channel: any) => console.log(channel));
-      const channelList = action.payload.channelList.map((channel: Channel) => ({
-        id: channel.id,
-        ownerId: channel.ownerId,
-        name: channel.name,
-        channelType: channel.channelType,
-        isPublic: channel.isPublic,
-        memberCount: channel.memberCount,
-        description: channel.description,
-      }));
+      // const channelList = action.payload.map((channel: Channel) => ({
+      //   id: channel.id,
+      //   ownerId: channel.ownerId,
+      //   name: channel.name,
+      //   channelType: channel.channelType,
+      //   isPublic: channel.isPublic,
+      //   memberCount: channel.memberCount,
+      //   description: channel.description,
+      // }));
       // eslint-disable-next-line no-param-reassign
-      state.channelList = channelList;
+      state.channelList = action.payload.channelList;
       // eslint-disable-next-line no-param-reassign
       state.show = '채널 목록';
     },
     loadChannelsFalse(state, action) {
-      console.log(state, action);
       // eslint-disable-next-line no-param-reassign
       state.show = action.payload;
     },
   },
 });
 
+export const CHANNELS = channelsSlice.name;
 export const {
   loadChannelsRequest,
   loadChannelsSuccess,
