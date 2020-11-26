@@ -89,6 +89,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', apiRouter);
+app.all('*', (req, res) => {
+  if (process.env.MODE === 'dev') {
+    res.redirect(process.env.DEV_URL as string);
+    return;
+  }
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
 
 app.use((req, res, next) => {
   next(createError(404));
