@@ -10,8 +10,7 @@ export const authService = {
     return API.post('/api/auth/login', { email, pw });
   },
   logout() {
-    const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
-    return API.post('/api/auth/logout', { accessToken, refreshToken });
+    return API.post('/api/auth/logout', { refreshToken });
   },
 };

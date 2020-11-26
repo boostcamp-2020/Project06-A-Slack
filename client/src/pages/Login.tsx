@@ -1,13 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { LoginBox } from '@/components';
+import { useAuth } from '@/hooks';
 
 const Login = () => {
+  const { accessToken } = useAuth();
   return (
-    <div>
-      <Link to="/">Home</Link>
-      <LoginBox />
-    </div>
+    <>
+      {accessToken ? (
+        <Redirect to="/" />
+      ) : (
+        <>
+          <Link to="/">Home</Link>
+          <LoginBox />
+        </>
+      )}
+    </>
   );
 };
 

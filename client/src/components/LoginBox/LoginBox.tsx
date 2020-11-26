@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { selectAuth, AUTH_ACTIONS } from '@/store/modules/auth';
+import { useDispatch } from 'react-redux';
+import { loginRequest } from '@/store/modules/auth';
 
 const Input = styled.input`
   display: block;
   margin: 1rem;
 `;
 
+const Label = styled.label``;
+
 const LoginBox = () => {
   const dispatch = useDispatch();
-
-  const { user, isLogin } = useSelector(selectAuth);
 
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
@@ -27,22 +26,34 @@ const LoginBox = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(AUTH_ACTIONS.loginRequest({ email, pw }));
+    dispatch(loginRequest({ email, pw }));
   };
 
   return (
     <>
-      {isLogin ? (
-        <Redirect to="/" />
-      ) : (
-        <div>
-          <form onSubmit={handleSubmit}>
-            <Input type="text" placeholder="email" onChange={handleChangeEmail} value={email} />
-            <Input type="password" placeholder="********" onChange={handleChangePw} value={pw} />
-            <Input type="submit" value="login" />
-          </form>
-        </div>
-      )}
+      <form onSubmit={handleSubmit}>
+        <Label>
+          이메일 주소
+          <Input
+            type="text"
+            placeholder="email"
+            onChange={handleChangeEmail}
+            value={email}
+            required
+          />
+        </Label>
+        <Label>
+          비밀번호
+          <Input
+            type="password"
+            placeholder="********"
+            onChange={handleChangePw}
+            value={pw}
+            required
+          />
+          <Input type="submit" value="login" />
+        </Label>
+      </form>
     </>
   );
 };

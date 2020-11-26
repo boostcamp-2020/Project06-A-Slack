@@ -1,56 +1,56 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '@/types';
 import { RootState } from '@/store/modules';
+import { User } from '@/types';
 
 interface AuthState {
+  loading: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
   user: User | null;
-  isLogin: boolean;
-  isLoggingIn: boolean;
 }
 
 const authState: AuthState = {
+  loading: false,
+  accessToken: localStorage.getItem('accessToken'),
+  refreshToken: localStorage.getItem('refreshToken'),
   user: null,
-  isLogin: false,
-  isLoggingIn: false,
 };
 
-export interface UserLoginPayload {
+export interface LoginRequestPayload {
   email: string;
   pw: string;
 }
-export interface AuthTokenPayload {
+export interface LoginSuccessPayload {
   accessToken: string;
   refreshToken: string;
+  user: User;
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: authState,
   reducers: {
-    loginRequest(state, action: PayloadAction<UserLoginPayload>) {
-      state.isLoggingIn = true;
+    loginRequest(state, action: PayloadAction<LoginRequestPayload>) {
+      state.loading = true;
     },
-    loginSuccess(state, { payload }: PayloadAction<AuthTokenPayload>) {
-      const { accessToken, refreshToken } = payload;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+    loginSuccess(state, { payload }: PayloadAction<LoginSuccessPayload>) {
+      const { accessToken, refreshToken, user } = payload;
+      state.accessToken = accessToken;
+      state.refreshToken = refreshToken;
+      state.user = user;
 
-      state.isLoggingIn = false;
-      state.isLogin = true;
+      state.loading = false;
     },
     loginFailure(state) {
-      state.isLoggingIn = false;
-      state.isLogin = false;
+      state.loading = false;
     },
-    loginCancelled(state) {},
+    loginCancelled() {},
     logoutRequest() {},
     logoutSuccess(state) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-
-      state.isLogin = false;
+      state.accessToken = null;
+      state.refreshToken = null;
     },
     logoutFailure() {},
   },
@@ -58,8 +58,16 @@ const authSlice = createSlice({
 
 const selectAuthState = (state: RootState) => state.auth;
 
-export const selectAuth = createSelector([selectAuthState], (auth) => auth);
+export const selectAuth = createSelector(selectAuthState, (auth) => auth);
 export const AUTH = authSlice.name;
-export const AUTH_ACTIONS = authSlice.actions;
+export const {
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  loginCancelled,
+  logoutRequest,
+  logoutSuccess,
+  logoutFailure,
+} = authSlice.actions;
 
 export default authSlice.reducer;
