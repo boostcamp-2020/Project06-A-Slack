@@ -1,8 +1,5 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-import { RootState } from '@/store/modules';
-import React, { Component, ReactChild, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { onChangeCurrent } from '@/store/modules/channels';
 import styled from 'styled-components';
 import { useChannelList, useChannels } from '@/hooks/useChannels';
@@ -40,9 +37,7 @@ const Channel = (args: Args) => {
   const { id, name, isPublic } = useChannelList(args.idx);
   const { current } = useChannels();
 
-  const onClick = useCallback(() => {
-    dispatch(onChangeCurrent(id));
-  }, []);
+  const onClick = () => dispatch(onChangeCurrent(id));
 
   return (
     <ChannelWrapper onClick={onClick} role="button" background={id === current}>
