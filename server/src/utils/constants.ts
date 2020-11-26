@@ -15,4 +15,5 @@ export const ERROR_MESSAGE = {
   WRONG_USER: '올바르지 않는 유저 아이디',
   BLACKLIST_TOKEN: '블랙리스트 토큰',
   LOGIN_REQUIRED: '로그인 필요',
+  WRONG_PARAMS: '올바르지 않은 매개변수',
 };

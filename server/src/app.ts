@@ -103,7 +103,8 @@ app.use((req, res, next) => {
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
-  res.status(err.status || 500).end();
+  const { message, status = 500 } = err;
+  res.status(status).json({ message, status });
 });
 
 server.listen(port, () => {
