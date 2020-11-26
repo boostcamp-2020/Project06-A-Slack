@@ -57,12 +57,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
       const { id } = decodedRefreshToken;
       await redisClient.del(id);
     } catch (err) {
-      if (err instanceof JsonWebTokenError) {
-        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
-        return;
-      }
-      next(err);
-      return;
+      console.error(err);
     }
   }
   res.status(200).end();
