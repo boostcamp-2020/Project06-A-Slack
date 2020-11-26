@@ -16,7 +16,7 @@ const threadState: Thread = {
   url: 'url/init',
   isEdited: 0,
   isPinned: 0,
-  createdAt: 'string',
+  createdAt: '',
   emoji: [
     { name: 'emoji1', userId: 1 },
     { name: 'emoji1', userId: 2 },
@@ -42,7 +42,7 @@ const threadSlice = createSlice({
 
 const selectThreadState = (state: RootState) => state.thread;
 
-export const selectTHREAD = createSelector(selectThreadState, (a) => a);
+export const selectThread = createSelector(selectThreadState, (t) => t);
 export const THREAD = threadSlice.name;
 export const { getThreadRequest, getThreadSuccess, getThreadFailure } = threadSlice.actions; // action 나눠서 export 하기
 

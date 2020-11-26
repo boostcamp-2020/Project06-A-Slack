@@ -1,12 +1,9 @@
 import { all, fork, takeEvery, call, put } from 'redux-saga/effects';
-import axios from 'axios';
-import { getThreadRequest, getThreadSuccess, getThreadFailure } from '../modules/thread';
+import api from '@/api';
+import { getThreadRequest, getThreadSuccess, getThreadFailure } from '@/store/modules/thread';
 
 const getThreadListAPI = () => {
-  const accessToken = localStorage.getItem('accessToken');
-  return axios.get('/api/threads/channels/1', {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+  return api.get('/api/threads/channels/1');
 };
 
 function* getThreadList() {
