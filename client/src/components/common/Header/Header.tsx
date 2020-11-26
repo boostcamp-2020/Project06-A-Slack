@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { getUserRequest } from '@/store/modules/user';
 import { flex } from '@/styles/mixin';
 import { useAuth } from '@/hooks';
 
@@ -20,7 +22,13 @@ const ProfileImg = styled.img``;
 
 const Header = () => {
   const { userId } = useAuth();
-  console.log('?', userId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(getUserRequest({ userId: Number(userId) }));
+    }
+  }, [dispatch, userId]);
 
   return (
     <Container>
