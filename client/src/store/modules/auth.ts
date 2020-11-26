@@ -60,6 +60,14 @@ const selectAuthState = (state: RootState) => state.auth;
 
 export const selectAuth = createSelector(selectAuthState, (auth) => auth);
 export const AUTH = authSlice.name;
-export const AUTH_ACTIONS = authSlice.actions;
+export const {
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  loginCancelled,
+  logoutRequest,
+  logoutSuccess,
+  logoutFailure,
+} = authSlice.actions;
 
 export default authSlice.reducer;

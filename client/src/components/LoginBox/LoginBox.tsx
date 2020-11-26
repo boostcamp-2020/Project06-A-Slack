@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { AUTH_ACTIONS } from '@/store/modules/auth';
+import { loginRequest } from '@/store/modules/auth';
 
 const Input = styled.input`
   display: block;
@@ -26,7 +26,7 @@ const LoginBox = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(AUTH_ACTIONS.loginRequest({ email, pw }));
+    dispatch(loginRequest({ email, pw }));
   };
 
   return (

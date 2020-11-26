@@ -1,5 +1,14 @@
 import { put, all, call, take, fork, cancel, cancelled, takeEvery } from 'redux-saga/effects';
-import { AUTH, AUTH_ACTIONS, LoginRequestPayload } from '@/store/modules/auth';
+import {
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  loginCancelled,
+  logoutRequest,
+  logoutSuccess,
+  logoutFailure,
+  LoginRequestPayload,
+} from '@/store/modules/auth';
 import { authService } from '@/services';
 
 function* login({ email, pw }: LoginRequestPayload) {
@@ -9,13 +18,13 @@ function* login({ email, pw }: LoginRequestPayload) {
     if (status === 200) {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      yield put(AUTH_ACTIONS.loginSuccess({ accessToken, refreshToken, user }));
+      yield put(loginSuccess({ accessToken, refreshToken, user }));
     }
   } catch (err) {
-    yield put(AUTH_ACTIONS.loginFailure());
+    yield put(loginFailure());
   } finally {
     if (yield cancelled()) {
-      yield put(AUTH_ACTIONS.loginCancelled());
+      yield put(loginCancelled());
     }
   }
 }
@@ -26,10 +35,10 @@ function* logout() {
     if (status === 200) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      yield put(AUTH_ACTIONS.logoutSuccess());
+      yield put(logoutSuccess());
     }
   } catch (err) {
-    yield put(AUTH_ACTIONS.logoutFailure());
+    yield put(logoutFailure());
   }
 }
 
@@ -37,12 +46,12 @@ function* loginFlow() {
   while (true) {
     const {
       payload: { email, pw },
-    } = yield take(AUTH_ACTIONS.loginRequest);
+    } = yield take(loginRequest);
 
     const loginTask = yield fork(login, { email, pw });
-    const action = yield take([AUTH_ACTIONS.logoutRequest, AUTH_ACTIONS.loginFailure]);
+    const action = yield take([logoutRequest, loginFailure]);
 
-    if (action.type === AUTH_ACTIONS.logoutRequest().type) {
+    if (action.type === logoutRequest().type) {
       yield cancel(loginTask);
     }
   }
@@ -50,7 +59,7 @@ function* loginFlow() {
 
 function* logoutFlow() {
   while (true) {
-    yield take(AUTH_ACTIONS.logoutRequest);
+    yield take(logoutRequest);
     yield fork(logout);
   }
 }
