@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuth, AUTH_ACTIONS } from '@/store/modules/auth';
-import { ChannelListBox } from '@/components';
+import { ChannelListBox, ThreadListBox } from '@/components';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -22,6 +22,7 @@ const Home = () => {
           <button type="button" onClick={handleLogout}>
             Logout
           </button>
+          <ThreadListBox />
         </>
       ) : (
         <Link to="/login">
