@@ -1,11 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loadChannelsRequest } from '@/store/modules/channels';
-import { RootState } from '@/store/modules';
 import { useChannels } from '@/hooks/useChannels';
-import Channel from './Channel/Channel';
+import ChannelItem from './Channel/ChannelItem';
 
 interface ChannelItem {
   id: number;
@@ -32,12 +31,12 @@ const ChannelList = () => {
       {channelList?.map((channel: ChannelItem, idx: number) =>
         !showList ? (
           current === channel.id ? (
-            <Channel idx={idx} key={channel.id} />
+            <ChannelItem idx={idx} key={channel.id} />
           ) : (
             ''
           )
         ) : (
-          <Channel idx={idx} key={channel.id} />
+          <ChannelItem idx={idx} key={channel.id} />
         ),
       )}
     </>
