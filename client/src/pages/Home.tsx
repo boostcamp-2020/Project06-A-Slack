@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { AUTH_ACTIONS } from '@/store/modules/auth';
-import { ChannelListBox } from '@/components';
 import { useAuth } from '@/hooks';
+import { useDispatch } from 'react-redux';
+import { logoutRequest } from '@/store/modules/auth';
+import { ChannelListBox, ThreadListBox } from '@/components';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const Home = () => {
   const { accessToken } = useAuth();
 
   const handleLogout = () => {
-    dispatch(AUTH_ACTIONS.logoutRequest());
+    dispatch(logoutRequest());
   };
 
   return (
@@ -23,6 +23,7 @@ const Home = () => {
           <button type="button" onClick={handleLogout}>
             Logout
           </button>
+          <ThreadListBox />
         </>
       ) : (
         <Link to="/login">

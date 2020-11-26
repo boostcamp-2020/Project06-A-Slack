@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
+import { threadModel } from '@/models';
 
 /**
  * POST /api/threads
@@ -16,7 +17,9 @@ export const createThread = (req: Request, res: Response, next: NextFunction): v
 /**
  * GET /api/channels/:channelId
  */
-export const getChannelThreads = (req: Request, res: Response, next: NextFunction): void => {
+export const getChannelThreads = async (req: Request, res: Response, next: NextFunction) => {
+  // subthread까지 가져오도록 수정 필요.
   const { channelId } = req.params;
-  res.json({ users: [] });
+  const [threadList] = await threadModel.getThreadInChannel(Number(channelId));
+  res.json({ threadList });
 };
