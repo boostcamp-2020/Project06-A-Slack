@@ -24,7 +24,7 @@ const initialState: ChannelState = {
 };
 
 const channelsSlice = createSlice({
-  name: 'channels',
+  name: 'channel',
   initialState,
   reducers: {
     loadChannelsRequest(state) {},
