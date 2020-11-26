@@ -1,12 +1,11 @@
 import { useSelector } from 'react-redux';
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@/store/modules';
-import { create } from 'domain';
 
-const selectChannelsState = (state: RootState) => state.channels;
+const selectChannelsState = (state: RootState) => state.channel;
 const selectChannels = createSelector(selectChannelsState, (channels) => channels);
 
-const selectChannelListState = (state: RootState) => state.channels.channelList;
+const selectChannelListState = (state: RootState) => state.channel.channelList;
 const selectChannelList = (idx: number) =>
   createSelector(selectChannelListState, (channelList) => channelList[idx]);
 
