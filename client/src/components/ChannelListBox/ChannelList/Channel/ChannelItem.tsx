@@ -32,7 +32,7 @@ const IconWrapper = styled.div`
 
 const NameWrapper = styled.div``;
 
-const Channel = (args: Args) => {
+const ChannelItem = (args: Args) => {
   const dispatch = useDispatch();
   const { id, name, isPublic } = useChannelList(args.idx);
   const { current } = useChannels();
@@ -47,4 +47,4 @@ const Channel = (args: Args) => {
   );
 };
 
-export default Channel;
+export default ChannelItem;
