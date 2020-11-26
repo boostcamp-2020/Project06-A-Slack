@@ -3,9 +3,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { onChangeShowList } from '@/store/modules/channels';
-import { RootState } from '@/store/modules';
 import styled from 'styled-components';
 import { useChannels } from '@/hooks/useChannels';
 
