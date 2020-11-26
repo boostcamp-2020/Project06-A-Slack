@@ -31,7 +31,7 @@ const Input = styled.input`
   outline: 0;
   &:focus {
     transition: 0.3s;
-    box-shadow: ${(props) => props.theme.mixin.blueBoxShadow};
+    box-shadow: ${(props) => props.theme.boxShadow.skyblue};
   }
 `;
 
