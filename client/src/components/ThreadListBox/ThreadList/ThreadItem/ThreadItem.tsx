@@ -13,7 +13,7 @@ const StyledThreadItem = styled.div`
   }
 `;
 
-const ThreadItem: React.FC<ThreadItemProps> = ({ thread }) => {
+const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
   return (
     <StyledThreadItem>
       ThreadItem
