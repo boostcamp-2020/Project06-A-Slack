@@ -3,8 +3,8 @@ import { DefaultTheme } from 'styled-components';
 const calcRem = (size: number) => `${size / 16}rem`;
 
 const theme: DefaultTheme = {
-  mixin: {
-    blueBoxShadow: '0 0 0 1px rgba(18, 100, 163, 1), 0 0 0 5px rgba(29, 155, 209, 0.3)',
+  boxShadow: {
+    skyblue: '0 0 0 1px rgba(18, 100, 163, 1), 0 0 0 5px rgba(29, 155, 209, 0.3)',
   },
   color: {
     main: '#4a154b',

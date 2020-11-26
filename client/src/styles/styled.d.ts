@@ -2,8 +2,8 @@ import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    mixin: {
-      blueBoxShadow: string;
+    boxShadow: {
+      skyblue: string;
     };
 
     color: {
