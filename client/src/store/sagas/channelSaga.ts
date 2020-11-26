@@ -1,6 +1,6 @@
 import { all, fork, takeEvery, call, put } from 'redux-saga/effects';
 import { channelsService } from '@/services/channels.service';
-import { loadChannelsRequest, loadChannelsSuccess, loadChannelsFalse } from '../modules/channels';
+import { loadChannelsRequest, loadChannelsSuccess, loadChannelsFailure } from '../modules/channels';
 
 function loadChannelsAPI() {
   return channelsService.getChannels();
@@ -11,7 +11,7 @@ function* loadChannels() {
     const result = yield call(loadChannelsAPI);
     yield put(loadChannelsSuccess({ channelList: result.data.channelList }));
   } catch (err) {
-    yield put(loadChannelsFalse(err));
+    yield put(loadChannelsFailure(err));
   }
 }
 
