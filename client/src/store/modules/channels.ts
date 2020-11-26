@@ -13,14 +13,12 @@ interface Channel {
 
 interface ChannelState {
   channelList: Channel[];
-  show: string;
   current: number | undefined;
   showList: boolean;
 }
 
 const initialState: ChannelState = {
   channelList: [],
-  show: '',
   current: undefined,
   showList: true,
 };
@@ -29,15 +27,12 @@ const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    loadChannelsRequest(state) {
-      state.show = 'axios 요청을 보냄';
-    },
+    loadChannelsRequest(state) {},
     loadChannelsSuccess(state, action) {
       state.channelList = action.payload.channelList;
-      state.show = '채널 목록';
     },
-    loadChannelsFalse(state, action) {
-      state.show = action.payload;
+    loadChannelsFailure(state, action) {
+      // todo 에러처리
     },
     onChangeCurrent(state, action) {
       state.current = action.payload;
@@ -52,7 +47,7 @@ export const CHANNELS = channelsSlice.name;
 export const {
   loadChannelsRequest,
   loadChannelsSuccess,
-  loadChannelsFalse,
+  loadChannelsFailure,
   onChangeCurrent,
   onChangeShowList,
 } = channelsSlice.actions;
