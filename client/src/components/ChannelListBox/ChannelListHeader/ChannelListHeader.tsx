@@ -2,11 +2,12 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { onChangeShowList } from '@/store/modules/channels';
 import { RootState } from '@/store/modules';
 import styled from 'styled-components';
+import { useChannels } from '@/hooks/useChannels';
 
 const ChannelListHeaderWrapper = styled.div`
   display: flex;
@@ -39,13 +40,9 @@ const ChannelListHeaderContent = styled.div`
 
 const ChannelListBox = () => {
   const dispatch = useDispatch();
-  const { showList } = useSelector((state: RootState) => ({
-    showList: state.channels.showList,
-  }));
+  const { showList } = useChannels();
 
-  const onClick = useCallback(() => {
-    dispatch(onChangeShowList());
-  }, []);
+  const onClick = () => dispatch(onChangeShowList());
 
   return (
     <ChannelListHeaderWrapper>
