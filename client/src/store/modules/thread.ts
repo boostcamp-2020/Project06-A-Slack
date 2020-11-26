@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-param-reassign */
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Thread } from '@/types';
 import { RootState } from '@/store/modules';
@@ -30,10 +32,8 @@ const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
-    getThreadRequest(state) {
-      console.log('req 보냄');
-    },
-    getThreadSuccess(state, action) {
+    getThreadRequest(state) {},
+    getThreadSuccess(state, action: PayloadAction<ThreadList>) {
       state.threadList = action.payload.threadList;
     },
     getThreadFailure(state, action) {},
@@ -42,8 +42,8 @@ const threadSlice = createSlice({
 
 const selectThreadState = (state: RootState) => state.thread;
 
-export const selectTHREAD = createSelector([selectThreadState], (thread) => thread);
+export const selectTHREAD = createSelector(selectThreadState, (a) => a);
 export const THREAD = threadSlice.name;
-export const THREAD_ACTIONS = threadSlice.actions;
+export const { getThreadRequest, getThreadSuccess, getThreadFailure } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;
