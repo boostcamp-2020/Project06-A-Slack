@@ -3,7 +3,7 @@ import { TOKEN_TYPE } from '@/utils/constants';
 import { verifyJWT } from '@/utils/utils';
 import { TokenExpiredError } from 'jsonwebtoken';
 
-const instance = axios.create({ timeout: 8000 });
+const instance = axios.create();
 
 if (process.env.MODE !== 'dev') {
   instance.defaults.baseURL = process.env.BASE_URL;
@@ -38,6 +38,7 @@ instance.interceptors.request.use(
               if (error?.response?.status === 401) {
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
+                localStorage.removeItem('userId');
                 window.location.href = '/login';
               }
             }
