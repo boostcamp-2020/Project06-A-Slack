@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Channel {
@@ -12,40 +13,32 @@ interface Channel {
 
 interface ChannelState {
   channelList: Channel[];
-  show: string;
+  current: number | undefined;
+  showList: boolean;
 }
 
 const initialState: ChannelState = {
   channelList: [],
-  show: '',
+  current: undefined,
+  showList: true,
 };
 
 const channelsSlice = createSlice({
-  name: 'channels',
+  name: 'channel',
   initialState,
   reducers: {
-    loadChannelsRequest(state) {
-      // eslint-disable-next-line no-param-reassign
-      state.show = 'axios 요청을 보냄';
-    },
+    loadChannelsRequest(state) {},
     loadChannelsSuccess(state, action) {
-      // const channelList = action.payload.map((channel: Channel) => ({
-      //   id: channel.id,
-      //   ownerId: channel.ownerId,
-      //   name: channel.name,
-      //   channelType: channel.channelType,
-      //   isPublic: channel.isPublic,
-      //   memberCount: channel.memberCount,
-      //   description: channel.description,
-      // }));
-      // eslint-disable-next-line no-param-reassign
       state.channelList = action.payload.channelList;
-      // eslint-disable-next-line no-param-reassign
-      state.show = '채널 목록';
     },
-    loadChannelsFalse(state, action) {
-      // eslint-disable-next-line no-param-reassign
-      state.show = action.payload;
+    loadChannelsFailure(state, action) {
+      // todo 에러처리
+    },
+    onChangeCurrent(state, action) {
+      state.current = action.payload;
+    },
+    onChangeShowList(state) {
+      state.showList = !state.showList;
     },
   },
 });
@@ -54,6 +47,8 @@ export const CHANNELS = channelsSlice.name;
 export const {
   loadChannelsRequest,
   loadChannelsSuccess,
-  loadChannelsFalse,
+  loadChannelsFailure,
+  onChangeCurrent,
+  onChangeShowList,
 } = channelsSlice.actions;
 export default channelsSlice.reducer;
