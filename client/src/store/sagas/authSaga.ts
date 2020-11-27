@@ -18,7 +18,10 @@ function* login({ email, pw }: LoginRequestPayload) {
     if (status === 200) {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      yield put(loginSuccess({ accessToken, refreshToken, user }));
+      localStorage.setItem('userId', user.id);
+      yield put(
+        loginSuccess({ accessToken, refreshToken, userId: user.id ? Number(user.id) : null }),
+      );
     }
   } catch (err) {
     yield put(loginFailure());
@@ -35,6 +38,7 @@ function* logout() {
     if (status === 200) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userId');
       yield put(logoutSuccess());
     }
   } catch (err) {

@@ -5,7 +5,19 @@ import { TOKEN_TYPE } from '@/utils/constants';
 import { ChannelUsers } from '@/types/channelUsers';
 
 export const verifyJWT = (token: string, type: AuthToken) => {
-  return jwt.verify(token, type === TOKEN_TYPE.ACCESS ? config.jwtSecret : config.jwtRefreshSecret);
+  return new Promise((resolve, reject) => {
+    jwt.verify(
+      token,
+      type === TOKEN_TYPE.ACCESS ? config.jwtSecret : config.jwtRefreshSecret,
+      (err, decoded) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(decoded);
+      },
+    );
+  });
 };
 
 export const makeUserIcons = (users: ChannelUsers[]) => {

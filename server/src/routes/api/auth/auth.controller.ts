@@ -20,14 +20,14 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         const match = await bcrypt.compare(pw, user.pw);
         if (match) {
           // 비번 일치 할 때
-          const { pw: userPw, ...userInfo } = user;
+          const { pw: userPw, phoneNumber, image, ...userInfo } = user;
           const accessToken = jwt.sign(userInfo, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
           const refreshToken = jwt.sign(userInfo, config.jwtRefreshSecret, {
             expiresIn: TIME.TWO_MONTH,
           });
           // 해당 유저의 refresh token 설정
-          await redisClient.set(user.id, refreshToken);
-          await redisClient.expire(user.id, TIME.TWO_MONTH);
+          // await redisClient.set(user.id, refreshToken);
+          // await redisClient.expire(user.id, TIME.TWO_MONTH);
 
           res.json({ accessToken, refreshToken, user: userInfo });
           return;
@@ -55,14 +55,9 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
     try {
       const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
       const { id } = decodedRefreshToken;
-      await redisClient.del(id);
+      // await redisClient.del(id);
     } catch (err) {
-      if (err instanceof JsonWebTokenError) {
-        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
-        return;
-      }
-      next(err);
-      return;
+      console.error(err);
     }
   }
   res.status(200).end();
@@ -118,11 +113,11 @@ export const refreshAuthToken = async (
       const { iat, exp, ...claims } = decoded;
 
       /* 유저 refresh 토큰 일치 여부 확인 */
-      const result = await redisClient.get(claims.id);
-      if (result !== refreshToken) {
-        res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
-        return;
-      }
+      // const result = await redisClient.get(claims.id);
+      // if (result !== refreshToken) {
+      //   res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
+      //   return;
+      // }
 
       /* refresh 검증되면 새로운 access 토큰 생성 */
       const newAccessToken = jwt.sign(claims, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
