@@ -7,13 +7,16 @@ interface Props {
   display: boolean;
 }
 const StyledDetailBox = styled.div<Props>`
-  display: ${(display) => (display ? 'block' : 'none')};
+  display: ${(props: { display: boolean }) => (props.display ? 'block' : 'none')};
 `;
 const DetailBox = () => {
-  const { showDetail } = useChannel();
+  const { DetailVisible } = useChannel();
 
-  console.log(showDetail);
-  return <StyledDetailBox display={showDetail}>{/* <DetailHeader /> */}</StyledDetailBox>;
+  return (
+    <StyledDetailBox display={DetailVisible}>
+      <DetailHeader />
+    </StyledDetailBox>
+  );
 };
 
 export default DetailBox;
