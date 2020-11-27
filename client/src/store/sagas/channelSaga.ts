@@ -1,4 +1,4 @@
-import { all, fork, takeEvery, call, put, takeLatest, take } from 'redux-saga/effects';
+import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services/channel.service';
 import {
   loadChannelsRequest,
@@ -9,17 +9,9 @@ import {
   loadChannelFailure,
 } from '../modules/channel';
 
-function loadChannelsAPI() {
-  return channelService.getChannels();
-}
-
-function loadChannelAPI(channelId: number) {
-  return channelService.getChannel({ channelId });
-}
-
 function* loadChannels() {
   try {
-    const result = yield call(loadChannelsAPI);
+    const result = yield call(channelService.getChannels);
     yield put(loadChannelsSuccess({ channelList: result.data.channelList }));
   } catch (err) {
     yield put(loadChannelsFailure(err));
@@ -27,10 +19,8 @@ function* loadChannels() {
 }
 
 function* loadChannel(action: any) {
-  console.log(action);
   try {
-    const result = yield call(loadChannelAPI, action.payload);
-    console.log(result);
+    const result = yield call(channelService.getChannel, { channelId: action.payload });
     yield put(loadChannelSuccess({ channel: result.data.channel, users: result.data.users }));
   } catch (err) {
     yield put(loadChannelFailure(err));
