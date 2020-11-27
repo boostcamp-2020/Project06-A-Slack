@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import channelSlice, { CHANNELS } from './channels';
+import channelSlice, { CHANNEL } from './channel';
 import authSlice, { AUTH } from './auth';
 import threadSlice, { THREAD } from './thread';
 
 const rootReducer = combineReducers({
-  [CHANNELS]: channelSlice,
+  [CHANNEL]: channelSlice,
   [AUTH]: authSlice,
   [THREAD]: threadSlice,
 });
