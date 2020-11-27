@@ -4,9 +4,9 @@
 
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { onChangeShowList } from '@/store/modules/channels';
+import { onChangeShowChannelList } from '@/store/modules/channel';
 import styled from 'styled-components';
-import { useChannels } from '@/hooks/useChannels';
+import { useChannel } from '@/hooks/useChannel';
 
 const ChannelListHeaderWrapper = styled.div`
   display: flex;
@@ -39,14 +39,14 @@ const ChannelListHeaderContent = styled.div`
 
 const ChannelListBox = () => {
   const dispatch = useDispatch();
-  const { showList } = useChannels();
+  const { showChannelList } = useChannel();
 
-  const onClick = () => dispatch(onChangeShowList());
+  const onClick = () => dispatch(onChangeShowChannelList());
 
   return (
     <ChannelListHeaderWrapper>
       <SubWrapper>
-        <ButtonWrapper onClick={onClick}>{showList ? '▽' : '▷'}</ButtonWrapper>
+        <ButtonWrapper onClick={onClick}>{showChannelList ? '▽' : '▷'}</ButtonWrapper>
         <ChannelListHeaderContent onClick={onClick} role="button">
           Channels
         </ChannelListHeaderContent>
