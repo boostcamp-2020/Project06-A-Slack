@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
+import { channelModel } from '@/models';
 
 /**
  * GET /api/channels/:channelId
  */
-export const getChannel = (req: Request, res: Response, next: NextFunction) => {
+export const getChannel = async (req: Request, res: Response, next: NextFunction) => {
   const { channelId } = req.params;
-  res.json({ channel: { channelId } });
+  const [channel] = await channelModel.getChannel({ channelId: parseInt(channelId, 10) });
+  const [users] = await channelModel.getChannelUser({ channelId: parseInt(channelId, 10) });
+  res.json({ channel, users });
 };
 
 /**
