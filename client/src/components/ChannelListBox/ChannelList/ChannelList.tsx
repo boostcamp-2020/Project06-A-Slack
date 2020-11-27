@@ -18,7 +18,7 @@ interface ChannelItem {
 
 const ChannelList = () => {
   const dispatch = useDispatch();
-  const { channelList, showChannelList, current } = useChannel();
+  const { channelList, ChannelListVisible, current } = useChannel();
 
   const callAPI = () => dispatch(loadChannelsRequest());
 
@@ -29,7 +29,7 @@ const ChannelList = () => {
   return (
     <>
       {channelList?.map((channel: ChannelItem, idx: number) =>
-        !showChannelList ? (
+        !ChannelListVisible ? (
           current?.id === channel.id ? (
             <ChannelItem idx={idx} key={channel.id} />
           ) : (
