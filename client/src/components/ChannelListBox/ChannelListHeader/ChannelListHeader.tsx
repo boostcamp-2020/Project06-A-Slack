@@ -47,9 +47,7 @@ const ChannelListBox = () => {
     <ChannelListHeaderWrapper>
       <SubWrapper>
         <ButtonWrapper onClick={onClick}>{ChannelListVisible ? '▽' : '▷'}</ButtonWrapper>
-        <ChannelListHeaderContent onClick={onClick} role="button">
-          Channels
-        </ChannelListHeaderContent>
+        <ChannelListHeaderContent onClick={onClick}>Channels</ChannelListHeaderContent>
       </SubWrapper>
       <SubWrapper>
         <ButtonWrapper>፧</ButtonWrapper>

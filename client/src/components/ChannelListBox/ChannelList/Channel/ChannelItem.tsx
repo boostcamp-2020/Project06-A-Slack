@@ -45,7 +45,7 @@ const ChannelItem = (args: Args) => {
   };
 
   return (
-    <ChannelWrapper onClick={onClick} role="button" background={id === current?.id}>
+    <ChannelWrapper onClick={onClick} background={id === current?.id}>
       <IconWrapper>{isPublic === 1 ? '#' : 'O'}</IconWrapper>
       <NameWrapper>{name}</NameWrapper>
     </ChannelWrapper>
