@@ -15,17 +15,19 @@ interface Channel {
 interface ChannelState {
   channelList: Channel[];
   current: Channel | null;
-  showChannelList: boolean;
+  ChannelListVisible: boolean;
   users: ChannelUsers[] | null;
-  showDetail: boolean;
+  DetailVisible: boolean;
+  channelId: number | null;
 }
 
 const initialState: ChannelState = {
   channelList: [],
   current: null,
-  showChannelList: true,
+  ChannelListVisible: true,
   users: null,
-  showDetail: false,
+  DetailVisible: false,
+  channelId: null,
 };
 
 const channelSlice = createSlice({
@@ -39,19 +41,23 @@ const channelSlice = createSlice({
     loadChannelsFailure(state, action) {
       // todo 에러처리
     },
-    loadChannelRequest(state, action) {},
+    loadChannelRequest(state, action) {
+      state.channelId = action.payload;
+    },
     loadChannelSuccess(state, action) {
       state.users = action.payload.users;
     },
-    loadChannelFailure(state, action) {},
-    onChangeCurrent(state, action) {
+    loadChannelFailure(state, action) {
+      // tdoo 에러처리
+    },
+    setCurrent(state, action) {
       state.current = state.channelList[action.payload];
     },
-    onChangeShowChannelList(state) {
-      state.showChannelList = !state.showChannelList;
+    openChannelList(state) {
+      state.ChannelListVisible = !state.ChannelListVisible;
     },
-    onChangeShowDetail(state) {
-      state.showDetail = !state.showDetail;
+    openDetail(state) {
+      state.DetailVisible = !state.DetailVisible;
     },
   },
 });
@@ -64,8 +70,8 @@ export const {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  onChangeCurrent,
-  onChangeShowChannelList,
-  onChangeShowDetail,
+  setCurrent,
+  openChannelList,
+  openDetail,
 } = channelSlice.actions;
 export default channelSlice.reducer;

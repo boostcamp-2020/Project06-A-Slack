@@ -3,7 +3,7 @@ import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { ChannelUsers } from '@/types/channelUsers';
-import { onChangeShowDetail } from '@/store/modules/channel';
+import { openDetail } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
 const ThreadListHeaderBox = styled.div`
@@ -33,7 +33,7 @@ const ThreadListHeaderLeftButton = styled.button`
 
 const ThraedListHeaderLeftButtonBox = styled.div`
   display: flex;
-  align-items: center
+  align-items: center;
   justify-content: space-between;
   width: 80px;
   border: 1px solid black;
@@ -71,14 +71,14 @@ const ThreadListHeaderRightButton = styled.button`
 `;
 
 const ThreadListHeader = () => {
-  const { current, users, showDetail } = useChannel();
+  const { current, users, DetailVisible } = useChannel();
   const dispatch = useDispatch();
 
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(onChangeShowDetail());
+    dispatch(openDetail());
   };
 
-  return current !== null && users !== null ? (
+  return current && users ? (
     <ThreadListHeaderBox>
       <ThreadListHeaderLeft>
         {current.isPublic} {current.name}

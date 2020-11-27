@@ -1,6 +1,6 @@
 import React from 'react';
 import { useChannel } from '@/hooks/useChannel';
-import { onChangeShowDetail } from '@/store/modules/channel';
+import { openDetail } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -27,7 +27,7 @@ const DetailHeader = () => {
   const { current } = useChannel();
   const dispatch = useDispatch();
   const onClick = () => {
-    dispatch(onChangeShowDetail());
+    dispatch(openDetail());
   };
   return (
     <DetailHeaderBox>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { onChangeCurrent, loadChannelRequest } from '@/store/modules/channel';
+import { setCurrent, loadChannelRequest } from '@/store/modules/channel';
 import styled from 'styled-components';
 import { useChannelList, useChannel } from '@/hooks/useChannel';
 
@@ -20,7 +20,7 @@ const ChannelWrapper = styled.div<Props>`
   padding: 0 20px;
   font-size: 20px;
   color: #fff;
-  &: hover {
+  &:hover {
     ${(props: Props) => (!props.background ? 'background: rgba(0, 0, 0, 0.2);' : '')}
   }
   background: ${(props: Props) => (props.background ? 'blue' : 'transparent')};
@@ -40,7 +40,7 @@ const ChannelItem = (args: Args) => {
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
 
-    dispatch(onChangeCurrent(args.idx));
+    dispatch(setCurrent(args.idx));
     dispatch(loadChannelRequest(id));
   };
 
