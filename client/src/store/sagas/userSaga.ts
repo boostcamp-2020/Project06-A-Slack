@@ -1,4 +1,4 @@
-import { put, all, takeLatest, call, fork } from 'redux-saga/effects';
+import { put, all, takeEvery, call, fork } from 'redux-saga/effects';
 import { getUserRequest, getUserSuccess, getUserFailure } from '@/store/modules/user';
 import { userService } from '@/services';
 
@@ -14,7 +14,7 @@ function* getUser({ payload }: { payload: { userId: number } }) {
 }
 
 function* watchGetUser() {
-  yield takeLatest(getUserRequest, getUser);
+  yield takeEvery(getUserRequest, getUser);
 }
 
 export default function* userSaga() {

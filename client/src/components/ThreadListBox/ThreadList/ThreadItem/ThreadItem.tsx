@@ -8,7 +8,7 @@ interface ThreadItemProps {
 
 const StyledThreadItem = styled.div`
   background-color: white;
-  &: hover {
+  &:hover {
     background-color: #f8f8f8;
   }
 `;
