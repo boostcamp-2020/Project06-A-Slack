@@ -1,4 +1,4 @@
-import { put, all, call, take, fork, cancel, cancelled, takeEvery } from 'redux-saga/effects';
+import { put, all, call, take, fork, cancel, cancelled } from 'redux-saga/effects';
 import {
   loginRequest,
   loginSuccess,
@@ -64,7 +64,7 @@ function* loginFlow() {
 function* logoutFlow() {
   while (true) {
     yield take(logoutRequest);
-    yield fork(logout);
+    yield logout();
   }
 }
 
