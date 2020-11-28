@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectThread, getThreadRequest } from '@/store/modules/thread';
+import { useDispatch } from 'react-redux';
+import { getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
+import { useThread } from '@/hooks/useThread';
 
 const Container = styled.div`
   background-color: orange;
 `;
 
 const ThreadList = () => {
-  const { threadList } = useSelector(selectThread);
+  const { threadList } = useThread();
   const dispatch = useDispatch();
 
   useEffect(() => {

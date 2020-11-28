@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectSubThread, getSubThreadRequest } from '@/store/modules/subThread';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
+import { selectSubThread } from '@/hooks/useSubThread';
 
 const Container = styled.div`
   background-color: pink;
