@@ -2,8 +2,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadChannelsRequest } from '@/store/modules/channels';
-import { useChannels } from '@/hooks/useChannels';
+import { loadChannelsRequest } from '@/store/modules/channel';
+import { useChannel } from '@/hooks/useChannel';
 import ChannelItem from './Channel/ChannelItem';
 
 interface ChannelItem {
@@ -18,7 +18,7 @@ interface ChannelItem {
 
 const ChannelList = () => {
   const dispatch = useDispatch();
-  const { channelList, showList, current } = useChannels();
+  const { channelList, channelListVisible, current } = useChannel();
 
   const callAPI = () => dispatch(loadChannelsRequest());
 
@@ -29,8 +29,8 @@ const ChannelList = () => {
   return (
     <>
       {channelList?.map((channel: ChannelItem, idx: number) =>
-        !showList ? (
-          current === channel.id ? (
+        !channelListVisible ? (
+          current?.id === channel.id ? (
             <ChannelItem idx={idx} key={channel.id} />
           ) : (
             ''
