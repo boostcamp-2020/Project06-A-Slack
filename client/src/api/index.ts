@@ -46,7 +46,6 @@ instance.interceptors.request.use(
         }
       }
     }
-    // throw err;
     return config;
   },
   (err) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubThreadRequest } from '@/store/modules/subThread';
@@ -24,11 +24,12 @@ const Button = styled.button`
 
 const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
   const { userInfo } = useSelector(useUser);
+  const buttonEl = useRef<HTMLButtonElement>(null);
 
   const dispatch = useDispatch();
 
-  const replyClickEventHandler = (e: any) => {
-    const parentId = e.target.closest('button').id;
+  const replyClickEventHandler = () => {
+    const parentId = Number(buttonEl.current?.id);
     dispatch(getSubThreadRequest({ parentId }));
   };
 
@@ -43,7 +44,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
       <div>{thread.userId}</div>
       <div>{thread.createdAt}</div>
       <div>{thread.content}</div>
-      <Button id={String(thread.id)} type="button" onClick={replyClickEventHandler}>
+      <Button ref={buttonEl} id={String(thread.id)} type="button" onClick={replyClickEventHandler}>
         {displaySubProfile()?.map((subProfile: number | null, index: number) => (
           <div key={index}>{subProfile}</div>
         ))}

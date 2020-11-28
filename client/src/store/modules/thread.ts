@@ -37,7 +37,9 @@ const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
-    getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {},
+    getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
+      // state.channelId = action.payload.channelId;
+    },
     getThreadSuccess(state, action: PayloadAction<ThreadList>) {
       state.threadList = action.payload.threadList;
     },

@@ -1,19 +1,15 @@
-import { all, fork, take, call, put } from 'redux-saga/effects';
-import API from '@/api';
+import { all, fork, take, call, takeEvery, put } from 'redux-saga/effects';
 import {
   getThreadRequest,
   getThreadSuccess,
   getThreadFailure,
   getThreadRequestPayload,
 } from '@/store/modules/thread';
-
-const getThreadListAPI = ({ channelId }: getThreadRequestPayload) => {
-  return API.get(`/api/threads/channels/${channelId}`);
-};
+import { threadService } from '@/services/thread.service';
 
 function* getThreadList({ channelId }: getThreadRequestPayload) {
   try {
-    const result = yield call(getThreadListAPI, { channelId });
+    const result = yield call(threadService.getThreadList, { channelId });
     yield put(getThreadSuccess({ threadList: result.data.threadList }));
   } catch (err) {
     yield put(getThreadFailure(err));
@@ -21,11 +17,11 @@ function* getThreadList({ channelId }: getThreadRequestPayload) {
 }
 
 function* watchGetThreadList() {
+  // yield takeEvery(getThreadRequest, getThreadList, { channelId });
   while (true) {
     const {
       payload: { channelId },
     } = yield take(getThreadRequest);
-
     yield fork(getThreadList, { channelId });
   }
 }

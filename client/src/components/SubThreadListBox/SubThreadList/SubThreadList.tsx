@@ -1,16 +1,15 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
-import { selectSubThread } from '@/hooks/useSubThread';
+import { useSubThread } from '@/hooks/useSubThread';
 
 const Container = styled.div`
   background-color: pink;
 `;
 
 const SubThreadList = () => {
-  const { subThreadList } = useSelector(selectSubThread);
+  const { subThreadList } = useSubThread();
 
   return (
     <Container>
