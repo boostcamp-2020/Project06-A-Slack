@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
+import { threadModel } from '@/models';
 
 /**
  * GET /api/threads/:threadId
  */
-export const getThread = (req: Request, res: Response, next: NextFunction): void => {
+export const getSubThread = async (req: Request, res: Response, next: NextFunction) => {
   const { threadId } = req.params;
-  res.json({ thread: { threadId } });
+  const [subThreadList] = await threadModel.getSubThread(Number(threadId));
+  res.json({ subThreadList });
 };
 
 /**

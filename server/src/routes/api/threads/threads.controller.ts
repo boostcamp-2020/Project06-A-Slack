@@ -18,7 +18,7 @@ export const createThread = (req: Request, res: Response, next: NextFunction): v
  * GET /api/channels/:channelId
  */
 export const getChannelThreads = async (req: Request, res: Response, next: NextFunction) => {
-  // subthread까지 가져오도록 수정 필요.
+  // parentId가 null인 것만.
   const { channelId } = req.params;
   const [threadList] = await threadModel.getThreadInChannel(Number(channelId));
   res.json({ threadList });
