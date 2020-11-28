@@ -43,12 +43,13 @@ const HeaderContent = styled.div`
   font-size: ${(props) => props.theme.size.l};
 `;
 
-const TextArea = styled.input`
+const TextArea = styled.textarea`
   border: 1px ${(props) => props.theme.color.gray4} solid;
   border-radius: 3px;
   width: 100%;
   height: 80px;
   margin-bottom: 15px;
+  font-size: ${(props) => props.theme.size.m};
   &:focus {
     transition: 0.3s;
     box-shadow: ${(props) => props.theme.boxShadow.skyblue};
