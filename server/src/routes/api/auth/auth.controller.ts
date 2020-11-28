@@ -13,7 +13,7 @@ import {
 import { userModel } from '@/models';
 import config from '@/config';
 import { TIME, TOKEN_TYPE, ERROR_MESSAGE } from '@/utils/constants';
-import nodemailer from 'nodemailer';
+import isEmail from 'validator/lib/isEmail';
 import redisClient from '@/lib/redis';
 
 /**
@@ -159,10 +159,15 @@ export const verifyEmail = async (
   const { email: userEmail } = req.body;
   const content = `인증 코드 : ${code}`;
 
+  if (!isEmail(userEmail)) {
+    next({ message: ERROR_MESSAGE.INVALID_EMAIL, status: 400 });
+    return;
+  }
+
   try {
     await sendEmail(userEmail, content);
   } catch (err) {
-    next({ message: '인증 메일 전송 실패', status: 500 });
+    next({ message: ERROR_MESSAGE.SEND_EMAIL_FAILED, status: 500 });
     return;
   }
 
@@ -170,6 +175,6 @@ export const verifyEmail = async (
     const verifyCode = encrypt(code);
     res.json({ verifyCode });
   } catch (err) {
-    next({ message: '인증 코드 생성 실패', status: 500 });
+    next({ message: ERROR_MESSAGE.CODE_GENERATION_FAILED, status: 500 });
   }
 };
