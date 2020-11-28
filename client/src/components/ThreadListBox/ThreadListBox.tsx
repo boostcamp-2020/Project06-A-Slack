@@ -17,7 +17,7 @@ const ThreadListBox = () => {
   return (
     <StyledThreadListBox>
       <div>BoxTop</div>
-      <ThreadListHeader channel={channel} />
+      <ThreadListHeader />
       <ThreadList />
       <ThreadInputBox />
     </StyledThreadListBox>
