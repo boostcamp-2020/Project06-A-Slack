@@ -2,10 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import { IncomingForm } from 'formidable';
 import bcrypt from 'bcrypt';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import { verifyRequestData, verifyToken, getRandomString, encrypt, decrypt } from '@/utils/utils';
+import {
+  verifyRequestData,
+  verifyToken,
+  getRandomString,
+  encrypt,
+  decrypt,
+  sendEmail,
+} from '@/utils/utils';
 import { userModel } from '@/models';
 import config from '@/config';
 import { TIME, TOKEN_TYPE, ERROR_MESSAGE } from '@/utils/constants';
+import nodemailer from 'nodemailer';
 import redisClient from '@/lib/redis';
 
 /**
@@ -137,4 +145,31 @@ export const refreshAuthToken = async (
     }
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
+
+/**
+ * POST /api/auth/email/verify
+ */
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const code = getRandomString(6);
+  const { email: userEmail } = req.body;
+  const content = `인증 코드 : ${code}`;
+
+  try {
+    await sendEmail(userEmail, content);
+  } catch (err) {
+    next({ message: '인증 메일 전송 실패', status: 500 });
+    return;
+  }
+
+  try {
+    const verifyCode = encrypt(code);
+    res.json({ verifyCode });
+  } catch (err) {
+    next({ message: '인증 코드 생성 실패', status: 500 });
+  }
 };
