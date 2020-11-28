@@ -1,4 +1,4 @@
-import { all, fork, takeEvery, call, put, take } from 'redux-saga/effects';
+import { all, fork, takeEvery, takeLatest, call, put, take } from 'redux-saga/effects';
 import API from '@/api';
 import {
   getSubThreadRequest,
@@ -15,25 +15,22 @@ const getSubThreadListAPI = ({ parentId }: getSubThreadRequestPayload) => {
 function* getSubThreadList({ parentId }: getSubThreadRequestPayload) {
   try {
     const result = yield call(getSubThreadListAPI, { parentId });
-    console.log(result);
     yield put(getSubThreadSuccess({ subThreadList: result.data.subThreadList }));
   } catch (err) {
     yield put(getSubThreadFailure(err));
   }
 }
 
-function* watchGetThreadList() {
-  // yield takeEvery(getSubThreadRequest, getSubThreadList);
+function* watchGetSubThreadList() {
   while (true) {
     const {
       payload: { parentId },
     } = yield take(getSubThreadRequest);
 
     yield fork(getSubThreadList, { parentId });
-    // const action = yield take([logoutRequest, loginFailure]);
   }
 }
 
 export default function* subThreadSaga() {
-  yield all([fork(watchGetThreadList)]);
+  yield all([fork(watchGetSubThreadList)]);
 }
