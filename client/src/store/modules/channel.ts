@@ -15,18 +15,18 @@ interface Channel {
 interface ChannelState {
   channelList: Channel[];
   current: Channel | null;
-  ChannelListVisible: boolean;
-  users: ChannelUsers[] | null;
-  DetailVisible: boolean;
+  channelListVisible: boolean;
+  users: ChannelUsers[];
+  detailVisible: boolean;
   channelId: number | null;
 }
 
 const initialState: ChannelState = {
   channelList: [],
   current: null,
-  ChannelListVisible: true,
-  users: null,
-  DetailVisible: false,
+  channelListVisible: true,
+  users: [],
+  detailVisible: false,
   channelId: null,
 };
 
@@ -54,10 +54,10 @@ const channelSlice = createSlice({
       state.current = state.channelList[action.payload];
     },
     openChannelList(state) {
-      state.ChannelListVisible = !state.ChannelListVisible;
+      state.channelListVisible = !state.channelListVisible;
     },
     openDetail(state) {
-      state.DetailVisible = !state.DetailVisible;
+      state.detailVisible = !state.detailVisible;
     },
   },
 });
