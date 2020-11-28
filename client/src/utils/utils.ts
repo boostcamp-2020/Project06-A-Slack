@@ -21,14 +21,6 @@ export const verifyJWT = (token: string, type: AuthToken) => {
 };
 
 export const makeUserIcons = (users: ChannelUsers[]) => {
-  let i = 0;
-  const userIconList: ChannelUsers[] = [];
-  while (i < users.length) {
-    userIconList.push(users[i]);
-    i += 1;
-    if (i === 3) {
-      break;
-    }
-  }
+  const userIconList: ChannelUsers[] = users.slice(0, 3);
   return userIconList;
 };
