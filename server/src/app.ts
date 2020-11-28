@@ -94,7 +94,7 @@ app.all('*', (req, res) => {
     res.redirect(process.env.DEV_URL as string);
     return;
   }
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
 app.use((req, res, next) => {
