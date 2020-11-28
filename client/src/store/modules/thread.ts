@@ -44,9 +44,6 @@ const threadSlice = createSlice({
   },
 });
 
-const selectThreadState = (state: RootState) => state.thread;
-
-export const selectThread = createSelector(selectThreadState, (t) => t);
 export const THREAD = threadSlice.name;
 export const { getThreadRequest, getThreadSuccess, getThreadFailure } = threadSlice.actions; // action 나눠서 export 하기
 
