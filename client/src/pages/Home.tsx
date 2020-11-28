@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { useDispatch } from 'react-redux';
 import { logoutRequest } from '@/store/modules/auth';
-import { Header, ChannelListBox, ThreadListBox, DetailBox } from '@/components';
+import { Header, LeftSideBar, ThreadListBox, DetailBox } from '@/components';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  height: 100%;
+`;
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -15,24 +21,25 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <>
       <Header />
-      <p>Home page</p>
-      {accessToken ? (
-        <>
-          <ChannelListBox />
-          <button type="button" onClick={handleLogout}>
-            Logout
-          </button>
-          <ThreadListBox />
-          <DetailBox />
-        </>
-      ) : (
-        <Link to="/login">
-          <button type="button">Login Page</button>
-        </Link>
-      )}
-    </div>
+      <Container>
+        {accessToken ? (
+          <>
+            <LeftSideBar />
+            <ThreadListBox />
+            <DetailBox />
+          </>
+        ) : (
+          <Link to="/login">
+            <button type="button">Login Page</button>
+          </Link>
+        )}
+      </Container>
+      <button type="button" onClick={handleLogout}>
+        Logout
+      </button>
+    </>
   );
 };
 
