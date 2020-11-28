@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IncomingForm } from 'formidable';
 import bcrypt from 'bcrypt';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import { verifyRequestData, verifyToken } from '@/utils/utils';
+import { verifyRequestData, verifyToken, getRandomString, encrypt, decrypt } from '@/utils/utils';
 import { userModel } from '@/models';
 import config from '@/config';
 import { TIME, TOKEN_TYPE, ERROR_MESSAGE } from '@/utils/constants';
@@ -14,10 +14,13 @@ import redisClient from '@/lib/redis';
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, pw } = req.body;
   if (verifyRequestData([email, pw])) {
-    const [[user]] = await userModel.getUserByEmail({ email });
+    const decryptedEmail = decrypt(email);
+    const decryptedPw = decrypt(pw);
+
+    const [[user]] = await userModel.getUserByEmail({ email: decryptedEmail });
     if (user) {
       try {
-        const match = await bcrypt.compare(pw, user.pw);
+        const match = await bcrypt.compare(decryptedPw, user.pw);
         if (match) {
           // 비번 일치 할 때
           const { pw: userPw, phoneNumber, image, ...userInfo } = user;

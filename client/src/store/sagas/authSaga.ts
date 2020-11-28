@@ -10,10 +10,14 @@ import {
   LoginRequestPayload,
 } from '@/store/modules/auth';
 import { authService } from '@/services';
+import { encrypt } from '@/utils/utils';
 
 function* login({ email, pw }: LoginRequestPayload) {
   try {
-    const { data, status } = yield call(authService.login, { email, pw });
+    const { data, status } = yield call(authService.login, {
+      email: encrypt(email),
+      pw: encrypt(pw),
+    });
     const { accessToken, refreshToken, user } = data;
     if (status === 200) {
       localStorage.setItem('accessToken', accessToken);
