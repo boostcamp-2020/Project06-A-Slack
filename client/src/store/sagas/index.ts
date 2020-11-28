@@ -6,4 +6,11 @@ import userSaga from './userSaga';
 import subThreadSaga from './subThreadSaga';
 
 export default function* rootSaga() {
-  yield all([fork(authSaga), fork(channelSaga), fork(threadSaga), fork(userSaga), fork(subThreadSaga)]);
+  yield all([
+    fork(authSaga),
+    fork(channelSaga),
+    fork(threadSaga),
+    fork(userSaga),
+    fork(subThreadSaga),
+  ]);
+}
