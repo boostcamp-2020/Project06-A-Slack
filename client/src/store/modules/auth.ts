@@ -2,20 +2,19 @@
 /* eslint-disable no-param-reassign */
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/modules';
-import { User } from '@/types';
 
 interface AuthState {
   loading: boolean;
   accessToken: string | null;
   refreshToken: string | null;
-  user: User | null;
+  userId: number | null;
 }
 
 const authState: AuthState = {
   loading: false,
   accessToken: localStorage.getItem('accessToken'),
   refreshToken: localStorage.getItem('refreshToken'),
-  user: null,
+  userId: localStorage.getItem('userId') ? Number(localStorage.getItem('userId')) : null,
 };
 
 export interface LoginRequestPayload {
@@ -25,7 +24,7 @@ export interface LoginRequestPayload {
 export interface LoginSuccessPayload {
   accessToken: string;
   refreshToken: string;
-  user: User;
+  userId: number | null;
 }
 
 const authSlice = createSlice({
@@ -36,10 +35,10 @@ const authSlice = createSlice({
       state.loading = true;
     },
     loginSuccess(state, { payload }: PayloadAction<LoginSuccessPayload>) {
-      const { accessToken, refreshToken, user } = payload;
+      const { accessToken, refreshToken, userId } = payload;
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
-      state.user = user;
+      state.userId = userId;
 
       state.loading = false;
     },
@@ -51,6 +50,7 @@ const authSlice = createSlice({
     logoutSuccess(state) {
       state.accessToken = null;
       state.refreshToken = null;
+      state.userId = null;
     },
     logoutFailure() {},
   },

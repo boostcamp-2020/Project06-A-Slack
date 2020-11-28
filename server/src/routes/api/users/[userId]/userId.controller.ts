@@ -1,12 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
+import { userModel } from '@/models';
+import { ERROR_MESSAGE } from '@/utils/constants';
 
 /**
  * GET /api/users/:userId
  */
-export const getUser = (req: Request, res: Response, next: NextFunction): void => {
+export const getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { userId } = req.params;
-  res.json({ user: { userId } });
+  if (Number.isNaN(+userId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  try {
+    const [[user]] = await userModel.getUserById({ id: +userId });
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**
