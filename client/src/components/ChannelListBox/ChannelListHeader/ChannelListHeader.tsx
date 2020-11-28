@@ -7,17 +7,16 @@ import { useDispatch } from 'react-redux';
 import { openChannelList } from '@/store/modules/channel';
 import styled from 'styled-components';
 import { useChannel } from '@/hooks/useChannel';
+import { flex } from '@/styles/mixin';
 
 const ChannelListHeaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${flex(undefined, 'space-between')}
   margin-bottom: 10px;
 `;
 
 const ButtonWrapper = styled.button`
-  color: #fff;
-  font-size: 20px;
+  color: ${(props) => props.theme.color.white};
+  font-size: ${(props) => props.theme.size.m};
   background: transparent;
   border: none;
   &:hover {
@@ -27,26 +26,24 @@ const ButtonWrapper = styled.button`
 `;
 
 const SubWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${flex()}
 `;
 
 const ChannelListHeaderContent = styled.div`
   color: #fff;
-  font-size: 20px;
+  font-size: 12px;
 `;
 
 const ChannelListBox = () => {
   const dispatch = useDispatch();
-  const { ChannelListVisible } = useChannel();
+  const { channelListVisible } = useChannel();
 
   const onClick = () => dispatch(openChannelList());
 
   return (
     <ChannelListHeaderWrapper>
       <SubWrapper>
-        <ButtonWrapper onClick={onClick}>{ChannelListVisible ? '▽' : '▷'}</ButtonWrapper>
+        <ButtonWrapper onClick={onClick}>{channelListVisible ? '▽' : '▷'}</ButtonWrapper>
         <ChannelListHeaderContent onClick={onClick}>Channels</ChannelListHeaderContent>
       </SubWrapper>
       <SubWrapper>

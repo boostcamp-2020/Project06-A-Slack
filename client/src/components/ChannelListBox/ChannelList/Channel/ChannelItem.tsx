@@ -18,7 +18,7 @@ const ChannelWrapper = styled.div<Props>`
   align-items: center;
   margin-bottom: 10px;
   padding: 0 20px;
-  font-size: 20px;
+  font-size: ${(props) => props.theme.size.m};
   color: #fff;
   &:hover {
     ${(props: Props) => (!props.background ? 'background: rgba(0, 0, 0, 0.2);' : '')}
