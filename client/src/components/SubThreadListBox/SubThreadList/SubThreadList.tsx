@@ -14,8 +14,6 @@ const SubThreadList = () => {
 
   return (
     <Container>
-      <div> sub Thread1</div>
-      <div> sub Thread2</div>
       {subThreadList?.map((thread: Thread) => (
         <ThreadItem key={thread.id} thread={thread} />
       ))}
