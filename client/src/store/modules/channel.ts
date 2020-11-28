@@ -19,6 +19,8 @@ interface ChannelState {
   users: ChannelUsers[];
   detailVisible: boolean;
   channelId: number | null;
+  topic: string;
+  topicVisible: boolean;
 }
 
 const initialState: ChannelState = {
@@ -28,6 +30,8 @@ const initialState: ChannelState = {
   users: [],
   detailVisible: false,
   channelId: null,
+  topic: 'Add a topic',
+  topicVisible: false,
 };
 
 const channelSlice = createSlice({
@@ -59,6 +63,12 @@ const channelSlice = createSlice({
     openDetail(state) {
       state.detailVisible = !state.detailVisible;
     },
+    openTopic(state) {
+      state.topicVisible = !state.topicVisible;
+    },
+    changeTopic(state, action) {
+      state.topic = action.payload;
+    },
   },
 });
 
@@ -73,5 +83,7 @@ export const {
   setCurrent,
   openChannelList,
   openDetail,
+  openTopic,
+  changeTopic,
 } = channelSlice.actions;
 export default channelSlice.reducer;
