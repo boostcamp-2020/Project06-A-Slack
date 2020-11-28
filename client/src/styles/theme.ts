@@ -24,6 +24,13 @@ const theme: DefaultTheme = {
     gray4: '#ddd',
     gray5: '#eee',
     gray6: '#fff',
+
+    purple1: '#350d36',
+    purple2: '#3f0e40',
+    purple3: '#431e44',
+
+    green1: '#007a5a',
+    white: '#fff',
   },
   size: {
     xxxs: calcRem(8),

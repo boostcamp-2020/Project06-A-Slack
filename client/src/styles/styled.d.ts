@@ -24,6 +24,14 @@ declare module 'styled-components' {
       gray4: string;
       gray5: string;
       gray6: string;
+
+      purple1: string;
+      purple2: string;
+      purple3: string;
+
+      white: string;
+
+      green1: string;
     };
 
     size: {
