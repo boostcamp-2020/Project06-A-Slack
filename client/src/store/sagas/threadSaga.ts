@@ -1,9 +1,9 @@
 import { all, fork, takeEvery, call, put } from 'redux-saga/effects';
-import api from '@/api';
+import API from '@/api';
 import { getThreadRequest, getThreadSuccess, getThreadFailure } from '@/store/modules/thread';
 
 const getThreadListAPI = () => {
-  return api.get('/api/threads/channels/1');
+  return API.get('/api/threads/channels/1');
 };
 
 function* getThreadList() {

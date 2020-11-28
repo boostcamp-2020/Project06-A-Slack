@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectThread, getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
 import { Thread } from '@/types';
-import ThreadItem from './ThreadItem/ThreadItem';
+import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
 
-const StyledThreadList = styled.div`
+const Container = styled.div`
   background-color: orange;
 `;
 
@@ -18,12 +18,12 @@ const ThreadList = () => {
   }, [dispatch]);
 
   return (
-    <StyledThreadList>
+    <Container>
       <div>ThreadListTop</div>
       {threadList?.map((thread: Thread) => (
         <ThreadItem key={thread.id} thread={thread} />
       ))}
-    </StyledThreadList>
+    </Container>
   );
 };
 

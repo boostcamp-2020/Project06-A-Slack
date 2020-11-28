@@ -14,4 +14,8 @@ export interface Thread {
   isPinned: number;
   createdAt: string;
   emoji: Emoji[] | null;
+  subCount: number;
+  subThreadId1: number | null;
+  subThreadId2: number | null;
+  subThreadId3: number | null;
 }

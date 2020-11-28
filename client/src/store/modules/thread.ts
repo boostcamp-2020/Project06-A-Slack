@@ -21,6 +21,10 @@ const threadState: Thread = {
     { name: 'emoji1', userId: 1 },
     { name: 'emoji1', userId: 2 },
   ],
+  subCount: 0,
+  subThreadId1: 0,
+  subThreadId2: 0,
+  subThreadId3: 0,
 };
 
 const threadListState: ThreadList = {
