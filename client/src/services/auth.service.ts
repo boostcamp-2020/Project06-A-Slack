@@ -13,4 +13,7 @@ export const authService = {
     const refreshToken = localStorage.getItem('refreshToken');
     return API.post('/api/auth/logout', { refreshToken });
   },
+  verifyEmail({ email }: { email: string }) {
+    return API.post('/api/auth/email/verify', { email });
+  },
 };
