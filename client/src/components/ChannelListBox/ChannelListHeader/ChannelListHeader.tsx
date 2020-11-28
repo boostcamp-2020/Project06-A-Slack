@@ -39,14 +39,14 @@ const ChannelListHeaderContent = styled.div`
 
 const ChannelListBox = () => {
   const dispatch = useDispatch();
-  const { ChannelListVisible } = useChannel();
+  const { channelListVisible } = useChannel();
 
   const onClick = () => dispatch(openChannelList());
 
   return (
     <ChannelListHeaderWrapper>
       <SubWrapper>
-        <ButtonWrapper onClick={onClick}>{ChannelListVisible ? '▽' : '▷'}</ButtonWrapper>
+        <ButtonWrapper onClick={onClick}>{channelListVisible ? '▽' : '▷'}</ButtonWrapper>
         <ChannelListHeaderContent onClick={onClick}>Channels</ChannelListHeaderContent>
       </SubWrapper>
       <SubWrapper>

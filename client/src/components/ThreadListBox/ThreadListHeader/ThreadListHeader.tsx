@@ -71,7 +71,7 @@ const ThreadListHeaderRightButton = styled.button`
 `;
 
 const ThreadListHeader = () => {
-  const { current, users, DetailVisible } = useChannel();
+  const { current, users } = useChannel();
   const dispatch = useDispatch();
 
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
