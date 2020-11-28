@@ -3,7 +3,7 @@ import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { ChannelUsers } from '@/types/channelUsers';
-import { openDetail } from '@/store/modules/channel';
+import { openDetail, openTopic } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
 const ThreadListHeaderBox = styled.div`
@@ -71,11 +71,15 @@ const ThreadListHeaderRightButton = styled.button`
 `;
 
 const ThreadListHeader = () => {
-  const { current, users } = useChannel();
+  const { current, users, topic, topicVisible } = useChannel();
   const dispatch = useDispatch();
 
-  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+  const openDetailBar = (e: React.MouseEvent<HTMLElement>) => {
     dispatch(openDetail());
+  };
+
+  const openTopicModal = (e: React.MouseEvent<HTMLElement>) => {
+    dispatch(openTopic());
   };
 
   return current && users ? (
@@ -84,7 +88,7 @@ const ThreadListHeader = () => {
         {current.isPublic} {current.name}
         <ThraedListHeaderLeftButtonBox>
           <ThreadListHeaderLeftButton>핀</ThreadListHeaderLeftButton>
-          <ThreadListHeaderLeftButton>Add Topic</ThreadListHeaderLeftButton>
+          <ThreadListHeaderLeftButton onClick={openTopicModal}>{topic}</ThreadListHeaderLeftButton>
         </ThraedListHeaderLeftButtonBox>
       </ThreadListHeaderLeft>
       <ThreadListHeaderRight>
@@ -95,7 +99,7 @@ const ThreadListHeader = () => {
           {users?.length}
         </ThreadListHeaderRightUserBox>
         <ThreadListHeaderRightButton>O</ThreadListHeaderRightButton>
-        <ThreadListHeaderRightButton onClick={onClick}>i</ThreadListHeaderRightButton>
+        <ThreadListHeaderRightButton onClick={openDetailBar}>i</ThreadListHeaderRightButton>
       </ThreadListHeaderRight>
     </ThreadListHeaderBox>
   ) : (
