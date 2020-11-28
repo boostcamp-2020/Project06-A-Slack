@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubThreadRequest } from '@/store/modules/subThread';
 import { Thread } from '@/types';
-import styled from 'styled-components';
 import { useUser } from '@/hooks/useUser';
+import { flex } from '@/styles/mixin';
 
 interface ThreadItemProps {
   thread: Thread;
@@ -15,6 +16,10 @@ const Container = styled.div`
   &:hover {
     background-color: #f8f8f8;
   }
+`;
+
+const Button = styled.button`
+  ${flex()};
 `;
 
 const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
@@ -38,12 +43,12 @@ const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
       <div>{thread.userId}</div>
       <div>{thread.createdAt}</div>
       <div>{thread.content}</div>
-      <button id={String(thread.id)} type="button" onClick={replyClickEventHandler}>
+      <Button id={String(thread.id)} type="button" onClick={replyClickEventHandler}>
         {displaySubProfile()?.map((subProfile: number | null, index: number) => (
           <div key={index}>{subProfile}</div>
         ))}
         {thread.subCount}replies
-      </button>
+      </Button>
     </Container>
   );
 };
