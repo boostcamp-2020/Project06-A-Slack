@@ -28,12 +28,16 @@ const threadListState: ThreadList = {
   threadList: [threadState],
 };
 
+export interface getThreadRequestPayload {
+  channelId: number;
+}
+
 // 리듀서
 const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
-    getThreadRequest(state) {},
+    getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {},
     getThreadSuccess(state, action: PayloadAction<ThreadList>) {
       state.threadList = action.payload.threadList;
     },

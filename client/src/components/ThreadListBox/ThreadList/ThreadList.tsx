@@ -13,9 +13,10 @@ const Container = styled.div`
 const ThreadList = () => {
   const { threadList } = useThread();
   const dispatch = useDispatch();
+  const channelId = 1;
 
   useEffect(() => {
-    dispatch(getThreadRequest());
+    dispatch(getThreadRequest({ channelId }));
   }, [dispatch]);
 
   return (
