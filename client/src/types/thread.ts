@@ -15,7 +15,7 @@ export interface Thread {
   createdAt: string;
   emoji: Emoji[] | null;
   subCount: number;
-  subThreadId1: number | null;
-  subThreadId2: number | null;
-  subThreadId3: number | null;
+  subThreadUserId1: number | null;
+  subThreadUserId2: number | null;
+  subThreadUserId3: number | null;
 }

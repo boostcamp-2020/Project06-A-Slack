@@ -28,9 +28,8 @@ const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
   };
 
   const displaySubProfile = () => {
-    // subThreadId가 아니고 profile을 바로 가져와서 써버리자 그럼. id는 의미없어 이렇게 쓸거면 profile image로 바로.
-    // subThread craterId로
-    const results = [thread.subThreadId1, thread.subThreadId2, thread.subThreadId3];
+    // 추후 subThreadUserId 값을 이용해, 채널 멤버의 user 정보를 활용하여 프로필을 뿌려준다.
+    const results = [thread.subThreadUserId1, thread.subThreadUserId2, thread.subThreadUserId3];
     return results;
   };
 
@@ -45,7 +44,6 @@ const ThreadItem: React.FC<ThreadItemProps> = ({ thread }: ThreadItemProps) => {
         ))}
         {thread.subCount}replies
       </button>
-      <div>{thread.subThreadId1}</div>
     </Container>
   );
 };
