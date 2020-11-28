@@ -1,0 +1,97 @@
+paths:
+  /api/threads/{threadId}:
+    get:
+      tags:
+        - description: Thread
+      summary: 특정 쓰레드 조회
+      parameters:
+        - in: path
+          name: threadId
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - description: Thread
+      summary: 특정 쓰레드 수정
+      parameters:
+        - in: path
+          name: threadId
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+      responses:
+        200:
+          description: OK
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - description: Thread
+      summary: 특정 쓰레드 삭제
+      parameters:
+        - in: path
+          name: threadId
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/threads/{threadId}/pin:
+    post:
+      tags:
+        - description: Thread
+      summary: 특정 쓰레드에 핀추가
+      parameters:
+        - in: path
+          name: threadId
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

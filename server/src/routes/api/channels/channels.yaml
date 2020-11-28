@@ -1,0 +1,71 @@
+components:
+  schemas:
+    Channel:
+      type: object
+      properties:
+        id:
+          type: number
+        ownerId:
+          type: number
+        name:
+          type: string
+        channelType:
+          type: number
+        isPublic:
+          type: number
+        memberCount:
+          type: number
+        description:
+          type: string
+          nullable: true
+
+paths:
+  /api/channels:
+    get:
+      tags:
+        - description: Channels
+      summary: 채널 리스트를 반환
+      responses:
+        200:
+          description: 채널 리스트를 반환
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Channel'
+
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - description: Channels
+      summary: 채널을 생성
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                channelType:
+                  type: number
+                isPublic:
+                  type: number
+                description:
+                  type: string
+      responses:
+        201:
+          description: 채널 생성 성공
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

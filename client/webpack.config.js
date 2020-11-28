@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   devtool: 'source-map',
@@ -10,16 +11,6 @@ module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@services': path.resolve(__dirname, './src/services'),
-      '@lib': path.resolve(__dirname, './src/lib'),
-      '@store': path.resolve(__dirname, './src/store'),
-      '@constants': path.resolve(__dirname, './src/constants'),
-      '@api': path.resolve(__dirname, './src/api'),
-      '@imgs': path.resolve(__dirname, './src/imgs'),
-      '@styles': path.resolve(__dirname, './src/styles'),
-      '@hoc': path.resolve(__dirname, './src/hoc'),
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
@@ -43,7 +34,15 @@ module.exports = {
       {
         test: /\.(ts|tsx)?$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'ts-loader'],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+          'ts-loader',
+        ],
       },
       {
         test: /\.s[ac]ss$/i,
@@ -87,6 +86,9 @@ module.exports = {
       },
     }),
     new CleanWebpackPlugin(),
+    new Dotenv({
+      path: process.env.MODE === 'dev' ? '.env' : '.env.prod',
+    }),
   ],
   optimization: {
     splitChunks: {

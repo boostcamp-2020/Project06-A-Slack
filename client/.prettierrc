@@ -6,7 +6,6 @@
   "bracketSpacing": true,
   "semi": true,
   "useTabs": false,
-  "arrowParens": "always", 
-  "endOfLine": "auto",
-  "parser": "typescript"
+  "arrowParens": "always",
+  "endOfLine": "auto"
 }

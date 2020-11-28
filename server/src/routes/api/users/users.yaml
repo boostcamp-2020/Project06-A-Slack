@@ -1,0 +1,39 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        email:
+          type: string
+        image:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+        phoneNumber:
+          type: string
+          nullable: true
+
+paths:
+  /api/users:
+    get:
+      tags:
+        - description: 유저
+      summary: 유저 리스트를 가져온다.
+      responses:
+        200:
+          description: 유저 리스트를 반환
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

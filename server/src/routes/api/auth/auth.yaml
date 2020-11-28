@@ -1,0 +1,137 @@
+paths:
+  /api/auth/login:
+    post:
+      x-swagger-router-controller: auth.controller
+      tags:
+        - description: 인증
+      summary: 로그인
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: true
+              properties:
+                email:
+                  type: string
+                pw:
+                  type: string
+      responses:
+        200:
+          description: 로그인 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/logout:
+    post:
+      x-swagger-router-controller: auth.controller
+      tags:
+        - description: 인증
+      summary: 로그아웃
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: true
+              properties:
+                refreshToken:
+                  type: string
+
+      responses:
+        200:
+          description: 로그아웃 성공
+        401:
+          description: 유효하지 않은 토큰. 로그아웃 실패
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/signup:
+    post:
+      x-swagger-router-controller: auth.controller
+      tags:
+        - description: 인증
+      summary: 회원가입
+      operationId: signup
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                pw:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                displayName:
+                  type: string
+                phoneNumber:
+                  type: string
+                  nullable: true
+      responses:
+        201:
+          description: 회원가입 성공
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/token/refresh:
+    post:
+      tags:
+        - description: 인증
+      summary: 토큰 재발급
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: true
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        200:
+          description: 토큰 갱신 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+        401:
+          description: 유효하지 않은 토큰, 재 로그인 필요
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

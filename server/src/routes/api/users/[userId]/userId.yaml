@@ -1,0 +1,74 @@
+paths:
+  /api/users/{userId}:
+    get:
+      tags:
+        - description: 유저
+      summary: 특정 유저 정보 가져오기
+      parameters:
+        - name: userId
+          in: path
+          description: 유저 아이디
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - description: 유저
+      summary: 특정 유저 수정하기
+      parameters:
+        - name: userId
+          in: path
+          description: 유저 아이디
+          required: true
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: true
+              properties:
+                email:
+                  type: string
+                pw:
+                  type: string
+      responses:
+        200:
+          description: OK
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - description: 유저
+      summary: 특정 유저 삭제하기
+      parameters:
+        - name: userId
+          in: path
+          description: 유저 아이디
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
