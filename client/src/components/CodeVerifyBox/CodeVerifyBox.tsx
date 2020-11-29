@@ -1,8 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import isInt from 'validator/es/lib/isInt';
 import isAlpha from 'validator/es/lib/isAlpha';
 import { flex, focusedInputBoxShadow } from '@/styles/mixin';
+import { useDispatch } from 'react-redux';
+import { removeVerifyCode } from '@/store/modules/signup';
 
 const CodeBox = styled.div`
   ${flex()}
@@ -47,6 +49,8 @@ const Input = styled.input`
 `;
 
 const CodeVerifyBox = () => {
+  const dispatch = useDispatch();
+
   const refs = Array(6)
     .fill(1)
     .map(() => useRef<HTMLInputElement>(null));
@@ -90,6 +94,12 @@ const CodeVerifyBox = () => {
     // TODO : 인증 코드 전송 구현
     console.log(code);
   }
+
+  useEffect(() => {
+    return () => {
+      dispatch(removeVerifyCode());
+    };
+  }, []);
 
   return (
     <div>

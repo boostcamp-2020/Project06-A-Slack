@@ -93,7 +93,7 @@ const EmailBox = () => {
           <b>직장에서 사용하는 이메일 주소</b>를 사용하는 것이 좋습니다.
         </SubTitle>
       </Header>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} spellCheck="false">
         <Input
           type="email"
           placeholder="name@work-email.com"
