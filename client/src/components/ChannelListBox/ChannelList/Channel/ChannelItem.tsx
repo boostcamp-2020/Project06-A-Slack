@@ -46,7 +46,7 @@ const ChannelItem = (args: Args) => {
 
   return (
     <Channel onClick={onClick} pick={id === current?.id}>
-      <Icon>{isPublic === 1 ? '#' : 'O'}</Icon>
+      <Icon>{isPublic ? '#' : 'O'}</Icon>
       <Name>{name}</Name>
     </Channel>
   );
