@@ -21,6 +21,7 @@ interface ChannelState {
   channelId: number | null;
   topic: string;
   topicVisible: boolean;
+  addChannelVisible: boolean;
 }
 
 const initialState: ChannelState = {
@@ -32,6 +33,7 @@ const initialState: ChannelState = {
   channelId: null,
   topic: 'Add a topic',
   topicVisible: false,
+  addChannelVisible: false,
 };
 
 const channelSlice = createSlice({
@@ -54,6 +56,11 @@ const channelSlice = createSlice({
     loadChannelFailure(state, action) {
       // tdoo 에러처리
     },
+    makeChannelRequest(state, action) {},
+    makeChannelSuccess(state, action) {
+      // state.channelList.push(action.)
+    },
+    makeChannelFailure(state, action) {},
     setCurrent(state, action) {
       state.current = state.channelList[action.payload];
     },
@@ -65,6 +72,9 @@ const channelSlice = createSlice({
     },
     openTopic(state) {
       state.topicVisible = !state.topicVisible;
+    },
+    openAddChannel(state) {
+      state.addChannelVisible = !state.addChannelVisible;
     },
     changeTopic(state, action) {
       state.topic = action.payload;
@@ -80,10 +90,14 @@ export const {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
+  makeChannelRequest,
+  makeChannelSuccess,
+  makeChannelFailure,
   setCurrent,
   openChannelList,
   openDetail,
   openTopic,
+  openAddChannel,
   changeTopic,
 } = channelSlice.actions;
 export default channelSlice.reducer;
