@@ -3,7 +3,14 @@ import { Link } from 'react-router-dom';
 import { useAuth, useChannel } from '@/hooks';
 import { useDispatch } from 'react-redux';
 import { logoutRequest } from '@/store/modules/auth';
-import { Header, LeftSideBar, ThreadListBox, DetailBox, AddTopicModal } from '@/components';
+import {
+  Header,
+  LeftSideBar,
+  ThreadListBox,
+  DetailBox,
+  AddTopicModal,
+  CreateChannelModal,
+} from '@/components';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -12,7 +19,7 @@ const Container = styled.div`
 `;
 
 const Home = () => {
-  const { topicVisible } = useChannel();
+  const { topicVisible, addChannelVisible } = useChannel();
   const dispatch = useDispatch();
 
   const { accessToken } = useAuth();
@@ -20,8 +27,6 @@ const Home = () => {
   const handleLogout = () => {
     dispatch(logoutRequest());
   };
-
-  console.log(topicVisible);
 
   return (
     <>
@@ -40,6 +45,7 @@ const Home = () => {
         )}
       </Container>
       {topicVisible && <AddTopicModal />}
+      {addChannelVisible && <CreateChannelModal />}
       <button type="button" onClick={handleLogout}>
         Logout
       </button>
