@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   border: 1px solid red;
   width: 100%;
-  ${flex('', 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 const Left = styled.div`
   padding: ${(props) => props.theme.size.m};

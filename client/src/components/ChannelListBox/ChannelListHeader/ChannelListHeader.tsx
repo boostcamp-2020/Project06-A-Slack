@@ -16,7 +16,7 @@ interface Props {
 }
 
 const Container = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
   margin-bottom: 10px;
 `;
 

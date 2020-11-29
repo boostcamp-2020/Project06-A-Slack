@@ -22,7 +22,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  ${flex(undefined, 'space-between')};
+  ${flex('center', 'space-between')};
   margin-bottom: 20px;
   font-size: ${(props) => props.theme.size.xxxl};
   color: ${(props) => props.theme.color.black1};
@@ -57,7 +57,7 @@ const TextArea = styled.textarea`
 `;
 
 const ButtonBox = styled.div`
-  ${flex(undefined, 'flex-end')}
+  ${flex('center', 'flex-end')}
 `;
 
 const CancelButton = styled.button`

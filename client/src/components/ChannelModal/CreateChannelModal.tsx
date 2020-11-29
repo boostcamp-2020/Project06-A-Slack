@@ -30,7 +30,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  ${flex(undefined, 'space-between')};
+  ${flex('center', 'space-between')};
   margin-bottom: 20px;
   font-size: ${(props) => props.theme.size.xxxl};
   color: ${(props) => props.theme.color.black1};
@@ -106,7 +106,7 @@ const InputBox = styled.div<Props>`
 
 const Label = styled.label`
   margin: 25px 0;
-  display: ${flex(undefined, 'flex-start', 'column')};
+  display: ${flex('center', 'flex-start', 'column')};
 `;
 
 const LabelBox = styled.div`
@@ -135,7 +135,7 @@ const Bottomheader = styled.div`
 
 const BottomContent = styled.label`
   width: 100%;
-  ${flex(undefined, 'space-between')};
+  ${flex('center', 'space-between')};
 `;
 
 const BottomExplain = styled.div`
@@ -174,7 +174,7 @@ const Circle = styled.div<Props>`
 `;
 
 const CreateButtonBox = styled.div`
-  ${flex(undefined, 'flex-end')}
+  ${flex('center', 'flex-end')}
 `;
 const CreateButton = styled.button<Props>`
   border: 1px ${(props) => props.theme.color.gray6} solid;

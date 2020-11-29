@@ -5,7 +5,7 @@ import { flex } from '@/styles/mixin';
 const Container = styled.div`
   padding: 15px;
   background: ${(props) => props.theme.color.purple2};
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const Content = styled.div`

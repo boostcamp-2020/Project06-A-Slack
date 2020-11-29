@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 
 const Container = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
   padding: 10px 30px;
 `;
 
 const Label = styled.label`
-  ${flex(undefined, undefined, 'column')}
+  ${flex('center', 'center', 'column')}
   color: ${(props) => props.theme.color.gray1};
 `;
 
