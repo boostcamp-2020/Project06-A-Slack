@@ -7,7 +7,6 @@ import { flex } from '@/styles/mixin';
 import { WarningIcon } from '@/components';
 import { useSignupState } from '@/hooks';
 import { verifyEmailSendRequest } from '@/store/modules/signup';
-import { Redirect } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
