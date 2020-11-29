@@ -35,6 +35,6 @@ export const FormButton = styled.button`
   cursor: pointer;
   &:hover {
     transition: 0.3s;
-    background-color: ${(props) => lighten(0.05, props.theme.color.main)};
+    background-color: ${(props) => lighten(0.1, props.theme.color.main)};
   }
 `;
