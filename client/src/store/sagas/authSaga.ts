@@ -1,9 +1,8 @@
-import { put, all, call, take, fork, cancel, cancelled } from 'redux-saga/effects';
+import { put, all, call, take, fork, cancel } from 'redux-saga/effects';
 import {
   loginRequest,
   loginSuccess,
   loginFailure,
-  loginCancelled,
   logoutRequest,
   logoutSuccess,
   logoutFailure,
@@ -29,10 +28,6 @@ function* login({ email, pw }: LoginRequestPayload) {
     }
   } catch (err) {
     yield put(loginFailure());
-  } finally {
-    if (yield cancelled()) {
-      yield put(loginCancelled());
-    }
   }
 }
 
