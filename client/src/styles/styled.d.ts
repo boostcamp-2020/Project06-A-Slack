@@ -34,6 +34,10 @@ declare module 'styled-components' {
 
       green1: string;
       green2: string;
+
+      blue: string;
+
+      yellow: string;
     };
 
     size: {

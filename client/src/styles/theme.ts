@@ -33,6 +33,10 @@ const theme: DefaultTheme = {
     green1: '#007a5a',
     green2: '#008a6a',
     white: '#fff',
+
+    blue: '#0073c6',
+
+    yellow: '#e8912d',
   },
   size: {
     xxxs: calcRem(8),
