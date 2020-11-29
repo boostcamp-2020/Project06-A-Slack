@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { EmailBox } from '@/components';
+import { EmailBox, CodeVerifyBox } from '@/components';
 import { useSignupState } from '@/hooks';
 
 const EmailVerifyPage = () => {
@@ -10,7 +10,7 @@ const EmailVerifyPage = () => {
   return (
     <div>
       <Link to="/">Home</Link>
-      {verifyCode ? <div>인증 코드 입력 화면</div> : <EmailBox />}
+      {verifyCode ? <CodeVerifyBox /> : <EmailBox />}
     </div>
   );
 };
