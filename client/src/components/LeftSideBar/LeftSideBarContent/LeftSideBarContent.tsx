@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ChannelListBox from '@/components/ChannelListBox/ChannelListBox';
 
 const Container = styled.div`
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 `;
 
 const LeftSideBarContent = () => {

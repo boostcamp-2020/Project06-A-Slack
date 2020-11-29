@@ -4,7 +4,7 @@ import ChannelList from './ChannelList/ChannelList';
 import ChannelListHeader from './ChannelListHeader/ChannelListHeader';
 
 const ChannelListBoxWrapper = styled.div`
-  padding: 10px;
+  padding: ${(props) => props.theme.size.s} 0;
 `;
 
 const ChannelListBox = () => {

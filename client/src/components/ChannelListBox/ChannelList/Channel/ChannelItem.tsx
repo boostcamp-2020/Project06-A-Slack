@@ -10,27 +10,27 @@ interface Args {
 }
 
 interface Props {
-  background: boolean;
+  pick: boolean;
+  theme: any;
 }
 
-const ChannelWrapper = styled.div<Props>`
+const Channel = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  padding: 0 20px;
+  padding: ${(props) => props.theme.size.m};
   font-size: ${(props) => props.theme.size.m};
   color: #fff;
   &:hover {
-    ${(props: Props) => (!props.background ? 'background: rgba(0, 0, 0, 0.2);' : '')}
+    ${(props: Props) => (!props.pick ? 'background: rgba(0, 0, 0, 0.2);' : '')}
   }
-  background: ${(props: Props) => (props.background ? 'blue' : 'transparent')};
+  background: ${(props: Props) => (props.pick ? props.theme.color.blue : 'transparent')};
 `;
 
-const IconWrapper = styled.div`
+const Icon = styled.div`
   margin-right: 15px;
 `;
 
-const NameWrapper = styled.div``;
+const Name = styled.div``;
 
 const ChannelItem = (args: Args) => {
   const dispatch = useDispatch();
@@ -45,10 +45,10 @@ const ChannelItem = (args: Args) => {
   };
 
   return (
-    <ChannelWrapper onClick={onClick} background={id === current?.id}>
-      <IconWrapper>{isPublic === 1 ? '#' : 'O'}</IconWrapper>
-      <NameWrapper>{name}</NameWrapper>
-    </ChannelWrapper>
+    <Channel onClick={onClick} pick={id === current?.id}>
+      <Icon>{isPublic === 1 ? '#' : 'O'}</Icon>
+      <Name>{name}</Name>
+    </Channel>
   );
 };
 
