@@ -71,7 +71,7 @@ const ThreadListHeaderRightButton = styled.button`
 `;
 
 const ThreadListHeader = () => {
-  const { current, users } = useChannel();
+  const { current, users, topic } = useChannel();
   const dispatch = useDispatch();
 
   const openDetailBar = (e: React.MouseEvent<HTMLElement>) => {
