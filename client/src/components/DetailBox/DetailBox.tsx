@@ -10,10 +10,10 @@ const StyledDetailBox = styled.div<Props>`
   display: ${(props: { display: boolean }) => (props.display ? 'block' : 'none')};
 `;
 const DetailBox = () => {
-  const { DetailVisible } = useChannel();
+  const { detailVisible } = useChannel();
 
   return (
-    <StyledDetailBox display={DetailVisible}>
+    <StyledDetailBox display={detailVisible}>
       <DetailHeader />
     </StyledDetailBox>
   );
