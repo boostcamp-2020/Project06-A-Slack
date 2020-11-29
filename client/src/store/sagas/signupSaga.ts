@@ -8,7 +8,7 @@ import {
   VerifyEmailSendRequestPayload,
 } from '@/store/modules/signup';
 import { authService } from '@/services';
-import { TIME } from '@/utils/constants';
+import { TIME_MILLIS } from '@/utils/constants';
 
 function* verifyEmailSendFlow({
   payload: { email },
@@ -20,7 +20,7 @@ function* verifyEmailSendFlow({
     } = yield call(authService.verifyEmail, { email });
     if (status === 200) {
       yield put(verifyEmailSendSuccess({ verifyCode }));
-      yield delay(TIME.FIVE_MINUTE);
+      yield delay(TIME_MILLIS.FIVE_MINUTE);
       yield put(removeVerifyCode());
     }
   } catch (err) {
