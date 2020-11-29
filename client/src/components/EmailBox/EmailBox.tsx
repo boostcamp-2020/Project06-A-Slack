@@ -43,13 +43,13 @@ const WarningBox = styled.div`
   ${flex('center', 'flex-start')};
 `;
 
-const IconBox = styled.div`
+export const IconBox = styled.div`
   padding-left: 0.5rem;
   color: inherit;
   ${flex()};
 `;
 
-const WarningText = styled.div`
+export const WarningText = styled.div`
   color: inherit;
   ${flex()};
   margin-left: 0.35rem;

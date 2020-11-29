@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
+import isEmail from 'validator/es/lib/isEmail';
 import { loginRequest } from '@/store/modules/auth';
 import {
   FormButton as LoginButton,
   FormInput as Input,
   FormLabel as Label,
 } from '@/styles/shared/form';
+import { WarningIcon } from '@/components';
+import { IconBox, WarningText } from '@/components/EmailBox/EmailBox';
+import { flex } from '@/styles/mixin';
 
 const Container = styled.div`
   width: 100%;
@@ -31,14 +35,22 @@ const SignupButton = styled(LoginButton)`
   }
 `;
 
+const WarningBox = styled.div`
+  margin: 1rem auto;
+  color: ${(props) => props.theme.color.warningRed};
+  ${flex('center', 'flex-start')};
+`;
+
 const LoginBox = () => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
+  const [valid, setValid] = useState(true);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    setValid(true);
   };
 
   const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +59,10 @@ const LoginBox = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!isEmail(email)) {
+      setValid(false);
+      return;
+    }
     dispatch(loginRequest({ email, pw }));
   };
 
@@ -63,6 +79,14 @@ const LoginBox = () => {
             required
           />
         </Label>
+        {!valid && (
+          <WarningBox>
+            <IconBox>
+              <WarningIcon color="#D73A49" />
+            </IconBox>
+            <WarningText>유효하지 않은 이메일 주소입니다.</WarningText>
+          </WarningBox>
+        )}
         <Label>
           비밀번호
           <Input
