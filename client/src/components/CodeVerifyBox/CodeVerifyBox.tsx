@@ -117,6 +117,7 @@ const CodeVerifyBox = () => {
               onChange={handleChange}
               onKeyDown={handleBackspace}
               maxLength={1}
+              autoComplete="off"
             />
           ))}
         </LeftCodeBox>
@@ -135,6 +136,7 @@ const CodeVerifyBox = () => {
               onChange={handleChange}
               onKeyDown={handleBackspace}
               maxLength={1}
+              autoComplete="off"
             />
           ))}
         </RightCodeBox>
