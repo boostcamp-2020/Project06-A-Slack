@@ -60,7 +60,6 @@ const LoginBox = () => {
             placeholder="name@work-email.com"
             onChange={handleEmailChange}
             value={email}
-            autoComplete="true"
             required
           />
         </Label>
@@ -71,11 +70,10 @@ const LoginBox = () => {
             placeholder="*********"
             onChange={handlePwChange}
             value={pw}
-            autoComplete="true"
             required
           />
           <LoginButton type="submit">로그인</LoginButton>
-          <Link to="/signup">
+          <Link to="/verify">
             <SignupButton type="button">회원가입</SignupButton>
           </Link>
         </Label>

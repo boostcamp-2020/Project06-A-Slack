@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FormInput as Input, FormButton as Button } from '@/styles/shared/form';
-import { flex } from '@/styles/mixin';
 import isEmail from 'validator/es/lib/isEmail';
+import { useDispatch } from 'react-redux';
+import { FormInput as Input, FormButton } from '@/styles/shared/form';
+import { flex } from '@/styles/mixin';
 import { WarningIcon } from '@/components';
+import { useSignupState } from '@/hooks';
+import { verifyEmailSendRequest } from '@/store/modules/signup';
+import { Redirect } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -53,9 +57,20 @@ const WarningText = styled.div`
   font-size: ${(props) => props.theme.size.s};
 `;
 
-const SignupBox = () => {
+const Button = styled(FormButton)`
+  &:disabled {
+    cursor: wait;
+  }
+`;
+
+const EmailBox = () => {
   const [email, setEmail] = useState('');
   const [valid, setValid] = useState(true);
+  const {
+    verify: { loading },
+  } = useSignupState();
+
+  const dispatch = useDispatch();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -68,7 +83,7 @@ const SignupBox = () => {
       setValid(false);
       return;
     }
-    console.log('이메일 전송 구현하기');
+    dispatch(verifyEmailSendRequest({ email }));
   };
 
   return (
@@ -85,7 +100,6 @@ const SignupBox = () => {
           placeholder="name@work-email.com"
           onChange={handleEmailChange}
           value={email}
-          autoComplete="true"
           required
         />
         {!valid && (
@@ -96,10 +110,12 @@ const SignupBox = () => {
             <WarningText>유효하지 않은 이메일 주소입니다.</WarningText>
           </WarningBox>
         )}
-        <Button type="submit">인증 코드 전송</Button>
+        <Button disabled={loading} type="submit">
+          인증 코드 전송
+        </Button>
       </Form>
     </Container>
   );
 };
 
-export default SignupBox;
+export default EmailBox;

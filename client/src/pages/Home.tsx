@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/hooks';
 import { useDispatch } from 'react-redux';
+import { useAuth } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth';
 import { Header, ChannelListBox, ThreadListBox, DetailBox } from '@/components';
 
