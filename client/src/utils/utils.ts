@@ -39,3 +39,12 @@ export const decrypt = (text: string): string => {
   const decipher = crypto.createDecipheriv(CIPHER_ALGORITHM, CIPHER_KEY, IV);
   return decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
 };
+
+export const getNotNullDataInArray = (arr: any[]) => (property: string) => {
+  return arr.filter((el) => {
+    if (el[property] === null) {
+      return false;
+    }
+    return true;
+  });
+};
