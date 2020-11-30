@@ -38,7 +38,6 @@ const Header = styled.div`
 
 const CloseButton = styled.button`
   background: none;
-  border: none;
   color: ${(props) => props.theme.color.gray2};
   font-size: ${(props) => props.theme.size.xxxl};
   &:hover {
@@ -208,11 +207,11 @@ const CreateChannelModal = () => {
     setDescription(e.target.value);
   };
 
-  const closeAddChannelModal = (e: React.MouseEvent<HTMLElement>) => {
+  const closeAddChannelModal = () => {
     dispatch(openAddChannelModal());
   };
 
-  const toggleSecret = (e: React.MouseEvent<HTMLElement>) => {
+  const toggleSecret = () => {
     setSecret((state) => !state);
   };
 
