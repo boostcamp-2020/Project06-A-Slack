@@ -7,14 +7,10 @@ import ThreadInputBox from './ThreadInputBox/ThreadInputBox';
 
 const Container = styled.div`
   background-color: pink;
+  width: 100%;
 `;
 
 const ThreadListBox = () => {
-  const channel = {
-    id: 1,
-    name: 'slack-클론-구현팀',
-  };
-
   return (
     <Container>
       <div>BoxTop</div>

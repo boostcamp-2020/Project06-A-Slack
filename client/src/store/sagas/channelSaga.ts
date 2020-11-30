@@ -7,6 +7,9 @@ import {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
+  makeChannelRequest,
+  makeChannelSuccess,
+  makeChannelFailure,
 } from '../modules/channel';
 
 function* loadChannels() {
@@ -27,6 +30,18 @@ function* loadChannel(action: any) {
   }
 }
 
+function* makeChannel(action: any) {
+  /*
+  channelType: string;
+  description: string;
+  id: number;
+  isPublic: number;
+  memberCount: number;
+  name: string;
+  ownerId: number;
+  */
+}
+
 function* watchLoadChannels() {
   yield takeEvery(loadChannelsRequest, loadChannels);
 }
@@ -34,6 +49,10 @@ function* watchLoadChannels() {
 function* watchLoadChannel() {
   yield takeLatest(loadChannelRequest, loadChannel);
 }
+
+// function* watchMakeChannel() {
+//   yiled takeLatest(makeChannelRequest, )
+// }
 
 export default function* channelSaga() {
   yield all([fork(watchLoadChannels), fork(watchLoadChannel)]);

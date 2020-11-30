@@ -1,13 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth, useChannel } from '@/hooks';
 import { useDispatch } from 'react-redux';
-import { useAuth } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth';
-import { Header, ChannelListBox, ThreadListBox, DetailBox } from '@/components';
+import {
+  Header,
+  LeftSideBar,
+  ThreadListBox,
+  DetailBox,
+  AddTopicModal,
+  CreateChannelModal,
+} from '@/components';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  height: 100%;
+`;
 
 const HomePage = () => {
   const dispatch = useDispatch();
 
+  const { topicVisible, addChannelVisible } = useChannel();
   const { accessToken } = useAuth();
 
   const handleLogout = () => {
@@ -15,24 +29,27 @@ const HomePage = () => {
   };
 
   return (
-    <div>
+    <>
       <Header />
-      <p>Home page</p>
-      {accessToken ? (
-        <>
-          <ChannelListBox />
-          <button type="button" onClick={handleLogout}>
-            Logout
-          </button>
-          <ThreadListBox />
-          <DetailBox />
-        </>
-      ) : (
-        <Link to="/login">
-          <button type="button">Login Page</button>
-        </Link>
-      )}
-    </div>
+      <Container>
+        {accessToken ? (
+          <>
+            <LeftSideBar />
+            <ThreadListBox />
+            <DetailBox />
+          </>
+        ) : (
+          <Link to="/login">
+            <button type="button">Login Page</button>
+          </Link>
+        )}
+      </Container>
+      {topicVisible && <AddTopicModal />}
+      {addChannelVisible && <CreateChannelModal />}
+      <button type="button" onClick={handleLogout}>
+        Logout
+      </button>
+    </>
   );
 };
 
