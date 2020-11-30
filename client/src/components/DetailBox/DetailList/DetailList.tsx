@@ -6,7 +6,7 @@ import { flex } from '@/styles/mixin';
 import { ChannelUsers } from '@/types/channelUsers';
 
 const Container = styled.div`
-  padding: ${(props) => props.theme.size.m} ${(props) => props.theme.size.m};
+  padding: ${(props) => props.theme.size.m};
 `;
 
 const ListItem = styled.div`
@@ -23,7 +23,7 @@ const Arrow = styled.div`
   font-size: ${(props) => props.theme.size.m};
 `;
 
-const Members = styled.div`
+const ItemBox = styled.div`
   margin-top: 20px;
 `;
 
@@ -77,25 +77,43 @@ const DetailList = () => {
 
   return (
     <Container>
-      <ListItem onClick={openAbout}>
-        <ListItemName>About</ListItemName>
-        <Arrow>{about ? '∨' : '＞'}</Arrow>
-      </ListItem>
-      <Members onClick={openMembers}>
+      <ItemBox>
+        <ListItem onClick={openAbout}>
+          <ListItemName>About</ListItemName>
+          <Arrow>{about ? '∨' : '＞'}</Arrow>
+        </ListItem>
+      </ItemBox>
+      <ItemBox onClick={openMembers}>
         <ListItem>
           <ListItemName>Members</ListItemName>
           <Arrow>{members ? '∨' : '＞'}</Arrow>
         </ListItem>
         {members &&
           users?.map((user: ChannelUsers) => (
-            <MemberItem>
+            <MemberItem key={user.userId}>
               <MemberImg src="https://mblogthumb-phinf.pstatic.net/MjAxOTEyMTJfMjYw/MDAxNTc2MTQwMDE0MjIy.F1V39cfeZPhX87yFFlqkZQqfGmycVOxXbO3vg0dFrvEg.12ulcNAMUNyNzlE7rz5Hk2NVlJfkakVTOspDnzyRkUMg.PNG.vet6390/%EA%B8%B8%EA%B3%A0%EC%96%91%EC%9D%B4_%EC%9E%85%EC%96%91.PNG?type=w800" />
               <MemberInfo>{user.displayName}</MemberInfo>
             </MemberItem>
           ))}
-      </Members>
-      <ListItem />
-      <ListItem />
+      </ItemBox>
+      <ItemBox>
+        <ListItem onClick={openOrganizations}>
+          <ListItemName>Organizations</ListItemName>
+          <Arrow>{organization ? '∨' : '＞'}</Arrow>
+        </ListItem>
+      </ItemBox>
+      <ItemBox>
+        <ListItem onClick={openPinned}>
+          <ListItemName>Pinned</ListItemName>
+          <Arrow>{pinned ? '∨' : '＞'}</Arrow>
+        </ListItem>
+      </ItemBox>
+      <ItemBox>
+        <ListItem onClick={openFiles}>
+          <ListItemName>Files</ListItemName>
+          <Arrow>{files ? '∨' : '＞'}</Arrow>
+        </ListItem>
+      </ItemBox>
     </Container>
   );
 };
