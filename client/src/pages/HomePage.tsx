@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth';
 import { Header, ChannelListBox, ThreadListBox, DetailBox } from '@/components';
 
-const Home = () => {
+const HomePage = () => {
   const dispatch = useDispatch();
 
   const { accessToken } = useAuth();
@@ -36,4 +36,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
