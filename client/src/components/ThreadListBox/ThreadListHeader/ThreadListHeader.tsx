@@ -3,7 +3,7 @@ import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { ChannelUsers } from '@/types/channelUsers';
-import { openDetail, openTopic } from '@/store/modules/channel';
+import { openDetail, openTopicModal } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
@@ -74,12 +74,12 @@ const ThreadListHeader = () => {
   const { current, users, topic } = useChannel();
   const dispatch = useDispatch();
 
-  const openDetailBar = (e: React.MouseEvent<HTMLElement>) => {
+  const clickDetail = (e: React.MouseEvent<HTMLElement>) => {
     dispatch(openDetail());
   };
 
-  const openTopicModal = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(openTopic());
+  const clickTopicModal = (e: React.MouseEvent<HTMLElement>) => {
+    dispatch(openTopicModal());
   };
 
   return current && users ? (
@@ -90,7 +90,7 @@ const ThreadListHeader = () => {
         </LeftTitle>
         <LeftButtonBox>
           <LeftButton>핀</LeftButton>
-          <LeftButton onClick={openTopicModal}>{topic}</LeftButton>
+          <LeftButton onClick={clickTopicModal}>{topic}</LeftButton>
         </LeftButtonBox>
       </Left>
       <Right>
@@ -101,7 +101,7 @@ const ThreadListHeader = () => {
           {users?.length}
         </RightUserBox>
         <RightButton>O</RightButton>
-        <RightButton onClick={openDetailBar}>i</RightButton>
+        <RightButton onClick={clickDetail}>i</RightButton>
       </Right>
     </Container>
   ) : (

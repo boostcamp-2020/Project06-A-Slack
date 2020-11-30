@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { openAddChannel } from '@/store/modules/channel';
+import { openAddChannelModal } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -209,7 +209,7 @@ const CreateChannelModal = () => {
   };
 
   const closeAddChannelModal = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(openAddChannel());
+    dispatch(openAddChannelModal());
   };
 
   const toggleSecret = (e: React.MouseEvent<HTMLElement>) => {

@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { openChannelList, openAddChannel } from '@/store/modules/channel';
+import { openChannelList, openAddChannelModal } from '@/store/modules/channel';
 import styled from 'styled-components';
 import { useChannel } from '@/hooks/useChannel';
 import { flex } from '@/styles/mixin';
@@ -66,29 +66,28 @@ const PopupItem = styled.div`
 
 const ChannelListBox = () => {
   const ref = useRef();
-  const [addVisible, setAddVisible] = useState(false);
-  const [moreVisible, setMoreVisible] = useState(false);
+  const [addPopupVisible, setAddPopupVisible] = useState(false);
+  const [morePopupVisible, setMorePopupVisible] = useState(false);
 
   const dispatch = useDispatch();
   const { channelListVisible } = useChannel();
 
   const clickChannel = () => dispatch(openChannelList());
-  useOnClickOutside(ref, () => setAddVisible(false));
-  useOnClickOutside(ref, () => setMoreVisible(false));
+  useOnClickOutside(ref, () => setAddPopupVisible(false));
+  useOnClickOutside(ref, () => setMorePopupVisible(false));
 
   const clickAdd = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    setAddVisible((state) => !state);
+    setAddPopupVisible((state) => !state);
   };
 
   const clickMore = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    setMoreVisible((state) => !state);
+    setMorePopupVisible((state) => !state);
   };
 
-  const openAddChannelModal = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    dispatch(openAddChannel());
+  const clickAddChannelModal = (e: React.MouseEvent<HTMLElement>) => {
+    dispatch(openAddChannelModal());
   };
 
   return (
@@ -100,15 +99,15 @@ const ChannelListBox = () => {
       <SubWrapper>
         <PopupBox onClick={clickMore}>
           <Button>፧</Button>
-          <Popup pick={moreVisible} ref={ref}>
-            <PopupItem onClick={openAddChannelModal}>Add Channels</PopupItem>
+          <Popup pick={morePopupVisible} ref={ref}>
+            <PopupItem onClick={clickAddChannelModal}>Add Channels</PopupItem>
             <PopupItem>Browse Channels</PopupItem>
           </Popup>
         </PopupBox>
         <PopupBox onClick={clickAdd}>
           <Button>+</Button>
-          <Popup pick={addVisible} ref={ref}>
-            <PopupItem onClick={openAddChannelModal}>Add Channels</PopupItem>
+          <Popup pick={addPopupVisible} ref={ref}>
+            <PopupItem onClick={clickAddChannelModal}>Add Channels</PopupItem>
             <PopupItem>Browse Channels</PopupItem>
           </Popup>
         </PopupBox>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { changeTopic, openTopic } from '@/store/modules/channel';
+import { changeTopic, openTopicModal } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
 const ModalBackground = styled.div`
@@ -94,11 +94,11 @@ const AddTopicModal = () => {
   };
 
   const onCancel = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(openTopic());
+    dispatch(openTopicModal());
   };
   const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
     dispatch(changeTopic(content));
-    dispatch(openTopic());
+    dispatch(openTopicModal());
   };
 
   return (

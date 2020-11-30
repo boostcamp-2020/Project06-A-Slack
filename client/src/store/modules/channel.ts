@@ -70,10 +70,10 @@ const channelSlice = createSlice({
     openDetail(state) {
       state.detailVisible = !state.detailVisible;
     },
-    openTopic(state) {
+    openTopicModal(state) {
       state.topicVisible = !state.topicVisible;
     },
-    openAddChannel(state) {
+    openAddChannelModal(state) {
       state.addChannelVisible = !state.addChannelVisible;
     },
     changeTopic(state, action) {
@@ -96,8 +96,8 @@ export const {
   setCurrent,
   openChannelList,
   openDetail,
-  openTopic,
-  openAddChannel,
+  openTopicModal,
+  openAddChannelModal,
   changeTopic,
 } = channelSlice.actions;
 export default channelSlice.reducer;
