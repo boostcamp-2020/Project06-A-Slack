@@ -37,6 +37,7 @@ const theme: DefaultTheme = {
     blue: '#0073c6',
 
     yellow: '#e8912d',
+    warningRed: '#D73A49',
   },
   size: {
     xxxs: calcRem(8),

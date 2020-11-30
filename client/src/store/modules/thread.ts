@@ -8,31 +8,38 @@ interface ThreadList {
   threadList: Thread[] | null;
 }
 const threadState: Thread = {
-  id: 1,
-  userId: 1,
-  channelId: 1,
+  id: 0,
+  userId: 0,
+  channelId: 0,
   parentId: null,
-  content: 'init content',
-  url: 'url/init',
+  content: '첫번째 쓰레드를 작성해주세요! 😀',
+  url: '',
   isEdited: 0,
   isPinned: 0,
   createdAt: '',
-  emoji: [
-    { name: 'emoji1', userId: 1 },
-    { name: 'emoji1', userId: 2 },
-  ],
+  emoji: [],
+  subCount: 0,
+  subThreadUserId1: null,
+  subThreadUserId2: null,
+  subThreadUserId3: null,
 };
 
 const threadListState: ThreadList = {
   threadList: [threadState],
 };
 
+export interface getThreadRequestPayload {
+  channelId: number;
+}
+
 // 리듀서
 const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
-    getThreadRequest(state) {},
+    getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
+      // state.channelId = action.payload.channelId;
+    },
     getThreadSuccess(state, action: PayloadAction<ThreadList>) {
       state.threadList = action.payload.threadList;
     },
@@ -40,9 +47,6 @@ const threadSlice = createSlice({
   },
 });
 
-const selectThreadState = (state: RootState) => state.thread;
-
-export const selectThread = createSelector(selectThreadState, (t) => t);
 export const THREAD = threadSlice.name;
 export const { getThreadRequest, getThreadSuccess, getThreadFailure } = threadSlice.actions; // action 나눠서 export 하기
 

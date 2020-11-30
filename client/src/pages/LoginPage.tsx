@@ -3,7 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { LoginBox } from '@/components';
 import { useAuth } from '@/hooks';
 
-const Login = () => {
+const LoginPage = () => {
   const { accessToken } = useAuth();
   return (
     <>
@@ -19,4 +19,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

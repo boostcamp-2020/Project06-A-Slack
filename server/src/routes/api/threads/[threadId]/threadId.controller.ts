@@ -1,12 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
+import { threadModel } from '@/models';
+import { ERROR_MESSAGE } from '@/utils/constants';
 
 /**
  * GET /api/threads/:threadId
  */
-export const getThread = (req: Request, res: Response, next: NextFunction): void => {
+export const getSubThread = async (req: Request, res: Response, next: NextFunction) => {
   const { threadId } = req.params;
-  res.json({ thread: { threadId } });
+  if (Number.isNaN(Number(threadId))) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 500 });
+    return;
+  }
+  try {
+    const [subThreadList] = await threadModel.getSubThread(Number(threadId));
+    res.json({ subThreadList });
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**

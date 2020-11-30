@@ -2,10 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import { IncomingForm } from 'formidable';
 import bcrypt from 'bcrypt';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import { verifyRequestData, verifyToken } from '@/utils/utils';
+import {
+  verifyRequestData,
+  verifyToken,
+  getRandomString,
+  encrypt,
+  decrypt,
+  sendEmail,
+} from '@/utils/utils';
 import { userModel } from '@/models';
 import config from '@/config';
 import { TIME, TOKEN_TYPE, ERROR_MESSAGE } from '@/utils/constants';
+import isEmail from 'validator/lib/isEmail';
 import redisClient from '@/lib/redis';
 
 /**
@@ -14,10 +22,13 @@ import redisClient from '@/lib/redis';
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, pw } = req.body;
   if (verifyRequestData([email, pw])) {
-    const [[user]] = await userModel.getUserByEmail({ email });
+    const decryptedEmail = decrypt(email);
+    const decryptedPw = decrypt(pw);
+
+    const [[user]] = await userModel.getUserByEmail({ email: decryptedEmail });
     if (user) {
       try {
-        const match = await bcrypt.compare(pw, user.pw);
+        const match = await bcrypt.compare(decryptedPw, user.pw);
         if (match) {
           // 비번 일치 할 때
           const { pw: userPw, phoneNumber, image, ...userInfo } = user;
@@ -134,4 +145,36 @@ export const refreshAuthToken = async (
     }
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
+
+/**
+ * POST /api/auth/email/verify
+ */
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const code = getRandomString(6);
+  const { email: userEmail } = req.body;
+  const content = `인증 코드 : ${code}`;
+
+  if (!isEmail(userEmail)) {
+    next({ message: ERROR_MESSAGE.INVALID_EMAIL, status: 400 });
+    return;
+  }
+
+  try {
+    await sendEmail(userEmail, content);
+  } catch (err) {
+    next({ message: ERROR_MESSAGE.SEND_EMAIL_FAILED, status: 500 });
+    return;
+  }
+
+  try {
+    const verifyCode = encrypt(code);
+    res.json({ verifyCode });
+  } catch (err) {
+    next({ message: ERROR_MESSAGE.CODE_GENERATION_FAILED, status: 500 });
+  }
 };
