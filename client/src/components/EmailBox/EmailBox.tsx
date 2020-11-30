@@ -62,7 +62,7 @@ const Button = styled(FormButton)`
   }
 `;
 
-const EmailBox = () => {
+const EmailBox: React.FC = () => {
   const [email, setEmail] = useState('');
   const [valid, setValid] = useState(true);
   const {
@@ -104,7 +104,7 @@ const EmailBox = () => {
         {!valid && (
           <WarningBox>
             <IconBox>
-              <WarningIcon color="#D73A49" />
+              <WarningIcon />
             </IconBox>
             <WarningText>유효하지 않은 이메일 주소입니다.</WarningText>
           </WarningBox>

@@ -2,7 +2,7 @@ import React from 'react';
 import { EmailBox, CodeVerifyBox } from '@/components';
 import { useSignupState } from '@/hooks';
 
-const EmailVerifyPage = () => {
+const EmailVerifyPage: React.FC = () => {
   const {
     verify: { verifyCode },
   } = useSignupState();

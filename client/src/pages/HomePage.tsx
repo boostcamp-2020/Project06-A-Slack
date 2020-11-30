@@ -16,7 +16,7 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const { topicVisible, addChannelVisible } = useChannel();
   const { accessToken } = useAuth();
 

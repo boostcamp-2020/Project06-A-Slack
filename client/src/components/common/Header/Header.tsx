@@ -29,7 +29,7 @@ const LogoutButton = styled.button`
   right: 0.5rem;
 `;
 
-const Header = () => {
+const Header: React.FC = () => {
   const { userId } = useAuth();
   const dispatch = useDispatch();
 
