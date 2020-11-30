@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import isInt from 'validator/es/lib/isInt';
 import isAlpha from 'validator/es/lib/isAlpha';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { lighten } from 'polished';
+import { Redirect } from 'react-router-dom';
 import { flex, focusedInputBoxShadow } from '@/styles/mixin';
 import { removeVerifyCodeAndEmail } from '@/store/modules/signup';
 import { useSignupState } from '@/hooks';
@@ -18,7 +17,9 @@ const Container = styled.div`
 `;
 
 const AppIcon = styled.div`
-  margin: 0.5rem auto;
+  margin: 1rem auto;
+  font-size: 2rem;
+  font-weight: bold;
 `;
 
 const Title = styled.div`
@@ -84,10 +85,10 @@ const Input = styled.input`
 const InvaildBox = styled.div`
   width: 27rem;
   height: 3rem;
-  margin: 1.5rem auto;
+  margin: 3rem auto 0 auto;
   border: 1px solid ${(props) => props.theme.color.warningRed};
   border-radius: 5px;
-  background-color: ${(props) => lighten(0.42, props.theme.color.warningRed)};
+  background-color: rgba(224, 30, 90, 0.1);
   ${flex('center')};
 `;
 
@@ -98,13 +99,17 @@ const WarningText = styled.span`
   color: ${(props) => props.theme.color.black3};
 `;
 
+const InfoText = styled.div`
+  margin-top: 3rem;
+  color: ${(props) => props.theme.color.black3};
+`;
+
 const CodeVerifyBox = () => {
   const {
     verify: { verifyCode },
     email,
   } = useSignupState();
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const refs = Array(6)
     .fill(1)
@@ -146,21 +151,11 @@ const CodeVerifyBox = () => {
     }
   };
 
-  if (codes.every((e) => e)) {
-    const code = codes.join('');
-    try {
-      const decryptedCode = decrypt(verifyCode as string);
-      if (decryptedCode === code) {
-        history.push('/signup');
-      } else {
-        setCodes(Array(6).fill(''));
-        setValid(false);
-        // TODO: 코드 틀렸을 때 로직 구현
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  useEffect(() => {
+    return () => {
+      dispatch(removeVerifyCodeAndEmail());
+    };
+  }, []);
 
   useEffect(() => {
     if (!valid) {
@@ -168,11 +163,19 @@ const CodeVerifyBox = () => {
     }
   }, [valid]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(removeVerifyCodeAndEmail());
-    };
-  }, []);
+  if (codes.every((e) => e)) {
+    const code = codes.join('');
+    try {
+      const decryptedCode = decrypt(verifyCode as string);
+      if (decryptedCode === code) {
+        return <Redirect to={{ pathname: '/signup', state: { email } }} />;
+      }
+      setCodes(Array(6).fill(''));
+      setValid(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <Container>
@@ -225,6 +228,7 @@ const CodeVerifyBox = () => {
           <WarningText>유효하지 않은 코드입니다. 다시 시도해보세요!</WarningText>
         </InvaildBox>
       )}
+      <InfoText>고객님의 코드를 찾을 수 없나요? 스팸 폴더를 확인해 보세요!</InfoText>
     </Container>
   );
 };
