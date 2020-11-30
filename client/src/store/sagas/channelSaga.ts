@@ -1,18 +1,22 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
+import { Channel, JoinUser } from '@/types';
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,
-  loadJoinChannelsRequest,
-  loadJoinChannelsSuccess,
-  loadJoinChannelsFailure,
+  loadMyChannelsRequest,
+  loadMyChannelsSuccess,
+  loadMyChannelsFailure,
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  makeChannelRequest,
-  makeChannelSuccess,
-  makeChannelFailure,
+  createChannelRequest,
+  createChannelSuccess,
+  createChannelFailure,
+  joinChannelRequset,
+  joinChannelSuccess,
+  joinChannelFailure,
 } from '../modules/channel';
 
 function* loadChannels() {
@@ -24,13 +28,12 @@ function* loadChannels() {
   }
 }
 
-function* loadJoinChannels(action: any) {
+function* loadMyChannels(action: any) {
   try {
-    console.log(action.payload);
     const result = yield call(channelService.getJoinChannels, { userId: action.payload });
-    yield put(loadJoinChannelsSuccess({ joinChannelList: result.data.channelList }));
+    yield put(loadMyChannelsSuccess({ joinChannelList: result.data.channelList }));
   } catch (err) {
-    yield put(loadJoinChannelsFailure(err));
+    yield put(loadMyChannelsFailure(err));
   }
 }
 
@@ -43,16 +46,48 @@ function* loadChannel(action: any) {
   }
 }
 
-function* makeChannel(action: any) {
-  /*
-  channelType: string;
-  description: string;
-  id: number;
-  isPublic: number;
-  memberCount: number;
-  name: string;
-  ownerId: number;
-  */
+function* createChannel(action: any) {
+  try {
+    const { ownerId, channelType, isPublic, name, description, displayName } = action.payload;
+    const result = yield call(channelService.createChannel, {
+      ownerId,
+      channelType,
+      isPublic,
+      name,
+      description,
+    });
+
+    const channel: Channel = {
+      id: result.data.channel.insertId,
+      channelType: 1,
+      description,
+      isPublic,
+      name,
+      topic: '',
+      ownerId,
+      memberCount: 1,
+    };
+
+    const joinUser: JoinUser = {
+      displayName,
+      userId: ownerId,
+      url:
+        'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg',
+    };
+    yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });
+    yield put(createChannelSuccess({ channel, joinUser }));
+  } catch (err) {
+    yield put(createChannelFailure(err));
+  }
+}
+
+function* joinChannel(action: any) {
+  try {
+    const { userId, channelId } = action.payload;
+    yield call(channelService.joinChannel, { userId, channelId });
+  } catch (err) {
+    yield put(joinChannelFailure(err));
+  }
 }
 
 function* watchLoadChannels() {
@@ -60,17 +95,27 @@ function* watchLoadChannels() {
 }
 
 function* watchLoadJoinChannels() {
-  yield takeEvery(loadJoinChannelsRequest, loadJoinChannels);
+  yield takeEvery(loadMyChannelsRequest, loadMyChannels);
 }
 
 function* watchLoadChannel() {
   yield takeLatest(loadChannelRequest, loadChannel);
 }
 
-// function* watchMakeChannel() {
-//   yiled takeLatest(makeChannelRequest, )
-// }
+function* watchCreateChannel() {
+  yield takeLatest(createChannelRequest, createChannel);
+}
+
+function* watchJoinChannel() {
+  yield takeEvery(joinChannelRequset, joinChannel);
+}
 
 export default function* channelSaga() {
-  yield all([fork(watchLoadChannels), fork(watchLoadJoinChannels), fork(watchLoadChannel)]);
+  yield all([
+    fork(watchLoadChannels),
+    fork(watchLoadJoinChannels),
+    fork(watchCreateChannel),
+    fork(watchLoadChannel),
+    fork(watchJoinChannel),
+  ]);
 }

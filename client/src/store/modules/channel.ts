@@ -1,24 +1,13 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChannelUsers } from '@/types/channelUsers';
-
-interface Channel {
-  channelType: string;
-  description: string;
-  id: number;
-  isPublic: number;
-  memberCount: number;
-  name: string;
-  ownerId: number;
-  topic: string;
-}
+import { JoinUser, Channel } from '@/types';
 
 interface ChannelState {
   channelList: Channel[];
   joinChannelList: Channel[];
   current: Channel | null;
   channelListVisible: boolean;
-  users: ChannelUsers[];
+  users: JoinUser[];
   detailVisible: boolean;
   channelId: number | null;
   topic: string;
@@ -50,11 +39,11 @@ const channelSlice = createSlice({
     loadChannelsFailure(state, action) {
       // todo 에러처리
     },
-    loadJoinChannelsRequest(state, action) {},
-    loadJoinChannelsSuccess(state, action) {
+    loadMyChannelsRequest(state, action) {},
+    loadMyChannelsSuccess(state, action) {
       state.joinChannelList = action.payload.joinChannelList;
     },
-    loadJoinChannelsFailure(state, action) {
+    loadMyChannelsFailure(state, action) {
       // todo 에러처리
     },
     loadChannelRequest(state, action) {
@@ -64,13 +53,23 @@ const channelSlice = createSlice({
       state.users = action.payload.users;
     },
     loadChannelFailure(state, action) {
-      // tdoo 에러처리
+      // todo 에러처리
     },
-    makeChannelRequest(state, action) {},
-    makeChannelSuccess(state, action) {
-      // state.channelList.push(action.)
+    createChannelRequest(state, action) {},
+    createChannelSuccess(state, action) {
+      state.channelList.push(action.payload.channel);
+      state.joinChannelList.push(action.payload.channel);
+      state.current = action.payload.channel;
+      state.users = [action.payload.joinUser];
     },
-    makeChannelFailure(state, action) {},
+    createChannelFailure(state, action) {
+      // todo 에러처리
+    },
+    joinChannelRequset(state, action) {},
+    joinChannelSuccess(state, action) {},
+    joinChannelFailure(state, action) {
+      // todo 에러처리
+    },
     setCurrent(state, action) {
       state.current = state.joinChannelList[action.payload];
     },
@@ -97,15 +96,18 @@ export const {
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,
-  loadJoinChannelsRequest,
-  loadJoinChannelsSuccess,
-  loadJoinChannelsFailure,
+  loadMyChannelsRequest,
+  loadMyChannelsSuccess,
+  loadMyChannelsFailure,
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  makeChannelRequest,
-  makeChannelSuccess,
-  makeChannelFailure,
+  createChannelRequest,
+  createChannelSuccess,
+  createChannelFailure,
+  joinChannelRequset,
+  joinChannelSuccess,
+  joinChannelFailure,
   setCurrent,
   openChannelList,
   openDetail,
