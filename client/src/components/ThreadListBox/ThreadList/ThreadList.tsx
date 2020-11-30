@@ -4,7 +4,7 @@ import { getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
-import { useThread } from '@/hooks/useThread';
+import { useThread } from '@/hooks';
 
 const Container = styled.div`
   background-color: orange;
