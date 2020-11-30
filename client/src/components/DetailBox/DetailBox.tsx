@@ -5,18 +5,15 @@ import DetailHeader from './DeatailHeader/DetailHeader';
 import DetailButtonBox from './DetailButtonBox/DetailButtonBox';
 import DetailList from './DetailList/DetailList';
 
-interface Props {
-  display: boolean;
-}
-const StyledDetailBox = styled.div<Props>`
+const StyledDetailBox = styled.div`
   width: 600px;
-  display: ${(props: { display: boolean }) => (props.display ? 'block' : 'none')};
+  display: ${(props: { visible: boolean }) => (props.visible ? 'block' : 'none')};
 `;
 const DetailBox = () => {
   const { detailVisible } = useChannel();
 
   return (
-    <StyledDetailBox display={detailVisible}>
+    <StyledDetailBox visible={detailVisible}>
       <DetailHeader />
       <DetailButtonBox />
       <DetailList />
