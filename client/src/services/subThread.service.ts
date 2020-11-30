@@ -1,8 +1,7 @@
 import API from '@/api';
-import { getSubThreadRequestPayload } from '@/store/modules/subThread';
 
 export const subThreadService = {
-  getSubThreadList({ parentId }: getSubThreadRequestPayload) {
+  getSubThreadList(parentId: number) {
     return API.get(`/api/threads/${parentId}`);
   },
 };
