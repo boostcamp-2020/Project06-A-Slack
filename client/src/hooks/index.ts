@@ -3,3 +3,4 @@ export * from './useUser';
 export * from './useChannel';
 export * from './useSignupState';
 export * from './useThread';
+export * from './useSubThread';
