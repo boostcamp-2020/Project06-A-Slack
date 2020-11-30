@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import isInt from 'validator/es/lib/isInt';
 import isAlpha from 'validator/es/lib/isAlpha';
-import { flex, focusedInputBoxShadow } from '@/styles/mixin';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { flex, focusedInputBoxShadow } from '@/styles/mixin';
 import { removeVerifyCode } from '@/store/modules/signup';
+import { useSignupState } from '@/hooks';
+import { decrypt } from '@/utils/utils';
 
 const CodeBox = styled.div`
   ${flex()}
@@ -49,7 +52,11 @@ const Input = styled.input`
 `;
 
 const CodeVerifyBox = () => {
+  const {
+    verify: { verifyCode },
+  } = useSignupState();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const refs = Array(6)
     .fill(1)
@@ -91,8 +98,12 @@ const CodeVerifyBox = () => {
 
   if (codes.every((e) => e)) {
     const code = codes.join('');
-    // TODO : 인증 코드 전송 구현
-    console.log(code);
+    if (decrypt(verifyCode as string) === code) {
+      history.push('/signup');
+    } else {
+      setCodes(Array(6).fill(''));
+      // TODO: 코드 틀렸을 때 로직 구현
+    }
   }
 
   useEffect(() => {
