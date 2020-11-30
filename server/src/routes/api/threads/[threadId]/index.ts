@@ -3,7 +3,7 @@ import * as threadIdController from './threadId.controller';
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', threadIdController.getThread);
+router.get('/', threadIdController.getSubThread);
 router.post('/', threadIdController.modifyThread);
 router.delete('/', threadIdController.deleteThread);
 router.post('/pin', threadIdController.pinThread);

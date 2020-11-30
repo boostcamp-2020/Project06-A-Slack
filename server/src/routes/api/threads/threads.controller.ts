@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
 import { threadModel } from '@/models';
+import { ERROR_MESSAGE } from '@/utils/constants';
 
 /**
  * POST /api/threads
@@ -18,8 +19,17 @@ export const createThread = (req: Request, res: Response, next: NextFunction): v
  * GET /api/channels/:channelId
  */
 export const getChannelThreads = async (req: Request, res: Response, next: NextFunction) => {
-  // subthread까지 가져오도록 수정 필요.
+  // parentId가 null인 것만.
   const { channelId } = req.params;
-  const [threadList] = await threadModel.getThreadInChannel(Number(channelId));
-  res.json({ threadList });
+  if (Number.isNaN(Number(channelId))) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 500 });
+    return;
+  }
+  try {
+    const [threadList] = await threadModel.getThreadInChannel(Number(channelId));
+
+    res.json({ threadList });
+  } catch (err) {
+    next(err);
+  }
 };

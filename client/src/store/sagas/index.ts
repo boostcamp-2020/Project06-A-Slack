@@ -4,6 +4,7 @@ import channelSaga from './channelSaga';
 import threadSaga from './threadSaga';
 import userSaga from './userSaga';
 import signupSage from './signupSaga';
+import subThreadSaga from './subThreadSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -12,5 +13,6 @@ export default function* rootSaga() {
     fork(threadSaga),
     fork(userSaga),
     fork(signupSage),
+    fork(subThreadSaga),
   ]);
 }
