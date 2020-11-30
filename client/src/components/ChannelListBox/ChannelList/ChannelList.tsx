@@ -2,8 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadChannelsRequest } from '@/store/modules/channel';
+import { loadJoinChannelsRequest } from '@/store/modules/channel';
 import { useChannel } from '@/hooks/useChannel';
+import { useAuth } from '@/hooks/useAuth';
 import ChannelItem from './Channel/ChannelItem';
 
 interface ChannelItem {
@@ -18,9 +19,10 @@ interface ChannelItem {
 
 const ChannelList = () => {
   const dispatch = useDispatch();
-  const { channelList, channelListVisible, current } = useChannel();
+  const { joinChannelList, channelListVisible, current } = useChannel();
+  const { userId } = useAuth();
 
-  const callAPI = () => dispatch(loadChannelsRequest());
+  const callAPI = () => dispatch(loadJoinChannelsRequest(userId));
 
   useEffect(() => {
     callAPI();
@@ -28,7 +30,7 @@ const ChannelList = () => {
 
   return (
     <>
-      {channelList?.map((channel: ChannelItem, idx: number) =>
+      {joinChannelList?.map((channel: ChannelItem, idx: number) =>
         !channelListVisible ? (
           current?.id === channel.id ? (
             <ChannelItem idx={idx} key={channel.id} />
