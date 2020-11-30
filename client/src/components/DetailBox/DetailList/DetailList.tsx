@@ -51,27 +51,22 @@ const DetailList = () => {
   const { users } = useChannel();
 
   const openAbout = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
     setAbout((about) => !about);
   };
 
   const openMembers = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
     setMembers((members) => !members);
   };
 
   const openOrganizations = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
     setOrganization((organization) => !organization);
   };
 
   const openPinned = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
     setPinned((pinned) => !pinned);
   };
 
   const openFiles = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
     setFiles((files) => !files);
   };
 
