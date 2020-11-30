@@ -1,9 +1,12 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
-import { channelService } from '@/services/channel.service';
+import { channelService } from '@/services';
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,
+  loadJoinChannelsRequest,
+  loadJoinChannelsSuccess,
+  loadJoinChannelsFailure,
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
@@ -18,6 +21,16 @@ function* loadChannels() {
     yield put(loadChannelsSuccess({ channelList: result.data.channelList }));
   } catch (err) {
     yield put(loadChannelsFailure(err));
+  }
+}
+
+function* loadJoinChannels(action: any) {
+  try {
+    console.log(action.payload);
+    const result = yield call(channelService.getJoinChannels, { userId: action.payload });
+    yield put(loadJoinChannelsSuccess({ joinChannelList: result.data.channelList }));
+  } catch (err) {
+    yield put(loadJoinChannelsFailure(err));
   }
 }
 
@@ -46,6 +59,10 @@ function* watchLoadChannels() {
   yield takeEvery(loadChannelsRequest, loadChannels);
 }
 
+function* watchLoadJoinChannels() {
+  yield takeEvery(loadJoinChannelsRequest, loadJoinChannels);
+}
+
 function* watchLoadChannel() {
   yield takeLatest(loadChannelRequest, loadChannel);
 }
@@ -55,5 +72,5 @@ function* watchLoadChannel() {
 // }
 
 export default function* channelSaga() {
-  yield all([fork(watchLoadChannels), fork(watchLoadChannel)]);
+  yield all([fork(watchLoadChannels), fork(watchLoadJoinChannels), fork(watchLoadChannel)]);
 }
