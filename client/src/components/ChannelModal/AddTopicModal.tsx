@@ -89,7 +89,7 @@ const AddTopicModal = () => {
   const [content, setContent] = useState('');
   const dispatch = useDispatch();
 
-  const onChange = (e: any) => {
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
 
