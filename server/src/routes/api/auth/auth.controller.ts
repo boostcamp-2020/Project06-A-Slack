@@ -157,7 +157,7 @@ export const verifyEmail = async (
 ): Promise<void> => {
   const code = getRandomString(6);
   const { email: userEmail } = req.body;
-  const content = `인증 코드 : ${code}`;
+  const content = `인증 코드 : ${code.slice(0, 3)}-${code.slice(3, 6)}`;
 
   if (!isEmail(userEmail)) {
     next({ message: ERROR_MESSAGE.INVALID_EMAIL, status: 400 });
