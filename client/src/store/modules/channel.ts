@@ -10,10 +10,12 @@ interface Channel {
   memberCount: number;
   name: string;
   ownerId: number;
+  topic: string;
 }
 
 interface ChannelState {
   channelList: Channel[];
+  joinChannelList: Channel[];
   current: Channel | null;
   channelListVisible: boolean;
   users: ChannelUsers[];
@@ -26,6 +28,7 @@ interface ChannelState {
 
 const initialState: ChannelState = {
   channelList: [],
+  joinChannelList: [],
   current: null,
   channelListVisible: true,
   users: [],
@@ -47,6 +50,13 @@ const channelSlice = createSlice({
     loadChannelsFailure(state, action) {
       // todo 에러처리
     },
+    loadJoinChannelsRequest(state, action) {},
+    loadJoinChannelsSuccess(state, action) {
+      state.joinChannelList = action.payload.joinChannelList;
+    },
+    loadJoinChannelsFailure(state, action) {
+      // todo 에러처리
+    },
     loadChannelRequest(state, action) {
       state.channelId = action.payload;
     },
@@ -62,7 +72,7 @@ const channelSlice = createSlice({
     },
     makeChannelFailure(state, action) {},
     setCurrent(state, action) {
-      state.current = state.channelList[action.payload];
+      state.current = state.joinChannelList[action.payload];
     },
     openChannelList(state) {
       state.channelListVisible = !state.channelListVisible;
@@ -87,6 +97,9 @@ export const {
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,
+  loadJoinChannelsRequest,
+  loadJoinChannelsSuccess,
+  loadJoinChannelsFailure,
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
