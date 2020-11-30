@@ -2,7 +2,7 @@ import React from 'react';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
-import { ChannelUsers } from '@/types/channelUsers';
+import { JoinUser } from '@/types';
 import { openDetail, openTopicModal } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
@@ -95,7 +95,7 @@ const ThreadListHeader = () => {
       </Left>
       <Right>
         <RightUserBox>
-          {makeUserIcons(users).map((icon: ChannelUsers) => (
+          {makeUserIcons(users).map((icon: JoinUser) => (
             <RightUser key={icon.userId}>{icon.userId}</RightUser>
           ))}
           {users?.length}
