@@ -9,6 +9,7 @@ const Container = styled.div`
   width: 100%;
   height: 2.5rem;
   background-color: ${(props) => props.theme.color.main};
+  flex-shrink: 0;
   ${flex()};
 `;
 
