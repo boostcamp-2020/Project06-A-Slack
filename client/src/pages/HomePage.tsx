@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useAuth, useChannel } from '@/hooks';
-import { useDispatch } from 'react-redux';
-import { logoutRequest } from '@/store/modules/auth';
 import {
   Header,
   LeftSideBar,
@@ -19,14 +17,8 @@ const Container = styled.div`
 `;
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-
   const { topicVisible, addChannelVisible } = useChannel();
   const { accessToken } = useAuth();
-
-  const handleLogout = () => {
-    dispatch(logoutRequest());
-  };
 
   return (
     <>
@@ -44,9 +36,6 @@ const HomePage = () => {
       </Container>
       {topicVisible && <AddTopicModal />}
       {addChannelVisible && <CreateChannelModal />}
-      <button type="button" onClick={handleLogout}>
-        Logout
-      </button>
     </>
   );
 };
