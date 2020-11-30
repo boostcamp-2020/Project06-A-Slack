@@ -14,16 +14,16 @@ interface Props {
   theme: any;
 }
 
-const Channel = styled.div`
+const Channel = styled.div<Props>`
   display: flex;
   align-items: center;
   padding: ${(props) => props.theme.size.m};
   font-size: ${(props) => props.theme.size.m};
   color: #fff;
   &:hover {
-    ${(props: Props) => (!props.pick ? 'background: rgba(0, 0, 0, 0.2);' : '')}
+    ${(props) => (!props.pick ? 'background: rgba(0, 0, 0, 0.2);' : '')}
   }
-  background: ${(props: Props) => (props.pick ? props.theme.color.blue : 'transparent')};
+  background: ${(props) => (props.pick ? props.theme.color.blue : 'transparent')};
 `;
 
 const Icon = styled.div`

@@ -44,10 +44,10 @@ const Content = styled.div`
   font-size: 12px;
 `;
 
-const Popup = styled.div`
+const Popup = styled.div<Props>`
   position: absolute;
   border-radius: 5px;
-  display: ${(props: Props) => (props.pick ? 'block' : 'none')};
+  display: ${(props) => (props.pick ? 'block' : 'none')};
   top: 30px;
   left: -10px;
   width: 200px;
