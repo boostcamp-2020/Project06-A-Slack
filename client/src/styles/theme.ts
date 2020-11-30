@@ -24,6 +24,8 @@ const theme: DefaultTheme = {
     gray4: '#ddd',
     gray5: '#eee',
     gray6: '#fff',
+
+    warningRed: '#D73A49',
   },
   size: {
     xxxs: calcRem(8),

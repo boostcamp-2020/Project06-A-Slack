@@ -45,7 +45,6 @@ const authSlice = createSlice({
     loginFailure(state) {
       state.loading = false;
     },
-    loginCancelled() {},
     logoutRequest() {},
     logoutSuccess(state) {
       state.accessToken = null;
@@ -64,7 +63,6 @@ export const {
   loginRequest,
   loginSuccess,
   loginFailure,
-  loginCancelled,
   logoutRequest,
   logoutSuccess,
   logoutFailure,

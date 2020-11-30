@@ -24,6 +24,8 @@ declare module 'styled-components' {
       gray4: string;
       gray5: string;
       gray6: string;
+
+      warningRed: string;
     };
 
     size: {
