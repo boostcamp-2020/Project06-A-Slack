@@ -3,6 +3,7 @@ import authSaga from './authSaga';
 import channelSaga from './channelSaga';
 import threadSaga from './threadSaga';
 import userSaga from './userSaga';
+import signupSage from './signupSaga';
 import subThreadSaga from './subThreadSaga';
 
 export default function* rootSaga() {
@@ -11,6 +12,7 @@ export default function* rootSaga() {
     fork(channelSaga),
     fork(threadSaga),
     fork(userSaga),
+    fork(signupSage),
     fork(subThreadSaga),
   ]);
 }

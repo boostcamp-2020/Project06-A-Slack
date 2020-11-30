@@ -135,3 +135,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  # /api/auth/email/verify:
+  #   post:
+  #     tags:
+  #       - description: 인증
+  #     summary: 이메일 인증
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required: true
+  #             properties:
+  #               email:
+  #                 type: string
+  #     responses:
+  #       200:
+  #         description: 인증 코드 전송 성공
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 verifyCode:
+  #                   type: string
+  #       400:
+  #         description: 유효하지 않은 이메일
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ErrorResponse'
+  #       default:
+  #         description: Error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/ErrorResponse'

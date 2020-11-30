@@ -3,10 +3,10 @@ import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { ChannelUsers } from '@/types/channelUsers';
-import { openDetail } from '@/store/modules/channel';
+import { openDetail, openTopicModal } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
-const ThreadListHeaderBox = styled.div`
+const Container = styled.div`
   max-width: 80%;
   display: flex;
   align-items: center;
@@ -15,23 +15,23 @@ const ThreadListHeaderBox = styled.div`
   border: 1px solid black;
 `;
 
-const ThreadListHeaderLeft = styled.div`
+const Left = styled.div`
   border: 1px solid black;
 `;
 
-const ThreadListHeaderLeftTitle = styled.div`
+const LeftTitle = styled.div`
   font-size: 20px;
   border: 1px solid black;
 `;
 
-const ThreadListHeaderLeftButton = styled.button`
+const LeftButton = styled.button`
   background: none;
   border: none;
   outline: none;
   font-size: 12px;
 `;
 
-const ThraedListHeaderLeftButtonBox = styled.div`
+const LeftButtonBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,7 +40,7 @@ const ThraedListHeaderLeftButtonBox = styled.div`
   font-size: 16px;
 `;
 
-const ThreadListHeaderRight = styled.div`
+const Right = styled.div`
   width: 200px;
   height: 60px;
   display: flex;
@@ -49,13 +49,13 @@ const ThreadListHeaderRight = styled.div`
   border: 1px solid black;
 `;
 
-const ThreadListHeaderRightUserBox = styled.div`
+const RightUserBox = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid black;
 `;
 
-const ThreadListHeaderRightUser = styled.div`
+const RightUser = styled.div`
   display: block;
   width: 30px;
   height: 30px;
@@ -63,7 +63,7 @@ const ThreadListHeaderRightUser = styled.div`
   background: red;
 `;
 
-const ThreadListHeaderRightButton = styled.button`
+const RightButton = styled.button`
   background: none;
   border: none;
   outline: none;
@@ -71,33 +71,39 @@ const ThreadListHeaderRightButton = styled.button`
 `;
 
 const ThreadListHeader = () => {
-  const { current, users } = useChannel();
+  const { current, users, topic } = useChannel();
   const dispatch = useDispatch();
 
-  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+  const clickDetail = (e: React.MouseEvent<HTMLElement>) => {
     dispatch(openDetail());
   };
 
+  const clickTopicModal = (e: React.MouseEvent<HTMLElement>) => {
+    dispatch(openTopicModal());
+  };
+
   return current && users ? (
-    <ThreadListHeaderBox>
-      <ThreadListHeaderLeft>
-        {current.isPublic} {current.name}
-        <ThraedListHeaderLeftButtonBox>
-          <ThreadListHeaderLeftButton>핀</ThreadListHeaderLeftButton>
-          <ThreadListHeaderLeftButton>Add Topic</ThreadListHeaderLeftButton>
-        </ThraedListHeaderLeftButtonBox>
-      </ThreadListHeaderLeft>
-      <ThreadListHeaderRight>
-        <ThreadListHeaderRightUserBox>
+    <Container>
+      <Left>
+        <LeftTitle>
+          {current.isPublic} {current.name}
+        </LeftTitle>
+        <LeftButtonBox>
+          <LeftButton>핀</LeftButton>
+          <LeftButton onClick={clickTopicModal}>{topic}</LeftButton>
+        </LeftButtonBox>
+      </Left>
+      <Right>
+        <RightUserBox>
           {makeUserIcons(users).map((icon: ChannelUsers) => (
-            <ThreadListHeaderRightUser key={icon.userId}>{icon.userId}</ThreadListHeaderRightUser>
+            <RightUser key={icon.userId}>{icon.userId}</RightUser>
           ))}
           {users?.length}
-        </ThreadListHeaderRightUserBox>
-        <ThreadListHeaderRightButton>O</ThreadListHeaderRightButton>
-        <ThreadListHeaderRightButton onClick={onClick}>i</ThreadListHeaderRightButton>
-      </ThreadListHeaderRight>
-    </ThreadListHeaderBox>
+        </RightUserBox>
+        <RightButton>O</RightButton>
+        <RightButton onClick={clickDetail}>i</RightButton>
+      </Right>
+    </Container>
   ) : (
     <></>
   );

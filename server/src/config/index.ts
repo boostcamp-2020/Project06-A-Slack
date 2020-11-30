@@ -6,11 +6,19 @@ interface Config {
   devDB: PoolOptions;
   DB: PoolOptions;
   swaggerDefinition: any;
+  NODE_MAILER: {
+    email: string;
+    pw: string;
+  };
 }
 
 const config: Config = {
   jwtSecret: process.env.JWT_SECRET as string,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET as string,
+  NODE_MAILER: {
+    email: process.env.NODEMAILER_EMAIL as string,
+    pw: process.env.NODEMAILER_PW as string,
+  },
   devDB: {
     host: process.env.DB_DEV_HOST,
     user: process.env.DB_DEV_USER,
