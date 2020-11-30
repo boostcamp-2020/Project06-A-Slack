@@ -18,10 +18,10 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const Home = () => {
-  const { topicVisible, addChannelVisible } = useChannel();
+const HomePage = () => {
   const dispatch = useDispatch();
 
+  const { topicVisible, addChannelVisible } = useChannel();
   const { accessToken } = useAuth();
 
   const handleLogout = () => {
@@ -53,4 +53,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

@@ -1,6 +1,10 @@
-export const TIME = {
+export const TIME_SEC = {
   FIVE_MINUTE: 60 * 5,
   TWO_MONTH: 60 * 60 * 24 * 60,
+};
+
+export const TIME_MILLIS = {
+  FIVE_MINUTE: 1000 * 60 * 5,
 };
 
 export const TOKEN_TYPE = {

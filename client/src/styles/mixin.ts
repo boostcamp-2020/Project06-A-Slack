@@ -6,3 +6,7 @@ export const flex = (alignItems?: string, justifyContent?: string, flexDirection
   display: flex;
   flex-direction: ${flexDirection ?? 'row'};
 `;
+
+export const focusedInputBoxShadow = css`
+  box-shadow: 0 0 10px rgba(18, 100, 163, 0.3);
+`;

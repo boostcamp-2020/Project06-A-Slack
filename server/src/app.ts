@@ -87,6 +87,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 app.use('/api', apiRouter);
 app.all('*', (req, res) => {
@@ -94,7 +95,7 @@ app.all('*', (req, res) => {
     res.redirect(process.env.DEV_URL as string);
     return;
   }
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
 app.use((req, res, next) => {
