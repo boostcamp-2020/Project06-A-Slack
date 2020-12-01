@@ -41,7 +41,6 @@ module.exports = {
     ],
     'no-constant-condition': ['error', { checkLoops: false }],
     'no-restricted-globals': 'warn',
-    '@typescript-eslint/explicit-module-boundary-types': 'off', // 리액트 컴포넌트 리턴 값 지정안하면 뜸
     'no-use-before-define': ['off'], // import React할 때 에러떠서 off
     '@typescript-eslint/no-use-before-define': ['warn'],
     'import/prefer-default-export': 'off', // 한 개만 export할때는 export default를 쓰도록 하는 옵션

@@ -60,9 +60,9 @@ export const sendEmail = (targetEmail: string, content: string): Promise<void> =
       },
     });
     const mailOptions = {
-      from: `슬랙_06<${config.NODE_MAILER.email}>`,
+      from: `Slack_06<${config.NODE_MAILER.email}>`,
       to: targetEmail,
-      subject: '[슬랙_06] 이메일 인증',
+      subject: `[Slack_06] ${content}`,
       text: content,
     };
     transporter.sendMail(mailOptions, (err, info) => {

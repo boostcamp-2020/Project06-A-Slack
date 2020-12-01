@@ -4,7 +4,7 @@ import {
   verifyEmailSendRequest,
   verifyEmailSendSuccess,
   verifyEmailSendFailure,
-  removeVerifyCode,
+  removeVerifyCodeAndEmail,
   VerifyEmailSendRequestPayload,
 } from '@/store/modules/signup';
 import { authService } from '@/services';
@@ -19,9 +19,9 @@ function* verifyEmailSendFlow({
       status,
     } = yield call(authService.verifyEmail, { email });
     if (status === 200) {
-      yield put(verifyEmailSendSuccess({ verifyCode }));
+      yield put(verifyEmailSendSuccess({ verifyCode, email }));
       yield delay(TIME_MILLIS.FIVE_MINUTE);
-      yield put(removeVerifyCode());
+      yield put(removeVerifyCodeAndEmail());
     }
   } catch (err) {
     verifyEmailSendFailure({ err });

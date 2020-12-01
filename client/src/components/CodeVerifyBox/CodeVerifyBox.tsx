@@ -2,9 +2,42 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import isInt from 'validator/es/lib/isInt';
 import isAlpha from 'validator/es/lib/isAlpha';
-import { flex, focusedInputBoxShadow } from '@/styles/mixin';
 import { useDispatch } from 'react-redux';
-import { removeVerifyCode } from '@/store/modules/signup';
+import { Redirect } from 'react-router-dom';
+import { flex, focusedInputBoxShadow } from '@/styles/mixin';
+import { removeVerifyCodeAndEmail } from '@/store/modules/signup';
+import { useSignupState } from '@/hooks';
+import { decrypt } from '@/utils/utils';
+import { WarningIcon } from '@/components';
+
+const Container = styled.div`
+  width: 50rem;
+  margin: 0 auto;
+  ${flex('center', 'center', 'column')};
+`;
+
+const AppIcon = styled.div`
+  margin: 1rem auto;
+  font-size: 2rem;
+  font-weight: bold;
+`;
+
+const Title = styled.div`
+  margin: 0.5rem auto;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: ${(props) => props.theme.color.black1};
+`;
+
+const SubTitle = styled.div`
+  margin: 1rem auto 2rem auto;
+  font-size: 1.1rem;
+  color: ${(props) => props.theme.color.black4};
+`;
+
+const BoldText = styled.span`
+  font-weight: 800;
+`;
 
 const CodeBox = styled.div`
   ${flex()}
@@ -15,6 +48,7 @@ const CodeBox = styled.div`
     border-bottom-left-radius: 0;
   }
 `;
+
 const LeftCodeBox = styled(CodeBox)`
   border: 1px solid ${(props) => props.theme.color.black8};
   border-radius: 5px;
@@ -48,7 +82,33 @@ const Input = styled.input`
   }
 `;
 
+const InvaildBox = styled.div`
+  width: 27rem;
+  height: 3rem;
+  margin: 3rem auto 0 auto;
+  border: 1px solid ${(props) => props.theme.color.warningRed};
+  border-radius: 5px;
+  background-color: rgba(224, 30, 90, 0.1);
+  ${flex('center')};
+`;
+
+const WarningText = styled.span`
+  padding-left: 0.4rem;
+  padding-bottom: 0.05rem;
+  font-size: 0.9rem;
+  color: ${(props) => props.theme.color.black3};
+`;
+
+const InfoText = styled.div`
+  margin-top: 3rem;
+  color: ${(props) => props.theme.color.black3};
+`;
+
 const CodeVerifyBox = () => {
+  const {
+    verify: { verifyCode },
+    email,
+  } = useSignupState();
   const dispatch = useDispatch();
 
   const refs = Array(6)
@@ -56,6 +116,7 @@ const CodeVerifyBox = () => {
     .map(() => useRef<HTMLInputElement>(null));
 
   const [codes, setCodes] = useState(Array(6).fill(''));
+  const [valid, setValid] = useState(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,6 +129,7 @@ const CodeVerifyBox = () => {
           return (idx === suffix ? value : code).toUpperCase();
         }),
       );
+      setValid(true);
 
       if (value.length === 1) {
         if (suffix < 5) {
@@ -89,21 +151,40 @@ const CodeVerifyBox = () => {
     }
   };
 
-  if (codes.every((e) => e)) {
-    const code = codes.join('');
-    // TODO : 인증 코드 전송 구현
-    console.log(code);
-  }
-
   useEffect(() => {
     return () => {
-      dispatch(removeVerifyCode());
+      dispatch(removeVerifyCodeAndEmail());
     };
   }, []);
 
+  useEffect(() => {
+    if (!valid) {
+      refs[0].current?.focus();
+    }
+  }, [valid]);
+
+  if (codes.every((e) => e)) {
+    const code = codes.join('');
+    try {
+      const decryptedCode = decrypt(verifyCode as string);
+      if (decryptedCode === code) {
+        return <Redirect to={{ pathname: '/signup', state: { email } }} />;
+      }
+      setCodes(Array(6).fill(''));
+      setValid(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
-    <div>
-      <h1>인증 코드 입력 화면</h1>
+    <Container>
+      <AppIcon>Slack</AppIcon>
+      <Title>코드는 이메일에서 확인하세요</Title>
+      <SubTitle>
+        <BoldText>{email}</BoldText>(으)로 6자 코드를 보냈습니다. 코드는 잠시 후에 만료되니 빨리
+        입력하세요.
+      </SubTitle>
       <CodeBox>
         <LeftCodeBox>
           {refs.slice(0, 3).map((ref, idx) => (
@@ -141,7 +222,14 @@ const CodeVerifyBox = () => {
           ))}
         </RightCodeBox>
       </CodeBox>
-    </div>
+      {!valid && (
+        <InvaildBox>
+          <WarningIcon />
+          <WarningText>유효하지 않은 코드입니다. 다시 시도해보세요!</WarningText>
+        </InvaildBox>
+      )}
+      <InfoText>고객님의 코드를 찾을 수 없나요? 스팸 폴더를 확인해 보세요!</InfoText>
+    </Container>
   );
 };
 
