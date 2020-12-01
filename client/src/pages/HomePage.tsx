@@ -17,7 +17,6 @@ const Container = styled.div`
   height: 100%;
 `;
 
-
 const HomePage: React.FC = () => {
   const { topicVisible, addChannelVisible, showUsersVisible } = useChannel();
   const { accessToken } = useAuth();
@@ -39,9 +38,6 @@ const HomePage: React.FC = () => {
       {topicVisible && <AddTopicModal />}
       {addChannelVisible && <CreateChannelModal />}
       {showUsersVisible && <ShowUsersModal />}
-      <button type="button" onClick={handleLogout}>
-        Logout
-      </button>
     </>
   );
 };
