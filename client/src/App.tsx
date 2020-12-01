@@ -20,10 +20,10 @@ const App = () => {
           <Route path="/login" component={LoginPage} />
           <Route path="/verify" component={EmailVerifyPage} />
           <Route path="/signup" component={SignupPage} />
-          <Route path="/workspace/" component={WorkSpacePage} />
-          <Route path="/workspace/detail" component={WorkSpacePage} />
-          <Route path="/workspace/thread" component={WorkSpacePage} />
-          <Route path="/workspace/user_profile/:userId" component={WorkSpacePage} />
+          <Route path="/client/1/:channelId/:rightSideType/:threadId" component={WorkSpacePage} />
+          <Route path="/client/1/:channelId/:rightSideType" component={WorkSpacePage} />
+          <Route path="/client/1/:channelId" component={WorkSpacePage} />
+          <Route path="/client/1/" component={WorkSpacePage} />
           <Route component={NotFoundPage} />
         </Switch>
       </BrowserRouter>

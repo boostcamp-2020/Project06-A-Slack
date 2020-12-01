@@ -1,27 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components/common/';
-import { useThread, useChannel } from '@/hooks';
+import { useThread } from '@/hooks';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
   background-color: orange;
 `;
 
+interface RightSideParams {
+  channelId: string | undefined;
+}
+
 const ThreadList = () => {
-  const { current } = useChannel();
+  const { channelId }: RightSideParams = useParams();
   const { threadList } = useThread();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getThreadRequest({ channelId: Number(current?.id) }));
-  }, [dispatch, current]);
+    dispatch(getThreadRequest({ channelId: Number(channelId) }));
+  }, [dispatch, channelId]);
 
   return (
     <Container>
-      <div>ThreadListTop{current?.id}</div>
       {threadList?.map((thread: Thread, index: number) => (
         <ThreadItem
           key={thread.id}

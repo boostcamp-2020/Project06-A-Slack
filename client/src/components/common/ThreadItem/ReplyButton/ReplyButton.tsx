@@ -6,6 +6,7 @@ import { Thread } from '@/types';
 import { useChannel } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import { getNotNullDataInArray } from '@/utils/utils';
+import { Link } from 'react-router-dom';
 
 const Button = styled.button`
   ${flex()};
@@ -16,13 +17,8 @@ interface ReplyButtonProps {
 }
 
 const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) => {
-  const { users } = useChannel();
   const buttonEl = useRef<HTMLButtonElement>(null);
   const dispatch = useDispatch();
-
-  // const getUserInfo = (userId: number) => {
-  //   return users.filter((user) => user.userId === userId);
-  // };
 
   const replyClickEventHandler = (clickedThread: any) => {
     const parentId = Number(buttonEl.current?.id);
@@ -37,28 +33,24 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
       { subThreadUserId: thread.subThreadUserId3, subThreadProfile: thread.subThreadUserId3 },
     ];
     const results = getNotNullDataInArray(replyData)('subThreadUserId');
-    // results.map((replyDatum) => {
-    //   return getUserInfo(replyDatum.subThreadUserId);
-    // });
-    // results.map((el) => {
-    //   return el.displayName;
-    // });
     return results;
   };
 
   return (
-    <Button
-      ref={buttonEl}
-      id={String(thread.id)}
-      type="button"
-      onClick={() => replyClickEventHandler(thread)}
-    >
-      {getDisplayReplyData().map((el) => {
-        const { subThreadUserId, subThreadProfile } = el;
-        return <div key={`${thread.id}${subThreadUserId}`}>{subThreadProfile}</div>;
-      })}
-      {thread.subCount}replies
-    </Button>
+    <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
+      <Button
+        ref={buttonEl}
+        id={String(thread.id)}
+        type="button"
+        onClick={() => replyClickEventHandler(thread)}
+      >
+        {getDisplayReplyData().map((el) => {
+          const { subThreadUserId, subThreadProfile } = el;
+          return <div key={`${thread.id}${subThreadUserId}`}>{subThreadProfile}</div>;
+        })}
+        {thread.subCount}replies
+      </Button>
+    </Link>
   );
 };
 
