@@ -1,14 +1,16 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Redirect, useParams } from 'react-router-dom';
 import { useAuth, useChannel } from '@/hooks';
 import {
   Header,
   LeftSideBar,
   ThreadListBox,
-  DetailBox,
+  DetailHeader,
+  DetailBody,
   AddTopicModal,
   CreateChannelModal,
   ShowUsersModal,
+  RightSideBar,
 } from '@/components';
 import styled from 'styled-components';
 
@@ -17,10 +19,15 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const WorkSpacePage: React.FC = () => {
-  const { accessToken } = useAuth();
+interface RightSideParams {
+  channelId: string | undefined;
+  rightSideType: string | undefined;
+  threadId: string | undefined;
+}
 
-  const { topicVisible, addChannelVisible, showUsersVisible } = useChannel();
+const WorkSpacePage: React.FC = () => {
+  const { channelId, rightSideType, threadId }: RightSideParams = useParams();
+  const { accessToken } = useAuth();
 
   return (
     <>
@@ -30,11 +37,8 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            <DetailBox />
+            {/* {detailVisible && <RightSideBar Header={DetailHeader} Body={DetailBody} />} */}
           </Container>
-          {topicVisible && <AddTopicModal />}
-          {addChannelVisible && <CreateChannelModal />}
-          {showUsersVisible && <ShowUsersModal />}
         </>
       ) : (
         <Redirect to="/login" />
