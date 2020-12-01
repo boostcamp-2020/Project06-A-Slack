@@ -1,11 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { getSubThreadRequest } from '@/store/modules/subThread';
+import React, { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import { Thread } from '@/types';
-import { useUser } from '@/hooks';
 import { flex } from '@/styles/mixin';
-import { getNotNullDataInArray } from '@/utils/utils';
+
+import ReplyButton from './ReplyButton/ReplyButton';
+import ThreadPopup from './ThreadPopup/ThreadPopup';
 
 const Container = styled.div`
   background-color: white;
@@ -15,63 +14,79 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button`
-  ${flex()};
+interface IsSameUserStyleProp {
+  isSameUserStyleProp: boolean;
+}
+
+const ContentBox = styled.div<IsSameUserStyleProp>`
+  display: ${(props) => (props.isSameUserStyleProp ? 'block' : 'flex')};
+`;
+
+const UserImg = styled.img`
+  height: 2.25rem;
+  width: 2.25rem;
+`;
+const Popup = styled.div`
+  display: none;
+  position: relative;
+  border: 1px solid black;
+  ${Container}:hover & {
+    display: block;
+  }
+`;
+
+const SameUserBox = styled.div<IsSameUserStyleProp>`
+  display: ${(props) => (props.isSameUserStyleProp ? 'flex' : 'block')};
+`;
+
+const NotSameUserBox = styled.div<IsSameUserStyleProp>`
+  display: ${(props) => (props.isSameUserStyleProp ? 'block' : 'flex')};
 `;
 
 interface ThreadItemProps {
   thread: Thread;
-  isParentThreadOfRightSideBar: boolean;
+  isParentThreadOfRightSideBar?: boolean;
+  prevThreadUserId?: number;
 }
+const THIS_IS_FIRST_THREAD_OR_SUB_THREAD = 0;
 
 const ThreadItem: React.FC<ThreadItemProps> = ({
   thread,
   isParentThreadOfRightSideBar,
+  prevThreadUserId,
 }: ThreadItemProps) => {
-  const { userInfo } = useUser();
-  const buttonEl = useRef<HTMLButtonElement>(null);
-  const dispatch = useDispatch();
+  const [isSameUser, setIsSameUser] = useState(false);
+  const [createdDate, setCreatedDate] = useState('');
 
-  const replyClickEventHandler = (clickedThread: any) => {
-    const parentId = Number(buttonEl.current?.id);
-    dispatch(getSubThreadRequest({ parentId, parentThread: clickedThread }));
-  };
+  useEffect(() => {
+    setIsSameUser(prevThreadUserId === thread.userId);
+    setCreatedDate(new Date(thread.createdAt).toLocaleString('en-US'));
+  }, [isSameUser, createdDate]);
 
-  const getDisplayReplyData = () => {
-    // 추후 subThreadUserId 값을 이용해, 채널 멤버의 user 정보를 활용하여 프로필을 뿌려준다.
-    const replyData = [
-      { subThreadUserId: thread.subThreadUserId1, subThreadProfile: thread.subThreadUserId1 },
-      { subThreadUserId: thread.subThreadUserId2, subThreadProfile: thread.subThreadUserId2 },
-      { subThreadUserId: thread.subThreadUserId3, subThreadProfile: thread.subThreadUserId3 },
-    ];
-    const results = getNotNullDataInArray(replyData)('subThreadUserId');
-    return results;
-  };
-
+  const userImg =
+    'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg';
   return (
     <Container>
-      {thread.parentId}
-      <div>{thread.userId}</div>
-      <div>{thread.createdAt}</div>
-      <div>{thread.content}</div>
-      {thread.subCount === 0 || isParentThreadOfRightSideBar ? (
-        ''
-      ) : (
-        <Button
-          ref={buttonEl}
-          id={String(thread.id)}
-          type="button"
-          onClick={() => replyClickEventHandler(thread)}
-        >
-          {getDisplayReplyData().map((el) => {
-            const { subThreadUserId, subThreadProfile } = el;
-            return <div key={`${thread.id}${subThreadUserId}`}>{subThreadProfile}</div>;
-          })}
-          {thread.subCount}replies
-        </Button>
-      )}
+      <ContentBox isSameUserStyleProp={isSameUser}>
+        {isSameUser ? '' : <UserImg src={userImg} alt="userImg" />}
+        <SameUserBox isSameUserStyleProp={isSameUser}>
+          <NotSameUserBox isSameUserStyleProp={isSameUser}>
+            {/* {isSameUser ? '' : <div>{thread.userId}</div>} */}
+            {isSameUser ? '' : <div>사용자</div>}
+            <div>{createdDate}</div>
+          </NotSameUserBox>
+          <div>{thread.content}</div>
+        </SameUserBox>
+      </ContentBox>
+      {thread.subCount === 0 || isParentThreadOfRightSideBar ? '' : <ReplyButton thread={thread} />}
+      <Popup>
+        <ThreadPopup />
+      </Popup>
     </Container>
   );
 };
-
+ThreadItem.defaultProps = {
+  isParentThreadOfRightSideBar: false,
+  prevThreadUserId: THIS_IS_FIRST_THREAD_OR_SUB_THREAD,
+};
 export default ThreadItem;

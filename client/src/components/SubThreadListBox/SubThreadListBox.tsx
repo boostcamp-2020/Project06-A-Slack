@@ -15,7 +15,7 @@ const SubThreadListBox = () => {
   return (
     <Container>
       <div>subThreadListBox</div>
-      <ParentThread parentThread={parentThread} isParentThreadOfRightSideBar />
+      <ParentThread parentThread={parentThread} />
       <ReplyCountHorizon subCount={parentThread.subCount} />
       <SubThreadList subThreadList={subThreadList} />
     </Container>

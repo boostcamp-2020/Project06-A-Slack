@@ -15,7 +15,7 @@ const SubThreadList: React.FC<SubThreadListProps> = ({ subThreadList }: SubThrea
   return (
     <Container>
       {subThreadList?.map((thread: Thread) => (
-        <ThreadItem key={thread.id} thread={thread} isParentThreadOfRightSideBar={false} />
+        <ThreadItem key={thread.id} thread={thread} />
       ))}
     </Container>
   );

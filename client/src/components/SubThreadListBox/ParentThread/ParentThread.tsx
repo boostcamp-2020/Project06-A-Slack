@@ -9,20 +9,12 @@ const Container = styled.div`
 
 interface parentThreadProps {
   parentThread: Thread;
-  isParentThreadOfRightSideBar: boolean;
 }
 
-const SubThreadList: React.FC<parentThreadProps> = ({
-  parentThread,
-  isParentThreadOfRightSideBar,
-}: parentThreadProps) => {
+const SubThreadList: React.FC<parentThreadProps> = ({ parentThread }: parentThreadProps) => {
   return (
     <Container>
-      <ThreadItem
-        key={parentThread.id}
-        thread={parentThread}
-        isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
-      />
+      <ThreadItem key={parentThread.id} thread={parentThread} isParentThreadOfRightSideBar />
     </Container>
   );
 };

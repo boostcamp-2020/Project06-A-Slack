@@ -22,8 +22,12 @@ const ThreadList = () => {
   return (
     <Container>
       <div>ThreadListTop{current?.id}</div>
-      {threadList?.map((thread: Thread) => (
-        <ThreadItem key={thread.id} thread={thread} isParentThreadOfRightSideBar={false} />
+      {threadList?.map((thread: Thread, index: number) => (
+        <ThreadItem
+          key={thread.id}
+          thread={thread}
+          prevThreadUserId={threadList[index - 1]?.userId}
+        />
       ))}
     </Container>
   );
