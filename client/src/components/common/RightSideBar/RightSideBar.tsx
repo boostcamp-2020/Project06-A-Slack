@@ -6,8 +6,8 @@ const Container = styled.div`
 `;
 
 interface RightSideBarProps {
-  Header: JSX.Element;
-  Body: JSX.Element;
+  Header: any;
+  Body: any;
 }
 
 const RightSideBar: React.FC<RightSideBarProps> = ({ Header, Body }: RightSideBarProps) => {
