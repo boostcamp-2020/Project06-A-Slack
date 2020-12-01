@@ -23,7 +23,7 @@ const Channel = styled.div<Props>`
   &:hover {
     ${(props) => (!props.pick ? 'background: rgba(0, 0, 0, 0.2);' : '')}
   }
-  background: ${(props) => (props.pick ? props.theme.color.blue : 'transparent')};
+  background: ${(props) => (props.pick ? props.theme.color.blue1 : 'transparent')};
 `;
 
 const Icon = styled.div`

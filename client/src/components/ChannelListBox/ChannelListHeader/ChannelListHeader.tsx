@@ -60,7 +60,7 @@ const PopupItem = styled.div`
   font-size: ${(props) => props.theme.size.m};
   color: ${(props) => props.theme.color.black3};
   &:hover {
-    background: ${(props) => props.theme.color.blue};
+    background: ${(props) => props.theme.color.blue1};
   }
 `;
 
