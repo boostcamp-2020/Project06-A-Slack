@@ -9,7 +9,8 @@ const Container = styled.div`
 const LeftSideBarContent = () => {
   return (
     <Container>
-      <ChannelListBox />
+      <ChannelListBox channelType={1} />
+      <ChannelListBox channelType={2} />
     </Container>
   );
 };

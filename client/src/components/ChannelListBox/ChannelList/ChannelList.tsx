@@ -7,28 +7,38 @@ import { useChannel, useAuth } from '@/hooks';
 import { Channel } from '@/types';
 import ChannelItem from './Channel/ChannelItem';
 
-const ChannelList = () => {
+const ChannelList = ({
+  channelType,
+  channelListVisible,
+}: {
+  channelType: number;
+  channelListVisible: boolean;
+}) => {
   const dispatch = useDispatch();
-  const { joinChannelList, channelListVisible, current } = useChannel();
+  const { joinChannelList, current } = useChannel();
   const { userId } = useAuth();
 
   const callAPI = () => dispatch(loadMyChannelsRequest(userId));
 
   useEffect(() => {
     callAPI();
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
       {joinChannelList?.map((channel: Channel, idx: number) =>
-        !channelListVisible ? (
-          current?.id === channel.id ? (
-            <ChannelItem idx={idx} key={channel.id} />
+        channelType === channel.channelType ? (
+          !channelListVisible ? (
+            current?.id === channel.id ? (
+              <ChannelItem idx={idx} key={channel.id} />
+            ) : (
+              ''
+            )
           ) : (
-            ''
+            <ChannelItem idx={idx} key={channel.id} />
           )
         ) : (
-          <ChannelItem idx={idx} key={channel.id} />
+          ''
         ),
       )}
     </>
