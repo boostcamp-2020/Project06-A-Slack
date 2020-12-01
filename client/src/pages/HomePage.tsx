@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useAuth, useChannel } from '@/hooks';
-import { useDispatch } from 'react-redux';
-import { logoutRequest } from '@/store/modules/auth';
 import {
   Header,
   LeftSideBar,
@@ -19,15 +17,10 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const HomePage = () => {
-  const dispatch = useDispatch();
 
+const HomePage: React.FC = () => {
   const { topicVisible, addChannelVisible, showUsersVisible } = useChannel();
   const { accessToken } = useAuth();
-
-  const handleLogout = () => {
-    dispatch(logoutRequest());
-  };
 
   return (
     <>
@@ -40,9 +33,7 @@ const HomePage = () => {
             <DetailBox />
           </>
         ) : (
-          <Link to="/login">
-            <button type="button">Login Page</button>
-          </Link>
+          <Redirect to="/login" />
         )}
       </Container>
       {topicVisible && <AddTopicModal />}

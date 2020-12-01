@@ -41,7 +41,7 @@ const WarningBox = styled.div`
   ${flex('center', 'flex-start')};
 `;
 
-const LoginBox = () => {
+const LoginBox: React.FC = () => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
@@ -82,7 +82,7 @@ const LoginBox = () => {
         {!valid && (
           <WarningBox>
             <IconBox>
-              <WarningIcon color="#D73A49" />
+              <WarningIcon />
             </IconBox>
             <WarningText>유효하지 않은 이메일 주소입니다.</WarningText>
           </WarningBox>
