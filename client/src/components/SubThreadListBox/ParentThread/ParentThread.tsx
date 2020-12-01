@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
-import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
+import { ThreadItem } from '@/components/common';
 
 const Container = styled.div`
   background-color: orange;
