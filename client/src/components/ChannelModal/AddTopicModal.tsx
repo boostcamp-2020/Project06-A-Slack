@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { changeTopic, openTopicModal } from '@/store/modules/channel';
+import { changeTopic } from '@/store/modules/channel';
+import { useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
+
+interface Props {
+  ref: any;
+}
 
 const ModalBackground = styled.div`
   width: 100%;
@@ -10,9 +15,11 @@ const ModalBackground = styled.div`
   ${flex()};
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
+  top: 0;
+  left: 0;
 `;
 
-const Container = styled.div`
+const Container = styled.div<Props>`
   border-radius: 10px;
   padding: ${(props) => props.theme.size.xxl};
   background: ${(props) => props.theme.color.white};
@@ -85,25 +92,37 @@ const SubmitButton = styled.button`
   height: 30px;
 `;
 
-const AddTopicModal = () => {
+const AddTopicModal = ({
+  setAddTopicModalVisible,
+}: {
+  setAddTopicModalVisible: Function;
+}): React.FC | any => {
   const [content, setContent] = useState('');
+  const ref = useRef();
   const dispatch = useDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
 
-  const onCancel = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(openTopicModal());
+  const handler = () => {
+    setAddTopicModalVisible(false);
   };
-  const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
+
+  useOnClickOutside(ref, () => handler());
+
+  const onCancel = () => {
+    setAddTopicModalVisible(false);
+  };
+
+  const onSubmit = () => {
     dispatch(changeTopic(content));
-    dispatch(openTopicModal());
+    setAddTopicModalVisible(false);
   };
 
   return (
     <ModalBackground>
-      <Container>
+      <Container ref={ref}>
         <Header>
           <HeaderContent>Edit channel topic</HeaderContent>
           <CloseButton onClick={onCancel}>X</CloseButton>

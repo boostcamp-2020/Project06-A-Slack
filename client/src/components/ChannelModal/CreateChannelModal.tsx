@@ -1,11 +1,11 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { openAddChannelModal, createChannelRequest } from '@/store/modules/channel';
-import { useAuth, useChannel, useUser } from '@/hooks';
+import { createChannelRequest } from '@/store/modules/channel';
+import { useAuth, useUser } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -19,6 +19,8 @@ const ModalBackground = styled.div`
   ${flex()};
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
+  top: 0;
+  left: 0;
 `;
 
 const Container = styled.div`
@@ -192,7 +194,11 @@ const CreateButton = styled.button<Props>`
       `}
 `;
 
-const CreateChannelModal = () => {
+const CreateChannelModal = ({
+  setCreateChannelModalVisible,
+}: {
+  setCreateChannelModalVisible: Function;
+}) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [secret, setSecret] = useState(false);
@@ -210,15 +216,14 @@ const CreateChannelModal = () => {
   };
 
   const closeAddChannelModal = () => {
-    dispatch(openAddChannelModal());
+    setCreateChannelModalVisible(false);
   };
 
   const toggleSecret = () => {
     setSecret((state) => !state);
   };
 
-  const createChannel = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const createChannel = async () => {
     const isPublic = secret ? 0 : 1;
     dispatch(
       createChannelRequest({
@@ -230,7 +235,6 @@ const CreateChannelModal = () => {
         displayName: userInfo?.displayName,
       }),
     );
-    dispatch(openAddChannelModal());
   };
 
   return (

@@ -1,10 +1,11 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannel } from '@/hooks';
-import { openShowUsers, openAddUser } from '@/store/modules/channel';
-import { useDispatch } from 'react-redux';
 import { JoinUser } from '@/types';
+import AddUsersModal from '@/components/ChannelModal/AddUsersModal';
 
 const ModalBackground = styled.div`
   width: 100%;
@@ -12,6 +13,8 @@ const ModalBackground = styled.div`
   ${flex()};
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
+  top: 0;
+  left: 0;
 `;
 
 const Container = styled.div`
@@ -91,42 +94,46 @@ const Remove = styled.button`
   border-radius: 3px;
 `;
 
-const ShowUsersModal = () => {
+const ShowUsersModal = ({ setShowUsersModalVisible }: { setShowUsersModalVisible: Function }) => {
   const { users, current } = useChannel();
-  const dispatch = useDispatch();
+  const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
 
   const clickClose = () => {
-    dispatch(openShowUsers());
+    setShowUsersModalVisible((state: boolean) => !state);
   };
 
   const clickAddUser = () => {
-    dispatch(openShowUsers());
-    dispatch(openAddUser());
+    console.log(addUsersModalVisible);
+    // setShowUsersModalVisible((state: boolean) => !state);
+    setAddUsersModalVisible(true);
   };
 
   return (
-    <ModalBackground>
-      <Container>
-        <Header>
-          <HeaderContent>
-            {users.length} members in {current?.isPublic} {current?.name}
-          </HeaderContent>
-          <CloseButton onClick={clickClose}>X</CloseButton>
-        </Header>
-        <AddButton onClick={clickAddUser}>Add People</AddButton>
-        <Main>
-          {users?.map((user: JoinUser) => (
-            <Item key={user.userId}>
-              <UserInfo>
-                <Img src="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg" />
-                <Name>{user.displayName}</Name>
-              </UserInfo>
-              <Remove>Remove</Remove>
-            </Item>
-          ))}
-        </Main>
-      </Container>
-    </ModalBackground>
+    <>
+      {addUsersModalVisible && <AddUsersModal setAddUserModalVisible={setAddUsersModalVisible} />}
+      <ModalBackground>
+        <Container>
+          <Header>
+            <HeaderContent>
+              {users.length} members in {current?.isPublic} {current?.name}
+            </HeaderContent>
+            <CloseButton onClick={clickClose}>X</CloseButton>
+          </Header>
+          <AddButton onClick={clickAddUser}>Add People</AddButton>
+          <Main>
+            {users?.map((user: JoinUser) => (
+              <Item key={user.userId}>
+                <UserInfo>
+                  <Img src="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg" />
+                  <Name>{user.displayName}</Name>
+                </UserInfo>
+                <Remove>Remove</Remove>
+              </Item>
+            ))}
+          </Main>
+        </Container>
+      </ModalBackground>
+    </>
   );
 };
 
