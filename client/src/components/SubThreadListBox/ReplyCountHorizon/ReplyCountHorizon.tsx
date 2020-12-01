@@ -12,7 +12,12 @@ interface ReplyCountHorizonProps {
 const ReplyCountHorizon: React.FC<ReplyCountHorizonProps> = ({
   subCount,
 }: ReplyCountHorizonProps) => {
-  return <Container>{subCount}reply</Container>;
+  return (
+    <Container>
+      {subCount}
+      {subCount === 1 ? 'reply' : 'replies'}
+    </Container>
+  );
 };
 
 export default ReplyCountHorizon;
