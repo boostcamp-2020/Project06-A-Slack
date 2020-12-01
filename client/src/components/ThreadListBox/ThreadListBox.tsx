@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import SubThreadInputBox from '@/components/SubThreadListBox/SubThreadListBox';
+import SubThreadListBox from '@/components/SubThreadListBox/SubThreadListBox';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 import ThreadList from './ThreadList/ThreadList';
 import ThreadInputBox from './ThreadInputBox/ThreadInputBox';
@@ -17,7 +17,7 @@ const ThreadListBox = () => {
       <ThreadListHeader />
       <ThreadList />
       <ThreadInputBox />
-      <SubThreadInputBox />
+      <SubThreadListBox />
     </Container>
   );
 };
