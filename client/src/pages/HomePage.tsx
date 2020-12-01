@@ -10,6 +10,7 @@ import {
   DetailBox,
   AddTopicModal,
   CreateChannelModal,
+  ShowUsersModal,
 } from '@/components';
 import styled from 'styled-components';
 
@@ -21,7 +22,7 @@ const Container = styled.div`
 const HomePage = () => {
   const dispatch = useDispatch();
 
-  const { topicVisible, addChannelVisible } = useChannel();
+  const { topicVisible, addChannelVisible, showUsersVisible } = useChannel();
   const { accessToken } = useAuth();
 
   const handleLogout = () => {
@@ -46,6 +47,7 @@ const HomePage = () => {
       </Container>
       {topicVisible && <AddTopicModal />}
       {addChannelVisible && <CreateChannelModal />}
+      {showUsersVisible && <ShowUsersModal />}
       <button type="button" onClick={handleLogout}>
         Logout
       </button>
