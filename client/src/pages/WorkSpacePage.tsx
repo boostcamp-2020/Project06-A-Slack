@@ -11,7 +11,6 @@ import {
   ShowUsersModal,
 } from '@/components';
 import SubThreadListBox from '@/components/SubThreadListBox/SubThreadListBox';
-
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -40,6 +39,7 @@ const WorkSpacePage: React.FC = () => {
             <ThreadListBox />
             {rightSideType === 'detail' && <DetailBox />}
             {rightSideType === 'thread' && <SubThreadListBox />}
+            <DetailBox />
           </Container>
           {topicVisible && <AddTopicModal />}
           {addChannelVisible && <CreateChannelModal />}
