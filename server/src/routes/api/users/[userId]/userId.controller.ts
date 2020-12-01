@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
-import { userModel } from '@/models';
+import { userModel, channelModel } from '@/models';
 import { ERROR_MESSAGE } from '@/utils/constants';
 
 /**
@@ -18,6 +18,17 @@ export const getUser = async (req: Request, res: Response, next: NextFunction): 
   } catch (err) {
     next(err);
   }
+};
+
+export const getJoinChannels = async (req: Request, res: Response, next: NextFunction) => {
+  const { userId } = req.params;
+  console.log(userId);
+  if (Number.isNaN(+userId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  const [channelList] = await channelModel.getJoinChannels({ userId: +userId });
+  res.json({ channelList });
 };
 
 /**

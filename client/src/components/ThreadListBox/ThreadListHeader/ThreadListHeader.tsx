@@ -2,8 +2,8 @@ import React from 'react';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
-import { ChannelUsers } from '@/types/channelUsers';
-import { openDetail, openTopicModal } from '@/store/modules/channel';
+import { JoinUser } from '@/types';
+import { openDetail, openTopicModal, openShowUsers } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 
 const Container = styled.div`
@@ -74,12 +74,16 @@ const ThreadListHeader = () => {
   const { current, users, topic } = useChannel();
   const dispatch = useDispatch();
 
-  const clickDetail = (e: React.MouseEvent<HTMLElement>) => {
+  const clickDetail = () => {
     dispatch(openDetail());
   };
 
-  const clickTopicModal = (e: React.MouseEvent<HTMLElement>) => {
+  const clickTopicModal = () => {
     dispatch(openTopicModal());
+  };
+
+  const clickShowUsersModal = () => {
+    dispatch(openShowUsers());
   };
 
   return current && users ? (
@@ -94,8 +98,8 @@ const ThreadListHeader = () => {
         </LeftButtonBox>
       </Left>
       <Right>
-        <RightUserBox>
-          {makeUserIcons(users).map((icon: ChannelUsers) => (
+        <RightUserBox onClick={clickShowUsersModal}>
+          {makeUserIcons(users).map((icon: JoinUser) => (
             <RightUser key={icon.userId}>{icon.userId}</RightUser>
           ))}
           {users?.length}

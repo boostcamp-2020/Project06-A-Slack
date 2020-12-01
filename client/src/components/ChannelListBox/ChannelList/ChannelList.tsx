@@ -2,25 +2,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadChannelsRequest } from '@/store/modules/channel';
-import { useChannel } from '@/hooks/useChannel';
+import { loadMyChannelsRequest } from '@/store/modules/channel';
+import { useChannel, useAuth } from '@/hooks';
+import { Channel } from '@/types';
 import ChannelItem from './Channel/ChannelItem';
-
-interface ChannelItem {
-  id: number;
-  ownerId: number;
-  name: string;
-  channelType: string;
-  isPublic: number;
-  memberCount: number;
-  description: string;
-}
 
 const ChannelList = () => {
   const dispatch = useDispatch();
-  const { channelList, channelListVisible, current } = useChannel();
+  const { joinChannelList, channelListVisible, current } = useChannel();
+  const { userId } = useAuth();
 
-  const callAPI = () => dispatch(loadChannelsRequest());
+  const callAPI = () => dispatch(loadMyChannelsRequest(userId));
 
   useEffect(() => {
     callAPI();
@@ -28,7 +20,7 @@ const ChannelList = () => {
 
   return (
     <>
-      {channelList?.map((channel: ChannelItem, idx: number) =>
+      {joinChannelList?.map((channel: Channel, idx: number) =>
         !channelListVisible ? (
           current?.id === channel.id ? (
             <ChannelItem idx={idx} key={channel.id} />

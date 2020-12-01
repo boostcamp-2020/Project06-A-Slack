@@ -4,6 +4,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/modules';
 
 interface SignupState {
+  email: string | null;
   verify: {
     loading: boolean;
     verifyCode: string | null;
@@ -14,6 +15,7 @@ interface SignupState {
 }
 
 const signupState: SignupState = {
+  email: null,
   verify: {
     loading: false,
     verifyCode: null,
@@ -27,6 +29,7 @@ export interface VerifyEmailSendRequestPayload {
 
 interface VerifyEmailSendSuccessPayload {
   verifyCode: string;
+  email: string;
 }
 
 const signupSlice = createSlice({
@@ -37,16 +40,18 @@ const signupSlice = createSlice({
       state.verify.loading = true;
     },
     verifyEmailSendSuccess(state, action: PayloadAction<VerifyEmailSendSuccessPayload>) {
-      const { verifyCode } = action.payload;
+      const { verifyCode, email } = action.payload;
       state.verify.loading = false;
       state.verify.verifyCode = verifyCode;
+      state.email = email;
     },
     verifyEmailSendFailure(state, { payload }: PayloadAction<{ err: Error }>) {
       state.verify.loading = false;
       state.verify.err = payload.err;
     },
-    removeVerifyCode(state) {
+    removeVerifyCodeAndEmail(state) {
       state.verify.verifyCode = null;
+      state.email = null;
     },
   },
 });
@@ -59,7 +64,7 @@ export const {
   verifyEmailSendRequest,
   verifyEmailSendSuccess,
   verifyEmailSendFailure,
-  removeVerifyCode,
+  removeVerifyCodeAndEmail,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;

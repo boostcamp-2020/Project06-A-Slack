@@ -20,11 +20,16 @@ export const getChannel = async (req: Request, res: Response, next: NextFunction
 /**
  * POST /api/channels/:channelId/invite
  */
-export const inviteChannel = (req: Request, res: Response, next: NextFunction) => {
+export const inviteChannel = async (req: Request, res: Response, next: NextFunction) => {
   const { channelId } = req.params;
   const { userId } = req.body;
-  if (verifyRequestData([userId])) {
-    res.status(201).end();
+  if (Number.isNaN(+channelId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  if (verifyRequestData([userId, channelId])) {
+    const [result] = await channelModel.joinChannel({ userId, channelId: +channelId });
+    res.status(200).end();
     return;
   }
   res.status(400).json({ message: '필수 값 누락' });

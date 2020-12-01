@@ -4,7 +4,8 @@
 import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { openAddChannelModal } from '@/store/modules/channel';
+import { openAddChannelModal, createChannelRequest } from '@/store/modules/channel';
+import { useAuth, useChannel, useUser } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -38,7 +39,6 @@ const Header = styled.div`
 
 const CloseButton = styled.button`
   background: none;
-  border: none;
   color: ${(props) => props.theme.color.gray2};
   font-size: ${(props) => props.theme.size.xxxl};
   &:hover {
@@ -180,6 +180,7 @@ const CreateButton = styled.button<Props>`
   border: 1px ${(props) => props.theme.color.gray6} solid;
   border-radius: 5px;
   color: ${(props) => props.theme.color.white};
+  padding: 10px;
   ${(props) =>
     props.name !== ''
       ? ` background:  ${props.theme.color.green1};
@@ -188,15 +189,15 @@ const CreateButton = styled.button<Props>`
       background: ${props.theme.color.green2};
     }`
       : `background: ${props.theme.color.gray3}
-      pointer-events: none `}
-  padding: 10px;
+      `}
 `;
 
 const CreateChannelModal = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [secret, setSecret] = useState(false);
-  const [submit, setSubmit] = useState(false);
+  const { userId } = useAuth();
+  const { userInfo } = useUser();
 
   const dispatch = useDispatch();
 
@@ -208,12 +209,28 @@ const CreateChannelModal = () => {
     setDescription(e.target.value);
   };
 
-  const closeAddChannelModal = (e: React.MouseEvent<HTMLElement>) => {
+  const closeAddChannelModal = () => {
     dispatch(openAddChannelModal());
   };
 
-  const toggleSecret = (e: React.MouseEvent<HTMLElement>) => {
+  const toggleSecret = () => {
     setSecret((state) => !state);
+  };
+
+  const createChannel = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const isPublic = secret ? 0 : 1;
+    dispatch(
+      createChannelRequest({
+        ownerId: userId,
+        channelType: 1,
+        isPublic,
+        name,
+        description,
+        displayName: userInfo?.displayName,
+      }),
+    );
+    dispatch(openAddChannelModal());
   };
 
   return (
@@ -265,7 +282,7 @@ const CreateChannelModal = () => {
           </BottomContent>
         </Bottom>
         <CreateButtonBox>
-          <CreateButton type="submit" name={name}>
+          <CreateButton type="submit" name={name} onClick={createChannel} disabled={name === ''}>
             Create
           </CreateButton>
         </CreateButtonBox>

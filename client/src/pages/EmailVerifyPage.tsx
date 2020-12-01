@@ -1,18 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { EmailBox, CodeVerifyBox } from '@/components';
 import { useSignupState } from '@/hooks';
 
-const EmailVerifyPage = () => {
+const EmailVerifyPage: React.FC = () => {
   const {
     verify: { verifyCode },
   } = useSignupState();
-  return (
-    <div>
-      <Link to="/">Home</Link>
-      {verifyCode ? <CodeVerifyBox /> : <EmailBox />}
-    </div>
-  );
+  return <>{verifyCode ? <CodeVerifyBox /> : <EmailBox />}</>;
 };
 
 export default EmailVerifyPage;
