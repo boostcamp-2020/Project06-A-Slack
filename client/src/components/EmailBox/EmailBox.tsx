@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import isEmail from 'validator/es/lib/isEmail';
 import { useDispatch } from 'react-redux';
-import { FormInput as Input, FormButton } from '@/styles/shared/form';
+import { FormButton, FormInput } from '@/styles/shared';
 import { flex } from '@/styles/mixin';
-import { WarningIcon } from '@/components';
+import { WarningIcon, DimModal } from '@/components';
 import { useSignupState } from '@/hooks';
 import { verifyEmailSendRequest } from '@/store/modules/signup';
 
@@ -94,7 +94,7 @@ const EmailBox: React.FC = () => {
         </SubTitle>
       </Header>
       <Form onSubmit={handleSubmit} spellCheck="false">
-        <Input
+        <FormInput
           type="email"
           placeholder="name@work-email.com"
           onChange={handleEmailChange}
