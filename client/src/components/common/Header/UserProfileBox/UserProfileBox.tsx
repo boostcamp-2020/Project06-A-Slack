@@ -62,7 +62,7 @@ const RemovePhotoButton = styled.button`
   background-color: unset;
   font-size: 0.9rem;
   cursor: pointer;
-  color: ${(props) => props.theme.color.blue};
+  color: ${(props) => props.theme.color.blue1};
   &:hover {
     text-decoration: underline;
   }

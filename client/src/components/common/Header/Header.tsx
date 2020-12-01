@@ -78,7 +78,7 @@ const ModalListItem = styled.div`
   cursor: pointer;
   &:hover {
     color: white;
-    background-color: ${(props) => props.theme.color.blue};
+    background-color: ${(props) => props.theme.color.blue1};
   }
 `;
 
