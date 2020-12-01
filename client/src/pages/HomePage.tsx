@@ -8,6 +8,7 @@ import {
   DetailBox,
   AddTopicModal,
   CreateChannelModal,
+  ShowUsersModal,
 } from '@/components';
 import styled from 'styled-components';
 
@@ -16,8 +17,9 @@ const Container = styled.div`
   height: 100%;
 `;
 
+
 const HomePage: React.FC = () => {
-  const { topicVisible, addChannelVisible } = useChannel();
+  const { topicVisible, addChannelVisible, showUsersVisible } = useChannel();
   const { accessToken } = useAuth();
 
   return (
@@ -36,6 +38,10 @@ const HomePage: React.FC = () => {
       </Container>
       {topicVisible && <AddTopicModal />}
       {addChannelVisible && <CreateChannelModal />}
+      {showUsersVisible && <ShowUsersModal />}
+      <button type="button" onClick={handleLogout}>
+        Logout
+      </button>
     </>
   );
 };

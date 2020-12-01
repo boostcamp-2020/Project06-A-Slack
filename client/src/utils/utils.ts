@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import config from '@/config';
-import { AuthToken } from '@/types';
+import { AuthToken, JoinUser } from '@/types';
 import { TOKEN_TYPE } from '@/utils/constants';
-import { ChannelUsers } from '@/types/channelUsers';
+
 import crypto from 'crypto';
 
 const CIPHER_ALGORITHM = process.env.CIPHER_ALGORITHM as string;
@@ -25,8 +25,8 @@ export const verifyJWT = (token: string, type: AuthToken) => {
   });
 };
 
-export const makeUserIcons = (users: ChannelUsers[]) => {
-  const userIconList: ChannelUsers[] = users.slice(0, 3);
+export const makeUserIcons = (users: JoinUser[]) => {
+  const userIconList: JoinUser[] = users.slice(0, 3);
   return userIconList;
 };
 

@@ -5,7 +5,7 @@ import channelIdRouter from './[channelId]';
 const router = express.Router();
 
 router.get('/', channelsController.getChannels);
-router.post('/', channelsController.makeChannel);
+router.post('/', channelsController.createChannel);
 router.use('/:channelId', channelIdRouter);
 
 export default router;

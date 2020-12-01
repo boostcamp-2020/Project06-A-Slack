@@ -1,31 +1,25 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChannelUsers } from '@/types/channelUsers';
-
-interface Channel {
-  channelType: string;
-  description: string;
-  id: number;
-  isPublic: number;
-  memberCount: number;
-  name: string;
-  ownerId: number;
-}
+import { JoinUser, Channel } from '@/types';
 
 interface ChannelState {
   channelList: Channel[];
+  joinChannelList: Channel[];
   current: Channel | null;
   channelListVisible: boolean;
-  users: ChannelUsers[];
+  users: JoinUser[];
   detailVisible: boolean;
   channelId: number | null;
   topic: string;
   topicVisible: boolean;
+  showUsersVisible: boolean;
   addChannelVisible: boolean;
+  addUserVisible: boolean;
 }
 
 const initialState: ChannelState = {
   channelList: [],
+  joinChannelList: [],
   current: null,
   channelListVisible: true,
   users: [],
@@ -33,7 +27,9 @@ const initialState: ChannelState = {
   channelId: null,
   topic: 'Add a topic',
   topicVisible: false,
+  showUsersVisible: false,
   addChannelVisible: false,
+  addUserVisible: false,
 };
 
 const channelSlice = createSlice({
@@ -47,6 +43,13 @@ const channelSlice = createSlice({
     loadChannelsFailure(state, action) {
       // todo 에러처리
     },
+    loadMyChannelsRequest(state, action) {},
+    loadMyChannelsSuccess(state, action) {
+      state.joinChannelList = action.payload.joinChannelList;
+    },
+    loadMyChannelsFailure(state, action) {
+      // todo 에러처리
+    },
     loadChannelRequest(state, action) {
       state.channelId = action.payload;
     },
@@ -54,15 +57,25 @@ const channelSlice = createSlice({
       state.users = action.payload.users;
     },
     loadChannelFailure(state, action) {
-      // tdoo 에러처리
+      // todo 에러처리
     },
-    makeChannelRequest(state, action) {},
-    makeChannelSuccess(state, action) {
-      // state.channelList.push(action.)
+    createChannelRequest(state, action) {},
+    createChannelSuccess(state, action) {
+      state.channelList.push(action.payload.channel);
+      state.joinChannelList.push(action.payload.channel);
+      state.current = action.payload.channel;
+      state.users = [action.payload.joinUser];
     },
-    makeChannelFailure(state, action) {},
+    createChannelFailure(state, action) {
+      // todo 에러처리
+    },
+    joinChannelRequset(state, action) {},
+    joinChannelSuccess(state, action) {},
+    joinChannelFailure(state, action) {
+      // todo 에러처리
+    },
     setCurrent(state, action) {
-      state.current = state.channelList[action.payload];
+      state.current = state.joinChannelList[action.payload];
     },
     openChannelList(state) {
       state.channelListVisible = !state.channelListVisible;
@@ -79,6 +92,12 @@ const channelSlice = createSlice({
     changeTopic(state, action) {
       state.topic = action.payload;
     },
+    openShowUsers(state) {
+      state.showUsersVisible = !state.showUsersVisible;
+    },
+    openAddUser(state) {
+      state.addUserVisible = !state.addUserVisible;
+    },
   },
 });
 
@@ -87,17 +106,25 @@ export const {
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,
+  loadMyChannelsRequest,
+  loadMyChannelsSuccess,
+  loadMyChannelsFailure,
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  makeChannelRequest,
-  makeChannelSuccess,
-  makeChannelFailure,
+  createChannelRequest,
+  createChannelSuccess,
+  createChannelFailure,
+  joinChannelRequset,
+  joinChannelSuccess,
+  joinChannelFailure,
   setCurrent,
   openChannelList,
   openDetail,
   openTopicModal,
   openAddChannelModal,
   changeTopic,
+  openShowUsers,
+  openAddUser,
 } = channelSlice.actions;
 export default channelSlice.reducer;

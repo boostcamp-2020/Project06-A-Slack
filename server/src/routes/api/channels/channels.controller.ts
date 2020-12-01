@@ -12,10 +12,18 @@ export const getChannels = async (req: Request, res: Response, next: NextFunctio
 /**
  * POST /api/channels
  */
-export const makeChannel = (req: Request, res: Response, next: NextFunction) => {
-  const { name, channelType, isPublic } = req.body;
-  if (verifyRequestData([name, channelType, isPublic])) {
-    return res.status(201).end();
+export const createChannel = async (req: Request, res: Response, next: NextFunction) => {
+  const { ownerId, name, channelType, isPublic, description } = req.body;
+  if (verifyRequestData([ownerId, name, channelType, isPublic])) {
+    const [channel] = await channelModel.createChannel({
+      ownerId,
+      name,
+      channelType,
+      isPublic,
+      description,
+    });
+    res.status(200).json({ channel });
+    return;
   }
   res.status(400).json({ message: '필수 값 누락' });
 };

@@ -35,7 +35,9 @@ declare module 'styled-components' {
       green1: string;
       green2: string;
 
-      blue: string;
+      blue1: string;
+      blue2: string;
+      blue3: string;
 
       yellow: string;
       warningRed: string;

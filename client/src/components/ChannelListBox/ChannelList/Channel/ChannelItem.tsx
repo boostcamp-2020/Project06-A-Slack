@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrent, loadChannelRequest } from '@/store/modules/channel';
 import styled from 'styled-components';
-import { useChannelList, useChannel } from '@/hooks/useChannel';
+import { useJoinChannelList, useChannel } from '@/hooks/useChannel';
 
 interface Args {
   key: number;
@@ -23,7 +23,7 @@ const Channel = styled.div<Props>`
   &:hover {
     ${(props) => (!props.pick ? 'background: rgba(0, 0, 0, 0.2);' : '')}
   }
-  background: ${(props) => (props.pick ? props.theme.color.blue : 'transparent')};
+  background: ${(props) => (props.pick ? props.theme.color.blue1 : 'transparent')};
 `;
 
 const Icon = styled.div`
@@ -34,10 +34,10 @@ const Name = styled.div``;
 
 const ChannelItem = (args: Args) => {
   const dispatch = useDispatch();
-  const { id, name, isPublic } = useChannelList(args.idx);
+  const { id, name, isPublic } = useJoinChannelList(args.idx);
   const { current } = useChannel();
 
-  const onClick = (e: React.MouseEvent<HTMLElement>) => {
+  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     dispatch(setCurrent(args.idx));

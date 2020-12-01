@@ -34,7 +34,9 @@ const theme: DefaultTheme = {
     green2: '#008a6a',
     white: '#fff',
 
-    blue: '#0073c6',
+    blue1: '#0073c6',
+    blue2: '#1164a3',
+    blue3: '#0b4c8c',
 
     yellow: '#e8912d',
     warningRed: '#D73A49',

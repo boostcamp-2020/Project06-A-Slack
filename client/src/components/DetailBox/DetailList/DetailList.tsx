@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useChannel } from '@/hooks/useChannel';
 import { flex } from '@/styles/mixin';
-import { ChannelUsers } from '@/types/channelUsers';
+import { JoinUser } from '@/types';
 
 const Container = styled.div`
   padding: ${(props) => props.theme.size.m};
@@ -84,7 +84,7 @@ const DetailList = () => {
           <Arrow>{members ? '∨' : '＞'}</Arrow>
         </ListItem>
         {members &&
-          users?.map((user: ChannelUsers) => (
+          users?.map((user: JoinUser) => (
             <MemberItem key={user.userId}>
               <MemberImg src="https://mblogthumb-phinf.pstatic.net/MjAxOTEyMTJfMjYw/MDAxNTc2MTQwMDE0MjIy.F1V39cfeZPhX87yFFlqkZQqfGmycVOxXbO3vg0dFrvEg.12ulcNAMUNyNzlE7rz5Hk2NVlJfkakVTOspDnzyRkUMg.PNG.vet6390/%EA%B8%B8%EA%B3%A0%EC%96%91%EC%9D%B4_%EC%9E%85%EC%96%91.PNG?type=w800" />
               <MemberInfo>{user.displayName}</MemberInfo>
