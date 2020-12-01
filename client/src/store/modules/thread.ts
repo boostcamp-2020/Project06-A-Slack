@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Thread, initThread } from '@/types';
+import { Thread, initialThread } from '@/types';
 
 interface ThreadList {
   threadList: Thread[] | null;
 }
 
 const threadListState: ThreadList = {
-  threadList: [initThread],
+  threadList: [initialThread],
 };
 
 export interface getThreadRequestPayload {

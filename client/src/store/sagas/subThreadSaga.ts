@@ -3,13 +3,13 @@ import {
   getSubThreadRequest,
   getSubThreadSuccess,
   getSubThreadFailure,
-  getSubThreadRequestPayload,
+  GetSubThreadRequestPayload,
 } from '@/store/modules/subThread';
 import { subThreadService } from '@/services/subThread.service';
 
-function* getSubThreadList({ parentId, parentThread }: getSubThreadRequestPayload) {
+function* getSubThreadList({ parentId, parentThread }: GetSubThreadRequestPayload) {
   try {
-    const result = yield call(subThreadService.getSubThreadList, parentId);
+    const result = yield call(subThreadService.getSubThreadList, { parentId });
     yield put(getSubThreadSuccess({ parentThread, subThreadList: result.data.subThreadList }));
   } catch (err) {
     yield put(getSubThreadFailure(err));
