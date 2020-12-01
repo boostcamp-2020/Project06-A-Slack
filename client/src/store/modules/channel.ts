@@ -6,30 +6,18 @@ interface ChannelState {
   channelList: Channel[];
   joinChannelList: Channel[];
   current: Channel | null;
-  channelListVisible: boolean;
   users: JoinUser[];
-  detailVisible: boolean;
   channelId: number | null;
   topic: string;
-  topicVisible: boolean;
-  showUsersVisible: boolean;
-  addChannelVisible: boolean;
-  addUserVisible: boolean;
 }
 
 const initialState: ChannelState = {
   channelList: [],
   joinChannelList: [],
   current: null,
-  channelListVisible: true,
   users: [],
-  detailVisible: false,
   channelId: null,
   topic: 'Add a topic',
-  topicVisible: false,
-  showUsersVisible: false,
-  addChannelVisible: false,
-  addUserVisible: false,
 };
 
 const channelSlice = createSlice({
@@ -77,26 +65,8 @@ const channelSlice = createSlice({
     setCurrent(state, action) {
       state.current = state.joinChannelList[action.payload];
     },
-    openChannelList(state) {
-      state.channelListVisible = !state.channelListVisible;
-    },
-    openDetail(state) {
-      state.detailVisible = !state.detailVisible;
-    },
-    openTopicModal(state) {
-      state.topicVisible = !state.topicVisible;
-    },
-    openAddChannelModal(state) {
-      state.addChannelVisible = !state.addChannelVisible;
-    },
     changeTopic(state, action) {
       state.topic = action.payload;
-    },
-    openShowUsers(state) {
-      state.showUsersVisible = !state.showUsersVisible;
-    },
-    openAddUser(state) {
-      state.addUserVisible = !state.addUserVisible;
     },
   },
 });
@@ -119,12 +89,6 @@ export const {
   joinChannelSuccess,
   joinChannelFailure,
   setCurrent,
-  openChannelList,
-  openDetail,
-  openTopicModal,
-  openAddChannelModal,
   changeTopic,
-  openShowUsers,
-  openAddUser,
 } = channelSlice.actions;
 export default channelSlice.reducer;
