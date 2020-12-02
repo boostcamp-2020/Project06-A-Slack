@@ -20,7 +20,7 @@ export interface Thread {
   subThreadUserId3: number | null;
 }
 
-export const initThread: Thread = {
+export const initialThread: Thread = {
   id: 0,
   userId: 0,
   channelId: 0,

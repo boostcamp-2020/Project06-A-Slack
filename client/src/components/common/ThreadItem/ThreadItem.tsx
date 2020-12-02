@@ -80,7 +80,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
           <div>{thread.content}</div>
         </SameUserBox>
       </ContentBox>
-      {thread.subCount === 0 || isParentThreadOfRightSideBar ? '' : <ReplyButton thread={thread} />}
+      {!(thread.subCount === 0 || isParentThreadOfRightSideBar) && <ReplyButton thread={thread} />}
       <Popup>
         <ThreadPopup />
       </Popup>

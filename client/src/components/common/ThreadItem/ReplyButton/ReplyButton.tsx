@@ -20,8 +20,11 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
   const buttonEl = useRef<HTMLButtonElement>(null);
   const dispatch = useDispatch();
 
-  const replyClickEventHandler = (clickedThread: any) => {
-    const parentId = Number(buttonEl.current?.id);
+  const replyClickEventHandler = (
+    clickedThread: Thread,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    const parentId = Number(e.currentTarget.id);
     dispatch(getSubThreadRequest({ parentId, parentThread: clickedThread }));
   };
 
@@ -42,7 +45,7 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
         ref={buttonEl}
         id={String(thread.id)}
         type="button"
-        onClick={() => replyClickEventHandler(thread)}
+        onClick={(e) => replyClickEventHandler(thread, e)}
       >
         {getDisplayReplyData().map((el) => {
           const { subThreadUserId, subThreadProfile } = el;
