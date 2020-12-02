@@ -20,6 +20,9 @@ export const SubmitButton = styled(Button)`
   &:hover {
     background-color: ${(props) => lighten(0.03, props.theme.color.green1)};
   }
+  &:active {
+    background-color: ${(props) => lighten(0.06, props.theme.color.green1)};
+  }
 `;
 
 export const CancelButton = styled(Button)`
@@ -28,5 +31,8 @@ export const CancelButton = styled(Button)`
   border: 1px solid ${(props) => props.theme.color.lightGray1};
   &:hover {
     background-color: ${(props) => darken(0.02, props.theme.color.semiWhite)};
+  }
+  &:active {
+    background-color: ${(props) => darken(0.04, props.theme.color.semiWhite)};
   }
 `;
