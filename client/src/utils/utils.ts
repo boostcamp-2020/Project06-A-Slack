@@ -45,3 +45,11 @@ export const getNotNullDataInArray = (arr: any[]) => (property: string | number)
     return el[property];
   });
 };
+
+export const isNumberTypeValue = (value: any): boolean => {
+  const numberedValue = Number(value);
+  if (!Number.isNaN(numberedValue)) {
+    return true;
+  }
+  return false;
+};
