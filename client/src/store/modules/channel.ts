@@ -9,6 +9,7 @@ interface ChannelState {
   users: JoinUser[];
   channelId: number | null;
   topic: string;
+  fetchResult: boolean | null;
 }
 
 const initialState: ChannelState = {
@@ -18,7 +19,13 @@ const initialState: ChannelState = {
   users: [],
   channelId: null,
   topic: 'Add a topic',
+  fetchResult: null,
 };
+
+export interface modifyLastChannelRequestPayload {
+  lastChannelId: number;
+  userId: number;
+}
 
 const channelSlice = createSlice({
   name: 'channel',
@@ -47,6 +54,15 @@ const channelSlice = createSlice({
     loadChannelFailure(state, action) {
       // todo 에러처리
     },
+    modifyTopicRequest(state, action) {},
+    modifyTopicSuccess(state, action) {},
+    modifyTopicFailure(state, action) {},
+    modifyLastChannelRequest(state, action: PayloadAction<modifyLastChannelRequestPayload>) {},
+    modifyLastChannelSuccess(state, action: PayloadAction<{ fetchResult: boolean }>) {
+      const { fetchResult } = action.payload;
+      state.fetchResult = fetchResult;
+    },
+    modifyLastChannelFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
       state.channelList.push(action.payload.channel);
@@ -82,6 +98,12 @@ export const {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
+  modifyTopicRequest,
+  modifyTopicSuccess,
+  modifyTopicFailure,
+  modifyLastChannelRequest,
+  modifyLastChannelSuccess,
+  modifyLastChannelFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,

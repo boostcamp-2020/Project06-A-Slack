@@ -1,6 +1,7 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
 import { Channel, JoinUser } from '@/types';
+import { PayloadAction } from '@reduxjs/toolkit';
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
@@ -11,12 +12,19 @@ import {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
+  modifyLastChannelRequest,
+  modifyLastChannelSuccess,
+  modifyLastChannelFailure,
+  modifyTopicRequest,
+  modifyTopicSuccess,
+  modifyTopicFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,
   joinChannelRequset,
   joinChannelSuccess,
   joinChannelFailure,
+  modifyLastChannelRequestPayload,
 } from '../modules/channel';
 
 function* loadChannels() {
@@ -81,12 +89,21 @@ function* createChannel(action: any) {
   }
 }
 
-function* joinChannel(action: any) {
+function* joinChannel({ userId, channelId }: { userId: number; channelId: number }) {
   try {
-    const { userId, channelId } = action.payload;
     yield call(channelService.joinChannel, { userId, channelId });
   } catch (err) {
     yield put(joinChannelFailure(err));
+  }
+}
+
+function* modifyLastChannel({
+  payload: { lastChannelId, userId },
+}: PayloadAction<modifyLastChannelRequestPayload>) {
+  try {
+    yield call(channelService.modifyLastChannel, { lastChannelId, userId });
+  } catch (err) {
+    yield put(modifyTopicFailure({ err }));
   }
 }
 
@@ -106,8 +123,12 @@ function* watchCreateChannel() {
   yield takeLatest(createChannelRequest, createChannel);
 }
 
-function* watchJoinChannel() {
-  yield takeEvery(joinChannelRequset, joinChannel);
+// function* watchJoinChannel() {
+//   yield takeEvery(joinChannelRequset, joinChannel);
+// }
+
+function* watchModifyLastChannel() {
+  yield takeLatest(modifyTopicRequest, modifyLastChannel);
 }
 
 export default function* channelSaga() {
@@ -116,6 +137,7 @@ export default function* channelSaga() {
     fork(watchLoadJoinChannels),
     fork(watchCreateChannel),
     fork(watchLoadChannel),
-    fork(watchJoinChannel),
+    // fork(watchJoinChannel),
+    fork(watchModifyLastChannel),
   ]);
 }
