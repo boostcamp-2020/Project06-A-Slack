@@ -20,10 +20,14 @@ const App = () => {
           <Route path="/login" component={LoginPage} />
           <Route path="/verify" component={EmailVerifyPage} />
           <Route path="/signup" component={SignupPage} />
-          <Route path="/client/1/:channelId/:rightSideType/:threadId" component={WorkSpacePage} />
-          <Route path="/client/1/:channelId/:rightSideType" component={WorkSpacePage} />
-          <Route path="/client/1/:channelId" component={WorkSpacePage} />
-          <Route path="/client/1/" component={WorkSpacePage} />
+          <Route path="/client/1" exact component={WorkSpacePage} />
+          <Route path="/client/1/:channelId" exact component={WorkSpacePage} />
+          <Route path="/client/1/:channelId/:rightSideType" exact component={WorkSpacePage} />
+          <Route
+            path="/client/1/:channelId/:rightSideType/:threadId"
+            exact
+            component={WorkSpacePage}
+          />
           <Route component={NotFoundPage} />
         </Switch>
       </BrowserRouter>

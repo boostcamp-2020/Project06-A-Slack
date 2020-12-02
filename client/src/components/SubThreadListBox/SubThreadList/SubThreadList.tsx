@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
-import { ThreadItem } from '@/components/common';
+import { ThreadItem } from '@/components';
 
 const Container = styled.div`
   background-color: pink;

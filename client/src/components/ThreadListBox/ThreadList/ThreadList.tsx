@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
 import { Thread } from '@/types';
-import { ThreadItem } from '@/components/common/';
+import { ThreadItem } from '@/components';
 import { useThread } from '@/hooks';
 import { useParams } from 'react-router-dom';
+import { isNumberTypeValue } from '@/utils/utils';
 
 const Container = styled.div`
   background-color: orange;
@@ -21,7 +22,9 @@ const ThreadList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getThreadRequest({ channelId: Number(channelId) }));
+    if (isNumberTypeValue(channelId)) {
+      dispatch(getThreadRequest({ channelId: Number(channelId) }));
+    }
   }, [dispatch, channelId]);
 
   return (
