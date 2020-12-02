@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   background-color: blue;
+  button {
+    font-size: ${(props) => props.theme.size.xs};
+  }
 `;
 
 interface ThreadPopupProps {
