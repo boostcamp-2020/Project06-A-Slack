@@ -80,7 +80,6 @@ channel2.on('connection', (socket: Socket) => {
 });
 
 app.set('port', port);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
@@ -89,6 +88,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../../client/dist')));
 
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', apiRouter);
 app.all('*', (req, res) => {
   if (process.env.MODE === 'dev') {
