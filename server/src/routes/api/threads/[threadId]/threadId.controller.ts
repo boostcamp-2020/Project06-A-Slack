@@ -31,7 +31,7 @@ export const modifyThread = async (req: Request, res: Response, next: NextFuncti
 
   if (verifyRequestData([content])) {
     try {
-      const result = await threadModel.updateThread(content, Number(threadId));
+      const [result] = await threadModel.updateThread(content, Number(threadId));
       res.status(200).json(result);
       return;
     } catch (err) {
@@ -49,7 +49,7 @@ export const deleteThread = async (req: Request, res: Response, next: NextFuncti
   const { threadId } = req.params;
   if (verifyRequestData([threadId])) {
     try {
-      const result = await threadModel.deleteThread(Number(threadId));
+      const [result] = await threadModel.deleteThread(Number(threadId));
       res.status(200).json(result);
       return;
     } catch (err) {

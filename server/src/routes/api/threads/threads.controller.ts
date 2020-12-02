@@ -13,7 +13,7 @@ export const createThread = async (req: Request, res: Response, next: NextFuncti
     // userId, channelId, content, parentId 이상한값 예외처리 추후 추가
     try {
       const url = 'temp/url'; // 추후 url 생성 부분 추가
-      const result = await threadModel.createThread(userId, channelId, content, parentId, url);
+      const [result] = await threadModel.createThread(userId, channelId, content, parentId, url);
       res.status(201).json(result);
       return;
     } catch (err) {
