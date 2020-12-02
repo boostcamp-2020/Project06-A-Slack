@@ -10,6 +10,7 @@ import {
   EditUserRequestPayload,
 } from '@/store/modules/user';
 import { userService } from '@/services';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 function* getUser({ payload }: { payload: { userId: number } }) {
   try {
@@ -28,14 +29,40 @@ function* watchGetUser() {
 
 function* editUser(action: PayloadAction<EditUserRequestPayload>) {
   try {
-    const { userId, displayName, phoneNumber, handleClose } = action.payload;
-    const { data, status } = yield call(userService.editUser, {
-      id: userId,
+    const {
+      userId,
       displayName,
       phoneNumber,
-    });
+      profileImage,
+      previousFileName,
+      handleClose,
+    } = action.payload;
+    const formData = new FormData();
+    formData.append('displayName', displayName);
+    formData.append('phoneNumber', phoneNumber);
+
+    let setDefault = false;
+
+    if (typeof profileImage === 'string') {
+      formData.append('setDefault', '0');
+    } else if (profileImage) {
+      formData.append('setDefault', '0');
+      formData.append('image', profileImage);
+    } else {
+      formData.append('setDefault', '1');
+      setDefault = true;
+    }
+
+    if (previousFileName) {
+      formData.append('previousFileName', previousFileName);
+    }
+
+    const {
+      data: { image },
+      status,
+    } = yield call(userService.editUser, { id: userId, formData });
     if (status === 200) {
-      yield put(editUserSuccess({ userId, displayName, phoneNumber }));
+      yield put(editUserSuccess({ userId, displayName, phoneNumber, image, setDefault }));
       handleClose();
     }
   } catch (err) {

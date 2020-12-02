@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { User } from '@/types';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
@@ -29,6 +30,13 @@ export interface EditUserPayload {
 
 export interface EditUserRequestPayload extends EditUserPayload {
   handleClose: () => void;
+  profileImage: File | undefined | string;
+  previousFileName: string | undefined;
+}
+
+export interface EditUserSuccessPayload extends EditUserPayload {
+  image: string;
+  setDefault: boolean;
 }
 
 const userSlice = createSlice({
@@ -44,11 +52,16 @@ const userSlice = createSlice({
       state.edit.loading = true;
       state.edit.success = false;
     },
-    editUserSuccess(state, action: PayloadAction<EditUserPayload>) {
-      const { displayName, phoneNumber } = action.payload;
+    editUserSuccess(state, action: PayloadAction<EditUserSuccessPayload>) {
+      const { displayName, phoneNumber, image, setDefault } = action.payload;
       if (state.userInfo) {
         state.userInfo.displayName = displayName;
         state.userInfo.phoneNumber = phoneNumber;
+        if (setDefault) {
+          state.userInfo.image = USER_DEFAULT_PROFILE_URL;
+        } else if (image) {
+          state.userInfo.image = image;
+        }
         state.edit.loading = false;
         state.edit.success = true;
       }
