@@ -20,3 +20,6 @@ export const ERROR_MESSAGE = {
   BLACKLIST_TOKEN: '블랙리스트 토큰',
   LOGIN_REQUIRED: '로그인 필요',
 };
+
+export const USER_DEFAULT_PROFILE_URL =
+  'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg';
