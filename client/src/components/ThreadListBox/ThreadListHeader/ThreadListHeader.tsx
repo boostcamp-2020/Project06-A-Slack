@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
+import { CHANNELTYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
-import { useDispatch } from 'react-redux';
 import AddUsersModal from '@/components/ChannelModal/AddUsersModal';
 import AddTopicModal from '@/components/ChannelModal/AddTopicModal';
 import ShowUsersModal from '@/components/ChannelModal/ShowUsersModal';
@@ -72,7 +72,7 @@ const RightButton = styled.button`
   font-size: 30px;
 `;
 
-const ThreadListHeader = (): React.FC | any => {
+const ThreadListHeader = (): ReactElement => {
   const { current, users, topic } = useChannel();
   const [addUserModalVisible, setAddUserModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
@@ -104,7 +104,7 @@ const ThreadListHeader = (): React.FC | any => {
           <LeftTitle>
             {current.isPublic} {current.name}
           </LeftTitle>
-          {current.channelType === 1 && (
+          {current.channelType === CHANNELTYPE.CHANNEL && (
             <LeftButtonBox>
               <LeftButton>핀</LeftButton>
               <LeftButton onClick={clickAddTopicModal}>{topic}</LeftButton>
@@ -112,7 +112,7 @@ const ThreadListHeader = (): React.FC | any => {
           )}
         </Left>
         <Right>
-          {current.channelType === 1 && (
+          {current.channelType === CHANNELTYPE.CHANNEL && (
             <RightUserBox onClick={clickShowUsersModal}>
               {makeUserIcons(users).map((icon: JoinUser) => (
                 <RightUser key={icon.userId}>{icon.userId}</RightUser>
