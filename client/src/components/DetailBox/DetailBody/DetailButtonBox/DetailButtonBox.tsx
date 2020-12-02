@@ -20,7 +20,7 @@ const Button = styled.button`
   background: ${(props) => props.theme.color.gray3};
 `;
 
-const DetailButtonBox = () => {
+export const DetailButtonBox: React.FC = () => {
   return (
     <Container>
       <Label>
@@ -42,5 +42,3 @@ const DetailButtonBox = () => {
     </Container>
   );
 };
-
-export default DetailButtonBox;

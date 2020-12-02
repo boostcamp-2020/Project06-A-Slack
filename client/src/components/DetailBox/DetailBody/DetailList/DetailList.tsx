@@ -42,7 +42,7 @@ const MemberInfo = styled.div`
   font-size: ${(props) => props.theme.size.m};
 `;
 
-const DetailList = () => {
+export const DetailList: React.FC = () => {
   const [about, setAbout] = useState(false);
   const [members, setMembers] = useState(false);
   const [organization, setOrganization] = useState(false);
@@ -50,23 +50,23 @@ const DetailList = () => {
   const [files, setFiles] = useState(false);
   const { users } = useChannel();
 
-  const openAbout = (e: React.MouseEvent<HTMLElement>) => {
+  const openAbout = () => {
     setAbout((about) => !about);
   };
 
-  const openMembers = (e: React.MouseEvent<HTMLElement>) => {
+  const openMembers = () => {
     setMembers((members) => !members);
   };
 
-  const openOrganizations = (e: React.MouseEvent<HTMLElement>) => {
+  const openOrganizations = () => {
     setOrganization((organization) => !organization);
   };
 
-  const openPinned = (e: React.MouseEvent<HTMLElement>) => {
+  const openPinned = () => {
     setPinned((pinned) => !pinned);
   };
 
-  const openFiles = (e: React.MouseEvent<HTMLElement>) => {
+  const openFiles = () => {
     setFiles((files) => !files);
   };
 
@@ -112,5 +112,3 @@ const DetailList = () => {
     </Container>
   );
 };
-
-export default DetailList;

@@ -1,18 +1,13 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { openChannelList, openAddChannelModal } from '@/store/modules/channel';
+/* eslint-disable @typescript-eslint/ban-types */
+import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
-import { useChannel } from '@/hooks/useChannel';
 import { flex } from '@/styles/mixin';
 import { useOnClickOutside } from '@/hooks';
+import CreateChannelModal from '@/components/ChannelModal/CreateChannelModal';
+import { CHANNELTYPE } from '@/utils/constants';
 
 interface Props {
   pick: boolean;
-  theme: any;
-  ref: any;
 }
 
 const Container = styled.div`
@@ -64,55 +59,70 @@ const PopupItem = styled.div`
   }
 `;
 
-const ChannelListBox = () => {
-  const ref = useRef();
+const ChannelListBox = ({
+  channelType,
+  channelListVisible,
+  setChannelListVisible,
+}: {
+  channelType: number;
+  setChannelListVisible: (fn: (state: boolean) => boolean) => void;
+  channelListVisible: boolean;
+}): ReactElement => {
+  const ref = useRef<HTMLDivElement>(null);
   const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
   const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
+  const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
 
-  const dispatch = useDispatch();
-  const { channelListVisible } = useChannel();
+  const clickChannel = () => {
+    setChannelListVisible((state: boolean) => !state);
+  };
 
-  const clickChannel = () => dispatch(openChannelList());
   useOnClickOutside(ref, () => setAddChannelsModalVisible(false));
   useOnClickOutside(ref, () => setSectionOptionsModalVisible(false));
 
-  const clickAdd = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
+  const clickAdd = () => {
     setAddChannelsModalVisible((state) => !state);
   };
 
-  const clickMore = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
+  const clickMore = () => {
     setSectionOptionsModalVisible((state) => !state);
   };
 
-  const clickAddChannelModal = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(openAddChannelModal());
+  const clickAddChannelModal = () => {
+    setCreateChannelModalVisible((state) => !state);
   };
 
   return (
-    <Container>
-      <SubWrapper>
-        <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
-        <Content onClick={clickChannel}>Channels</Content>
-      </SubWrapper>
-      <SubWrapper>
-        <PopupBox onClick={clickMore}>
-          <Button>፧</Button>
-          <Popup pick={sectionOptionsModalVisible} ref={ref}>
-            <PopupItem onClick={clickAddChannelModal}>Add Channels</PopupItem>
-            <PopupItem>Browse Channels</PopupItem>
-          </Popup>
-        </PopupBox>
-        <PopupBox onClick={clickAdd}>
-          <Button>+</Button>
-          <Popup pick={addChannelsModalVisible} ref={ref}>
-            <PopupItem onClick={clickAddChannelModal}>Add Channels</PopupItem>
-            <PopupItem>Browse Channels</PopupItem>
-          </Popup>
-        </PopupBox>
-      </SubWrapper>
-    </Container>
+    <>
+      {createChannelModalVisible && (
+        <CreateChannelModal setCreateChannelModalVisible={setCreateChannelModalVisible} />
+      )}
+      <Container>
+        <SubWrapper>
+          <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
+          <Content onClick={clickChannel}>
+            {channelType === CHANNELTYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
+          </Content>
+        </SubWrapper>
+        <SubWrapper>
+          <PopupBox onClick={clickMore}>
+            <Button>፧</Button>
+            <Popup pick={sectionOptionsModalVisible} ref={ref}>
+              <PopupItem onClick={clickAddChannelModal}>Add Channels</PopupItem>
+              <PopupItem>Browse Channels</PopupItem>
+            </Popup>
+          </PopupBox>
+          <PopupBox onClick={clickAdd}>
+            <Button>+</Button>
+            <Popup pick={addChannelsModalVisible} ref={ref}>
+              <PopupItem onClick={clickAddChannelModal}>
+                {channelType === CHANNELTYPE.CHANNEL ? 'Add Channels' : '임시 유저 추가'}
+              </PopupItem>
+            </Popup>
+          </PopupBox>
+        </SubWrapper>
+      </Container>
+    </>
   );
 };
 

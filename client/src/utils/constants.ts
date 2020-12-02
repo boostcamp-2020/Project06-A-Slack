@@ -23,3 +23,8 @@ export const ERROR_MESSAGE = {
 
 export const USER_DEFAULT_PROFILE_URL =
   'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg';
+
+export const CHANNELTYPE = {
+  CHANNEL: 1,
+  DM: 2,
+};

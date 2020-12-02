@@ -1,15 +1,7 @@
 import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
-import { useAuth, useChannel } from '@/hooks';
-import {
-  Header,
-  LeftSideBar,
-  ThreadListBox,
-  AddTopicModal,
-  CreateChannelModal,
-  ShowUsersModal,
-  RightSideBar,
-} from '@/components';
+import { useAuth } from '@/hooks';
+import { Header, LeftSideBar, ThreadListBox, RightSideBar } from '@/components';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -24,9 +16,8 @@ interface RightSideParams {
 }
 
 const WorkSpacePage: React.FC = () => {
-  const { channelId, rightSideType, threadId }: RightSideParams = useParams();
+  const { channelId, rightSideType }: RightSideParams = useParams();
   const { accessToken } = useAuth();
-  const { topicVisible, addChannelVisible, showUsersVisible } = useChannel();
 
   return (
     <>
@@ -38,9 +29,6 @@ const WorkSpacePage: React.FC = () => {
             <ThreadListBox />
             {rightSideType && <RightSideBar type={rightSideType} channelId={Number(channelId)} />}
           </Container>
-          {topicVisible && <AddTopicModal />}
-          {addChannelVisible && <CreateChannelModal />}
-          {showUsersVisible && <ShowUsersModal />}
         </>
       ) : (
         <Redirect to="/login" />

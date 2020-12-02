@@ -1,6 +1,5 @@
 import React from 'react';
 import { useChannel } from '@/hooks/useChannel';
-import { openDetail } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
@@ -29,11 +28,11 @@ const Button = styled.button`
   padding: ${(props) => props.theme.size.m};
 `;
 
-const DetailHeader = () => {
+const DetailHeader: React.FC = () => {
   const { current } = useChannel();
   const dispatch = useDispatch();
   const onClick = () => {
-    dispatch(openDetail());
+    // Link로 연결하는 작업
   };
   return (
     <Container>
