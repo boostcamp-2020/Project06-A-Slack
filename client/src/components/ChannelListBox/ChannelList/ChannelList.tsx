@@ -24,20 +24,14 @@ const ChannelList = ({
 
   return (
     <>
-      {joinChannelList?.map((channel: Channel, idx: number) =>
-        channelType === channel.channelType ? (
-          !channelListVisible ? (
-            current?.id === channel.id ? (
-              <ChannelItem idx={idx} key={channel.id} />
-            ) : (
-              ''
-            )
+      {joinChannelList?.map(
+        (channel: Channel, idx: number) =>
+          channelType === channel.channelType &&
+          (!channelListVisible ? (
+            current?.id === channel.id && <ChannelItem idx={idx} key={channel.id} />
           ) : (
             <ChannelItem idx={idx} key={channel.id} />
-          )
-        ) : (
-          ''
-        ),
+          )),
       )}
     </>
   );
