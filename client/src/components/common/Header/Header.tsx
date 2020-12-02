@@ -3,14 +3,10 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getUserRequest } from '@/store/modules/user';
 import { flex } from '@/styles/mixin';
-import { useAuth } from '@/hooks';
+import { useAuth, useUser } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth';
 import { DimModal, UserStateIcon, MenuModal } from '@/components';
-import {
-  UserProfileModalHeader,
-  UserProfileModalBody,
-  UserProfileModalFooter,
-} from './UserProfileModalBox';
+import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 
 const Container = styled.div`
   position: relative;
@@ -88,6 +84,8 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
 
   const { userId } = useAuth();
+  const { userInfo } = useUser();
+
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [menuModalVisible, setMenuModalVisible] = useState(false);
 
@@ -101,28 +99,23 @@ const Header: React.FC = () => {
     dispatch(logoutRequest());
   };
 
-  const handleProfileEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO : dispatch submit logic
-  };
-
   useEffect(() => {
     if (userId) {
       dispatch(getUserRequest({ userId: Number(userId) }));
     }
   }, [dispatch, userId]);
 
+  const workspaceName = '부스트캠프 2020 멤버십';
+
   return (
     <Container>
-      <Title>부스트캠프 2020 멤버십</Title>
+      <Title>{workspaceName}</Title>
       {editProfileVisible && (
         <DimModal
           header={<UserProfileModalHeader />}
-          body={<UserProfileModalBody />}
-          footer={<UserProfileModalFooter handleClose={closeEditModal} />}
+          body={<UserProfileModalBody handleClose={closeEditModal} />}
           visible={editProfileVisible}
           setVisible={setEditProfileVisible}
-          handleSubmit={handleProfileEditSubmit}
         />
       )}
       {menuModalVisible && (
@@ -131,13 +124,13 @@ const Header: React.FC = () => {
             <ModalListItem onClick={openEditModal}>Edit profile</ModalListItem>
             <ModalListItem>View profile</ModalListItem>
             <Line />
-            <Logout onClick={handleLogout}>Sign out of 부스트캠프 2020 멤버십</Logout>
+            <Logout onClick={handleLogout}>Sign out of {workspaceName}</Logout>
           </MenuModal>
         </Modal>
       )}
       <ProfileBox onClick={openMenuModal}>
         <ProfileBackground />
-        <ProfileImg src="https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg" />
+        <ProfileImg src={userInfo?.image} />
         <Icon>
           <UserStateIcon />
         </Icon>
