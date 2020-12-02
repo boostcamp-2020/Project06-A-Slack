@@ -26,14 +26,12 @@ const SubThreadListBox: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (isNumberTypeValue(threadId)) {
-      dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
-    }
+    dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
   }, [threadId]);
 
   return (
     <>
-      {parentThread !== undefined ? (
+      {isNumberTypeValue(threadId) && parentThread !== undefined ? (
         <Container>
           <div>subThreadListBox</div>
           <ParentThread parentThread={parentThread} />
