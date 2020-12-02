@@ -10,7 +10,6 @@ interface SubThreadBox {
 
 export interface GetSubThreadRequestPayload {
   parentId: number;
-  parentThread: Thread;
 }
 
 const subThreadListState: SubThreadBox = {

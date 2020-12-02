@@ -16,7 +16,7 @@ export const createThread = (req: Request, res: Response, next: NextFunction): v
 };
 
 /**
- * GET /api/channels/:channelId
+ * GET /api/threads/channels/:channelId
  */
 export const getChannelThreads = async (req: Request, res: Response, next: NextFunction) => {
   // parentId가 null인 것만.

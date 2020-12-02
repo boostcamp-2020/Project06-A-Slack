@@ -18,6 +18,10 @@ export interface Thread {
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
   subThreadUserId3: number | null;
+  email: string;
+  displayName: string;
+  phoneNumber: string | null;
+  image: string | null;
 }
 
 export const initialThread: Thread = {
@@ -35,4 +39,8 @@ export const initialThread: Thread = {
   subThreadUserId1: null,
   subThreadUserId2: null,
   subThreadUserId3: null,
+  email: '',
+  displayName: '',
+  phoneNumber: null,
+  image: '',
 };
