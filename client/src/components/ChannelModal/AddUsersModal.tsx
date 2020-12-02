@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useRef, useState } from 'react';
+import React, { ReactElement, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannel, useOnClickOutside } from '@/hooks';
 import { joinChannelRequset } from '@/store/modules/channel';
-
-interface Props {
-  ref: any;
-}
 
 const ModalBackground = styled.div`
   width: 100%;
@@ -20,7 +16,7 @@ const ModalBackground = styled.div`
   left: 0;
 `;
 
-const Container = styled.div<Props>`
+const Container = styled.div`
   border-radius: 10px;
   padding: ${(props) => props.theme.size.xxl};
   background: ${(props) => props.theme.color.white};
@@ -107,12 +103,12 @@ const Remove = styled.button`
 const AddUserModal = ({
   setAddUserModalVisible,
 }: {
-  setAddUserModalVisible: Function;
-}): React.FC | any => {
-  const ref = useRef();
+  setAddUserModalVisible: (fn: (state: boolean) => boolean) => void;
+}): ReactElement => {
+  const ref = useRef<HTMLDivElement>(null);
 
   const handler = () => {
-    setAddUserModalVisible(false);
+    setAddUserModalVisible((state: boolean) => !state);
   };
 
   useOnClickOutside(ref, () => handler());
@@ -130,7 +126,7 @@ const AddUserModal = ({
               {current?.name}
             </ChannelName>
           </HeaderLeft>
-          <CloseButton onClick={() => setAddUserModalVisible()}>x</CloseButton>
+          <CloseButton onClick={handler}>x</CloseButton>
         </Header>
         <Input />
       </Container>

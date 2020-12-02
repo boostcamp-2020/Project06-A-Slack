@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useOnClickOutside } from '@/hooks';
 import CreateChannelModal from '@/components/ChannelModal/CreateChannelModal';
+import { CHANNELTYPE } from '@/utils/constants';
 
 interface Props {
   pick: boolean;
-  ref: any;
 }
 
 const Container = styled.div`
@@ -65,10 +65,10 @@ const ChannelListBox = ({
   setChannelListVisible,
 }: {
   channelType: number;
-  setChannelListVisible: Function;
+  setChannelListVisible: (fn: (state: boolean) => boolean) => void;
   channelListVisible: boolean;
-}) => {
-  const ref = useRef();
+}): ReactElement => {
+  const ref = useRef<HTMLDivElement>(null);
   const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
   const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
@@ -101,7 +101,7 @@ const ChannelListBox = ({
         <SubWrapper>
           <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
           <Content onClick={clickChannel}>
-            {channelType === 1 ? 'Channels' : 'Direct Messages'}
+            {channelType === CHANNELTYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
           </Content>
         </SubWrapper>
         <SubWrapper>
@@ -116,7 +116,7 @@ const ChannelListBox = ({
             <Button>+</Button>
             <Popup pick={addChannelsModalVisible} ref={ref}>
               <PopupItem onClick={clickAddChannelModal}>
-                {channelType === 1 ? 'Add Channels' : '임시 유저 추가'}
+                {channelType === CHANNELTYPE.CHANNEL ? 'Add Channels' : '임시 유저 추가'}
               </PopupItem>
             </Popup>
           </PopupBox>

@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/ban-types */
+import React, { ReactElement, useRef, useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
 import { createChannelRequest } from '@/store/modules/channel';
-import { useAuth, useUser } from '@/hooks';
+import { useAuth, useUser, useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -197,13 +196,14 @@ const CreateButton = styled.button<Props>`
 const CreateChannelModal = ({
   setCreateChannelModalVisible,
 }: {
-  setCreateChannelModalVisible: Function;
-}) => {
+  setCreateChannelModalVisible: (fn: (state: boolean) => boolean) => void;
+}): ReactElement => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [secret, setSecret] = useState(false);
   const { userId } = useAuth();
   const { userInfo } = useUser();
+  const ref = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
@@ -216,8 +216,10 @@ const CreateChannelModal = ({
   };
 
   const closeAddChannelModal = () => {
-    setCreateChannelModalVisible(false);
+    setCreateChannelModalVisible((state: boolean) => !state);
   };
+
+  useOnClickOutside(ref, closeAddChannelModal);
 
   const toggleSecret = () => {
     setSecret((state) => !state);
@@ -239,7 +241,7 @@ const CreateChannelModal = ({
 
   return (
     <ModalBackground>
-      <Container>
+      <Container ref={ref}>
         <Header>
           <HeaderContent>{secret ? 'Create a private channel' : 'Create a channel'}</HeaderContent>
           <CloseButton onClick={closeAddChannelModal}>X</CloseButton>

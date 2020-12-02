@@ -1,13 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { ReactElement, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { changeTopic } from '@/store/modules/channel';
 import { useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
-
-interface Props {
-  ref: any;
-}
 
 const ModalBackground = styled.div`
   width: 100%;
@@ -19,7 +15,7 @@ const ModalBackground = styled.div`
   left: 0;
 `;
 
-const Container = styled.div<Props>`
+const Container = styled.div`
   border-radius: 10px;
   padding: ${(props) => props.theme.size.xxl};
   background: ${(props) => props.theme.color.white};
@@ -95,29 +91,25 @@ const SubmitButton = styled.button`
 const AddTopicModal = ({
   setAddTopicModalVisible,
 }: {
-  setAddTopicModalVisible: Function;
-}): React.FC | any => {
+  setAddTopicModalVisible: (fn: (state: boolean) => boolean) => void;
+}): ReactElement => {
   const [content, setContent] = useState('');
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
 
-  const handler = () => {
-    setAddTopicModalVisible(false);
-  };
-
-  useOnClickOutside(ref, () => handler());
-
   const onCancel = () => {
-    setAddTopicModalVisible(false);
+    setAddTopicModalVisible((state: boolean) => !state);
   };
+
+  useOnClickOutside(ref, onCancel);
 
   const onSubmit = () => {
     dispatch(changeTopic(content));
-    setAddTopicModalVisible(false);
+    setAddTopicModalVisible((state: boolean) => !state);
   };
 
   return (

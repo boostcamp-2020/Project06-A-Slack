@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useState } from 'react';
+import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannel } from '@/hooks';
 import { JoinUser } from '@/types';
 import AddUsersModal from '@/components/ChannelModal/AddUsersModal';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 const ModalBackground = styled.div`
   width: 100%;
@@ -94,16 +94,22 @@ const Remove = styled.button`
   border-radius: 3px;
 `;
 
-const ShowUsersModal = ({ setShowUsersModalVisible }: { setShowUsersModalVisible: Function }) => {
+const ShowUsersModal = ({
+  setShowUsersModalVisible,
+}: {
+  setShowUsersModalVisible: (fn: (state: boolean) => boolean) => void;
+}): ReactElement => {
   const { users, current } = useChannel();
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const clickClose = () => {
     setShowUsersModalVisible((state: boolean) => !state);
   };
 
+  useOnClickOutside(ref, clickClose);
+
   const clickAddUser = () => {
-    console.log(addUsersModalVisible);
     // setShowUsersModalVisible((state: boolean) => !state);
     setAddUsersModalVisible(true);
   };
@@ -112,7 +118,7 @@ const ShowUsersModal = ({ setShowUsersModalVisible }: { setShowUsersModalVisible
     <>
       {addUsersModalVisible && <AddUsersModal setAddUserModalVisible={setAddUsersModalVisible} />}
       <ModalBackground>
-        <Container>
+        <Container ref={ref}>
           <Header>
             <HeaderContent>
               {users.length} members in {current?.isPublic} {current?.name}
