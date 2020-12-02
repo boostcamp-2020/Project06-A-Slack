@@ -6,7 +6,11 @@ import { ERROR_MESSAGE } from '@/utils/constants';
 /**
  * GET /api/threads/:threadId
  */
-export const getSubThread = async (req: Request, res: Response, next: NextFunction) => {
+export const getSubThread = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { threadId } = req.params;
   if (Number.isNaN(Number(threadId))) {
     next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 500 });
@@ -25,7 +29,11 @@ export const getSubThread = async (req: Request, res: Response, next: NextFuncti
  * 특정 쓰레드 수정
  * POST /api/threads/:threadId
  */
-export const modifyThread = async (req: Request, res: Response, next: NextFunction) => {
+export const modifyThread = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { threadId } = req.params;
   const { content } = req.body;
 
@@ -45,7 +53,11 @@ export const modifyThread = async (req: Request, res: Response, next: NextFuncti
  * 쓰레드의 is_deteled를 1로 변경
  * DELETE /api/threads/:threadId
  */
-export const deleteThread = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteThread = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { threadId } = req.params;
   if (verifyRequestData([threadId])) {
     try {
@@ -62,7 +74,7 @@ export const deleteThread = async (req: Request, res: Response, next: NextFuncti
 /**
  * POST /api/threads/:threadId/pin
  */
-export const pinThread = (req: Request, res: Response, next: NextFunction) => {
+export const pinThread = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { threadId } = req.params;
   if (verifyRequestData([threadId])) {
     res.status(200).end();
