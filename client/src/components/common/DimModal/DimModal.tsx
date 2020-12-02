@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { flex } from '@/styles/mixin';
 import { ModalCloseBox } from '@/components';
 import { useOnClickOutside } from '@/hooks';
@@ -119,11 +118,7 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
           <Title>{header}</Title>
           <ModalCloseBox handleClose={handleClose} />
         </Header>
-        <Body>
-          <Scrollbars renderThumbVertical={() => <ScrollBar className="thumb-vertical" />}>
-            {body}
-          </Scrollbars>
-        </Body>
+        <Body>{body}</Body>
         <Footer>{footer}</Footer>
       </Container>
     </DimLayer>
