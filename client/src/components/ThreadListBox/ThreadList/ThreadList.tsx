@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
 import { Thread } from '@/types';
-import ThreadItem from '@/components/common/ThreadItem/ThreadItem';
+import { ThreadItem } from '@/components';
 import { useThread } from '@/hooks/useThread';
 
 const Container = styled.div`

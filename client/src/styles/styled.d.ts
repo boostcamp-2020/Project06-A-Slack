@@ -26,11 +26,17 @@ declare module 'styled-components' {
       gray5: string;
       gray6: string;
 
+      lightGray1: string;
+      lightGray2: string;
+      lightGray3: string;
+
       purple1: string;
       purple2: string;
       purple3: string;
 
       white: string;
+      semiWhite: string;
+      modalWhite: string;
 
       green1: string;
       green2: string;
@@ -41,6 +47,7 @@ declare module 'styled-components' {
 
       yellow: string;
       warningRed: string;
+      onConnect: string;
     };
 
     size: {
