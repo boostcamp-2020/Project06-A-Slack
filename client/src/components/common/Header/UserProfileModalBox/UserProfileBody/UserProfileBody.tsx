@@ -4,17 +4,6 @@ import { FormLabel, FormInput, SubmitButton as SB, CancelButton as CB } from '@/
 import { flex } from '@/styles/mixin';
 import { useUser } from '@/hooks';
 
-/* Modal header component */
-const ModalHeader = styled.div`
-  font-size: 1.6rem;
-  font-weight: 800;
-`;
-
-export const UserProfileModalHeader: React.FC = () => {
-  return <ModalHeader>Edit your profile</ModalHeader>;
-};
-
-/* Modal Body Component */
 const ModalBody = styled.div`
   ${flex()};
   padding: 0 0.5rem;
@@ -68,7 +57,7 @@ const RemovePhotoButton = styled.button`
   }
 `;
 
-export const UserProfileModalBody: React.FC = () => {
+const UserProfileModalBody: React.FC = () => {
   const { userInfo } = useUser();
 
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -121,32 +110,4 @@ export const UserProfileModalBody: React.FC = () => {
   );
 };
 
-/* Modal footer component */
-const ModalFooter = styled.div`
-  width: 100%;
-  height: 100%;
-  ${flex('center', 'flex-end')};
-`;
-
-const CancelButton = styled(CB)`
-  margin: 0 0.5rem;
-`;
-const SubmitButton = styled(SB)`
-  margin: 0 0.5rem;
-  font-weight: 800;
-`;
-
-interface ProfileFooterProps {
-  handleClose: () => void;
-}
-
-export const UserProfileModalFooter: React.FC<ProfileFooterProps> = ({
-  handleClose,
-}: ProfileFooterProps) => {
-  return (
-    <ModalFooter>
-      <CancelButton onClick={handleClose}>Cancel</CancelButton>
-      <SubmitButton type="submit">Save Changes</SubmitButton>
-    </ModalFooter>
-  );
-};
+export default UserProfileModalBody;

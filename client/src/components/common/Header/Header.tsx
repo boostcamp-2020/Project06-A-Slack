@@ -10,7 +10,7 @@ import {
   UserProfileModalHeader,
   UserProfileModalBody,
   UserProfileModalFooter,
-} from './UserProfileBox/UserProfileBox';
+} from './UserProfileModalBox';
 
 const Container = styled.div`
   position: relative;
