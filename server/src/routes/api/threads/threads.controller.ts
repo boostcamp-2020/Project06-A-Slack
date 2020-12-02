@@ -14,7 +14,7 @@ export const createThread = async (req: Request, res: Response, next: NextFuncti
     try {
       const url = 'temp/url'; // 추후 url 생성 부분 추가
       const [result] = await threadModel.createThread(userId, channelId, content, parentId, url);
-      res.status(201).json(result);
+      res.status(201).json({ result });
       return;
     } catch (err) {
       next(err);
