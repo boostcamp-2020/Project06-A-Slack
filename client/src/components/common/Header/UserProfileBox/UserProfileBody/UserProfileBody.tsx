@@ -7,14 +7,11 @@ import { useUser } from '@/hooks';
 import { editUserRequest } from '@/store/modules/user';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
-const Container = styled.form`
-  overflow-y: auto;
-`;
+const Container = styled.form``;
 
 const ModalBody = styled.div`
   ${flex()};
-  padding: 0 0.5rem;
-  overflow-y: auto;
+  padding: 0 0.5rem 2rem 0.5rem;
 `;
 
 const UserInfoBox = styled.div``;
@@ -81,7 +78,7 @@ const RemovePhotoButton = styled.button`
 const ModalFooter = styled.div`
   width: 100%;
   height: 100%;
-  padding: 1.4rem;
+  margin: 2rem 0;
   border-radius: 0 0 5px 5px;
   ${flex('center', 'flex-end')};
 `;

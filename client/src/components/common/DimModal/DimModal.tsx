@@ -30,22 +30,24 @@ interface ContainerProps {
 }
 
 const Container = styled.div<ContainerProps>`
+  ${flex('center', 'center', 'column')}
   width: 43rem;
   height: auto;
   max-height: 90vh;
   background-color: white;
   border-radius: 5px;
   outline: 0;
-  ${flex('center', 'center', 'column')}
+  overflow: hidden;
 `;
 
 const Header = styled.div`
+  ${flex()}
   width: 100%;
-  height: 5.6rem;
+  min-height: 5.6rem;
   padding: 1.4rem;
   padding-left: 1.7rem;
-  ${flex()}
-  border-radius:5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
 `;
 
 const Title = styled.div`
@@ -54,9 +56,9 @@ const Title = styled.div`
 
 const Body = styled.div`
   width: 100%;
-  min-height: 100%;
   padding: 0 1.4rem;
-  ${flex()};
+  border-radius: 0 0 5px 5px;
+  overflow: auto;
 `;
 
 interface DimModalProps {
