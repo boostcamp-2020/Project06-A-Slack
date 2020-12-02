@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 const $root = document.getElementById('root') as HTMLElement;
-const useOnClickOutside = (ref: React.MutableRefObject<any>, handler: (args: any) => any) => {
+const useOnClickOutside = (ref: React.MutableRefObject<any>, handler: (args: any) => any): void => {
   useEffect(() => {
     const listener = (e: any) => {
       if (!ref.current || ref.current.contains(e.target)) {
