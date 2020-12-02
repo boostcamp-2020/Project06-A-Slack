@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
 import { useAuth, useChannel } from '@/hooks';
 import {
   Header,
   LeftSideBar,
   ThreadListBox,
-  DetailBox,
   AddTopicModal,
   CreateChannelModal,
   ShowUsersModal,
+  RightSideBar,
 } from '@/components';
-import SubThreadListBox from '@/components/SubThreadListBox/SubThreadListBox';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -37,9 +36,7 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            {rightSideType === 'detail' && <DetailBox />}
-            {rightSideType === 'thread' && <SubThreadListBox />}
-            <DetailBox />
+            {rightSideType && <RightSideBar type={rightSideType} channelId={Number(channelId)} />}
           </Container>
           {topicVisible && <AddTopicModal />}
           {addChannelVisible && <CreateChannelModal />}
