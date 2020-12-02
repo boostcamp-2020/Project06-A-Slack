@@ -4,6 +4,8 @@ interface EditUserParams {
   id: number;
   displayName: string;
   phoneNumber: string;
+  image: string | undefined;
+  setDefault: number;
 }
 
 export const userModel = {
@@ -19,7 +21,15 @@ export const userModel = {
     FROM user WHERE id=?;`;
     return pool.execute(sql, [id]);
   },
-  editUserById({ id, displayName, phoneNumber }: EditUserParams): any {
+  editUserById({ id, displayName, phoneNumber, image, setDefault }: EditUserParams): any {
+    if (setDefault) {
+      const sql = `UPDATE user SET display_name=?, phone_number=?, image=DEFAULT WHERE id=?;`;
+      return pool.execute(sql, [displayName, phoneNumber, id]);
+    }
+    if (image) {
+      const sql = `UPDATE user SET display_name=?, phone_number=?, image=? WHERE id=?;`;
+      return pool.execute(sql, [displayName, phoneNumber, image, id]);
+    }
     const sql = `UPDATE user SET display_name=?, phone_number=? WHERE id=?;`;
     return pool.execute(sql, [displayName, phoneNumber, id]);
   },
