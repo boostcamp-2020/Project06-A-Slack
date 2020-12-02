@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable prettier/prettier */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/ban-types */
+import React, { ReactElement, useRef, useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { openAddChannelModal, createChannelRequest } from '@/store/modules/channel';
-import { useAuth, useChannel, useUser } from '@/hooks';
+import { createChannelRequest } from '@/store/modules/channel';
+import { useAuth, useUser, useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -19,6 +18,8 @@ const ModalBackground = styled.div`
   ${flex()};
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
+  top: 0;
+  left: 0;
 `;
 
 const Container = styled.div`
@@ -192,12 +193,17 @@ const CreateButton = styled.button<Props>`
       `}
 `;
 
-const CreateChannelModal = () => {
+const CreateChannelModal = ({
+  setCreateChannelModalVisible,
+}: {
+  setCreateChannelModalVisible: (fn: (state: boolean) => boolean) => void;
+}): ReactElement => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [secret, setSecret] = useState(false);
   const { userId } = useAuth();
   const { userInfo } = useUser();
+  const ref = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
@@ -210,15 +216,16 @@ const CreateChannelModal = () => {
   };
 
   const closeAddChannelModal = () => {
-    dispatch(openAddChannelModal());
+    setCreateChannelModalVisible((state: boolean) => !state);
   };
+
+  useOnClickOutside(ref, closeAddChannelModal);
 
   const toggleSecret = () => {
     setSecret((state) => !state);
   };
 
-  const createChannel = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const createChannel = async () => {
     const isPublic = secret ? 0 : 1;
     dispatch(
       createChannelRequest({
@@ -230,12 +237,11 @@ const CreateChannelModal = () => {
         displayName: userInfo?.displayName,
       }),
     );
-    dispatch(openAddChannelModal());
   };
 
   return (
     <ModalBackground>
-      <Container>
+      <Container ref={ref}>
         <Header>
           <HeaderContent>{secret ? 'Create a private channel' : 'Create a channel'}</HeaderContent>
           <CloseButton onClick={closeAddChannelModal}>X</CloseButton>

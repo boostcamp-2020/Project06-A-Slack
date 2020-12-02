@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
+import { CHANNELTYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
-import { openDetail, openTopicModal, openShowUsers } from '@/store/modules/channel';
-import { useDispatch } from 'react-redux';
+import AddUsersModal from '@/components/ChannelModal/AddUsersModal';
+import AddTopicModal from '@/components/ChannelModal/AddTopicModal';
+import ShowUsersModal from '@/components/ChannelModal/ShowUsersModal';
 
 const Container = styled.div`
   max-width: 80%;
@@ -70,44 +72,59 @@ const RightButton = styled.button`
   font-size: 30px;
 `;
 
-const ThreadListHeader = () => {
+const ThreadListHeader = (): ReactElement => {
   const { current, users, topic } = useChannel();
-  const dispatch = useDispatch();
+  const [addUserModalVisible, setAddUserModalVisible] = useState(false);
+  const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
+  const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
 
   const clickDetail = () => {
-    dispatch(openDetail());
-  };
-
-  const clickTopicModal = () => {
-    dispatch(openTopicModal());
+    // LinkTo 작업
   };
 
   const clickShowUsersModal = () => {
-    dispatch(openShowUsers());
+    setShowUsersModalVisible((state) => !state);
+  };
+
+  const clickAddUserModal = () => {
+    setAddUserModalVisible((state) => !state);
+  };
+
+  const clickAddTopicModal = () => {
+    setAddTopicModalVisible((state) => !state);
   };
 
   return current && users ? (
-    <Container>
-      <Left>
-        <LeftTitle>
-          {current.isPublic} {current.name}
-        </LeftTitle>
-        <LeftButtonBox>
-          <LeftButton>핀</LeftButton>
-          <LeftButton onClick={clickTopicModal}>{topic}</LeftButton>
-        </LeftButtonBox>
-      </Left>
-      <Right>
-        <RightUserBox onClick={clickShowUsersModal}>
-          {makeUserIcons(users).map((icon: JoinUser) => (
-            <RightUser key={icon.userId}>{icon.userId}</RightUser>
-          ))}
-          {users?.length}
-        </RightUserBox>
-        <RightButton>O</RightButton>
-        <RightButton onClick={clickDetail}>i</RightButton>
-      </Right>
-    </Container>
+    <>
+      {addUserModalVisible && <AddUsersModal setAddUserModalVisible={clickAddUserModal} />}
+      {addTopicModalVisible && <AddTopicModal setAddTopicModalVisible={clickAddTopicModal} />}
+      {showUsersModalVisible && <ShowUsersModal setShowUsersModalVisible={clickShowUsersModal} />}
+      <Container>
+        <Left>
+          <LeftTitle>
+            {current.isPublic} {current.name}
+          </LeftTitle>
+          {current.channelType === CHANNELTYPE.CHANNEL && (
+            <LeftButtonBox>
+              <LeftButton>핀</LeftButton>
+              <LeftButton onClick={clickAddTopicModal}>{topic}</LeftButton>
+            </LeftButtonBox>
+          )}
+        </Left>
+        <Right>
+          {current.channelType === CHANNELTYPE.CHANNEL && (
+            <RightUserBox onClick={clickShowUsersModal}>
+              {makeUserIcons(users).map((icon: JoinUser) => (
+                <RightUser key={icon.userId}>{icon.userId}</RightUser>
+              ))}
+              {users?.length}
+            </RightUserBox>
+          )}
+          <RightButton onClick={clickAddUserModal}>O</RightButton>
+          <RightButton onClick={clickDetail}>i</RightButton>
+        </Right>
+      </Container>
+    </>
   ) : (
     <></>
   );

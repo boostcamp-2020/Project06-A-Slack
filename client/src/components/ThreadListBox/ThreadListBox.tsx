@@ -13,7 +13,6 @@ const Container = styled.div`
 const ThreadListBox = () => {
   return (
     <Container>
-      <div>BoxTop</div>
       <ThreadListHeader />
       <ThreadList />
       <ThreadInputBox />

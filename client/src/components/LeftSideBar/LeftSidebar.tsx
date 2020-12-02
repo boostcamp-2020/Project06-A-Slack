@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import LeftSidebarHeader from '@/components/LeftSideBar/LeftSideBarHeader/LeftSideBarHeader';
 import LeftSidebarContent from '@/components/LeftSideBar/LeftSideBarContent/LeftSideBarContent';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ const Container = styled.div`
   width: 200px;
 `;
 
-const LeftSideBar = () => {
+const LeftSideBar = (): ReactElement => {
   return (
     <Container>
       <LeftSidebarHeader />

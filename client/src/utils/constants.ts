@@ -20,3 +20,8 @@ export const ERROR_MESSAGE = {
   BLACKLIST_TOKEN: '블랙리스트 토큰',
   LOGIN_REQUIRED: '로그인 필요',
 };
+
+export const CHANNELTYPE = {
+  CHANNEL: 1,
+  DM: 2,
+};
