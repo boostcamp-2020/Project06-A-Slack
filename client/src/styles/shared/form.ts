@@ -10,6 +10,7 @@ export const FormLabel = styled.label`
 export const FormInput = styled.input`
   display: block;
   width: 25rem;
+  height: 3rem;
   margin: ${(props) => props.theme.size.xxs} 0;
   padding: ${(props) => props.theme.size.xs} 0;
   padding-left: ${(props) => props.theme.size.xxxs};
