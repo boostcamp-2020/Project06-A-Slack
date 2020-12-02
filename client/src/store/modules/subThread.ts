@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Thread } from '@/types';
-import { RootState } from '@/store/modules';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Thread, initialThread } from '@/types';
 
-interface SubThreadList {
+interface SubThreadBox {
+  parentThread: Thread;
   subThreadList: Thread[] | null;
 }
 
-export interface getSubThreadRequestPayload {
+export interface GetSubThreadRequestPayload {
   parentId: number;
 }
 
-const subThreadListState: SubThreadList = {
+const subThreadListState: SubThreadBox = {
+  parentThread: initialThread,
   subThreadList: null,
 };
 
@@ -21,8 +22,9 @@ const subThreadSlice = createSlice({
   name: 'subThread',
   initialState: subThreadListState,
   reducers: {
-    getSubThreadRequest(state, action: PayloadAction<getSubThreadRequestPayload>) {},
-    getSubThreadSuccess(state, action: PayloadAction<SubThreadList>) {
+    getSubThreadRequest(state, action: PayloadAction<GetSubThreadRequestPayload>) {},
+    getSubThreadSuccess(state, action: PayloadAction<SubThreadBox>) {
+      state.parentThread = action.payload.parentThread;
       state.subThreadList = action.payload.subThreadList;
     },
     getSubThreadFailure(state, action) {},
