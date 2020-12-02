@@ -26,7 +26,7 @@ export const getChannelThreads = async (req: Request, res: Response, next: NextF
     return;
   }
   try {
-    const [threadList] = await threadModel.getThreadInChannel(Number(channelId));
+    const [threadList] = await threadModel.getThreadListInChannel(Number(channelId));
 
     res.json({ threadList });
   } catch (err) {
