@@ -1,4 +1,4 @@
-import { put, all, takeEvery, call, fork, takeLatest } from 'redux-saga/effects';
+import { put, all, takeEvery, call, fork, takeLatest, delay } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   getUserRequest,
@@ -7,7 +7,7 @@ import {
   editUserRequest,
   editUserSuccess,
   editUserFailure,
-  EditUserPayload,
+  EditUserRequestPayload,
 } from '@/store/modules/user';
 import { userService } from '@/services';
 
@@ -26,18 +26,20 @@ function* watchGetUser() {
   yield takeEvery(getUserRequest, getUser);
 }
 
-function* editUser(action: PayloadAction<EditUserPayload>) {
+function* editUser(action: PayloadAction<EditUserRequestPayload>) {
   try {
-    const { userId, displayName, phoneNumber } = action.payload;
+    const { userId, displayName, phoneNumber, handleClose } = action.payload;
     const { data, status } = yield call(userService.editUser, {
       id: userId,
       displayName,
       phoneNumber,
     });
-    console.log(data, status);
-    yield put(editUserSuccess({ userId, displayName, phoneNumber }));
+    if (status === 200) {
+      yield put(editUserSuccess({ userId, displayName, phoneNumber }));
+      handleClose();
+    }
   } catch (err) {
-    yield put(editUserFailure());
+    yield put(editUserFailure({ err }));
   }
 }
 
