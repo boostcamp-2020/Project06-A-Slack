@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSubThread } from '@/hooks';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Thread } from '@/types';
+import { getSubThreadRequest } from '@/store/modules/subThread';
+import { isNumberTypeValue } from '@/utils/utils';
 import ParentThread from './ParentThread/ParentThread';
 import SubThreadList from './SubThreadList/SubThreadList';
 import ReplyCountHorizon from './ReplyCountHorizon/ReplyCountHorizon';
@@ -9,8 +14,23 @@ const Container = styled.div`
   background-color: green;
 `;
 
-const SubThreadListBox = () => {
+interface RightSideParams {
+  channelId: string | undefined;
+  rightSideType: string | undefined;
+  threadId: string | undefined;
+}
+
+const SubThreadListBox: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const { threadId }: RightSideParams = useParams();
   const { parentThread, subThreadList } = useSubThread();
+
+  useEffect(() => {
+    if (isNumberTypeValue(threadId)) {
+      dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
+    }
+  }, [threadId]);
 
   return (
     <Container>
