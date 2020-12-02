@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   background-color: orange;
-  ${flex('', 'space-between')};
+  ${flex('center', 'space-between')};
 `;
 
 const LeftSideBox = styled.div``;
