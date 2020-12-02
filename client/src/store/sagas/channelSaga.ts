@@ -79,7 +79,7 @@ function* createChannel(action: any) {
     const joinUser: JoinUser = {
       displayName,
       userId: ownerId,
-      url:
+      image:
         'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg',
     };
     yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });

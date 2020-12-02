@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Redirect, useParams } from 'react-router-dom';
-import { useAuth, useChannel } from '@/hooks';
-import {
-  Header,
-  LeftSideBar,
-  ThreadListBox,
-  DetailHeader,
-  DetailBody,
-  AddTopicModal,
-  CreateChannelModal,
-  ShowUsersModal,
-  RightSideBar,
-} from '@/components';
+import { useAuth } from '@/hooks';
+import { Header, LeftSideBar, ThreadListBox, RightSideBar } from '@/components';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -26,7 +16,7 @@ interface RightSideParams {
 }
 
 const WorkSpacePage: React.FC = () => {
-  const { channelId, rightSideType, threadId }: RightSideParams = useParams();
+  const { channelId, rightSideType }: RightSideParams = useParams();
   const { accessToken } = useAuth();
 
   return (
@@ -37,7 +27,7 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            {/* {detailVisible && <RightSideBar Header={DetailHeader} Body={DetailBody} />} */}
+            {rightSideType && <RightSideBar type={rightSideType} channelId={Number(channelId)} />}
           </Container>
         </>
       ) : (

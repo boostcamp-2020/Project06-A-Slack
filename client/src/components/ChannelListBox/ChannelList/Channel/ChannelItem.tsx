@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setCurrent, loadChannelRequest } from '@/store/modules/channel';
 import styled from 'styled-components';
 import { useJoinChannelList, useChannel } from '@/hooks/useChannel';
+import { Link } from 'react-router-dom';
 
 interface Args {
   key: number;
@@ -37,18 +38,18 @@ const ChannelItem = (args: Args) => {
   const { id, name, isPublic } = useJoinChannelList(args.idx);
   const { current } = useChannel();
 
-  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-
+  const onClick = () => {
     dispatch(setCurrent(args.idx));
     dispatch(loadChannelRequest(id));
   };
 
   return (
-    <Channel onClick={onClick} pick={id === current?.id}>
-      <Icon>{isPublic ? '#' : 'O'}</Icon>
-      <Name>{name}</Name>
-    </Channel>
+    <Link to={`/client/1/${id}`}>
+      <Channel onClick={onClick} pick={id === current?.id}>
+        <Icon>{isPublic ? '#' : 'O'}</Icon>
+        <Name>{name}</Name>
+      </Channel>
+    </Link>
   );
 };
 

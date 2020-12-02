@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
-const useOnClickOutside = (ref: React.MutableRefObject<any>, handler: (args: any) => any) => {
+const $root = document.getElementById('root') as HTMLElement;
+const useOnClickOutside = (ref: React.MutableRefObject<any>, handler: (args: any) => any): void => {
   useEffect(() => {
     const listener = (e: any) => {
       if (!ref.current || ref.current.contains(e.target)) {
@@ -9,12 +10,12 @@ const useOnClickOutside = (ref: React.MutableRefObject<any>, handler: (args: any
       handler(e);
     };
 
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
+    $root.addEventListener('mousedown', listener);
+    $root.addEventListener('touchstart', listener);
 
     return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
+      $root.removeEventListener('mousedown', listener);
+      $root.removeEventListener('touchstart', listener);
     };
   }, [ref, handler]);
 };
