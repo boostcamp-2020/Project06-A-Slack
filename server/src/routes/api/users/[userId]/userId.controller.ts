@@ -56,7 +56,7 @@ export const modifyUser = async (
   try {
     if (verifyRequestData([displayName, phoneNumber])) {
       await userModel.editUserById({ id: +userId, displayName, phoneNumber });
-      res.status(201).end();
+      res.status(200).end();
       return;
     }
     res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
