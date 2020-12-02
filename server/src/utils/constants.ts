@@ -19,4 +19,5 @@ export const ERROR_MESSAGE = {
   INVALID_EMAIL: '유효하지 않은 이메일',
   SEND_EMAIL_FAILED: '인증 메일 전송 실패',
   CODE_GENERATION_FAILED: '인증 코드 생성 실패',
+  ENCRYPT_DECRYPT_FAILED: '암호화/복호화 실패',
 };
