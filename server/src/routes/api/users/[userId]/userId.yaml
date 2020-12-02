@@ -40,9 +40,9 @@ paths:
               type: object
               required: true
               properties:
-                email:
+                displayName:
                   type: string
-                pw:
+                phoneNumber:
                   type: string
       responses:
         200:

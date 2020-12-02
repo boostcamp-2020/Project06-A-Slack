@@ -3,15 +3,21 @@ import { verifyRequestData } from '@/utils/utils';
 import { userModel, channelModel } from '@/models';
 import { ERROR_MESSAGE } from '@/utils/constants';
 
-/**
- * GET /api/users/:userId
- */
-export const getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+/* userId 공통 처리 함수 */
+export const checkUserIdParam = (req: Request, res: Response, next: NextFunction): void => {
   const { userId } = req.params;
   if (Number.isNaN(+userId)) {
     next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
+  next();
+};
+
+/**
+ * GET /api/users/:userId
+ */
+export const getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { userId } = req.params;
   try {
     const [[user]] = await userModel.getUserById({ id: +userId });
     res.json({ user });
@@ -20,26 +26,43 @@ export const getUser = async (req: Request, res: Response, next: NextFunction): 
   }
 };
 
-export const getJoinChannels = async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * GET /api/users/:userId/channels
+ */
+export const getJoinedChannels = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { userId } = req.params;
-  console.log(userId);
-  if (Number.isNaN(+userId)) {
-    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
-    return;
+  try {
+    const [channelList] = await channelModel.getJoinChannels({ userId: +userId });
+    res.json({ channelList });
+  } catch (err) {
+    next(err);
   }
-  const [channelList] = await channelModel.getJoinChannels({ userId: +userId });
-  res.json({ channelList });
 };
 
 /**
  * POST /api/users/:userId
  */
-export const modifyUser = (req: Request, res: Response, next: NextFunction): void => {
+export const modifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { userId } = req.params;
-  // TODO : 아래 코드에서 수정할 유저 값 undefined인지 검증
-  // const {} = req.body;
-  // if(verifyRequestData[]) {}
-  res.status(201).end();
+  const { displayName, phoneNumber } = req.body;
+  try {
+    if (verifyRequestData([displayName, phoneNumber])) {
+      await userModel.editUserById({ id: +userId, displayName, phoneNumber });
+      res.status(201).end();
+      return;
+    }
+    res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**
@@ -59,5 +82,5 @@ export const modifyLastChannel = (req: Request, res: Response, next: NextFunctio
     res.status(200).end();
     return;
   }
-  res.status(400).json({ message: '필수 값 누락' });
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
