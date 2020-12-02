@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadMyChannelsRequest } from '@/store/modules/channel';
 import { useChannel, useAuth } from '@/hooks';
@@ -13,15 +13,13 @@ const ChannelList = ({
 }: {
   channelType: number;
   channelListVisible: boolean;
-}) => {
+}): ReactElement => {
   const dispatch = useDispatch();
   const { joinChannelList, current } = useChannel();
   const { userId } = useAuth();
 
-  const callAPI = () => dispatch(loadMyChannelsRequest(userId));
-
   useEffect(() => {
-    callAPI();
+    dispatch(loadMyChannelsRequest(userId));
   }, []);
 
   return (
