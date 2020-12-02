@@ -5,10 +5,10 @@ import { flex } from '@/styles/mixin';
 import { getNotNullDataInArray } from '@/utils/utils';
 import { Link } from 'react-router-dom';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
-import { useChannel } from '@/hooks/useChannel';
+import { useChannel } from '@/hooks';
 
 const Reply = styled.button`
-  ${flex('row', 'flext-start')};
+  ${flex('center', 'flext-start')};
 `;
 
 const Profile = styled.img`
