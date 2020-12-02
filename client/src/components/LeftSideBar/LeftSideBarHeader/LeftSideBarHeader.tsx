@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 
@@ -20,7 +20,7 @@ const Button = styled.button`
   border: none;
 `;
 
-const LeftSideBar = () => {
+const LeftSideBar = (): ReactElement => {
   return (
     <Container>
       <Content>부캠하이</Content>
