@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SubThreadListBox } from '@/components';
-import DetailBox from '@/components/DetailBox/DetailBox';
+import { DetailBody, SubThreadListBox } from '@/components';
 
 // const Container = styled.div`
 //   background-color: orange;
@@ -14,7 +13,7 @@ interface RightSideBarBodyProps {
 const RightSideBarBody: React.FC<RightSideBarBodyProps> = ({ type }: RightSideBarBodyProps) => {
   return (
     <>
-      {type === 'detail' && <DetailBox />}
+      {type === 'detail' && <DetailBody />}
       {type === 'thread' && <SubThreadListBox />}
     </>
   );
