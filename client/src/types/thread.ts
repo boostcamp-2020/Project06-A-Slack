@@ -44,3 +44,14 @@ export const initialThread: Thread = {
   phoneNumber: null,
   image: '',
 };
+
+export interface ThreadResponse {
+  result: {
+    fieldCount: number;
+    affectedRows: number;
+    inserId: number;
+    info: string;
+    serverStatus: number;
+    warningStatus: number;
+  };
+}
