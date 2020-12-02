@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Thread } from '@/types';
-import { flex } from '@/styles/mixin';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
@@ -63,16 +63,18 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
     setCreatedDate(new Date(thread.createdAt).toLocaleString('en-US'));
   }, [isSameUser, createdDate]);
 
-  const userImg =
-    'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg';
   return (
     <Container>
       <ContentBox isSameUserStyleProp={isSameUser}>
-        {isSameUser ? '' : <UserImg src={userImg} alt="userImg" />}
+        {!isSameUser && (
+          <UserImg
+            src={thread.image === null ? USER_DEFAULT_PROFILE_URL : thread.image}
+            alt="userImg"
+          />
+        )}
         <SameUserBox isSameUserStyleProp={isSameUser}>
           <NotSameUserBox isSameUserStyleProp={isSameUser}>
-            {/* {isSameUser ? '' : <div>{thread.userId}</div>} */}
-            {isSameUser ? '' : <div>사용자</div>}
+            {!isSameUser && <div>{thread.displayName}</div>}
             <div>{createdDate}</div>
           </NotSameUserBox>
           <div>{thread.content}</div>
