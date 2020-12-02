@@ -14,7 +14,7 @@ export const getSubThread = async (req: Request, res: Response, next: NextFuncti
   }
   try {
     const [parentThread] = await threadModel.getParentThread(Number(threadId));
-    const [subThreadList] = await threadModel.getSubThread(Number(threadId));
+    const [subThreadList] = await threadModel.getSubThreadList(Number(threadId));
     res.json({ parentThread, subThreadList });
   } catch (err) {
     next(err);
@@ -22,35 +22,51 @@ export const getSubThread = async (req: Request, res: Response, next: NextFuncti
 };
 
 /**
+ * 특정 쓰레드 수정
  * POST /api/threads/:threadId
  */
-export const modifyThread = (req: Request, res: Response, next: NextFunction): void => {
+export const modifyThread = async (req: Request, res: Response, next: NextFunction) => {
   const { threadId } = req.params;
   const { content } = req.body;
 
   if (verifyRequestData([content])) {
-    res.status(200).end();
-    return;
+    try {
+      const result = await threadModel.updateThread(content, Number(threadId));
+      res.status(200).json(result);
+      return;
+    } catch (err) {
+      next(err);
+    }
   }
-  res.status(400).end();
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
+ * 쓰레드의 is_deteled를 1로 변경
  * DELETE /api/threads/:threadId
  */
-export const deleteThread = (req: Request, res: Response, next: NextFunction): void => {
+export const deleteThread = async (req: Request, res: Response, next: NextFunction) => {
   const { threadId } = req.params;
-  res.status(200).end();
+  if (verifyRequestData([threadId])) {
+    try {
+      const result = await threadModel.deleteThread(Number(threadId));
+      res.status(200).json(result);
+      return;
+    } catch (err) {
+      next(err);
+    }
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
  * POST /api/threads/:threadId/pin
  */
-export const pinThread = (req: Request, res: Response, next: NextFunction): void => {
+export const pinThread = (req: Request, res: Response, next: NextFunction) => {
   const { threadId } = req.params;
   if (verifyRequestData([threadId])) {
     res.status(200).end();
     return;
   }
-  res.status(400).json({ message: '필수 값 누락' });
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
