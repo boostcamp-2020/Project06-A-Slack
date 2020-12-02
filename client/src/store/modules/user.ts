@@ -11,6 +11,12 @@ const userState: UserState = {
   userInfo: null,
 };
 
+export interface EditUserPayload {
+  userId: number;
+  displayName: string;
+  phoneNumber: string;
+}
+
 const userSlice = createSlice({
   name: 'user',
   initialState: userState,
@@ -19,13 +25,27 @@ const userSlice = createSlice({
     getUserSuccess(state, { payload }: PayloadAction<{ userInfo: User }>) {
       state.userInfo = payload.userInfo;
     },
-    getUserFailure() {
-      window.location.href = '/login';
+    getUserFailure() {},
+    editUserRequest(state, action: PayloadAction<EditUserPayload>) {},
+    editUserSuccess(state, action: PayloadAction<EditUserPayload>) {
+      const { displayName, phoneNumber } = action.payload;
+      if (state.userInfo) {
+        state.userInfo.displayName = displayName;
+        state.userInfo.phoneNumber = phoneNumber;
+      }
     },
+    editUserFailure() {},
   },
 });
 
 export const USER = userSlice.name;
-export const { getUserRequest, getUserSuccess, getUserFailure } = userSlice.actions;
+export const {
+  getUserRequest,
+  getUserSuccess,
+  getUserFailure,
+  editUserRequest,
+  editUserSuccess,
+  editUserFailure,
+} = userSlice.actions;
 
 export default userSlice.reducer;
