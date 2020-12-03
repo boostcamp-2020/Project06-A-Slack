@@ -3,6 +3,6 @@ export interface User {
   email: string;
   displayName: string;
   phoneNumber: string | null;
-  image: string | null;
+  image: string;
   lastChannelId: number | null;
 }

@@ -22,9 +22,15 @@ export const ERROR_MESSAGE = {
 };
 
 export const USER_DEFAULT_PROFILE_URL =
-  'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg';
+  'https://user-images.githubusercontent.com/61396464/100866119-8c399c00-34db-11eb-894f-3551297f5293.png';
 
 export const CHANNELTYPE = {
   CHANNEL: 1,
   DM: 2,
+};
+
+export const INPUT_BOX_TYPE = {
+  THREAD: 'thread',
+  SUBTHREAD: 'subThread',
+  EDIT: 'edit',
 };

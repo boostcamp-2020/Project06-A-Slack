@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { INPUT_BOX_TYPE } from '@/utils/constants';
+import { ThreadInputBox } from '@/components/common';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 import ThreadList from './ThreadList/ThreadList';
-import ThreadInputBox from './ThreadInputBox/ThreadInputBox';
 
 const Container = styled.div`
   background-color: pink;
@@ -14,7 +15,7 @@ const ThreadListBox = () => {
     <Container>
       <ThreadListHeader />
       <ThreadList />
-      <ThreadInputBox />
+      <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.THREAD} />
     </Container>
   );
 };

@@ -3,7 +3,11 @@ import {
   getThreadRequest,
   getThreadSuccess,
   getThreadFailure,
+  createThreadRequest,
+  createThreadSuccess,
+  createThreadFailure,
   getThreadRequestPayload,
+  createThreadRequestPayload,
 } from '@/store/modules/thread';
 import { threadService } from '@/services/thread.service';
 
@@ -17,7 +21,6 @@ function* getThreadList({ channelId }: getThreadRequestPayload) {
 }
 
 function* watchGetThreadList() {
-  // yield takeEvery(getThreadRequest, getThreadList, { channelId });
   while (true) {
     const {
       payload: { channelId },
@@ -26,6 +29,29 @@ function* watchGetThreadList() {
   }
 }
 
+function* createThread({ content, userId, channelId, parentId }: createThreadRequestPayload) {
+  try {
+    const result = yield call(threadService.createThread, {
+      content,
+      userId,
+      channelId,
+      parentId,
+    });
+    yield put(createThreadSuccess({ result: result.data.result }));
+  } catch (err) {
+    yield put(createThreadFailure(err));
+  }
+}
+
+function* watchcreateThread() {
+  while (true) {
+    const {
+      payload: { content, userId, channelId, parentId },
+    } = yield take(createThreadRequest);
+    yield fork(createThread, { content, userId, channelId, parentId });
+  }
+}
+
 export default function* threadSaga() {
-  yield all([fork(watchGetThreadList)]);
+  yield all([fork(watchGetThreadList), fork(watchcreateThread)]);
 }

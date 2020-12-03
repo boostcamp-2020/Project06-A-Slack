@@ -7,6 +7,7 @@ import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
 
 const Container = styled.div`
+  position: relative;
   background-color: white;
   border: 1px solid black;
   &:hover {
@@ -28,7 +29,9 @@ const UserImg = styled.img`
 `;
 const Popup = styled.div`
   display: none;
-  position: relative;
+  position: absolute;
+  right: 0.25rem;
+  top: -0.5rem;
   border: 1px solid black;
   ${Container}:hover & {
     display: block;
@@ -82,7 +85,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
       </ContentBox>
       {!(thread.subCount === 0 || isParentThreadOfRightSideBar) && <ReplyButton thread={thread} />}
       <Popup>
-        <ThreadPopup />
+        <ThreadPopup thread={thread} />
       </Popup>
     </Container>
   );

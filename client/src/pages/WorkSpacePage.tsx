@@ -17,6 +17,12 @@ interface RightSideParams {
   threadId: string | undefined;
 }
 
+const checkValidOfRightSideType = (rightSideType: string | undefined) => {
+  return (
+    rightSideType === 'detail' || rightSideType === 'user_profile' || rightSideType === 'thread'
+  );
+};
+
 const WorkSpacePage: React.FC = () => {
   const { channelId, rightSideType }: RightSideParams = useParams();
   const { accessToken } = useAuth();
@@ -50,7 +56,14 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            {rightSideType && <RightSideBar type={rightSideType} channelId={Number(channelId)} />}
+            <>
+              {rightSideType &&
+                (checkValidOfRightSideType(rightSideType) ? (
+                  <RightSideBar type={rightSideType} channelId={Number(channelId)} />
+                ) : (
+                  history.goBack()
+                ))}
+            </>
           </Container>
         </>
       ) : (
