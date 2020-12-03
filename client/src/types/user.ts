@@ -4,5 +4,5 @@ export interface User {
   displayName: string;
   phoneNumber: string | null;
   image: string | null;
-  lastChannelId: string | null;
+  lastChannelId: number | null;
 }
