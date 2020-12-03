@@ -9,7 +9,7 @@ const selectChannelListState = (state: RootState) => state.channel.channelList;
 const selectChannelList = (idx: number) =>
   createSelector(selectChannelListState, (channelList) => channelList[idx]);
 
-const selectJoinChannelListState = (state: RootState) => state.channel.joinChannelList;
+const selectJoinChannelListState = (state: RootState) => state.channel.myChannelList;
 const selectJoinChannelList = (idx: number) =>
   createSelector(selectJoinChannelListState, (joinChannelList) => joinChannelList[idx]);
 
