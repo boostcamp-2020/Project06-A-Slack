@@ -17,7 +17,13 @@ export const channelService = {
   joinChannel({ userId, channelId }: { userId: number; channelId: number }) {
     return API.post(`/api/channels/${channelId}/invite`, { userId });
   },
-  modifyLastChannel({ lastChannelId, userId }: { lastChannelId: number; userId: number }) {
+  modifyLastChannel({
+    lastChannelId,
+    userId,
+  }: {
+    lastChannelId: number | null | undefined;
+    userId: number | null | undefined;
+  }) {
     return API.post(`/api/users/${userId}/last-channel`, { lastChannelId });
   },
 };
