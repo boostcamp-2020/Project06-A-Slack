@@ -58,15 +58,18 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
       <MoreActionButton type="button" onClick={openMenuModal}>
         MoreActions
         {menuModalVisible && (
-          <Modal onClick={closeMenuModal}>
-            <MenuModal width="auto" visible={menuModalVisible} setVisible={setMenuModalVisible}>
-              <ModalListItem onClick={openEditModal}>Unfollow message</ModalListItem>
-              <ModalListItem>Copy link</ModalListItem>
-              <ModalListItem>Pin to this conversation</ModalListItem>
-              <ModalListItem>Edit message</ModalListItem>
-              <ModalListItem>Delete message</ModalListItem>
-            </MenuModal>
-          </Modal>
+          <MenuModal
+            top="1rem"
+            right="1rem"
+            visible={menuModalVisible}
+            setVisible={setMenuModalVisible}
+          >
+            <ModalListItem onClick={openEditModal}>Unfollow message</ModalListItem>
+            <ModalListItem>Copy link</ModalListItem>
+            <ModalListItem>Pin to this conversation</ModalListItem>
+            <ModalListItem>Edit message</ModalListItem>
+            <ModalListItem>Delete message</ModalListItem>
+          </MenuModal>
         )}
       </MoreActionButton>
     </Container>
