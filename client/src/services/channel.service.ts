@@ -1,7 +1,7 @@
 import API from '@/api';
-import { ChannelInfo } from '@/types';
+import { ChannelInfo, Service } from '@/types';
 
-export const channelService = {
+export const channelService: Service = {
   getChannels() {
     return API.get('/api/channels');
   },
@@ -20,7 +20,7 @@ export const channelService = {
   modifyChannelTopic({ channelId, topic }: { channelId: number; topic: string }) {
     return API.post(`/api/channels/${channelId}/topic`, { topic });
   },
-  modifyLastChannel({ lastChannelId, userId }: { lastChannelId: number; userId: number }): any {
+  modifyLastChannel({ lastChannelId, userId }: { lastChannelId: number; userId: number }) {
     return API.post(`/api/users/${userId}/last-channel`, { lastChannelId });
   },
 };

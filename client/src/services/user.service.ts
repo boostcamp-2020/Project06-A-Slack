@@ -1,13 +1,14 @@
 import API from '@/api';
+import { Service } from '@/types';
 
-export const userService = {
-  getUsers(): any {
+export const userService: Service = {
+  getUsers() {
     return API.get('/api/users');
   },
-  getUser({ id }: { id: number }): any {
+  getUser({ id }: { id: number }) {
     return API.get(`/api/users/${id}`);
   },
-  editUser({ id, formData }: { id: number; formData: FormData }): any {
+  editUser({ id, formData }: { id: number; formData: FormData }) {
     return API.post(`/api/users/${id}`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
