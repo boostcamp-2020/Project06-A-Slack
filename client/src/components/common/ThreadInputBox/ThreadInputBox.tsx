@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { createThreadRequest } from '@/store/modules/thread';
 import { useParams } from 'react-router-dom';
 import { useUser } from '@/hooks';
+import { INPUT_BOX_TYPE } from '@/utils/constants';
 
 interface ThreadInputBoxProps {
   inputBoxType: string;
@@ -13,6 +14,13 @@ interface RightSideParams {
   rightSideType: string | undefined;
   threadId: string | undefined;
 }
+
+const getParentId = (inputBoxType: string, threadId: string | undefined) => {
+  if (threadId === undefined || inputBoxType === INPUT_BOX_TYPE.THREAD) {
+    return null;
+  }
+  return Number(threadId);
+};
 
 const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadInputBoxProps) => {
   const { channelId, threadId }: RightSideParams = useParams();
@@ -27,24 +35,25 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const userId = Number(userInfo?.id);
-    const parentId = threadId === undefined ? null : Number(threadId);
-    const content = inputValue;
-    dispatch(
-      createThreadRequest({
-        content,
-        userId,
-        channelId: Number(channelId),
-        parentId,
-      }),
-    );
+    if (userInfo !== null) {
+      const userId = Number(userInfo.id);
+      const parentId = getParentId(inputBoxType, threadId);
+      const content = inputValue;
+      dispatch(
+        createThreadRequest({
+          content,
+          userId,
+          channelId: Number(channelId),
+          parentId,
+        }),
+      );
+    }
   };
 
   return (
     <form onSubmit={submitHandler}>
       <input type="text" onChange={inputValueHandler} />
       <input type="submit" value=">" />
-      <div>{inputValue}</div>
     </form>
   );
 };
