@@ -102,8 +102,9 @@ function* modifyLastChannel({
 }: PayloadAction<modifyLastChannelRequestPayload>) {
   try {
     yield call(channelService.modifyLastChannel, { lastChannelId, userId });
+    yield put(modifyLastChannelSuccess());
   } catch (err) {
-    yield put(modifyTopicFailure({ err }));
+    yield put(modifyLastChannelFailure({ err }));
   }
 }
 
@@ -128,7 +129,7 @@ function* watchCreateChannel() {
 // }
 
 function* watchModifyLastChannel() {
-  yield takeLatest(modifyTopicRequest, modifyLastChannel);
+  yield takeLatest(modifyLastChannelRequest, modifyLastChannel);
 }
 
 export default function* channelSaga() {
