@@ -32,7 +32,7 @@ export const channelModel = {
   },
   getChannelUser({ channelId }: { channelId: number }): any {
     const sql = `SELECT user_channel.user_id as userId, 
-    user.display_name as displayName
+    user.display_name as displayName, user.image as image
     FROM user
     JOIN user_channel
     ON user_channel.channel_id = ? and user_channel.user_id = user.id

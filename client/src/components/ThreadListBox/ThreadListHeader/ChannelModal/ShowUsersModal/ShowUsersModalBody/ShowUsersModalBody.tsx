@@ -89,7 +89,7 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
         {users?.map((user: JoinUser) => (
           <Item key={user.userId}>
             <UserInfo>
-              <Img src="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg" />
+              <Img src={user.image} />
               <Name>{user.displayName}</Name>
             </UserInfo>
             <Remove>Remove</Remove>

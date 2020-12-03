@@ -62,12 +62,11 @@ const RightUserBox = styled.div`
   border: 1px solid black;
 `;
 
-const RightUser = styled.div`
+const RightUser = styled.img`
   display: block;
   width: 30px;
   height: 30px;
   border: 1px solid black;
-  background: red;
 `;
 
 const RightButton = styled.button`
@@ -155,7 +154,7 @@ const ThreadListHeader = (): ReactElement | any => {
           {current?.channelType === CHANNELTYPE.CHANNEL && (
             <RightUserBox onClick={clickShowUsersModal}>
               {makeUserIcons(users).map((icon: JoinUser) => (
-                <RightUser key={icon.userId}>{icon.userId}</RightUser>
+                <RightUser key={icon.userId} src={icon.image} />
               ))}
               {users?.length}
             </RightUserBox>
