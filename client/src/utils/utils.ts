@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '@/config';
-import { AuthToken, JoinUser } from '@/types';
+import { AuthToken, JoinUser, Channel } from '@/types';
 import { TOKEN_TYPE } from '@/utils/constants';
 
 import crypto from 'crypto';
@@ -49,4 +49,14 @@ export const getNotNullDataInArray = (arr: any[]) => (property: string | number)
 export const isNumberTypeValue = (value: any): boolean => {
   const numberedValue = Number(value);
   return !Number.isNaN(numberedValue);
+};
+
+export const isExistedChannel = ({
+  channelId,
+  myChannelList,
+}: {
+  channelId: number;
+  myChannelList: Channel[];
+}): boolean => {
+  return myChannelList.some((channel: Channel) => channel.id === channelId);
 };
