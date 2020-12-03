@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import {
   NotFoundPage,
@@ -27,7 +27,7 @@ const App = () => {
             exact
             component={WorkSpacePage}
           />
-          <Route component={NotFoundPage} />
+          <Redirect to="/" />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
