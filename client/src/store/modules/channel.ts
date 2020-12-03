@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { JoinUser, Channel } from '@/types';
 
 interface ChannelState {
   channelList: Channel[];
-  joinChannelList: Channel[];
+  myChannelList: Channel[];
   current: Channel | null;
   users: JoinUser[];
   channelId: number | null;
@@ -13,12 +14,17 @@ interface ChannelState {
 
 const initialState: ChannelState = {
   channelList: [],
-  joinChannelList: [],
+  myChannelList: [],
   current: null,
   users: [],
   channelId: null,
   topic: 'Add a topic',
 };
+
+export interface modifyLastChannelRequestPayload {
+  lastChannelId: number;
+  userId: number;
+}
 
 const channelSlice = createSlice({
   name: 'channel',
@@ -33,7 +39,7 @@ const channelSlice = createSlice({
     },
     loadMyChannelsRequest(state, action) {},
     loadMyChannelsSuccess(state, action) {
-      state.joinChannelList = action.payload.joinChannelList;
+      state.myChannelList = action.payload.joinChannelList;
     },
     loadMyChannelsFailure(state, action) {
       // todo 에러처리
@@ -42,15 +48,23 @@ const channelSlice = createSlice({
       state.channelId = action.payload;
     },
     loadChannelSuccess(state, action) {
+      const [temp] = action.payload.channel;
+      state.current = temp;
       state.users = action.payload.users;
     },
     loadChannelFailure(state, action) {
       // todo 에러처리
     },
+    modifyTopicRequest(state, action) {},
+    modifyTopicSuccess() {},
+    modifyTopicFailure(state, action) {},
+    modifyLastChannelRequest(state, action: PayloadAction<modifyLastChannelRequestPayload>) {},
+    modifyLastChannelSuccess() {},
+    modifyLastChannelFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
       state.channelList.push(action.payload.channel);
-      state.joinChannelList.push(action.payload.channel);
+      state.myChannelList.push(action.payload.channel);
       state.current = action.payload.channel;
       state.users = [action.payload.joinUser];
     },
@@ -63,7 +77,10 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     setCurrent(state, action) {
-      state.current = state.joinChannelList[action.payload];
+      const [temp] = state.myChannelList.filter(
+        (channel: Channel) => channel.id === action.payload.channelId,
+      );
+      state.current = temp;
     },
     changeTopic(state, action) {
       state.topic = action.payload;
@@ -82,6 +99,12 @@ export const {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
+  modifyTopicRequest,
+  modifyTopicSuccess,
+  modifyTopicFailure,
+  modifyLastChannelRequest,
+  modifyLastChannelSuccess,
+  modifyLastChannelFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,

@@ -2,7 +2,7 @@ export interface User {
   id: number;
   email: string;
   displayName: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   image: string;
-  lastChannelId: string | null;
+  lastChannelId: number | null;
 }

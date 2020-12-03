@@ -21,6 +21,10 @@ export const userModel = {
     FROM user WHERE id=?;`;
     return pool.execute(sql, [id]);
   },
+  modifyLastChannel({ lastChannelId, userId }: { lastChannelId: number; userId: number }): any {
+    const sql = `UPDATE user SET last_channel_id = ? WHERE id = ?`;
+    return pool.execute(sql, [lastChannelId, userId]);
+  },
   editUserById({ id, displayName, phoneNumber, image, setDefault }: EditUserParams): any {
     if (setDefault) {
       const sql = `UPDATE user SET display_name=?, phone_number=?, image=DEFAULT WHERE id=?;`;

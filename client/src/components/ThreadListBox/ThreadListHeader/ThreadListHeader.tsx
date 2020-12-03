@@ -1,15 +1,19 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { CHANNELTYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
+import { useParams } from 'react-router-dom';
+import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel';
 import AddUsersModal from '@/components/ChannelModal/AddUsersModal';
 import AddTopicModal from '@/components/ChannelModal/AddTopicModal';
 import ShowUsersModal from '@/components/ChannelModal/ShowUsersModal';
+import { useUser } from '@/hooks';
 
 const Container = styled.div`
-  max-width: 80%;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -72,11 +76,25 @@ const RightButton = styled.button`
   font-size: 30px;
 `;
 
-const ThreadListHeader = (): ReactElement => {
+interface RightSideParams {
+  channelId: string;
+}
+
+const ThreadListHeader = (): ReactElement | any => {
+  const dispatch = useDispatch();
   const { current, users, topic } = useChannel();
+  const { userInfo } = useUser();
   const [addUserModalVisible, setAddUserModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
+  const { channelId }: RightSideParams = useParams();
+
+  useEffect(() => {
+    dispatch(loadChannelRequest(channelId));
+    if (userInfo) {
+      dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo.id }));
+    }
+  }, [userInfo]);
 
   const clickDetail = () => {
     // LinkTo 작업
@@ -94,7 +112,7 @@ const ThreadListHeader = (): ReactElement => {
     setAddTopicModalVisible((state) => !state);
   };
 
-  return current && users ? (
+  return (
     <>
       {addUserModalVisible && <AddUsersModal setAddUserModalVisible={clickAddUserModal} />}
       {addTopicModalVisible && <AddTopicModal setAddTopicModalVisible={clickAddTopicModal} />}
@@ -102,9 +120,9 @@ const ThreadListHeader = (): ReactElement => {
       <Container>
         <Left>
           <LeftTitle>
-            {current.isPublic} {current.name}
+            {current?.isPublic} {current?.name}
           </LeftTitle>
-          {current.channelType === CHANNELTYPE.CHANNEL && (
+          {current?.channelType === CHANNELTYPE.CHANNEL && (
             <LeftButtonBox>
               <LeftButton>핀</LeftButton>
               <LeftButton onClick={clickAddTopicModal}>{topic}</LeftButton>
@@ -112,7 +130,7 @@ const ThreadListHeader = (): ReactElement => {
           )}
         </Left>
         <Right>
-          {current.channelType === CHANNELTYPE.CHANNEL && (
+          {current?.channelType === CHANNELTYPE.CHANNEL && (
             <RightUserBox onClick={clickShowUsersModal}>
               {makeUserIcons(users).map((icon: JoinUser) => (
                 <RightUser key={icon.userId}>{icon.userId}</RightUser>
@@ -125,8 +143,6 @@ const ThreadListHeader = (): ReactElement => {
         </Right>
       </Container>
     </>
-  ) : (
-    <></>
   );
 };
 

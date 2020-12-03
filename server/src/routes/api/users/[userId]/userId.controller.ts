@@ -121,10 +121,19 @@ export const deleteUser = (req: Request, res: Response, next: NextFunction): voi
 /**
  * POST /api/users/:userId/last-channel
  */
-export const modifyLastChannel = (req: Request, res: Response, next: NextFunction): void => {
-  const { channelId } = req.body;
-  if (verifyRequestData([channelId])) {
-    res.status(200).end();
+export const modifyLastChannel = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { userId } = req.params;
+  const { lastChannelId } = req.body;
+  if (Number.isNaN(+userId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  if (verifyRequestData([lastChannelId])) {
+    await userModel.modifyLastChannel({ lastChannelId, userId: +userId });
     return;
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
