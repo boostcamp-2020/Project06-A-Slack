@@ -25,6 +25,7 @@ import {
   joinChannelSuccess,
   joinChannelFailure,
   modifyLastChannelRequestPayload,
+  modifyTopicChannelRequestPayload,
 } from '../modules/channel';
 
 function* loadChannels() {
@@ -97,6 +98,18 @@ function* joinChannel({ userId, channelId }: { userId: number; channelId: number
   }
 }
 
+function* modifyTopicChannel(action: any) {
+  try {
+    const { channelId, topic } = action.payload;
+    yield call(channelService.modifyChannelTopic, { channelId, topic });
+    yield put(modifyTopicSuccess({ channelId }));
+  } catch (err) {
+    yield put(modifyTopicFailure({ err }));
+  }
+}
+
+modifyTopicSuccess({ channelId: 1 });
+
 function* modifyLastChannel({
   payload: { lastChannelId, userId },
 }: PayloadAction<modifyLastChannelRequestPayload>) {
@@ -112,7 +125,7 @@ function* watchLoadChannels() {
   yield takeEvery(loadChannelsRequest, loadChannels);
 }
 
-function* watchLoadJoinChannels() {
+function* watchLoadMyChannels() {
   yield takeEvery(loadMyChannelsRequest, loadMyChannels);
 }
 
@@ -132,13 +145,17 @@ function* watchModifyLastChannel() {
   yield takeLatest(modifyLastChannelRequest, modifyLastChannel);
 }
 
+function* watchModifyTopicChannel() {
+  yield takeLatest(modifyTopicRequest, modifyTopicChannel);
+}
 export default function* channelSaga() {
   yield all([
     fork(watchLoadChannels),
-    fork(watchLoadJoinChannels),
+    fork(watchLoadMyChannels),
     fork(watchCreateChannel),
     fork(watchLoadChannel),
     // fork(watchJoinChannel),
     fork(watchModifyLastChannel),
+    fork(watchModifyTopicChannel),
   ]);
 }

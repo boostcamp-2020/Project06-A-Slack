@@ -1,18 +1,9 @@
 import React, { ReactElement, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { changeTopic } from '@/store/modules/channel';
-import { useOnClickOutside } from '@/hooks';
+import { modifyTopicRequest, setCurrent } from '@/store/modules/channel';
 import { useDispatch } from 'react-redux';
-
-const Container = styled.div`
-  border-radius: 10px;
-  padding: ${(props) => props.theme.size.xxl};
-  background: ${(props) => props.theme.color.white};
-  width: 500px;
-  height: 220px;
-  box-shadow: ${(props) => props.theme.boxShadow.darkgray};
-`;
+import { useChannel } from '@/hooks';
 
 const TextArea = styled.textarea`
   border: 1px ${(props) => props.theme.color.gray4} solid;
@@ -64,7 +55,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   setAddTopicModalVisible,
 }: AddTopicModalBodyProps) => {
   const [content, setContent] = useState('');
-
+  const { channelId, current } = useChannel();
   const dispatch = useDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -76,8 +67,11 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   };
 
   const onSubmit = () => {
-    dispatch(changeTopic(content));
-    setAddTopicModalVisible((state: boolean) => !state);
+    if (channelId !== null && current !== null) {
+      dispatch(modifyTopicRequest({ channelId, topic: content }));
+      setAddTopicModalVisible((state: boolean) => !state);
+      dispatch(setCurrent({ name: 'topic', value: content }));
+    }
   };
 
   return (

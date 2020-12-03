@@ -82,7 +82,7 @@ interface RightSideParams {
 
 const ThreadListHeader = (): ReactElement | any => {
   const dispatch = useDispatch();
-  const { current, users, topic } = useChannel();
+  const { current, users } = useChannel();
   const { userInfo } = useUser();
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
@@ -146,7 +146,7 @@ const ThreadListHeader = (): ReactElement | any => {
           {current?.channelType === CHANNELTYPE.CHANNEL && (
             <LeftButtonBox>
               <LeftButton>핀</LeftButton>
-              <LeftButton onClick={clickAddTopicModal}>{topic}</LeftButton>
+              <LeftButton onClick={clickAddTopicModal}>{current.topic}</LeftButton>
             </LeftButtonBox>
           )}
         </Left>
