@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getThreadRequest } from '@/store/modules/thread';
 import styled from 'styled-components';
