@@ -29,11 +29,12 @@ export const createThread = async (
       - SELECT sub_thread_user_id_1, sub_thread_user_id_2, sub_thread_user_id_3 FROM thread 
       */
       await threadModel.updateSubCountOfThread(parentId);
-
-      const [
-        { subThreadUserId1, subThreadUserId2, subThreadUserId3 },
-      ] = await threadModel.getThread(Number(parentId));
-      const subThreadUserIdList: number[] = [subThreadUserId1, subThreadUserId2, subThreadUserId3];
+      const [[parentThread]] = await threadModel.getThread(Number(parentId));
+      const subThreadUserIdList: number[] = [
+        parentThread.subThreadUserId1,
+        parentThread.subThreadUserId2,
+        parentThread.subThreadUserId3,
+      ];
 
       if (!subThreadUserIdList.find((subThreadUserId) => subThreadUserId === userId)) {
         const updateIndex = subThreadUserIdList.findIndex(
