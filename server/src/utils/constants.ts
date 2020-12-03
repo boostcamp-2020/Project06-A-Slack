@@ -19,4 +19,8 @@ export const ERROR_MESSAGE = {
   INVALID_EMAIL: '유효하지 않은 이메일',
   SEND_EMAIL_FAILED: '인증 메일 전송 실패',
   CODE_GENERATION_FAILED: '인증 코드 생성 실패',
+  ENCRYPT_DECRYPT_FAILED: '암호화/복호화 실패',
 };
+
+export const USER_DEFAULT_PROFILE_URL =
+  'https://user-images.githubusercontent.com/61396464/100866119-8c399c00-34db-11eb-894f-3551297f5293.png';

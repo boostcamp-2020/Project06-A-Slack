@@ -1,17 +1,26 @@
 import { Request, Response, NextFunction } from 'express';
+import { IncomingForm } from 'formidable';
+import { promises as fs } from 'fs';
+import path from 'path';
 import { verifyRequestData } from '@/utils/utils';
 import { userModel, channelModel } from '@/models';
-import { ERROR_MESSAGE } from '@/utils/constants';
+import { ERROR_MESSAGE, USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
+
+/* userId 공통 처리 함수 */
+export const checkUserIdParam = (req: Request, res: Response, next: NextFunction): void => {
+  const { userId } = req.params;
+  if (Number.isNaN(+userId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  next();
+};
 
 /**
  * GET /api/users/:userId
  */
 export const getUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { userId } = req.params;
-  if (Number.isNaN(+userId)) {
-    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
-    return;
-  }
   try {
     const [[user]] = await userModel.getUserById({ id: +userId });
     res.json({ user });
@@ -20,26 +29,85 @@ export const getUser = async (req: Request, res: Response, next: NextFunction): 
   }
 };
 
-export const getJoinChannels = async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * GET /api/users/:userId/channels
+ */
+export const getJoinedChannels = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { userId } = req.params;
-  console.log(userId);
-  if (Number.isNaN(+userId)) {
-    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
-    return;
+  try {
+    const [channelList] = await channelModel.getJoinChannels({ userId: +userId });
+    res.json({ channelList });
+  } catch (err) {
+    next(err);
   }
-  const [channelList] = await channelModel.getJoinChannels({ userId: +userId });
-  res.json({ channelList });
 };
 
 /**
  * POST /api/users/:userId
  */
-export const modifyUser = (req: Request, res: Response, next: NextFunction): void => {
+export const modifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { userId } = req.params;
-  // TODO : 아래 코드에서 수정할 유저 값 undefined인지 검증
-  // const {} = req.body;
-  // if(verifyRequestData[]) {}
-  res.status(201).end();
+
+  try {
+    const form = new IncomingForm();
+    form.uploadDir = './src/public/imgs/profile/';
+    form.keepExtensions = true;
+    form.multiples = true;
+
+    let imgSrc: string;
+
+    form.on('fileBegin', (name, file) => {
+      imgSrc = `${Date.now()}_${file.name}`;
+      // eslint-disable-next-line no-param-reassign
+      file.path = `${form.uploadDir}${imgSrc}`;
+    });
+
+    const port = req.app.get('port');
+    const prefix = `${req.protocol}://${req.hostname}${port !== 80 ? `:${port}` : ''}`;
+
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        next(err);
+        return;
+      }
+
+      const { displayName, phoneNumber, setDefault, previousFileName } = fields;
+      const { image } = files;
+
+      if (verifyRequestData([displayName, phoneNumber, setDefault])) {
+        const imgUrl = image ? `${prefix}/imgs/profile/${imgSrc}` : undefined;
+        await userModel.editUserById({
+          id: +userId,
+          displayName: displayName as string,
+          phoneNumber: phoneNumber as string,
+          image: imgUrl,
+          setDefault: +setDefault,
+        });
+
+        if (previousFileName !== USER_DEFAULT_PROFILE_URL) {
+          const [, filePath] = String(previousFileName).split(prefix);
+          try {
+            const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
+          } catch (error) {
+            console.log('file delete error', error.message);
+          }
+        }
+        res.json({ image: imgUrl });
+        return;
+      }
+      res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 /**
@@ -59,5 +127,5 @@ export const modifyLastChannel = (req: Request, res: Response, next: NextFunctio
     res.status(200).end();
     return;
   }
-  res.status(400).json({ message: '필수 값 누락' });
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };

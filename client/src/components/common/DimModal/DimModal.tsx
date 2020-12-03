@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { flex } from '@/styles/mixin';
 import { ModalCloseBox } from '@/components';
 import { useOnClickOutside } from '@/hooks';
@@ -30,23 +29,25 @@ interface ContainerProps {
   height?: string;
 }
 
-const Container = styled.form<ContainerProps>`
-  width: 42rem;
+const Container = styled.div<ContainerProps>`
+  ${flex('center', 'center', 'column')}
+  width: 43rem;
   height: auto;
   max-height: 90vh;
   background-color: white;
   border-radius: 5px;
   outline: 0;
-  ${flex('center', 'center', 'column')}
+  overflow: hidden;
 `;
 
 const Header = styled.div`
+  ${flex()}
   width: 100%;
-  height: 5.6rem;
+  min-height: 5.6rem;
   padding: 1.4rem;
   padding-left: 1.7rem;
-  ${flex()}
-  border-radius:5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
 `;
 
 const Title = styled.div`
@@ -55,51 +56,25 @@ const Title = styled.div`
 
 const Body = styled.div`
   width: 100%;
-  height: 24rem;
   padding: 0 1.4rem;
-  ${flex()};
-  flex: 1;
-  overflow-y: hidden;
-  .thumb-vertical {
-    transition: 0.3s;
-    opacity: 0;
-  }
-  &:hover {
-    .thumb-vertical {
-      transition: 0.3s;
-      opacity: 1;
-    }
-  }
-`;
-
-const Footer = styled(Header)`
-  padding: 1.4rem;
   border-radius: 0 0 5px 5px;
-`;
-
-const ScrollBar = styled.div`
-  background-color: ${(props) => props.theme.color.black7};
-  border-radius: 5px;
+  overflow: auto;
 `;
 
 interface DimModalProps {
   header: React.ReactNode;
   body: React.ReactNode;
-  footer: React.ReactNode;
   visible: boolean;
   setVisible: (a: any) => any;
-  handleSubmit?: (e: React.FormEvent) => void;
 }
 
 const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
   header,
   body,
-  footer,
   visible,
   setVisible,
-  handleSubmit,
 }: PropsWithChildren<DimModalProps>) => {
-  const containerRef = useRef<HTMLFormElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -114,17 +89,12 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
 
   return (
     <DimLayer visible={visible}>
-      <Container ref={containerRef} onSubmit={handleSubmit}>
+      <Container ref={containerRef}>
         <Header>
           <Title>{header}</Title>
           <ModalCloseBox handleClose={handleClose} />
         </Header>
-        <Body>
-          <Scrollbars renderThumbVertical={() => <ScrollBar className="thumb-vertical" />}>
-            {body}
-          </Scrollbars>
-        </Body>
-        <Footer>{footer}</Footer>
+        <Body>{body}</Body>
       </Container>
     </DimLayer>
   );
