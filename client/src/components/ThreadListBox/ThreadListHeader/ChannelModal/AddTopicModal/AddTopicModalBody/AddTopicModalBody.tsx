@@ -5,16 +5,6 @@ import { changeTopic } from '@/store/modules/channel';
 import { useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
-const ModalBackground = styled.div`
-  width: 100%;
-  height: 100%;
-  ${flex()};
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-`;
-
 const Container = styled.div`
   border-radius: 10px;
   padding: ${(props) => props.theme.size.xxl};
@@ -22,28 +12,6 @@ const Container = styled.div`
   width: 500px;
   height: 220px;
   box-shadow: ${(props) => props.theme.boxShadow.darkgray};
-`;
-
-const Header = styled.div`
-  ${flex('center', 'space-between')};
-  margin-bottom: 20px;
-  font-size: ${(props) => props.theme.size.xxxl};
-  color: ${(props) => props.theme.color.black1};
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: ${(props) => props.theme.color.gray2};
-  font-size: ${(props) => props.theme.size.xxxl};
-  &:hover {
-    transition: 0.3s;
-    background: ${(props) => props.theme.color.gray5};
-  }
-`;
-
-const HeaderContent = styled.div`
-  font-size: ${(props) => props.theme.size.l};
 `;
 
 const TextArea = styled.textarea`
@@ -88,13 +56,15 @@ const SubmitButton = styled.button`
   height: 30px;
 `;
 
-const AddTopicModal = ({
-  setAddTopicModalVisible,
-}: {
+interface AddTopicModalBodyProps {
   setAddTopicModalVisible: (fn: (state: boolean) => boolean) => void;
-}): ReactElement => {
+}
+
+const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
+  setAddTopicModalVisible,
+}: AddTopicModalBodyProps) => {
   const [content, setContent] = useState('');
-  const ref = useRef<HTMLDivElement>(null);
+
   const dispatch = useDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -105,28 +75,20 @@ const AddTopicModal = ({
     setAddTopicModalVisible((state: boolean) => !state);
   };
 
-  useOnClickOutside(ref, onCancel);
-
   const onSubmit = () => {
     dispatch(changeTopic(content));
     setAddTopicModalVisible((state: boolean) => !state);
   };
 
   return (
-    <ModalBackground>
-      <Container ref={ref}>
-        <Header>
-          <HeaderContent>Edit channel topic</HeaderContent>
-          <CloseButton onClick={onCancel}>X</CloseButton>
-        </Header>
-        <TextArea value={content} onChange={onChange} />
-        <ButtonBox>
-          <CancelButton onClick={onCancel}>Cancel</CancelButton>
-          <SubmitButton onClick={onSubmit}>Set Topic</SubmitButton>
-        </ButtonBox>
-      </Container>
-    </ModalBackground>
+    <>
+      <TextArea value={content} onChange={onChange} />
+      <ButtonBox>
+        <CancelButton onClick={onCancel}>Cancel</CancelButton>
+        <SubmitButton onClick={onSubmit}>Set Topic</SubmitButton>
+      </ButtonBox>
+    </>
   );
 };
 
-export default AddTopicModal;
+export default AddTopicModalBody;
