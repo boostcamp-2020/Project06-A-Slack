@@ -7,10 +7,11 @@ import { CHANNELTYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
 import { useParams } from 'react-router-dom';
 import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel';
-import AddUsersModal from '@/components/ChannelModal/AddUsersModal';
-import AddTopicModal from '@/components/ChannelModal/AddTopicModal';
-import ShowUsersModal from '@/components/ChannelModal/ShowUsersModal';
 import { useUser } from '@/hooks';
+import { DimModal } from '@/components/common';
+import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
+import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
+import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
 
 const Container = styled.div`
   max-width: 100%;
@@ -84,7 +85,7 @@ const ThreadListHeader = (): ReactElement | any => {
   const dispatch = useDispatch();
   const { current, users, topic } = useChannel();
   const { userInfo } = useUser();
-  const [addUserModalVisible, setAddUserModalVisible] = useState(false);
+  const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
   const { channelId }: RightSideParams = useParams();
@@ -104,8 +105,8 @@ const ThreadListHeader = (): ReactElement | any => {
     setShowUsersModalVisible((state) => !state);
   };
 
-  const clickAddUserModal = () => {
-    setAddUserModalVisible((state) => !state);
+  const clickAddUsersModal = () => {
+    setAddUsersModalVisible((state) => !state);
   };
 
   const clickAddTopicModal = () => {
@@ -114,9 +115,30 @@ const ThreadListHeader = (): ReactElement | any => {
 
   return (
     <>
-      {addUserModalVisible && <AddUsersModal setAddUserModalVisible={clickAddUserModal} />}
-      {addTopicModalVisible && <AddTopicModal setAddTopicModalVisible={clickAddTopicModal} />}
-      {showUsersModalVisible && <ShowUsersModal setShowUsersModalVisible={clickShowUsersModal} />}
+      {addUsersModalVisible && (
+        <DimModal
+          header={<AddUsersModalHeader />}
+          body={<AddUsersModalBody setAddUsersModalVisble={clickAddUsersModal} />}
+          visible={addUsersModalVisible}
+          setVisible={clickAddUsersModal}
+        />
+      )}
+      {addTopicModalVisible && (
+        <DimModal
+          header={<AddTopicModalHeader />}
+          body={<AddTopicModalBody setAddTopicModalVisible={clickAddTopicModal} />}
+          visible={addTopicModalVisible}
+          setVisible={clickAddTopicModal}
+        />
+      )}
+      {showUsersModalVisible && (
+        <DimModal
+          header={<ShowUsersModalHeader />}
+          body={<ShowUsersModalBody setShowUsersModalVisible={clickShowUsersModal} />}
+          visible={showUsersModalVisible}
+          setVisible={clickShowUsersModal}
+        />
+      )}
       <Container>
         <Left>
           <LeftTitle>
@@ -138,7 +160,7 @@ const ThreadListHeader = (): ReactElement | any => {
               {users?.length}
             </RightUserBox>
           )}
-          <RightButton onClick={clickAddUserModal}>O</RightButton>
+          <RightButton onClick={clickAddUsersModal}>O</RightButton>
           <RightButton onClick={clickDetail}>i</RightButton>
         </Right>
       </Container>

@@ -5,8 +5,5 @@ export { default as ThreadListBox } from './ThreadListBox/ThreadListBox';
 export { default as SubThreadListBox } from './SubThreadListBox/SubThreadListBox';
 export { default as DetailHeader } from './DetailBox/DeatailHeader/DetailHeader';
 export { default as DetailBody } from './DetailBox/DetailBody/DetailBody';
-export { default as AddTopicModal } from './ChannelModal/AddTopicModal';
-export { default as CreateChannelModal } from './ChannelModal/CreateChannelModal';
 export { default as EmailBox } from './EmailBox/EmailBox';
 export { default as CodeVerifyBox } from './CodeVerifyBox/CodeVerifyBox';
-export { default as ShowUsersModal } from './ChannelModal/ShowUsersModal';
