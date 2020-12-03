@@ -28,3 +28,11 @@ export const CHANNELTYPE = {
   CHANNEL: 1,
   DM: 2,
 };
+
+export const SOCKET_EVENT_TYPE = {
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+  MESSAGE: 'message',
+  ENTER_ROOM: 'enter_room',
+  LEAVE_ROOM: 'leave_room',
+};
