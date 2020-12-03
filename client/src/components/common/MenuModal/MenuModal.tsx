@@ -71,6 +71,7 @@ const MenuModal: React.FC<PropsWithChildren<MenuModalProps>> = ({
   }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     if (e.target === containerRef.current) {
       return;
     }
