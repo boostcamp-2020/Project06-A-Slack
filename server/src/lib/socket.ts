@@ -2,7 +2,7 @@ import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
 
-const { CONNECTION, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
+const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
 export const bindSocketServer = (server: http.Server): void => {
   const io = new SocketIO.Server(server, {
@@ -12,8 +12,8 @@ export const bindSocketServer = (server: http.Server): void => {
 
   const mainChannel = io.of('/');
 
-  mainChannel.on(CONNECTION, (socket: Socket) => {
-    console.log('메인 채널됨 socketID : ', socket.id);
+  mainChannel.on(CONNECT, (socket: Socket) => {
+    console.log('메인 채널 연결됨 socketID : ', socket.id);
     io.to(socket.id).emit(MESSAGE, { socketId: socket.id });
 
     socket.on(MESSAGE, (data) => {
