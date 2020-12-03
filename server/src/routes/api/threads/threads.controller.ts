@@ -18,6 +18,33 @@ export const createThread = async (
     try {
       const url = 'temp/url'; // 추후 url 생성 부분 추가
       const [result] = await threadModel.createThread(userId, channelId, content, parentId, url);
+      // 1. threadCount 변경 2. subThread 추가 로직 구현
+      /*
+      1. parentId가 true면, parentId의 subCount 값 +1
+      - await threadModel.updateSubCountOfThread(parentId);
+      - UPDATE thread SET sub_count +1 WHERE id = ?(parent_id);
+      2. parentId의 sub_thread_user_id 1,2,3이 null이고, 1,2,3에 해당 userId가 없으면 userId를 null에 추가.
+      - sub_thread_user_id를 돌면서, 값이 있을때 existSubThreadUserIdList에 userId를 넣고, 
+      없으면 existSubThreadUserIdList에 현재 userId값이 있는지 비교한 후, 있으면 넘어가고 없으면 update.
+      - SELECT sub_thread_user_id_1, sub_thread_user_id_2, sub_thread_user_id_3 FROM thread 
+      */
+      await threadModel.updateSubCountOfThread(parentId);
+
+      const [
+        { subThreadUserId1, subThreadUserId2, subThreadUserId3 },
+      ] = await threadModel.getThread(Number(parentId));
+      const subThreadUserIdList: number[] = [subThreadUserId1, subThreadUserId2, subThreadUserId3];
+
+      if (!subThreadUserIdList.find((subThreadUserId) => subThreadUserId === userId)) {
+        const updateIndex = subThreadUserIdList.findIndex(
+          (subThreadUserId) => subThreadUserId === null,
+        );
+        // null인 자리가 있으면,
+        if (updateIndex !== -1) {
+          await threadModel.updateSubThreadUserIdOfThread(updateIndex + 1, userId, parentId);
+        }
+      }
+
       res.status(201).json({ result });
       return;
     } catch (err) {
@@ -37,7 +64,7 @@ export const getChannelThreads = async (
 ): Promise<void> => {
   const { channelId } = req.params;
   if (Number.isNaN(Number(channelId))) {
-    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 500 });
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
   try {
