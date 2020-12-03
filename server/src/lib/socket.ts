@@ -1,13 +1,8 @@
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
+import { SOCKET_EVENT_TYPE } from '@/utils/constants';
 
-const SOCKET_EVENT_TYPE = {
-  CONNECTION: 'CONNECTION',
-  DISCONNECT: 'DISCONNECT',
-  MESSAGE: 'MESSAGE',
-  ENTER_ROOM: 'ENTER_ROOM',
-  LEAVE_ROOM: 'LEAVE_ROOM',
-};
+const { CONNECTION, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
 export const bindSocketServer = (server: http.Server): void => {
   const io = new SocketIO.Server(server, {
@@ -17,32 +12,32 @@ export const bindSocketServer = (server: http.Server): void => {
 
   const mainChannel = io.of('/');
 
-  mainChannel.on(SOCKET_EVENT_TYPE.CONNECTION, (socket: Socket) => {
+  mainChannel.on(CONNECTION, (socket: Socket) => {
     console.log('메인 채널됨 socketID : ', socket.id);
-    io.to(socket.id).emit(SOCKET_EVENT_TYPE.MESSAGE, { socketId: socket.id });
+    io.to(socket.id).emit(MESSAGE, { socketId: socket.id });
 
-    socket.on(SOCKET_EVENT_TYPE.MESSAGE, (data) => {
+    socket.on(MESSAGE, (data) => {
       console.log('channel 1 메시지', data);
       if (data.target) {
-        mainChannel.to(data.target).emit(SOCKET_EVENT_TYPE.MESSAGE, data.message);
+        mainChannel.to(data.target).emit(MESSAGE, data.message);
         return;
       }
-      mainChannel.emit(SOCKET_EVENT_TYPE.MESSAGE, data.message);
+      mainChannel.emit(MESSAGE, data.message);
     });
 
-    socket.on(SOCKET_EVENT_TYPE.ENTER_ROOM, (data) => {
+    socket.on(ENTER_ROOM, (data) => {
       console.log(`enter room ${data}`);
       socket.join(data);
       console.log(socket.rooms);
     });
 
-    socket.on(SOCKET_EVENT_TYPE.LEAVE_ROOM, (data) => {
+    socket.on(LEAVE_ROOM, (data) => {
       console.log(`leave room ${data}`);
       socket.leave(data);
       console.log(socket.rooms);
     });
 
-    socket.on(SOCKET_EVENT_TYPE.DISCONNECT, () => {
+    socket.on(DISCONNECT, () => {
       console.log('연결 끊김, 바이');
     });
   });
