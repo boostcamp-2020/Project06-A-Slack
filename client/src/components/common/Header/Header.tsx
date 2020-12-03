@@ -55,12 +55,6 @@ const Icon = styled.div`
   bottom: -1.5px;
 `;
 
-const Modal = styled.div`
-  position: absolute;
-  top: 2.5rem;
-  right: 1rem;
-`;
-
 const Line = styled.div`
   width: 100%;
   height: 0.5px;
@@ -89,8 +83,7 @@ const Header: React.FC = () => {
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [menuModalVisible, setMenuModalVisible] = useState(false);
 
-  const closeMenuModal = () => setMenuModalVisible(false);
-  const openMenuModal = () => setMenuModalVisible(true);
+  const toggleMenuModal = () => setMenuModalVisible((state) => !state);
 
   const closeEditModal = () => setEditProfileVisible(false);
   const openEditModal = () => setEditProfileVisible(true);
@@ -119,16 +112,19 @@ const Header: React.FC = () => {
         />
       )}
       {menuModalVisible && (
-        <Modal onClick={closeMenuModal}>
-          <MenuModal width="auto" visible={menuModalVisible} setVisible={setMenuModalVisible}>
-            <ModalListItem onClick={openEditModal}>Edit profile</ModalListItem>
-            <ModalListItem>View profile</ModalListItem>
-            <Line />
-            <Logout onClick={handleLogout}>Sign out of {workspaceName}</Logout>
-          </MenuModal>
-        </Modal>
+        <MenuModal
+          top="2.5rem"
+          right="1rem"
+          visible={menuModalVisible}
+          setVisible={setMenuModalVisible}
+        >
+          <ModalListItem onClick={openEditModal}>Edit profile</ModalListItem>
+          <ModalListItem>View profile</ModalListItem>
+          <Line />
+          <Logout onClick={handleLogout}>Sign out of {workspaceName}</Logout>
+        </MenuModal>
       )}
-      <ProfileBox onClick={openMenuModal}>
+      <ProfileBox onMouseDown={toggleMenuModal}>
         <ProfileBackground />
         <ProfileImg src={userInfo?.image} />
         <Icon>
