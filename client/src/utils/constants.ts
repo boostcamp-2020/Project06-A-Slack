@@ -28,3 +28,9 @@ export const CHANNELTYPE = {
   CHANNEL: 1,
   DM: 2,
 };
+
+export const INPUT_BOX_TYPE = {
+  THREAD: 'thread',
+  SUBTHREAD: 'subThread',
+  EDIT: 'edit',
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks';
 import { Header, LeftSideBar, ThreadListBox, RightSideBar } from '@/components';
 import styled from 'styled-components';
@@ -15,9 +15,16 @@ interface RightSideParams {
   threadId: string | undefined;
 }
 
+const checkValidOfRightSideType = (rightSideType: string | undefined) => {
+  return (
+    rightSideType === 'detail' || rightSideType === 'user_profile' || rightSideType === 'thread'
+  );
+};
+
 const WorkSpacePage: React.FC = () => {
   const { channelId, rightSideType }: RightSideParams = useParams();
   const { accessToken } = useAuth();
+  const history = useHistory();
 
   return (
     <>
@@ -27,7 +34,14 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            {rightSideType && <RightSideBar type={rightSideType} channelId={Number(channelId)} />}
+            <>
+              {rightSideType &&
+                (checkValidOfRightSideType(rightSideType) ? (
+                  <RightSideBar type={rightSideType} channelId={Number(channelId)} />
+                ) : (
+                  history.goBack()
+                ))}
+            </>
           </Container>
         </>
       ) : (
