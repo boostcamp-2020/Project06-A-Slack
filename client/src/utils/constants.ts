@@ -34,3 +34,11 @@ export const INPUT_BOX_TYPE = {
   SUBTHREAD: 'subThread',
   EDIT: 'edit',
 };
+
+export const SOCKET_EVENT_TYPE = {
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+  MESSAGE: 'message',
+  ENTER_ROOM: 'enter_room',
+  LEAVE_ROOM: 'leave_room',
+};
