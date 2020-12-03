@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { ReactElement, useRef, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { useChannel, useOnClickOutside } from '@/hooks';
-import { joinChannelRequset } from '@/store/modules/channel';
+import { useChannel } from '@/hooks';
 
 const Header = styled.div`
   ${flex('center', 'flex-start', 'column')};
