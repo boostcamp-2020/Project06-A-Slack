@@ -8,6 +8,9 @@ import {
   editUserSuccess,
   editUserFailure,
   EditUserRequestPayload,
+  getUsersRequest,
+  getUsersSuccess,
+  getUsersFailure,
 } from '@/store/modules/user';
 import { userService } from '@/services';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
@@ -74,6 +77,22 @@ function* watchEditUser() {
   yield takeLatest(editUserRequest, editUser);
 }
 
+function* getUsers() {
+  try {
+    const { data, status } = yield call(userService.getUsers);
+    console.log(data, status);
+    if (status === 200) {
+      yield put(getUsersSuccess({ usersInfo: data.users }));
+    }
+  } catch (err) {
+    yield put(getUsersFailure());
+  }
+}
+
+function* watchGetUsers() {
+  yield takeEvery(getUsersRequest, getUsers);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchGetUser), fork(watchEditUser)]);
+  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchGetUsers)]);
 }

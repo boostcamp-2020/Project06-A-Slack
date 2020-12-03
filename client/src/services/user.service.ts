@@ -1,6 +1,9 @@
 import API from '@/api';
 
 export const userService = {
+  getUsers(): any {
+    return API.get('/api/users');
+  },
   getUser({ id }: { id: number }): any {
     return API.get(`/api/users/${id}`);
   },
