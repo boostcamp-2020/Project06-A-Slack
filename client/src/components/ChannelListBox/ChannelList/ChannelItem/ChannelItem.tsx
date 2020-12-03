@@ -41,7 +41,6 @@ const ChannelItem = (args: Args) => {
 
   const onClick = () => {
     dispatch(loadChannelRequest(id));
-    dispatch(modifyLastChannelRequest({ lastChannelId: id, userId }));
   };
 
   return (

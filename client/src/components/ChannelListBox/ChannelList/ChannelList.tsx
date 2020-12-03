@@ -20,7 +20,7 @@ const ChannelList = ({
 
   useEffect(() => {
     dispatch(loadMyChannelsRequest(userId));
-  }, []);
+  }, [dispatch, userId]);
 
   return (
     <>

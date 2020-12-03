@@ -91,7 +91,9 @@ const ThreadListHeader = (): ReactElement | any => {
 
   useEffect(() => {
     dispatch(loadChannelRequest(channelId));
-    dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo?.id }));
+    if (userInfo) {
+      dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo.id }));
+    }
   }, [userInfo]);
 
   const clickDetail = () => {

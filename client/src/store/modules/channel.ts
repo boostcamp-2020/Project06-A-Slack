@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { JoinUser, Channel } from '@/types';
@@ -22,7 +23,7 @@ const initialState: ChannelState = {
 
 export interface modifyLastChannelRequestPayload {
   lastChannelId: number;
-  userId: number | undefined | null;
+  userId: number;
 }
 
 const channelSlice = createSlice({
