@@ -100,38 +100,24 @@ const Remove = styled.button`
   border-radius: 3px;
 `;
 
-const AddUserModal = ({
-  setAddUserModalVisible,
-}: {
-  setAddUserModalVisible: (fn: (state: boolean) => boolean) => void;
-}): ReactElement => {
+interface AddUsersModalBodyProps {
+  setAddUsersModalVisble: (fn: (state: boolean) => boolean) => void;
+}
+
+const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
+  setAddUsersModalVisble,
+}: AddUsersModalBodyProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const handler = () => {
-    setAddUserModalVisible((state: boolean) => !state);
+    setAddUsersModalVisble((state: boolean) => !state);
   };
 
   useOnClickOutside(ref, () => handler());
 
   const { current } = useChannel();
 
-  return (
-    <ModalBackground>
-      <Container ref={ref}>
-        <Header>
-          <HeaderLeft>
-            <HeaderTitle>Add People</HeaderTitle>
-            <ChannelName>
-              {current?.isPublic}
-              {current?.name}
-            </ChannelName>
-          </HeaderLeft>
-          <CloseButton onClick={handler}>x</CloseButton>
-        </Header>
-        <Input />
-      </Container>
-    </ModalBackground>
-  );
+  return <Input />;
 };
 
-export default AddUserModal;
+export default AddUsersModalBody;
