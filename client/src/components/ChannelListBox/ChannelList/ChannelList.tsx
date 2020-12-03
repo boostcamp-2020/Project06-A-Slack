@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { loadMyChannelsRequest } from '@/store/modules/channel';
 import { useChannel, useAuth } from '@/hooks';
 import { Channel } from '@/types';
-import ChannelItem from './Channel/ChannelItem';
+import ChannelItem from './ChannelItem/ChannelItem';
 
 const ChannelList = ({
   channelType,
@@ -15,7 +15,7 @@ const ChannelList = ({
   channelListVisible: boolean;
 }): ReactElement => {
   const dispatch = useDispatch();
-  const { joinChannelList, current } = useChannel();
+  const { myChannelList, current } = useChannel();
   const { userId } = useAuth();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const ChannelList = ({
 
   return (
     <>
-      {joinChannelList?.map(
+      {myChannelList?.map(
         (channel: Channel, idx: number) =>
           channelType === channel.channelType &&
           (!channelListVisible ? (
