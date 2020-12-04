@@ -7,7 +7,6 @@ import { getUsersRequest } from '@/store/modules/user';
 import { useUser } from '@/hooks';
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';
-import { userInfo } from 'os';
 
 const InputContainer = styled.div`
   ${flex()}
@@ -74,8 +73,6 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   useEffect(() => {
     dispatch(getUsersRequest());
   }, []);
-
-  console.log(userInfo);
 
   const changeText = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);

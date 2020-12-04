@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannel } from '@/hooks';
 import { JoinUser } from '@/types';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import { DimModal } from '@/components/common';
+import { DimModal } from '@/components';
 import { AddUsersModalHeader, AddUsersModalBody } from '../../AddUsersModal';
 
 const AddButton = styled.button`
@@ -61,13 +60,6 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
 }: ShowUsersModalBody) => {
   const { users } = useChannel();
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  const clickClose = () => {
-    setShowUsersModalVisible((state: boolean) => !state);
-  };
-
-  useOnClickOutside(ref, clickClose);
 
   const clickAddUsersModal = () => {
     // setShowUsersModalVisible((state: boolean) => !state);
