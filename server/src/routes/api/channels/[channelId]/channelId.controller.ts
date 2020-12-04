@@ -36,6 +36,24 @@ export const inviteChannel = async (req: Request, res: Response, next: NextFunct
 };
 
 /**
+ * POST /api/channels/:channelId/topic
+ */
+
+export const modifyTopic = async (req: Request, res: Response, next: NextFunction) => {
+  const { channelId } = req.params;
+  const { topic } = req.body;
+  if (Number.isNaN(+channelId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  if (verifyRequestData([topic])) {
+    await channelModel.modifyTopic({ channelId: +channelId, topic });
+    res.status(200).end();
+  }
+  res.status(400).json({ message: '필수 값 누락' });
+};
+
+/**
  * POST /api/channels/:channelId
  */
 export const modifyChannel = (req: Request, res: Response, next: NextFunction) => {

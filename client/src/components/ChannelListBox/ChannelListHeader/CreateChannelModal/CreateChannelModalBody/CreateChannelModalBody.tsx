@@ -12,47 +12,6 @@ interface Props {
   name?: string;
 }
 
-const ModalBackground = styled.div`
-  width: 100%;
-  height: 100%;
-  ${flex()};
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-`;
-
-const Container = styled.div`
-  border-radius: 10px;
-  padding: ${(props) => props.theme.size.xxl};
-  background: ${(props) => props.theme.color.white};
-  width: 500px;
-  height: 500px;
-  box-shadow: ${(props) => props.theme.boxShadow.darkgray};
-`;
-
-const Header = styled.div`
-  ${flex('center', 'space-between')};
-  margin-bottom: 20px;
-  font-size: ${(props) => props.theme.size.xxxl};
-  color: ${(props) => props.theme.color.black1};
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  color: ${(props) => props.theme.color.gray2};
-  font-size: ${(props) => props.theme.size.xxxl};
-  &:hover {
-    transition: 0.3s;
-    background: ${(props) => props.theme.color.gray5};
-  }
-`;
-
-const HeaderContent = styled.div`
-  font-size: ${(props) => props.theme.size.xxxl};
-  font-weight: 700;
-`;
-
 const Explain = styled.div`
   font-size: ${(props) => props.theme.size.s};
   color: ${(props) => props.theme.color.gray2};
@@ -193,17 +152,21 @@ const CreateButton = styled.button<Props>`
       `}
 `;
 
-const CreateChannelModal = ({
-  setCreateChannelModalVisible,
-}: {
+interface CreateChannelModalBodyProps {
   setCreateChannelModalVisible: (fn: (state: boolean) => boolean) => void;
-}): ReactElement => {
+  setSecret: (fn: (state: boolean) => boolean) => void;
+  secret: boolean;
+}
+
+const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
+  setCreateChannelModalVisible,
+  setSecret,
+  secret,
+}: CreateChannelModalBodyProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [secret, setSecret] = useState(false);
   const { userId } = useAuth();
   const { userInfo } = useUser();
-  const ref = useRef<HTMLDivElement>(null);
 
   const dispatch = useDispatch();
 
@@ -215,17 +178,11 @@ const CreateChannelModal = ({
     setDescription(e.target.value);
   };
 
-  const closeAddChannelModal = () => {
-    setCreateChannelModalVisible((state: boolean) => !state);
-  };
-
-  useOnClickOutside(ref, closeAddChannelModal);
-
-  const toggleSecret = () => {
+  const clickSecret = () => {
     setSecret((state) => !state);
   };
 
-  const createChannel = async () => {
+  const clickCreateChannel = async () => {
     const isPublic = secret ? 0 : 1;
     dispatch(
       createChannelRequest({
@@ -237,64 +194,54 @@ const CreateChannelModal = ({
         displayName: userInfo?.displayName,
       }),
     );
+    setCreateChannelModalVisible((state) => !state);
   };
 
   return (
-    <ModalBackground>
-      <Container ref={ref}>
-        <Header>
-          <HeaderContent>{secret ? 'Create a private channel' : 'Create a channel'}</HeaderContent>
-          <CloseButton onClick={closeAddChannelModal}>X</CloseButton>
-        </Header>
-        <Explain>
-          Channels are where your team communicates. They’re best when organized around a topic —
-          #marketing, for example.
-        </Explain>
-        <Form>
-          <Label>
-            <LabelBox>
-              <LabelContent>Name</LabelContent>
-              {name === '' && <NameAlert>Don't forget to name your channel.</NameAlert>}
-            </LabelBox>
-            <InputBox secret={secret}>
-              <NameInput
-                onChange={changeName}
-                value={name}
-                required
-                placeholder="e.g. plan-budget"
-              />
-            </InputBox>
-          </Label>
-          <Label>
-            <LabelBox>
-              <LabelContent>Description</LabelContent>
-              <Description>(optional)</Description>
-            </LabelBox>
-            <DescriptionInput onChange={changeDescription} value={description} />
-            <Description>What's this channel about?</Description>
-          </Label>
-        </Form>
-        <Bottom>
-          <Bottomheader>Make private</Bottomheader>
-          <BottomContent>
-            <BottomExplain>
-              {secret
-                ? `This can’t be undone. A private channel cannot be made public later on.`
-                : `When a channel is set to private, it can only be viewed or joined by invitation.`}
-            </BottomExplain>
-            <PrivateButton secret={secret} onClick={toggleSecret}>
-              <Circle secret={secret} />
-            </PrivateButton>
-          </BottomContent>
-        </Bottom>
-        <CreateButtonBox>
-          <CreateButton type="submit" name={name} onClick={createChannel} disabled={name === ''}>
-            Create
-          </CreateButton>
-        </CreateButtonBox>
-      </Container>
-    </ModalBackground>
+    <>
+      <Explain>
+        Channels are where your team communicates. They’re best when organized around a topic —
+        #marketing, for example.
+      </Explain>
+      <Form>
+        <Label>
+          <LabelBox>
+            <LabelContent>Name</LabelContent>
+            {name === '' && <NameAlert>Don't forget to name your channel.</NameAlert>}
+          </LabelBox>
+          <InputBox secret={secret}>
+            <NameInput onChange={changeName} value={name} required placeholder="e.g. plan-budget" />
+          </InputBox>
+        </Label>
+        <Label>
+          <LabelBox>
+            <LabelContent>Description</LabelContent>
+            <Description>(optional)</Description>
+          </LabelBox>
+          <DescriptionInput onChange={changeDescription} value={description} />
+          <Description>What's this channel about?</Description>
+        </Label>
+      </Form>
+      <Bottom>
+        <Bottomheader>Make private</Bottomheader>
+        <BottomContent>
+          <BottomExplain>
+            {secret
+              ? `This can’t be undone. A private channel cannot be made public later on.`
+              : `When a channel is set to private, it can only be viewed or joined by invitation.`}
+          </BottomExplain>
+          <PrivateButton secret={secret} onClick={clickSecret}>
+            <Circle secret={secret} />
+          </PrivateButton>
+        </BottomContent>
+      </Bottom>
+      <CreateButtonBox>
+        <CreateButton type="submit" name={name} onClick={clickCreateChannel} disabled={name === ''}>
+          Create
+        </CreateButton>
+      </CreateButtonBox>
+    </>
   );
 };
 
-export default CreateChannelModal;
+export default CreateChannelModalBody;

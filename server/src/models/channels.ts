@@ -14,6 +14,11 @@ interface JoinInfo {
   channelId: number;
 }
 
+interface TopicInfo {
+  channelId: number;
+  topic: string;
+}
+
 export const channelModel = {
   getChannels() {
     const sql = `SELECT channel_type as channelType, id, description, is_public as isPublic, 
@@ -32,7 +37,7 @@ export const channelModel = {
   },
   getChannelUser({ channelId }: { channelId: number }): any {
     const sql = `SELECT user_channel.user_id as userId, 
-    user.display_name as displayName
+    user.display_name as displayName, user.image as image
     FROM user
     JOIN user_channel
     ON user_channel.channel_id = ? and user_channel.user_id = user.id
@@ -41,7 +46,7 @@ export const channelModel = {
   },
   getChannel({ channelId }: { channelId: number }): any {
     const sql = `SELECT id, owner_id as ownerId, name, channel_type as channelType, is_public as isPublic, 
-    is_deleted as isDeleted, member_count as memberCount, description
+    is_deleted as isDeleted, member_count as memberCount, description, topic
     FROM channel
     WHERE channel.id = ?
     `;
@@ -54,5 +59,9 @@ export const channelModel = {
   joinChannel({ userId, channelId }: JoinInfo): any {
     const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES(?, ?)`;
     return pool.execute(sql, [userId, channelId]);
+  },
+  modifyTopic({ channelId, topic }: TopicInfo) {
+    const sql = 'UPDATE channel SET topic = ? WHERE id = ?';
+    return pool.execute(sql, [topic, channelId]);
   },
 };

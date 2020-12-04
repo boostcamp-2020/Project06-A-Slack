@@ -9,7 +9,6 @@ interface ChannelState {
   current: Channel | null;
   users: JoinUser[];
   channelId: number | null;
-  topic: string;
 }
 
 const initialState: ChannelState = {
@@ -18,12 +17,16 @@ const initialState: ChannelState = {
   current: null,
   users: [],
   channelId: null,
-  topic: 'Add a topic',
 };
 
 export interface modifyLastChannelRequestPayload {
   lastChannelId: number;
   userId: number;
+}
+
+export interface modifyTopicChannelRequestPayload {
+  channelId: number;
+  topic: string;
 }
 
 const channelSlice = createSlice({
@@ -56,7 +59,7 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     modifyTopicRequest(state, action) {},
-    modifyTopicSuccess() {},
+    modifyTopicSuccess(state, action: PayloadAction<{ channelId: number }>) {},
     modifyTopicFailure(state, action) {},
     modifyLastChannelRequest(state, action: PayloadAction<modifyLastChannelRequestPayload>) {},
     modifyLastChannelSuccess() {},
@@ -76,14 +79,12 @@ const channelSlice = createSlice({
     joinChannelFailure(state, action) {
       // todo 에러처리
     },
-    setCurrent(state, action) {
-      const [temp] = state.myChannelList.filter(
-        (channel: Channel) => channel.id === action.payload.channelId,
-      );
-      state.current = temp;
-    },
-    changeTopic(state, action) {
-      state.topic = action.payload;
+    setCurrent(state, action: PayloadAction<{ name: string; value: string }>) {
+      if (state.current !== null) {
+        if (action.payload.name === 'topic') {
+          state.current.topic = action.payload.value;
+        }
+      }
     },
   },
 });
@@ -112,6 +113,5 @@ export const {
   joinChannelSuccess,
   joinChannelFailure,
   setCurrent,
-  changeTopic,
 } = channelSlice.actions;
 export default channelSlice.reducer;

@@ -9,6 +9,11 @@ interface EditUserParams {
 }
 
 export const userModel = {
+  getUsers(): any {
+    const sql = `SELECT id, email, display_name as displayName, image
+    FROM user`;
+    return pool.query(sql);
+  },
   getUserByEmail({ email }: { email: string }): any {
     const sql = `SELECT id, pw, email, display_name as displayName, phone_number as phoneNumber, 
     image, last_channel_id as lastChannelId 

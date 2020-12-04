@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrent, loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel';
+import { loadChannelRequest } from '@/store/modules/channel';
 import styled from 'styled-components';
 import { useJoinChannelList, useChannel, useAuth } from '@/hooks';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,6 @@ interface Args {
 
 interface Props {
   pick: boolean;
-  theme: any;
 }
 
 const Channel = styled.div<Props>`
@@ -36,7 +35,6 @@ const Name = styled.div``;
 const ChannelItem = (args: Args) => {
   const dispatch = useDispatch();
   const { id, name, isPublic } = useJoinChannelList(args.idx);
-  const { userId } = useAuth();
   const { current } = useChannel();
 
   const onClick = () => {

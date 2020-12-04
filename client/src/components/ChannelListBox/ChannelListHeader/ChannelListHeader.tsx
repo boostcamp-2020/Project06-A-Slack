@@ -2,15 +2,12 @@
 import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { useOnClickOutside } from '@/hooks';
-import CreateChannelModal from '@/components/ChannelModal/CreateChannelModal';
-import { CHANNELTYPE } from '@/utils/constants';
-
-interface Props {
-  pick: boolean;
-}
+import { CHANNEL_TYPE } from '@/utils/constants';
+import { DimModal, MenuModal } from '@/components';
+import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 
 const Container = styled.div`
+  position: relative;
   ${flex('center', 'space-between')}
   margin-bottom: 10px;
 `;
@@ -39,23 +36,14 @@ const Content = styled.div`
   font-size: 12px;
 `;
 
-const Popup = styled.div<Props>`
-  position: absolute;
-  border-radius: 5px;
-  display: ${(props) => (props.pick ? 'block' : 'none')};
-  top: 30px;
-  left: -10px;
-  width: 200px;
-  padding: ${(props) => props.theme.size.l} 0;
-  background: ${(props) => props.theme.color.white};
-`;
-
-const PopupItem = styled.div`
-  padding: 5px 30px;
-  font-size: ${(props) => props.theme.size.m};
-  color: ${(props) => props.theme.color.black3};
+const ModalListItem = styled.div`
+  width: 100%;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
   &:hover {
-    background: ${(props) => props.theme.color.blue1};
+    color: white;
+    background-color: ${(props) => props.theme.color.blue1};
   }
 `;
 
@@ -68,57 +56,81 @@ const ChannelListBox = ({
   setChannelListVisible: (fn: (state: boolean) => boolean) => void;
   channelListVisible: boolean;
 }): ReactElement => {
-  const ref = useRef<HTMLDivElement>(null);
   const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
   const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
+  const [secret, setSecret] = useState(false);
 
   const clickChannel = () => {
     setChannelListVisible((state: boolean) => !state);
   };
 
-  useOnClickOutside(ref, () => setAddChannelsModalVisible(false));
-  useOnClickOutside(ref, () => setSectionOptionsModalVisible(false));
-
-  const clickAdd = () => {
+  const toggleAddChannelsModal = () => {
     setAddChannelsModalVisible((state) => !state);
   };
 
-  const clickMore = () => {
+  const toggleSectionOptionsModal = () => {
     setSectionOptionsModalVisible((state) => !state);
   };
 
-  const clickAddChannelModal = () => {
+  const clickCreateChannelModal = () => {
     setCreateChannelModalVisible((state) => !state);
   };
-
   return (
     <>
       {createChannelModalVisible && (
-        <CreateChannelModal setCreateChannelModalVisible={setCreateChannelModalVisible} />
+        <DimModal
+          header={<CreateChannelModalHeader secret={secret} />}
+          body={
+            <CreateChannelModalBody
+              secret={secret}
+              setCreateChannelModalVisible={setCreateChannelModalVisible}
+              setSecret={setSecret}
+            />
+          }
+          visible={createChannelModalVisible}
+          setVisible={setCreateChannelModalVisible}
+        />
       )}
       <Container>
+        {addChannelsModalVisible && (
+          <MenuModal
+            top="1.5rem"
+            right="-5rem"
+            visible={addChannelsModalVisible}
+            setVisible={setAddChannelsModalVisible}
+          >
+            <ModalListItem onClick={clickCreateChannelModal}>
+              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+            </ModalListItem>
+            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+          </MenuModal>
+        )}
+        {sectionOptionsModalVisible && (
+          <MenuModal
+            top="1.5rem"
+            right="-3.5rem"
+            visible={sectionOptionsModalVisible}
+            setVisible={setSectionOptionsModalVisible}
+          >
+            <ModalListItem onClick={clickCreateChannelModal}>
+              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+            </ModalListItem>
+            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+          </MenuModal>
+        )}
         <SubWrapper>
           <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
           <Content onClick={clickChannel}>
-            {channelType === CHANNELTYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
+            {channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
           </Content>
         </SubWrapper>
         <SubWrapper>
-          <PopupBox onClick={clickMore}>
+          <PopupBox onClick={toggleSectionOptionsModal}>
             <Button>፧</Button>
-            <Popup pick={sectionOptionsModalVisible} ref={ref}>
-              <PopupItem onClick={clickAddChannelModal}>Add Channels</PopupItem>
-              <PopupItem>Browse Channels</PopupItem>
-            </Popup>
           </PopupBox>
-          <PopupBox onClick={clickAdd}>
+          <PopupBox onClick={toggleAddChannelsModal}>
             <Button>+</Button>
-            <Popup pick={addChannelsModalVisible} ref={ref}>
-              <PopupItem onClick={clickAddChannelModal}>
-                {channelType === CHANNELTYPE.CHANNEL ? 'Add Channels' : '임시 유저 추가'}
-              </PopupItem>
-            </Popup>
           </PopupBox>
         </SubWrapper>
       </Container>

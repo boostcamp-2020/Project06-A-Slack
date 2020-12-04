@@ -5,6 +5,7 @@ const router = express.Router({ mergeParams: true });
 
 router.get('/', channelIdController.getChannel);
 router.post('/invite', channelIdController.inviteChannel);
+router.post('/topic', channelIdController.modifyTopic);
 router.post('/', channelIdController.modifyChannel);
 router.delete('/', channelIdController.deleteChannel);
 
