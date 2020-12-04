@@ -27,8 +27,21 @@ const commonStyle = css`
 
   input,
   button {
-    border: none;
     font-size: 1rem;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    &:link {
+      text-decoration: none;
+    }
+    &:visited {
+      text-decoration: none;
+    }
+    &:hover {
+      text-decoration: none;
+    }
   }
 `;
 

@@ -1,23 +1,24 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { openChannelList } from '@/store/modules/channel';
+/* eslint-disable @typescript-eslint/ban-types */
+import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
-import { useChannel } from '@/hooks/useChannel';
+import { flex } from '@/styles/mixin';
+import { CHANNEL_TYPE } from '@/utils/constants';
+import { DimModal, MenuModal } from '@/components';
+import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 
-const ChannelListHeaderWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+const Container = styled.div`
+  position: relative;
+  ${flex('center', 'space-between')}
   margin-bottom: 10px;
 `;
 
-const ButtonWrapper = styled.button`
-  color: #fff;
-  font-size: 20px;
+const PopupBox = styled.div`
+  position: relative;
+`;
+
+const Button = styled.button`
+  color: ${(props) => props.theme.color.white};
+  font-size: ${(props) => props.theme.size.m};
   background: transparent;
   border: none;
   &:hover {
@@ -27,33 +28,113 @@ const ButtonWrapper = styled.button`
 `;
 
 const SubWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${flex()}
 `;
 
-const ChannelListHeaderContent = styled.div`
+const Content = styled.div`
   color: #fff;
-  font-size: 20px;
+  font-size: 12px;
 `;
 
-const ChannelListBox = () => {
-  const dispatch = useDispatch();
-  const { channelListVisible } = useChannel();
+const ModalListItem = styled.div`
+  width: 100%;
+  padding: 0.4rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  &:hover {
+    color: white;
+    background-color: ${(props) => props.theme.color.blue1};
+  }
+`;
 
-  const onClick = () => dispatch(openChannelList());
+const ChannelListBox = ({
+  channelType,
+  channelListVisible,
+  setChannelListVisible,
+}: {
+  channelType: number;
+  setChannelListVisible: (fn: (state: boolean) => boolean) => void;
+  channelListVisible: boolean;
+}): ReactElement => {
+  const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
+  const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
+  const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
+  const [secret, setSecret] = useState(false);
 
+  const clickChannel = () => {
+    setChannelListVisible((state: boolean) => !state);
+  };
+
+  const toggleAddChannelsModal = () => {
+    setAddChannelsModalVisible((state) => !state);
+  };
+
+  const toggleSectionOptionsModal = () => {
+    setSectionOptionsModalVisible((state) => !state);
+  };
+
+  const clickCreateChannelModal = () => {
+    setCreateChannelModalVisible((state) => !state);
+  };
   return (
-    <ChannelListHeaderWrapper>
-      <SubWrapper>
-        <ButtonWrapper onClick={onClick}>{channelListVisible ? '▽' : '▷'}</ButtonWrapper>
-        <ChannelListHeaderContent onClick={onClick}>Channels</ChannelListHeaderContent>
-      </SubWrapper>
-      <SubWrapper>
-        <ButtonWrapper>፧</ButtonWrapper>
-        <ButtonWrapper>+</ButtonWrapper>
-      </SubWrapper>
-    </ChannelListHeaderWrapper>
+    <>
+      {createChannelModalVisible && (
+        <DimModal
+          header={<CreateChannelModalHeader secret={secret} />}
+          body={
+            <CreateChannelModalBody
+              secret={secret}
+              setCreateChannelModalVisible={setCreateChannelModalVisible}
+              setSecret={setSecret}
+            />
+          }
+          visible={createChannelModalVisible}
+          setVisible={setCreateChannelModalVisible}
+        />
+      )}
+      <Container>
+        {addChannelsModalVisible && (
+          <MenuModal
+            top="1.5rem"
+            right="-5rem"
+            visible={addChannelsModalVisible}
+            setVisible={setAddChannelsModalVisible}
+          >
+            <ModalListItem onClick={clickCreateChannelModal}>
+              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+            </ModalListItem>
+            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+          </MenuModal>
+        )}
+        {sectionOptionsModalVisible && (
+          <MenuModal
+            top="1.5rem"
+            right="-3.5rem"
+            visible={sectionOptionsModalVisible}
+            setVisible={setSectionOptionsModalVisible}
+          >
+            <ModalListItem onClick={clickCreateChannelModal}>
+              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+            </ModalListItem>
+            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+          </MenuModal>
+        )}
+        <SubWrapper>
+          <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
+          <Content onClick={clickChannel}>
+            {channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
+          </Content>
+        </SubWrapper>
+        <SubWrapper>
+          <PopupBox onClick={toggleSectionOptionsModal}>
+            <Button>፧</Button>
+          </PopupBox>
+          <PopupBox onClick={toggleAddChannelsModal}>
+            <Button>+</Button>
+          </PopupBox>
+        </SubWrapper>
+      </Container>
+    </>
   );
 };
 

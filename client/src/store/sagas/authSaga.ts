@@ -1,19 +1,22 @@
-import { put, all, call, take, fork, cancel, cancelled, takeEvery } from 'redux-saga/effects';
+import { put, all, call, take, fork, cancel } from 'redux-saga/effects';
 import {
   loginRequest,
   loginSuccess,
   loginFailure,
-  loginCancelled,
   logoutRequest,
   logoutSuccess,
   logoutFailure,
   LoginRequestPayload,
-} from '@/store/modules/auth';
+} from '@/store/modules/auth.slice';
 import { authService } from '@/services';
+import { encrypt } from '@/utils/utils';
 
 function* login({ email, pw }: LoginRequestPayload) {
   try {
-    const { data, status } = yield call(authService.login, { email, pw });
+    const { data, status } = yield call(authService.login, {
+      email: encrypt(email),
+      pw: encrypt(pw),
+    });
     const { accessToken, refreshToken, user } = data;
     if (status === 200) {
       localStorage.setItem('accessToken', accessToken);
@@ -25,10 +28,6 @@ function* login({ email, pw }: LoginRequestPayload) {
     }
   } catch (err) {
     yield put(loginFailure());
-  } finally {
-    if (yield cancelled()) {
-      yield put(loginCancelled());
-    }
   }
 }
 
@@ -64,7 +63,7 @@ function* loginFlow() {
 function* logoutFlow() {
   while (true) {
     yield take(logoutRequest);
-    yield fork(logout);
+    yield logout();
   }
 }
 

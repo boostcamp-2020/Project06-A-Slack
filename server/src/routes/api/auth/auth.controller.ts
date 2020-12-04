@@ -2,11 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import { IncomingForm } from 'formidable';
 import bcrypt from 'bcrypt';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
-import { verifyRequestData, verifyToken } from '@/utils/utils';
+import {
+  verifyRequestData,
+  verifyToken,
+  getRandomString,
+  encrypt,
+  decrypt,
+  sendEmail,
+} from '@/utils/utils';
 import { userModel } from '@/models';
 import config from '@/config';
 import { TIME, TOKEN_TYPE, ERROR_MESSAGE } from '@/utils/constants';
-import redisClient from '@/lib/redis';
+import isEmail from 'validator/lib/isEmail';
 
 /**
  * POST /api/auth/login
@@ -14,10 +21,19 @@ import redisClient from '@/lib/redis';
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, pw } = req.body;
   if (verifyRequestData([email, pw])) {
-    const [[user]] = await userModel.getUserByEmail({ email });
+    let decryptedEmail;
+    let decryptedPw;
+    try {
+      decryptedEmail = decrypt(email);
+      decryptedPw = decrypt(pw);
+    } catch (err) {
+      next({ message: ERROR_MESSAGE.ENCRYPT_DECRYPT_FAILED, status: 400 });
+    }
+
+    const [[user]] = await userModel.getUserByEmail({ email: decryptedEmail as string });
     if (user) {
       try {
-        const match = await bcrypt.compare(pw, user.pw);
+        const match = await bcrypt.compare(decryptedPw, user.pw);
         if (match) {
           // 비번 일치 할 때
           const { pw: userPw, phoneNumber, image, ...userInfo } = user;
@@ -25,9 +41,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
           const refreshToken = jwt.sign(userInfo, config.jwtRefreshSecret, {
             expiresIn: TIME.TWO_MONTH,
           });
-          // 해당 유저의 refresh token 설정
-          // await redisClient.set(user.id, refreshToken);
-          // await redisClient.expire(user.id, TIME.TWO_MONTH);
 
           res.json({ accessToken, refreshToken, user: userInfo });
           return;
@@ -48,14 +61,11 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 /**
  * POST /api/auth/logout
  */
-export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const logout = async (req: Request, res: Response): Promise<void> => {
   const { refreshToken } = req.body;
   if (verifyRequestData([refreshToken])) {
-    /* 유저id key 값으로 저장된 refresh token을 삭제 */
     try {
-      const decodedRefreshToken = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
-      const { id } = decodedRefreshToken;
-      // await redisClient.del(id);
+      await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
     } catch (err) {
       console.error(err);
     }
@@ -112,13 +122,6 @@ export const refreshAuthToken = async (
       const decoded = await verifyToken(refreshToken, TOKEN_TYPE.REFRESH);
       const { iat, exp, ...claims } = decoded;
 
-      /* 유저 refresh 토큰 일치 여부 확인 */
-      // const result = await redisClient.get(claims.id);
-      // if (result !== refreshToken) {
-      //   res.status(401).json({ message: ERROR_MESSAGE.INVALID_TOKEN });
-      //   return;
-      // }
-
       /* refresh 검증되면 새로운 access 토큰 생성 */
       const newAccessToken = jwt.sign(claims, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
 
@@ -134,4 +137,36 @@ export const refreshAuthToken = async (
     }
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
+
+/**
+ * POST /api/auth/email/verify
+ */
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const code = getRandomString(6);
+  const { email: userEmail } = req.body;
+  const content = `인증 코드 : ${code.slice(0, 3)}-${code.slice(3, 6)}`;
+
+  if (!isEmail(userEmail)) {
+    next({ message: ERROR_MESSAGE.INVALID_EMAIL, status: 400 });
+    return;
+  }
+
+  try {
+    await sendEmail(userEmail, content);
+  } catch (err) {
+    next({ message: ERROR_MESSAGE.SEND_EMAIL_FAILED, status: 500 });
+    return;
+  }
+
+  try {
+    const verifyCode = encrypt(code);
+    res.json({ verifyCode });
+  } catch (err) {
+    next({ message: ERROR_MESSAGE.CODE_GENERATION_FAILED, status: 500 });
+  }
 };

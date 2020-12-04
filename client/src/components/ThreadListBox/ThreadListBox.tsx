@@ -1,26 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import { INPUT_BOX_TYPE } from '@/utils/constants';
+import { ThreadInputBox } from '@/components/common';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 import ThreadList from './ThreadList/ThreadList';
-import ThreadInputBox from './ThreadInputBox/ThreadInputBox';
 
-const StyledThreadListBox = styled.div`
+const Container = styled.div`
   background-color: pink;
+  width: 100%;
 `;
 
 const ThreadListBox = () => {
-  const channel = {
-    id: 1,
-    name: 'slack-클론-구현팀',
-  };
-
   return (
-    <StyledThreadListBox>
-      <div>BoxTop</div>
+    <Container>
       <ThreadListHeader />
       <ThreadList />
-      <ThreadInputBox />
-    </StyledThreadListBox>
+      <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.THREAD} />
+    </Container>
   );
 };
 

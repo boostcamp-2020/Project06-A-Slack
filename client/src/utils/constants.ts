@@ -1,6 +1,10 @@
-export const TIME = {
+export const TIME_SEC = {
   FIVE_MINUTE: 60 * 5,
   TWO_MONTH: 60 * 60 * 24 * 60,
+};
+
+export const TIME_MILLIS = {
+  FIVE_MINUTE: 1000 * 60 * 5,
 };
 
 export const TOKEN_TYPE = {
@@ -15,4 +19,26 @@ export const ERROR_MESSAGE = {
   WRONG_USER: '올바르지 않는 유저 아이디',
   BLACKLIST_TOKEN: '블랙리스트 토큰',
   LOGIN_REQUIRED: '로그인 필요',
+};
+
+export const USER_DEFAULT_PROFILE_URL =
+  'https://user-images.githubusercontent.com/61396464/100866119-8c399c00-34db-11eb-894f-3551297f5293.png';
+
+export const CHANNEL_TYPE = {
+  CHANNEL: 1,
+  DM: 2,
+};
+
+export const INPUT_BOX_TYPE = {
+  THREAD: 'thread',
+  SUBTHREAD: 'subThread',
+  EDIT: 'edit',
+};
+
+export const SOCKET_EVENT_TYPE = {
+  CONNECT: 'connect',
+  DISCONNECT: 'disconnect',
+  MESSAGE: 'message',
+  ENTER_ROOM: 'enter_room',
+  LEAVE_ROOM: 'leave_room',
 };

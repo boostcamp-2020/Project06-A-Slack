@@ -1,29 +1,42 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectThread, getThreadRequest } from '@/store/modules/thread';
+import { useDispatch } from 'react-redux';
+import { getThreadRequest } from '@/store/modules/thread.slice';
 import styled from 'styled-components';
 import { Thread } from '@/types';
-import ThreadItem from './ThreadItem/ThreadItem';
+import { ThreadItem } from '@/components';
+import { useThread } from '@/hooks';
+import { useParams } from 'react-router-dom';
+import { isNumberTypeValue } from '@/utils/utils';
 
-const StyledThreadList = styled.div`
+const Container = styled.div`
   background-color: orange;
 `;
 
+interface RightSideParams {
+  channelId: string | undefined;
+}
+
 const ThreadList = () => {
-  const { threadList } = useSelector(selectThread);
+  const { channelId }: RightSideParams = useParams();
+  const { threadList } = useThread();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getThreadRequest());
-  }, [dispatch]);
+    if (isNumberTypeValue(channelId)) {
+      dispatch(getThreadRequest({ channelId: Number(channelId) }));
+    }
+  }, [dispatch, channelId]);
 
   return (
-    <StyledThreadList>
-      <div>ThreadListTop</div>
-      {threadList?.map((thread: Thread) => (
-        <ThreadItem key={thread.id} thread={thread} />
+    <Container>
+      {threadList?.map((thread: Thread, index: number) => (
+        <ThreadItem
+          key={thread.id}
+          thread={thread}
+          prevThreadUserId={threadList[index - 1]?.userId}
+        />
       ))}
-    </StyledThreadList>
+    </Container>
   );
 };
 

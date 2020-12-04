@@ -4,6 +4,7 @@ declare module 'styled-components' {
   export interface DefaultTheme {
     boxShadow: {
       skyblue: string;
+      darkgray: string;
     };
 
     color: {
@@ -24,6 +25,29 @@ declare module 'styled-components' {
       gray4: string;
       gray5: string;
       gray6: string;
+
+      lightGray1: string;
+      lightGray2: string;
+      lightGray3: string;
+
+      purple1: string;
+      purple2: string;
+      purple3: string;
+
+      white: string;
+      semiWhite: string;
+      modalWhite: string;
+
+      green1: string;
+      green2: string;
+
+      blue1: string;
+      blue2: string;
+      blue3: string;
+
+      yellow: string;
+      warningRed: string;
+      onConnect: string;
     };
 
     size: {

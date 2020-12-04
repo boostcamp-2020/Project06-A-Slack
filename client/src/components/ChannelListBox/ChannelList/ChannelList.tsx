@@ -1,43 +1,37 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadChannelsRequest } from '@/store/modules/channel';
-import { useChannel } from '@/hooks/useChannel';
-import ChannelItem from './Channel/ChannelItem';
+import { loadMyChannelsRequest } from '@/store/modules/channel.slice';
+import { useChannel, useAuth } from '@/hooks';
+import { Channel } from '@/types';
+import ChannelItem from './ChannelItem/ChannelItem';
 
-interface ChannelItem {
-  id: number;
-  ownerId: number;
-  name: string;
-  channelType: string;
-  isPublic: number;
-  memberCount: number;
-  description: string;
-}
-
-const ChannelList = () => {
+const ChannelList = ({
+  channelType,
+  channelListVisible,
+}: {
+  channelType: number;
+  channelListVisible: boolean;
+}): ReactElement => {
   const dispatch = useDispatch();
-  const { channelList, channelListVisible, current } = useChannel();
-
-  const callAPI = () => dispatch(loadChannelsRequest());
+  const { myChannelList, current } = useChannel();
+  const { userId } = useAuth();
 
   useEffect(() => {
-    callAPI();
-  }, [dispatch]);
+    dispatch(loadMyChannelsRequest(userId));
+  }, [dispatch, userId]);
 
   return (
     <>
-      {channelList?.map((channel: ChannelItem, idx: number) =>
-        !channelListVisible ? (
-          current?.id === channel.id ? (
-            <ChannelItem idx={idx} key={channel.id} />
+      {myChannelList?.map(
+        (channel: Channel, idx: number) =>
+          channelType === channel.channelType &&
+          (!channelListVisible ? (
+            current?.id === channel.id && <ChannelItem idx={idx} key={channel.id} />
           ) : (
-            ''
-          )
-        ) : (
-          <ChannelItem idx={idx} key={channel.id} />
-        ),
+            <ChannelItem idx={idx} key={channel.id} />
+          )),
       )}
     </>
   );

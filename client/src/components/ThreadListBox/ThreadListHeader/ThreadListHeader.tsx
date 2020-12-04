@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
-import { ChannelUsers } from '@/types/channelUsers';
-import { openDetail } from '@/store/modules/channel';
-import { useDispatch } from 'react-redux';
+import { CHANNEL_TYPE } from '@/utils/constants';
+import { JoinUser } from '@/types';
+import { Link, useParams } from 'react-router-dom';
+import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel.slice';
+import { useUser } from '@/hooks';
+import { DimModal } from '@/components/common';
+import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
+import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
+import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
 
-const ThreadListHeaderBox = styled.div`
-  max-width: 80%;
+const Container = styled.div`
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,23 +22,23 @@ const ThreadListHeaderBox = styled.div`
   border: 1px solid black;
 `;
 
-const ThreadListHeaderLeft = styled.div`
+const Left = styled.div`
   border: 1px solid black;
 `;
 
-const ThreadListHeaderLeftTitle = styled.div`
+const LeftTitle = styled.div`
   font-size: 20px;
   border: 1px solid black;
 `;
 
-const ThreadListHeaderLeftButton = styled.button`
+const LeftButton = styled.button`
   background: none;
   border: none;
   outline: none;
   font-size: 12px;
 `;
 
-const ThraedListHeaderLeftButtonBox = styled.div`
+const LeftButtonBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -40,7 +47,7 @@ const ThraedListHeaderLeftButtonBox = styled.div`
   font-size: 16px;
 `;
 
-const ThreadListHeaderRight = styled.div`
+const Right = styled.div`
   width: 200px;
   height: 60px;
   display: flex;
@@ -49,57 +56,114 @@ const ThreadListHeaderRight = styled.div`
   border: 1px solid black;
 `;
 
-const ThreadListHeaderRightUserBox = styled.div`
+const RightUserBox = styled.div`
   display: flex;
   align-items: center;
   border: 1px solid black;
 `;
 
-const ThreadListHeaderRightUser = styled.div`
+const RightUser = styled.img`
   display: block;
   width: 30px;
   height: 30px;
   border: 1px solid black;
-  background: red;
 `;
 
-const ThreadListHeaderRightButton = styled.button`
+const RightButton = styled.button`
   background: none;
   border: none;
   outline: none;
   font-size: 30px;
 `;
 
-const ThreadListHeader = () => {
-  const { current, users } = useChannel();
-  const dispatch = useDispatch();
+interface RightSideParams {
+  channelId: string;
+}
 
-  const onClick = (e: React.MouseEvent<HTMLElement>) => {
-    dispatch(openDetail());
+const ThreadListHeader = (): ReactElement | any => {
+  const dispatch = useDispatch();
+  const { current, users } = useChannel();
+  const { userInfo } = useUser();
+  const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
+  const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
+  const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
+  const { channelId }: RightSideParams = useParams();
+
+  useEffect(() => {
+    dispatch(loadChannelRequest(channelId));
+    if (userInfo) {
+      dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo.id }));
+    }
+  }, [userInfo]);
+
+  const clickShowUsersModal = () => {
+    setShowUsersModalVisible((state) => !state);
   };
 
-  return current && users ? (
-    <ThreadListHeaderBox>
-      <ThreadListHeaderLeft>
-        {current.isPublic} {current.name}
-        <ThraedListHeaderLeftButtonBox>
-          <ThreadListHeaderLeftButton>핀</ThreadListHeaderLeftButton>
-          <ThreadListHeaderLeftButton>Add Topic</ThreadListHeaderLeftButton>
-        </ThraedListHeaderLeftButtonBox>
-      </ThreadListHeaderLeft>
-      <ThreadListHeaderRight>
-        <ThreadListHeaderRightUserBox>
-          {makeUserIcons(users).map((icon: ChannelUsers) => (
-            <ThreadListHeaderRightUser key={icon.userId}>{icon.userId}</ThreadListHeaderRightUser>
-          ))}
-          {users?.length}
-        </ThreadListHeaderRightUserBox>
-        <ThreadListHeaderRightButton>O</ThreadListHeaderRightButton>
-        <ThreadListHeaderRightButton onClick={onClick}>i</ThreadListHeaderRightButton>
-      </ThreadListHeaderRight>
-    </ThreadListHeaderBox>
-  ) : (
-    <></>
+  const clickAddUsersModal = () => {
+    setAddUsersModalVisible((state) => !state);
+  };
+
+  const clickAddTopicModal = () => {
+    setAddTopicModalVisible((state) => !state);
+  };
+
+  return (
+    <>
+      {addUsersModalVisible && (
+        <DimModal
+          header={<AddUsersModalHeader />}
+          body={<AddUsersModalBody setAddUsersModalVisble={clickAddUsersModal} />}
+          visible={addUsersModalVisible}
+          setVisible={clickAddUsersModal}
+        />
+      )}
+      {addTopicModalVisible && (
+        <DimModal
+          header={<AddTopicModalHeader />}
+          body={<AddTopicModalBody setAddTopicModalVisible={clickAddTopicModal} />}
+          visible={addTopicModalVisible}
+          setVisible={clickAddTopicModal}
+        />
+      )}
+      {showUsersModalVisible && (
+        <DimModal
+          header={<ShowUsersModalHeader />}
+          body={<ShowUsersModalBody setShowUsersModalVisible={clickShowUsersModal} />}
+          visible={showUsersModalVisible}
+          setVisible={clickShowUsersModal}
+        />
+      )}
+      <Container>
+        <Left>
+          <LeftTitle>
+            {current?.isPublic} {current?.name}
+          </LeftTitle>
+          {current?.channelType === CHANNEL_TYPE.CHANNEL && (
+            <LeftButtonBox>
+              <LeftButton>핀</LeftButton>
+              <LeftButton onClick={clickAddTopicModal}>
+                {current?.topic === null ? 'Add a topic' : current?.topic}
+              </LeftButton>
+            </LeftButtonBox>
+          )}
+        </Left>
+        <Right>
+          {current?.channelType === CHANNEL_TYPE.CHANNEL && (
+            <RightUserBox onClick={clickShowUsersModal}>
+              {makeUserIcons(users).map((icon: JoinUser) => (
+                <RightUser key={icon.userId} src={icon.image} />
+              ))}
+              {users?.length}
+            </RightUserBox>
+          )}
+          <RightButton onClick={clickAddUsersModal}>O</RightButton>
+          <Link to={`/client/1/${channelId}/detail`}>
+            <RightButton>i</RightButton>
+          </Link>
+        </Right>
+      </Container>
+    </>
   );
 };
 
