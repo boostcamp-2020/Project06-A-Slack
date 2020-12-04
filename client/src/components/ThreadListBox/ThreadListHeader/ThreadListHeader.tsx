@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useChannel } from '@/hooks/useChannel';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
-import { CHANNELTYPE } from '@/utils/constants';
+import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
 import { useParams } from 'react-router-dom';
 import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel';
@@ -143,15 +143,15 @@ const ThreadListHeader = (): ReactElement | any => {
           <LeftTitle>
             {current?.isPublic} {current?.name}
           </LeftTitle>
-          {current?.channelType === CHANNELTYPE.CHANNEL && (
+          {current?.channelType === CHANNEL_TYPE.CHANNEL && (
             <LeftButtonBox>
               <LeftButton>핀</LeftButton>
-              <LeftButton onClick={clickAddTopicModal}>{current.topic}</LeftButton>
+              <LeftButton onClick={clickAddTopicModal}>{current?.topic}</LeftButton>
             </LeftButtonBox>
           )}
         </Left>
         <Right>
-          {current?.channelType === CHANNELTYPE.CHANNEL && (
+          {current?.channelType === CHANNEL_TYPE.CHANNEL && (
             <RightUserBox onClick={clickShowUsersModal}>
               {makeUserIcons(users).map((icon: JoinUser) => (
                 <RightUser key={icon.userId} src={icon.image} />

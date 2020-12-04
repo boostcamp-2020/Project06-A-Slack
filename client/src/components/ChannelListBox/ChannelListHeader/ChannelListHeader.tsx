@@ -3,7 +3,7 @@ import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useOnClickOutside } from '@/hooks';
-import { CHANNELTYPE } from '@/utils/constants';
+import { CHANNEL_TYPE } from '@/utils/constants';
 import { DimModal, MenuModal } from '@/components/common';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 
@@ -106,9 +106,9 @@ const ChannelListBox = ({
             setVisible={setAddChannelsModalVisible}
           >
             <ModalListItem onClick={clickCreateChannelModal}>
-              {channelType === CHANNELTYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
             </ModalListItem>
-            <ModalListItem>{channelType === CHANNELTYPE.CHANNEL && '채널 검색'}</ModalListItem>
+            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
           </MenuModal>
         )}
         {sectionOptionsModalVisible && (
@@ -119,15 +119,15 @@ const ChannelListBox = ({
             setVisible={setSectionOptionsModalVisible}
           >
             <ModalListItem onClick={clickCreateChannelModal}>
-              {channelType === CHANNELTYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
             </ModalListItem>
-            <ModalListItem>{channelType === CHANNELTYPE.CHANNEL && '채널 검색'}</ModalListItem>
+            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
           </MenuModal>
         )}
         <SubWrapper>
           <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
           <Content onClick={clickChannel}>
-            {channelType === CHANNELTYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
+            {channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
           </Content>
         </SubWrapper>
         <SubWrapper>

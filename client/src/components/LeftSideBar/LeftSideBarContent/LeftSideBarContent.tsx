@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import ChannelListBox from '@/components/ChannelListBox/ChannelListBox';
-import { CHANNELTYPE } from '@/utils/constants';
+import { CHANNEL_TYPE } from '@/utils/constants';
 
 const Container = styled.div`
   /* overflow-y: scroll; */
@@ -10,8 +10,8 @@ const Container = styled.div`
 const LeftSideBarContent = (): ReactElement => {
   return (
     <Container>
-      <ChannelListBox channelType={CHANNELTYPE.CHANNEL} />
-      <ChannelListBox channelType={CHANNELTYPE.DM} />
+      <ChannelListBox channelType={CHANNEL_TYPE.CHANNEL} />
+      <ChannelListBox channelType={CHANNEL_TYPE.DM} />
     </Container>
   );
 };
