@@ -2,14 +2,9 @@
 import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { useOnClickOutside } from '@/hooks';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { DimModal, MenuModal } from '@/components/common';
+import { DimModal, MenuModal } from '@/components';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
-
-interface Props {
-  pick: boolean;
-}
 
 const Container = styled.div`
   position: relative;
