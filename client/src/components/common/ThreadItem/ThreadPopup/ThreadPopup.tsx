@@ -60,7 +60,7 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
         {menuModalVisible && (
           <MenuModal
             top="1rem"
-            right="0"
+            right="1rem"
             visible={menuModalVisible}
             setVisible={setMenuModalVisible}
           >
