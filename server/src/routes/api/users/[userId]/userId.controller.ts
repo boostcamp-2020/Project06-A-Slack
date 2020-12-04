@@ -92,7 +92,7 @@ export const modifyUser = async (
           setDefault: +setDefault,
         });
 
-        if (previousFileName !== USER_DEFAULT_PROFILE_URL) {
+        if (previousFileName !== USER_DEFAULT_PROFILE_URL && previousFileName) {
           const [, filePath] = String(previousFileName).split(prefix);
           try {
             const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
