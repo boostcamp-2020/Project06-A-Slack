@@ -7,13 +7,26 @@ import { Link } from 'react-router-dom';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import { useChannelState } from '@/hooks';
 
-const Reply = styled.button`
-  ${flex('center', 'flext-start')};
+const ReplyBox = styled.div`
+  ${flex('center', 'flex-start')};
+  margin-top: 0.4rem;
 `;
 
 const Profile = styled.img`
-  height: ${(props) => props.theme.size.xxxl};
-  width: ${(props) => props.theme.size.xxxl};
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.3rem;
+  border-radius: 5px;
+  object-fit: cover;
+  cursor: pointer;
+`;
+
+const ReplyCount = styled.span`
+  font-weight: bold;
+  font-size: 0.8rem;
+  padding-top: 0.2rem;
+  margin-left: 0.2rem;
+  color: ${(props) => props.theme.color.blue1};
 `;
 
 interface ReplyButtonProps {
@@ -36,7 +49,7 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
 
   return (
     <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
-      <Reply id={String(thread.id)}>
+      <ReplyBox id={String(thread.id)}>
         {getDisplayReplyData().map((el) => {
           const { subThreadUserId, subThreadProfile } = el;
           return (
@@ -47,8 +60,8 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
             />
           );
         })}
-        {thread.subCount}replies
-      </Reply>
+        <ReplyCount>{thread.subCount} replies</ReplyCount>
+      </ReplyBox>
     </Link>
   );
 };
