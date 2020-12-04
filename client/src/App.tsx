@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/verify" component={EmailVerifyPage} />
           <Route path="/signup" component={SignupPage} />
           <Route
-            path="/client/1/:channelId(\d+)?/:rightSideType(\d+)?/:threadId(\d+)?"
+            path="/client/1/:channelId(\d+)?/:rightSideType?/:threadId(\d+)?"
             exact
             component={WorkSpacePage}
           />
