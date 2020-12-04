@@ -58,7 +58,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   const { channelId, current } = useChannel();
   const dispatch = useDispatch();
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
 
@@ -76,7 +76,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
 
   return (
     <>
-      <TextArea value={content} onChange={onChange} />
+      <TextArea value={content} onChange={changeContent} />
       <ButtonBox>
         <CancelButton onClick={clickCancel}>Cancel</CancelButton>
         <SubmitButton onClick={clickSubmit}>Set Topic</SubmitButton>
