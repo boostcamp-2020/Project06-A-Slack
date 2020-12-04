@@ -34,7 +34,6 @@ const Popup = styled.div`
   right: 1rem;
   top: -0.75rem;
   border-radius: 5px;
-  border: 1.5px solid ${(props) => props.theme.color.lightGray1};
   ${Container}:hover & {
     display: flex;
   }

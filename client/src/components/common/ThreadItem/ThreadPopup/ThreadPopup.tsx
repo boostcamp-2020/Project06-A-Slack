@@ -11,6 +11,7 @@ const Container = styled.div`
   ${flex()};
   border-radius: 5px;
   background-color: white;
+  border: 1.5px solid ${(props) => props.theme.color.lightGray1};
   button {
     font-size: ${(props) => props.theme.size.xs};
   }
