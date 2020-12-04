@@ -1,7 +1,7 @@
 import React, { ReactElement, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { modifyTopicRequest, setCurrent } from '@/store/modules/channel';
+import { modifyTopicRequest, setCurrent } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
 import { useChannel } from '@/hooks';
 

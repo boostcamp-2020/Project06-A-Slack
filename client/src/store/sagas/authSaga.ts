@@ -7,7 +7,7 @@ import {
   logoutSuccess,
   logoutFailure,
   LoginRequestPayload,
-} from '@/store/modules/auth';
+} from '@/store/modules/auth.slice';
 import { authService } from '@/services';
 import { encrypt } from '@/utils/utils';
 

@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { ReactElement, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadMyChannelsRequest } from '@/store/modules/channel';
+import { loadMyChannelsRequest } from '@/store/modules/channel.slice';
 import { useChannel, useAuth } from '@/hooks';
 import { Channel } from '@/types';
 import ChannelItem from './ChannelItem/ChannelItem';

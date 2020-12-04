@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { loadChannelRequest } from '@/store/modules/channel';
+import { loadChannelRequest } from '@/store/modules/channel.slice';
 import styled from 'styled-components';
 import { useJoinChannelList, useChannel, useAuth } from '@/hooks';
 import { Link } from 'react-router-dom';

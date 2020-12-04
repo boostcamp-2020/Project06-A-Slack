@@ -3,7 +3,7 @@
 import React, { ReactElement, useRef, useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { createChannelRequest } from '@/store/modules/channel';
+import { createChannelRequest } from '@/store/modules/channel.slice';
 import { useAuth, useUser, useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 

@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import channelSlice, { CHANNEL } from './channel';
-import authSlice, { AUTH } from './auth';
-import threadSlice, { THREAD } from './thread';
-import subThreadSlice, { SUBTHREAD } from './subThread';
-import userSlice, { USER } from './user';
-import signupSlice, { SIGNUP } from './signup';
-import socketSlice, { SOCKET } from './socket';
+import channelSlice, { CHANNEL } from './channel.slice';
+import authSlice, { AUTH } from './auth.slice';
+import threadSlice, { THREAD } from './thread.slice';
+import subThreadSlice, { SUBTHREAD } from './subThread.slice';
+import userSlice, { USER } from './user.slice';
+import signupSlice, { SIGNUP } from './signup.slice';
+import socketSlice, { SOCKET } from './socket.slice';
 
 const rootReducer = combineReducers({
   [CHANNEL]: channelSlice,

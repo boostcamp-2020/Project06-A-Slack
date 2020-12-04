@@ -4,7 +4,7 @@ import {
   getSubThreadSuccess,
   getSubThreadFailure,
   GetSubThreadRequestPayload,
-} from '@/store/modules/subThread';
+} from '@/store/modules/subThread.slice';
 import { subThreadService } from '@/services/subThread.service';
 
 function* getSubThreadList({ parentId }: GetSubThreadRequestPayload) {
