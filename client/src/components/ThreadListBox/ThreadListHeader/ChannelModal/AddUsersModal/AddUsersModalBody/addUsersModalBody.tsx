@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { joinChannelRequset } from '@/store/modules/channel';
-import { getUsersRequest } from '@/store/modules/user';
+import { joinChannelRequset } from '@/store/modules/channel.slice';
+import { getUsersRequest } from '@/store/modules/user.slice';
 import { useUser } from '@/hooks';
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';

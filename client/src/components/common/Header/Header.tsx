@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { getUserRequest } from '@/store/modules/user';
+import { getUserRequest } from '@/store/modules/user.slice';
 import { flex } from '@/styles/mixin';
 import { useAuth, useUser } from '@/hooks';
-import { logoutRequest } from '@/store/modules/auth';
+import { logoutRequest } from '@/store/modules/auth.slice';
 import { DimModal, UserStateIcon, MenuModal } from '@/components';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 

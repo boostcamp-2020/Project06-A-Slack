@@ -4,6 +4,7 @@ import { AuthToken } from '@/types';
 import { TOKEN_TYPE } from '@/utils/constants';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import smtpTransport from 'nodemailer-smtp-transport';
 
 const CIPHER_ALGORITHM = process.env.CIPHER_ALGORITHM as string;
 const CIPHER_KEY = process.env.CIPHER_KEY as string;
@@ -52,13 +53,18 @@ export const decrypt = (text: string): string => {
 
 export const sendEmail = (targetEmail: string, content: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const transporter = nodemailer.createTransport({
-      service: 'naver',
-      auth: {
-        user: config.NODE_MAILER.email,
-        pass: config.NODE_MAILER.pw,
-      },
-    });
+    const transporter = nodemailer.createTransport(
+      smtpTransport({
+        tls: {
+          rejectUnauthorized: false,
+        },
+        service: 'naver',
+        auth: {
+          user: config.NODE_MAILER.email,
+          pass: config.NODE_MAILER.pw,
+        },
+      }),
+    );
     const mailOptions = {
       from: `Slack_06<${config.NODE_MAILER.email}>`,
       to: targetEmail,

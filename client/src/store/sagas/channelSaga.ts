@@ -26,7 +26,7 @@ import {
   joinChannelFailure,
   modifyLastChannelRequestPayload,
   modifyTopicChannelRequestPayload,
-} from '../modules/channel';
+} from '../modules/channel.slice';
 
 function* loadChannels() {
   try {

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
 import isEmail from 'validator/es/lib/isEmail';
-import { loginRequest } from '@/store/modules/auth';
+import { loginRequest } from '@/store/modules/auth.slice';
 import {
   FormButton as LoginButton,
   FormInput as Input,

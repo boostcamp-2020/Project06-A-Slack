@@ -4,7 +4,7 @@ import {
   socketConnectSuccess,
   socketConnectFailure,
   sendMessageRequest,
-} from '@/store/modules/socket';
+} from '@/store/modules/socket.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';

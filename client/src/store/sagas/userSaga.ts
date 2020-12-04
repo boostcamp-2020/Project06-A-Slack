@@ -11,7 +11,7 @@ import {
   getUsersRequest,
   getUsersSuccess,
   getUsersFailure,
-} from '@/store/modules/user';
+} from '@/store/modules/user.slice';
 import { userService } from '@/services';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 

@@ -17,7 +17,7 @@ export const getSubThread = async (
     return;
   }
   try {
-    const [parentThread] = await threadModel.getParentThread(Number(threadId));
+    const [parentThread] = await threadModel.getThread(Number(threadId));
     const [subThreadList] = await threadModel.getSubThreadList(Number(threadId));
     res.json({ parentThread, subThreadList });
   } catch (err) {

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSubThread } from '@/hooks';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getSubThreadRequest } from '@/store/modules/subThread';
+import { getSubThreadRequest } from '@/store/modules/subThread.slice';
 import { isNumberTypeValue } from '@/utils/utils';
 import { ThreadInputBox } from '@/components/common';
 import { INPUT_BOX_TYPE } from '@/utils/constants';

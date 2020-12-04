@@ -6,7 +6,7 @@ import {
   verifyEmailSendFailure,
   removeVerifyCodeAndEmail,
   VerifyEmailSendRequestPayload,
-} from '@/store/modules/signup';
+} from '@/store/modules/signup.slice';
 import { authService } from '@/services';
 import { TIME_MILLIS } from '@/utils/constants';
 
