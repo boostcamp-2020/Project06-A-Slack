@@ -1,4 +1,4 @@
-# Project06 A Slack
+# Slack 클론
 
 ## 🎞프로젝트 소개
 팀 협업도구로 유명한 슬랙을 구현하는 프로젝트 입니다.  
@@ -14,6 +14,7 @@ TypeScript, React, Redux (Toolkit, Saga), Styled-Components, Axios
 ### BE
 TypeScript, Express, Swagger, SocketIO, Mysql, NodeMailer, JsonWebToken
 
+## 팀명
 
 ## 팀원 💁🏻‍♀️💁🏻‍♂️
 
