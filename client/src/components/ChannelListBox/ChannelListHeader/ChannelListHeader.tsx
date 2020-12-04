@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, ReactElement, useRef } from 'react';
+import React, { useState, ReactElement } from 'react';
 import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
@@ -102,7 +101,7 @@ const ChannelListBox = ({
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
 
-  const toggleChannelList = (e: React.MouseEvent<HTMLDivElement>) => {
+  const toggleChannelList = () => {
     setChannelListVisible((state: boolean) => !state);
   };
 
@@ -116,7 +115,7 @@ const ChannelListBox = ({
     setSectionOptionsModalVisible((state) => !state);
   };
 
-  const clickCreateChannelModal = (e: React.MouseEvent<HTMLDivElement>) => {
+  const clickCreateChannelModal = () => {
     setCreateChannelModalVisible(true);
   };
   return (
