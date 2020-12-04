@@ -6,3 +6,5 @@ export { default as ArrowDownIcon } from './ArrowDownIcon/ArrowDownIcon';
 export { default as ArrowRightIcon } from './ArrowRightIcon/ArrowRightIcon';
 export { default as PlusIcon } from './PlusIcon/PlusIcon';
 export { default as DotIcon } from './DotIcon/DotIcon';
+export { default as LockIcon } from './LockIcon/LockIcon';
+export { default as PoundIcon } from './PoundIcon/PoundIcon';
