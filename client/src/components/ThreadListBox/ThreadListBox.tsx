@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { INPUT_BOX_TYPE } from '@/utils/constants';
-import { ThreadInputBox } from '@/components/common';
+import { ThreadInputBox } from '@/components';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 import ThreadList from './ThreadList/ThreadList';
 

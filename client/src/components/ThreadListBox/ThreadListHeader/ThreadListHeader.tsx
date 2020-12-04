@@ -1,14 +1,13 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useChannel } from '@/hooks/useChannel';
+import { useChannelState, useUserState } from '@/hooks';
 import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
 import { Link, useParams } from 'react-router-dom';
 import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel.slice';
-import { useUser } from '@/hooks';
-import { DimModal } from '@/components/common';
+import { DimModal } from '@/components';
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
@@ -82,8 +81,8 @@ interface RightSideParams {
 
 const ThreadListHeader = () => {
   const dispatch = useDispatch();
-  const { current, users } = useChannel();
-  const { userInfo } = useUser();
+  const { current, users } = useChannelState();
+  const { userInfo } = useUserState();
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);

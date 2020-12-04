@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useSubThread } from '@/hooks';
+import { useSubThreadState } from '@/hooks';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getSubThreadRequest } from '@/store/modules/subThread.slice';
@@ -24,7 +24,7 @@ interface RightSideParams {
 const SubThreadListBox: React.FC = () => {
   const dispatch = useDispatch();
   const { threadId }: RightSideParams = useParams();
-  const { parentThread, subThreadList } = useSubThread();
+  const { parentThread, subThreadList } = useSubThreadState();
   const history = useHistory();
 
   useEffect(() => {
