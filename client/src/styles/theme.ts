@@ -51,6 +51,7 @@ const theme: DefaultTheme = {
 
     channelItemColor: '#bcabbc',
     channelBorder: 'rgb(82,38,83)',
+    threadHover: '#faf9f9',
   },
   size: {
     xxxs: calcRem(8),

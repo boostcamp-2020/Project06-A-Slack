@@ -52,6 +52,7 @@ declare module 'styled-components' {
 
       channelItemColor: string;
       channelBorder: string;
+      threadHover: string;
     };
 
     size: {
