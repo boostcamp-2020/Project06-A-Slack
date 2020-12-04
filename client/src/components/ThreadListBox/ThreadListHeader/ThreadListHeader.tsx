@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { makeUserIcons } from '@/utils/utils';
 import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel';
 import { useUser } from '@/hooks';
 import { DimModal } from '@/components/common';
@@ -96,10 +96,6 @@ const ThreadListHeader = (): ReactElement | any => {
     }
   }, [userInfo]);
 
-  const clickDetail = () => {
-    // LinkTo 작업
-  };
-
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
   };
@@ -162,7 +158,9 @@ const ThreadListHeader = (): ReactElement | any => {
             </RightUserBox>
           )}
           <RightButton onClick={clickAddUsersModal}>O</RightButton>
-          <RightButton onClick={clickDetail}>i</RightButton>
+          <Link to={`/client/1/${channelId}/detail`}>
+            <RightButton>i</RightButton>
+          </Link>
         </Right>
       </Container>
     </>
