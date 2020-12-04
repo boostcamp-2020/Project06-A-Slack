@@ -50,6 +50,7 @@ declare module 'styled-components' {
       onConnect: string;
 
       channelItemColor: string;
+      channelBorder: string;
     };
 
     size: {

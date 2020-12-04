@@ -8,6 +8,8 @@ const Container = styled.div`
   padding: 15px;
   background: ${(props) => props.theme.color.purple2};
   ${flex('center', 'space-between')}
+  border-top: 1px solid ${(props) => props.theme.color.channelBorder};
+  border-bottom: 1px solid ${(props) => props.theme.color.channelBorder};
 `;
 
 const Title = styled.div`
