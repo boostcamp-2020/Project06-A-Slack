@@ -92,14 +92,14 @@ export const modifyUser = async (
           setDefault: +setDefault,
         });
 
-        if (previousFileName !== USER_DEFAULT_PROFILE_URL && previousFileName) {
-          const [, filePath] = String(previousFileName).split(prefix);
-          try {
-            const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
-          } catch (error) {
-            console.log('file delete error', error.message);
-          }
-        }
+        // if (previousFileName !== USER_DEFAULT_PROFILE_URL && previousFileName) {
+        //   const [, filePath] = String(previousFileName).split(prefix);
+        //   try {
+        //     const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
+        //   } catch (error) {
+        //     console.log('file delete error', error.message);
+        //   }
+        // }
         res.json({ image: imgUrl });
         return;
       }
