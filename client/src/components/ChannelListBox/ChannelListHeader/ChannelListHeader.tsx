@@ -8,7 +8,8 @@ import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChanne
 const Container = styled.div`
   position: relative;
   ${flex('center', 'space-between')}
-  margin-bottom: 10px;
+  margin-bottom: 0.65rem;
+  cursor: pointer;
 `;
 
 const PopupBox = styled.div`
@@ -33,6 +34,7 @@ const OptionIcon = styled.button`
     background: rgba(255, 255, 255, 0.15);
   }
   outline: 0;
+  cursor: pointer;
 `;
 
 const DotIconBox = styled(OptionIcon)``;
