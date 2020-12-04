@@ -146,7 +146,9 @@ const ThreadListHeader = (): ReactElement | any => {
           {current?.channelType === CHANNEL_TYPE.CHANNEL && (
             <LeftButtonBox>
               <LeftButton>핀</LeftButton>
-              <LeftButton onClick={clickAddTopicModal}>{current?.topic}</LeftButton>
+              <LeftButton onClick={clickAddTopicModal}>
+                {current?.topic === null ? 'Add a topic' : current?.topic}
+              </LeftButton>
             </LeftButtonBox>
           )}
         </Left>
