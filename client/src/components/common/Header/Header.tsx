@@ -25,7 +25,7 @@ const Title = styled.div`
 
 const TitleText = styled.span`
   font-size: 0.8rem;
-  padding-bottom: 0.15rem;
+  padding-bottom: 0.2rem;
 `;
 
 const ProfileBox = styled.div`
