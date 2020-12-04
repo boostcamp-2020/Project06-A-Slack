@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useRef, ReactElement } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannelState } from '@/hooks';
-import { JoinUser } from '@/types';
+import { JoinedUser } from '@/types';
 import { DimModal } from '@/components';
 import { AddUsersModalHeader, AddUsersModalBody } from '../../AddUsersModal';
 
@@ -78,7 +78,7 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
       )}
       <Main>
         <AddButton onClick={clickAddUsersModal}>Add Users</AddButton>
-        {users?.map((user: JoinUser) => (
+        {users?.map((user: JoinedUser) => (
           <Item key={user.userId}>
             <UserInfo>
               <Img src={user.image} />

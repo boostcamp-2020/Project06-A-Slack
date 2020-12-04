@@ -1,6 +1,6 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
-import { Channel, JoinUser } from '@/types';
+import { Channel, JoinedUser } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   loadChannelsRequest,
@@ -77,14 +77,14 @@ function* createChannel(action: any) {
       memberCount: 1,
     };
 
-    const joinUser: JoinUser = {
+    const joinedUser: JoinedUser = {
       displayName,
       userId: ownerId,
       image:
         'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg',
     };
     yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });
-    yield put(createChannelSuccess({ channel, joinUser }));
+    yield put(createChannelSuccess({ channel, joinedUser }));
   } catch (err) {
     yield put(createChannelFailure(err));
   }

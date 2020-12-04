@@ -14,3 +14,17 @@ export const focusedInputBoxShadow = css`
 export const modalBoxShadow = css`
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
 `;
+
+export const hoverActive = css`
+  cursor: pointer;
+  &:hover,
+  &:active {
+    background-color: ${(props) => props.theme.color.gray5};
+    path {
+      fill: ${(props) => props.theme.color.black4};
+    }
+  }
+  &:active {
+    background-color: ${(props) => props.theme.color.gray4};
+  }
+`;

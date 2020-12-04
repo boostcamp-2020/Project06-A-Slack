@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Thread, JoinUser } from '@/types';
+import { Thread } from '@/types';
 import { flex } from '@/styles/mixin';
 import { getNotNullDataInArray } from '@/utils/utils';
 import { Link } from 'react-router-dom';

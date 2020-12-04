@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useChannelState, useUserState } from '@/hooks';
 import styled from 'styled-components';
-import { makeUserIcons } from '@/utils/utils';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { JoinUser } from '@/types';
+import { JoinedUser } from '@/types';
 import { Link, useParams } from 'react-router-dom';
 import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel.slice';
-import { DimModal, LockIcon, PoundIcon } from '@/components';
+import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/components';
 import theme from '@/styles/theme';
-import { flex } from '@/styles/mixin';
+import { flex, hoverActive } from '@/styles/mixin';
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
@@ -18,14 +17,12 @@ const Container = styled.div`
   ${flex('center', 'space-between')}
   width: 100%;
   height: 4.3rem;
-  padding: 0 0.4rem;
+  padding: 0 1.3rem;
   border: 1px solid ${(props) => props.theme.color.lightGray2};
   background-color: white;
 `;
 
-const LeftBox = styled.div`
-  margin-left: 0.7rem;
-`;
+const LeftBox = styled.div``;
 
 const LeftTopBox = styled.div``;
 
@@ -46,30 +43,45 @@ const AddTopicText = styled.span`
 `;
 
 const RightBox = styled.div`
-  width: 200px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  ${flex()}
 `;
 
-const RightUserBox = styled.div`
-  display: flex;
-  align-items: center;
+const UserImgBox = styled.div`
+  ${flex()}
+  padding:0.1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  ${hoverActive}
 `;
 
-const RightUser = styled.img`
+const UserImg = styled.img`
   display: block;
-  width: 30px;
-  height: 30px;
+  width: 1.6rem;
+  height: 1.6rem;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+  margin-left: -0.5rem;
 `;
 
-const RightButton = styled.button`
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 30px;
+const UserCount = styled.span`
+  margin: 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: ${(props) => props.theme.color.black3};
 `;
+
+const AddUserBox = styled.div`
+  width: 2.4rem;
+  height: 2.4rem;
+  ${flex()};
+  border-radius: 5px;
+  margin-left: 0.2rem;
+  ${hoverActive}
+`;
+
+const InfoIconBox = styled(AddUserBox)``;
 
 interface RightSideParams {
   channelId: string;
@@ -147,16 +159,20 @@ const ThreadListHeader = () => {
         </LeftBox>
         <RightBox>
           {current?.channelType === CHANNEL_TYPE.CHANNEL && (
-            <RightUserBox onClick={clickShowUsersModal}>
-              {makeUserIcons(users).map((icon: JoinUser) => (
-                <RightUser key={icon.userId} src={icon.image} />
+            <UserImgBox onClick={clickShowUsersModal}>
+              {users.slice(0, 3).map((icon: JoinedUser) => (
+                <UserImg key={icon.userId} src={icon.image} />
               ))}
-              {users?.length}
-            </RightUserBox>
+              <UserCount>{users?.length}</UserCount>
+            </UserImgBox>
           )}
-          <RightButton onClick={clickAddUsersModal}>O</RightButton>
+          <AddUserBox onClick={clickAddUsersModal}>
+            <AddUserIcon size="1.4rem" />
+          </AddUserBox>
           <Link to={`/client/1/${channelId}/detail`}>
-            <RightButton>i</RightButton>
+            <InfoIconBox>
+              <WarningIcon size="1.1rem" color={theme.color.black5} />
+            </InfoIconBox>
           </Link>
         </RightBox>
       </Container>
