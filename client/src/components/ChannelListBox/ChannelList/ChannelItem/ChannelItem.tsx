@@ -6,11 +6,6 @@ import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { useJoinChannelListState, useChannelState, useAuthState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 
-interface Args {
-  key: number;
-  idx: number;
-}
-
 interface Props {
   pick: boolean;
 }
@@ -38,9 +33,13 @@ const Icon = styled.div`
 
 const Name = styled.div``;
 
-const ChannelItem = (args: Args) => {
+interface ChannelItemProps {
+  idx: number;
+}
+
+const ChannelItem = ({ idx }: ChannelItemProps) => {
   const dispatch = useDispatch();
-  const { id, name, isPublic } = useJoinChannelListState(args.idx);
+  const { id, name, isPublic } = useJoinChannelListState(idx);
   const { current } = useChannelState();
 
   const onClick = () => {
