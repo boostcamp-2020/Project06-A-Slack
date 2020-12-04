@@ -47,6 +47,8 @@ const theme: DefaultTheme = {
     yellow: '#e8912d',
     warningRed: '#D73A49',
     onConnect: '#2bac76',
+
+    channelItemColor: ' #bcabbc',
   },
   size: {
     xxxs: calcRem(8),

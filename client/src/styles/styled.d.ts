@@ -48,6 +48,8 @@ declare module 'styled-components' {
       yellow: string;
       warningRed: string;
       onConnect: string;
+
+      channelItemColor: string;
     };
 
     size: {

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useRef, ReactElement } from 'react';
-import styled from 'styled-components';
+import React, { useState, ReactElement } from 'react';
+import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { DimModal, MenuModal } from '@/components';
+import { DimModal, MenuModal, ArrowDownIcon, PlusIcon, DotIcon } from '@/components';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 
 const Container = styled.div`
@@ -16,24 +16,37 @@ const PopupBox = styled.div`
   position: relative;
 `;
 
-const Button = styled.button`
+const Controls = styled.div`
+  ${flex()}
+  margin-right:0.5rem;
+`;
+
+const OptionIcon = styled.button`
+  ${flex()}
+  width: 2rem;
+  height: 2rem;
   color: ${(props) => props.theme.color.white};
   font-size: ${(props) => props.theme.size.m};
   background: transparent;
   border: none;
+  border-radius: 5px;
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
   }
   outline: 0;
 `;
+
+const DotIconBox = styled(OptionIcon)``;
+const PlusIconBox = styled(OptionIcon)``;
 
 const SubWrapper = styled.div`
   ${flex()}
 `;
 
-const Content = styled.div`
-  color: #fff;
-  font-size: 12px;
+const Title = styled.div`
+  color: ${(props) => props.theme.color.channelItemColor};
+  font-size: 0.9rem;
+  user-select: none;
 `;
 
 const ModalListItem = styled.div`
@@ -45,6 +58,33 @@ const ModalListItem = styled.div`
     color: white;
     background-color: ${(props) => props.theme.color.blue1};
   }
+`;
+
+interface ArrowProps {
+  rotate: boolean;
+}
+
+const ArrowIcon = styled.div<ArrowProps>`
+  ${flex()}
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: 0 0.5rem;
+  color: ${(props) => props.theme.color.white};
+  font-size: ${(props) => props.theme.size.m};
+  background: transparent;
+  border: none;
+  transition: 0.3s;
+  ${(props) =>
+    props.rotate &&
+    css`
+      transform: rotate(-90deg);
+      transition: 0.3s;
+    `}
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  outline: 0;
+  cursor: pointer;
 `;
 
 const ChannelListBox = ({
@@ -65,15 +105,18 @@ const ChannelListBox = ({
     setChannelListVisible((state: boolean) => !state);
   };
 
-  const toggleAddChannelsModal = () => {
+  const toggleAddChannelsModal = (e: any) => {
+    e.stopPropagation();
     setAddChannelsModalVisible((state) => !state);
   };
 
-  const toggleSectionOptionsModal = () => {
+  const toggleSectionOptionsModal = (e: any) => {
+    e.stopPropagation();
     setSectionOptionsModalVisible((state) => !state);
   };
 
-  const clickCreateChannelModal = () => {
+  const clickCreateChannelModal = (e: any) => {
+    e.stopPropagation();
     setCreateChannelModalVisible((state) => !state);
   };
   return (
@@ -92,7 +135,7 @@ const ChannelListBox = ({
           setVisible={setCreateChannelModalVisible}
         />
       )}
-      <Container>
+      <Container onClick={clickChannel}>
         {addChannelsModalVisible && (
           <MenuModal
             top="1.5rem"
@@ -120,19 +163,23 @@ const ChannelListBox = ({
           </MenuModal>
         )}
         <SubWrapper>
-          <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
-          <Content onClick={clickChannel}>
-            {channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
-          </Content>
+          <ArrowIcon rotate={!channelListVisible}>
+            <ArrowDownIcon />
+          </ArrowIcon>
+          <Title>{channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}</Title>
         </SubWrapper>
-        <SubWrapper>
+        <Controls>
           <PopupBox onClick={toggleSectionOptionsModal}>
-            <Button>፧</Button>
+            <DotIconBox>
+              <DotIcon />
+            </DotIconBox>
           </PopupBox>
           <PopupBox onClick={toggleAddChannelsModal}>
-            <Button>+</Button>
+            <PlusIconBox>
+              <PlusIcon size="1.4rem" />
+            </PlusIconBox>
           </PopupBox>
-        </SubWrapper>
+        </Controls>
       </Container>
     </>
   );
