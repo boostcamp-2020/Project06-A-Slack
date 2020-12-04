@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, ReactElement } from 'react';
+import React, { useState, ReactElement, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
@@ -66,13 +66,14 @@ interface ArrowProps {
 
 const ArrowIcon = styled.div<ArrowProps>`
   ${flex()}
-  width: 1.2rem;
-  height: 1.2rem;
-  margin: 0 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.4rem;
   color: ${(props) => props.theme.color.white};
   font-size: ${(props) => props.theme.size.m};
   background: transparent;
   border: none;
+  border-radius: 5px;
   transition: 0.3s;
   ${(props) =>
     props.rotate &&
@@ -101,7 +102,7 @@ const ChannelListBox = ({
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
 
-  const toggleChannelList = () => {
+  const toggleChannelList = (e: React.MouseEvent<HTMLDivElement>) => {
     setChannelListVisible((state: boolean) => !state);
   };
 
@@ -116,8 +117,7 @@ const ChannelListBox = ({
   };
 
   const clickCreateChannelModal = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    setCreateChannelModalVisible((state) => !state);
+    setCreateChannelModalVisible(true);
   };
   return (
     <>
