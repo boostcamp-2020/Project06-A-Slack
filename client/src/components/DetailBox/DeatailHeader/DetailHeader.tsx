@@ -1,5 +1,5 @@
 import React from 'react';
-import { useChannel } from '@/hooks/useChannel';
+import { useChannelState } from '@/hooks';
 import { useDispatch } from 'react-redux';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
@@ -29,7 +29,7 @@ const Button = styled.button`
 `;
 
 const DetailHeader: React.FC = () => {
-  const { current } = useChannel();
+  const { current } = useChannelState();
   const dispatch = useDispatch();
   const onClick = () => {
     // Link로 연결하는 작업

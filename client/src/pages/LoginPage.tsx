@@ -1,10 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { LoginBox } from '@/components';
-import { useAuth } from '@/hooks';
+import { useAuthState } from '@/hooks';
 
 const LoginPage: React.FC = () => {
-  const { accessToken } = useAuth();
+  const { accessToken } = useAuthState();
   return <>{accessToken ? <Redirect to="/" /> : <LoginBox />}</>;
 };
 

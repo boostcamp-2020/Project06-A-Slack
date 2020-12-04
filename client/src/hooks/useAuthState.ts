@@ -6,8 +6,8 @@ const selectAuth = createSelector(
   (state: RootState) => state.auth,
   (auth) => auth,
 );
-const useAuth = () => {
+const useAuthState = () => {
   return useSelector(selectAuth);
 };
 
-export { useAuth };
+export { useAuthState };

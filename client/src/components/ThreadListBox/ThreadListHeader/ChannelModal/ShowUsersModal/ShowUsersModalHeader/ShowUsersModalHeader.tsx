@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useChannel } from '@/hooks';
+import { useChannelState } from '@/hooks';
 
 const HeaderContent = styled.div`
   font-size: ${(props) => props.theme.size.l};
 `;
 
 const ShowUsersModalHeader: React.FC = () => {
-  const { users, current } = useChannel();
+  const { users, current } = useChannelState();
 
   return (
     <>

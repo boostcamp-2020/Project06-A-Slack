@@ -7,8 +7,8 @@ export const selectSubThread = createSelector(
   (st) => st,
 );
 
-const useSubThread = () => {
+const useSubThreadState = () => {
   return useSelector(selectSubThread);
 };
 
-export { useSubThread };
+export { useSubThreadState };

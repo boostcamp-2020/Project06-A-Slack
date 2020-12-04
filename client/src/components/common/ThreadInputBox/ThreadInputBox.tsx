@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createThreadRequest } from '@/store/modules/thread.slice';
 import { useParams } from 'react-router-dom';
-import { useUser } from '@/hooks';
+import { useUserState } from '@/hooks';
 import { INPUT_BOX_TYPE } from '@/utils/constants';
 
 interface ThreadInputBoxProps {
@@ -24,7 +24,7 @@ const getParentId = (inputBoxType: string, threadId: string | undefined) => {
 
 const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadInputBoxProps) => {
   const { channelId, threadId }: RightSideParams = useParams();
-  const { userInfo } = useUser();
+  const { userInfo } = useUserState();
 
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
