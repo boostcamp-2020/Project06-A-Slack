@@ -178,11 +178,11 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
     setDescription(e.target.value);
   };
 
-  const toggleSecret = () => {
+  const clickSecret = () => {
     setSecret((state) => !state);
   };
 
-  const createChannel = async () => {
+  const clickCreateChannel = async () => {
     const isPublic = secret ? 0 : 1;
     dispatch(
       createChannelRequest({
@@ -230,13 +230,13 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
               ? `This can’t be undone. A private channel cannot be made public later on.`
               : `When a channel is set to private, it can only be viewed or joined by invitation.`}
           </BottomExplain>
-          <PrivateButton secret={secret} onClick={toggleSecret}>
+          <PrivateButton secret={secret} onClick={clickSecret}>
             <Circle secret={secret} />
           </PrivateButton>
         </BottomContent>
       </Bottom>
       <CreateButtonBox>
-        <CreateButton type="submit" name={name} onClick={createChannel} disabled={name === ''}>
+        <CreateButton type="submit" name={name} onClick={clickCreateChannel} disabled={name === ''}>
           Create
         </CreateButton>
       </CreateButtonBox>

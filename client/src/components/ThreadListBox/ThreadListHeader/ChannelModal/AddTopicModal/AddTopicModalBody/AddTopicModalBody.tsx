@@ -62,11 +62,11 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
     setContent(e.target.value);
   };
 
-  const onCancel = () => {
+  const clickCancel = () => {
     setAddTopicModalVisible((state: boolean) => !state);
   };
 
-  const onSubmit = () => {
+  const clickSubmit = () => {
     if (channelId !== null && current !== null) {
       dispatch(modifyTopicRequest({ channelId, topic: content }));
       setAddTopicModalVisible((state: boolean) => !state);
@@ -78,8 +78,8 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
     <>
       <TextArea value={content} onChange={onChange} />
       <ButtonBox>
-        <CancelButton onClick={onCancel}>Cancel</CancelButton>
-        <SubmitButton onClick={onSubmit}>Set Topic</SubmitButton>
+        <CancelButton onClick={clickCancel}>Cancel</CancelButton>
+        <SubmitButton onClick={clickSubmit}>Set Topic</SubmitButton>
       </ButtonBox>
     </>
   );
