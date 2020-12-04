@@ -5,6 +5,7 @@ import { WriteIcon } from '@/components';
 
 const Container = styled.div`
   width: 16.25rem;
+  height: 4.3rem;
   padding: 15px;
   background: ${(props) => props.theme.color.purple2};
   ${flex('center', 'space-between')}
