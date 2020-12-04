@@ -10,7 +10,7 @@ const Container = styled.div`
 `;
 
 const ListItem = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const ListItemName = styled.div`
@@ -28,7 +28,7 @@ const ItemBox = styled.div`
 `;
 
 const MemberItem = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const MemberImg = styled.img`
