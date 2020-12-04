@@ -48,21 +48,26 @@ const RightBox = styled.div`
 
 const UserImgBox = styled.div`
   ${flex()}
-  padding:0.1rem;
+  padding: 1px;
   margin-right: 0.5rem;
   cursor: pointer;
   border-radius: 5px;
   ${hoverActive}
 `;
 
-const UserImg = styled.img`
+interface UserImgProps {
+  zIndex: number;
+}
+
+const UserImg = styled.img<UserImgProps>`
   display: block;
   width: 1.6rem;
   height: 1.6rem;
   object-fit: cover;
   border-radius: 5px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
-  margin-left: -0.5rem;
+  margin-left: -0.3rem;
+  z-index: ${(props) => props.zIndex};
 `;
 
 const UserCount = styled.span`
@@ -160,8 +165,8 @@ const ThreadListHeader = () => {
         <RightBox>
           {current?.channelType === CHANNEL_TYPE.CHANNEL && (
             <UserImgBox onClick={clickShowUsersModal}>
-              {users.slice(0, 3).map((icon: JoinedUser) => (
-                <UserImg key={icon.userId} src={icon.image} />
+              {users.slice(0, 3).map((icon: JoinedUser, idx: number) => (
+                <UserImg zIndex={users.length - idx} key={icon.userId} src={icon.image} />
               ))}
               <UserCount>{users?.length}</UserCount>
             </UserImgBox>
