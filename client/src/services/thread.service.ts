@@ -1,5 +1,5 @@
 import API from '@/api';
-import { getThreadRequestPayload, createThreadRequestPayload } from '@/store/modules/thread';
+import { getThreadRequestPayload, createThreadRequestPayload } from '@/store/modules/thread.slice';
 import { Service } from '@/types';
 
 export const threadService: Service = {

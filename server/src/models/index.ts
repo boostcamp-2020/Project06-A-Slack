@@ -1,3 +1,3 @@
-export { userModel } from './user';
-export { channelModel } from './channels';
-export { threadModel } from './thread';
+export { userModel } from './user.model';
+export { channelModel } from './channels.model';
+export { threadModel } from './thread.model';

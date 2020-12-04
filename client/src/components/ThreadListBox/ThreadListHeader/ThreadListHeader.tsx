@@ -6,7 +6,7 @@ import { makeUserIcons } from '@/utils/utils';
 import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
 import { useParams } from 'react-router-dom';
-import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel';
+import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel.slice';
 import { useUser } from '@/hooks';
 import { DimModal } from '@/components/common';
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
