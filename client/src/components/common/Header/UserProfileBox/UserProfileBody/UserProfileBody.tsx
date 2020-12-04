@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { FormLabel, FormInput, SubmitButton as SB, CancelButton as CB } from '@/styles/shared';
 import { flex } from '@/styles/mixin';
 import { useUser } from '@/hooks';
-import { editUserRequest } from '@/store/modules/user';
+import { editUserRequest } from '@/store/modules/user.slice';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 const Container = styled.form``;

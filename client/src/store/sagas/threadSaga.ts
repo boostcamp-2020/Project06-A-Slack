@@ -8,7 +8,7 @@ import {
   createThreadFailure,
   getThreadRequestPayload,
   createThreadRequestPayload,
-} from '@/store/modules/thread';
+} from '@/store/modules/thread.slice';
 import { threadService } from '@/services/thread.service';
 
 function* getThreadList({ channelId }: getThreadRequestPayload) {

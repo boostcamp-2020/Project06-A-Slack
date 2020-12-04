@@ -6,7 +6,7 @@ import { FormButton, FormInput } from '@/styles/shared';
 import { flex } from '@/styles/mixin';
 import { WarningIcon, DimModal } from '@/components';
 import { useSignupState } from '@/hooks';
-import { verifyEmailSendRequest } from '@/store/modules/signup';
+import { verifyEmailSendRequest } from '@/store/modules/signup.slice';
 
 const Container = styled.div`
   width: 100%;
