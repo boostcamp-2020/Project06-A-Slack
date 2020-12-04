@@ -80,7 +80,7 @@ interface RightSideParams {
   channelId: string;
 }
 
-const ThreadListHeader = (): ReactElement | any => {
+const ThreadListHeader = () => {
   const dispatch = useDispatch();
   const { current, users } = useChannel();
   const { userInfo } = useUser();
@@ -94,7 +94,7 @@ const ThreadListHeader = (): ReactElement | any => {
     if (userInfo) {
       dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo.id }));
     }
-  }, [userInfo]);
+  }, [channelId]);
 
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
