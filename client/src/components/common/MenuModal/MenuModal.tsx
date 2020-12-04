@@ -37,7 +37,7 @@ const Container = styled.div<ContainerProps>`
   outline: 0;
   ${modalBoxShadow}
   ${flex('center', 'center', 'column')}
-  z-index: 2;
+  z-index: 10;
 `;
 
 interface MenuModalProps {
