@@ -9,3 +9,5 @@ export { default as DotIcon } from './DotIcon/DotIcon';
 export { default as LockIcon } from './LockIcon/LockIcon';
 export { default as PoundIcon } from './PoundIcon/PoundIcon';
 export { default as AddUserIcon } from './AddUserIcon/AddUserIcon';
+export { default as ReactionIcon } from './ReactionIcon/ReactionIcon';
+export { default as CommentIcon } from './CommentIcon/CommentIcon';

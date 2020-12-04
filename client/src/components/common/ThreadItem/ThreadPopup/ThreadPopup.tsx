@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { Link } from 'react-router-dom';
-import { DimModal, MenuModal } from '@/components';
+import { DimModal, MenuModal, ReactionIcon, CommentIcon, DotIcon } from '@/components';
+import { flex, hoverActive } from '@/styles/mixin';
+import theme from '@/styles/theme';
 
 const Container = styled.div`
   position: relative;
-  background-color: blue;
+  ${flex()};
+  border-radius: 5px;
+  background-color: white;
   button {
     font-size: ${(props) => props.theme.size.xs};
   }
@@ -18,10 +22,6 @@ const Modal = styled.div`
   right: -8rem;
 `;
 
-const MoreActionButton = styled.button`
-  position: relative;
-`;
-
 const ModalListItem = styled.div`
   width: 100%;
   padding: 0.4rem 1.2rem;
@@ -31,6 +31,20 @@ const ModalListItem = styled.div`
     color: white;
     background-color: ${(props) => props.theme.color.blue1};
   }
+`;
+
+const ModalItems = styled.div`
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 5px;
+  ${hoverActive};
+  ${flex()};
+`;
+
+const ReactionBox = styled(ModalItems)``;
+const CommentBox = styled(ModalItems)``;
+const MoreActionBox = styled(ModalItems)`
+  position: relative;
 `;
 
 interface ThreadPopupProps {
@@ -49,14 +63,16 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
 
   return (
     <Container>
-      <button type="button">reaction</button>
+      <ReactionBox>
+        <ReactionIcon size="1.5rem" color={theme.color.black5} />
+      </ReactionBox>
       <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
-        <button type="button">replyInThread</button>
+        <CommentBox>
+          <CommentIcon size="1.2rem" color={theme.color.black5} />
+        </CommentBox>
       </Link>
-      <button type="button">shareMessage</button>
-      <button type="button">Save</button>
-      <MoreActionButton type="button" onClick={openMenuModal}>
-        MoreActions
+      <MoreActionBox onClick={openMenuModal}>
+        <DotIcon color={theme.color.black5} />
         {menuModalVisible && (
           <MenuModal
             top="1rem"
@@ -71,7 +87,7 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
             <ModalListItem>Delete message</ModalListItem>
           </MenuModal>
         )}
-      </MoreActionButton>
+      </MoreActionBox>
     </Container>
   );
 };

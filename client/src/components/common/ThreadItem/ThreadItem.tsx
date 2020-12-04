@@ -17,17 +17,6 @@ interface IsSameUserStyleProp {
 //   display: ${(props) => (props.isSameUserStyleProp ? 'block' : 'flex')};
 // `;
 
-// const Popup = styled.div`
-//   display: none;
-//   position: absolute;
-//   right: 0.25rem;
-//   top: -0.5rem;
-//   border: 1px solid black;
-//   ${Container}:hover & {
-//     display: block;
-//   }
-// `;
-
 const Container = styled.div`
   position: relative;
   display: flex;
@@ -36,6 +25,18 @@ const Container = styled.div`
   padding: 0.5rem 1.25rem;
   &:hover {
     background-color: ${(props) => props.theme.color.threadHover};
+  }
+`;
+
+const Popup = styled.div`
+  display: none;
+  position: absolute;
+  right: 1rem;
+  top: -0.75rem;
+  border-radius: 5px;
+  border: 1.5px solid ${(props) => props.theme.color.lightGray1};
+  ${Container}:hover & {
+    display: flex;
   }
 `;
 
@@ -125,9 +126,9 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
         <ContentBottom>{thread.content}</ContentBottom>
         {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
       </ContentBox>
-      {/* <Popup>
+      <Popup>
         <ThreadPopup thread={thread} />
-      </Popup> */}
+      </Popup>
     </Container>
   );
 };
