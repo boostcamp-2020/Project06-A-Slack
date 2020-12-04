@@ -101,21 +101,21 @@ const ChannelListBox = ({
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
 
-  const clickChannel = () => {
+  const toggleChannelList = () => {
     setChannelListVisible((state: boolean) => !state);
   };
 
-  const toggleAddChannelsModal = (e: any) => {
+  const toggleAddChannelsModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setAddChannelsModalVisible((state) => !state);
   };
 
-  const toggleSectionOptionsModal = (e: any) => {
+  const toggleSectionOptionsModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setSectionOptionsModalVisible((state) => !state);
   };
 
-  const clickCreateChannelModal = (e: any) => {
+  const clickCreateChannelModal = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setCreateChannelModalVisible((state) => !state);
   };
@@ -125,6 +125,7 @@ const ChannelListBox = ({
         <DimModal
           header={<CreateChannelModalHeader secret={secret} />}
           body={
+            // eslint-disable-next-line react/jsx-wrap-multilines
             <CreateChannelModalBody
               secret={secret}
               setCreateChannelModalVisible={setCreateChannelModalVisible}
@@ -135,7 +136,7 @@ const ChannelListBox = ({
           setVisible={setCreateChannelModalVisible}
         />
       )}
-      <Container onClick={clickChannel}>
+      <Container onClick={toggleChannelList}>
         {addChannelsModalVisible && (
           <MenuModal
             top="1.5rem"
