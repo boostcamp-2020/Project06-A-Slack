@@ -6,7 +6,6 @@ import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 import ThreadList from './ThreadList/ThreadList';
 
 const Container = styled.div`
-  background-color: pink;
   width: 100%;
 `;
 

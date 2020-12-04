@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useChannelState, useUserState } from '@/hooks';
 import styled from 'styled-components';
@@ -7,65 +7,60 @@ import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinUser } from '@/types';
 import { Link, useParams } from 'react-router-dom';
 import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel.slice';
-import { DimModal } from '@/components';
+import { DimModal, LockIcon, PoundIcon } from '@/components';
+import theme from '@/styles/theme';
+import { flex } from '@/styles/mixin';
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
 
 const Container = styled.div`
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
+  ${flex('center', 'space-between')}
+  width: 100%;
+  padding: 0 0.4rem;
   border: 1px solid black;
+  background-color: white;
 `;
 
-const Left = styled.div`
-  border: 1px solid black;
+const LeftBox = styled.div`
+  margin-left: 0.7rem;
 `;
 
-const LeftTitle = styled.div`
-  font-size: 20px;
-  border: 1px solid black;
+const LeftTopBox = styled.div``;
+
+const ChannelTitle = styled.span`
+  color: ${(props) => props.theme.color.lightBlack};
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-left: 0.2rem;
 `;
 
-const LeftButton = styled.button`
-  background: none;
+const AddTopicText = styled.span`
+  background: unset;
+  color: ${(props) => props.theme.color.black8};
+  font-size: 0.7rem;
   border: none;
   outline: none;
-  font-size: 12px;
+  cursor: pointer;
 `;
 
-const LeftButtonBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 80px;
-  border: 1px solid black;
-  font-size: 16px;
-`;
-
-const Right = styled.div`
+const RightBox = styled.div`
   width: 200px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid black;
 `;
 
 const RightUserBox = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid black;
 `;
 
 const RightUser = styled.img`
   display: block;
   width: 30px;
   height: 30px;
-  border: 1px solid black;
 `;
 
 const RightButton = styled.button`
@@ -134,20 +129,22 @@ const ThreadListHeader = () => {
         />
       )}
       <Container>
-        <Left>
-          <LeftTitle>
-            {current?.isPublic} {current?.name}
-          </LeftTitle>
+        <LeftBox>
+          <LeftTopBox>
+            {current?.isPublic ? (
+              <PoundIcon size="0.7rem" color={theme.color.lightBlack} />
+            ) : (
+              <LockIcon size="0.7rem" color={theme.color.lightBlack} />
+            )}
+            <ChannelTitle>{current?.name}</ChannelTitle>
+          </LeftTopBox>
           {current?.channelType === CHANNEL_TYPE.CHANNEL && (
-            <LeftButtonBox>
-              <LeftButton>핀</LeftButton>
-              <LeftButton onClick={clickAddTopicModal}>
-                {current?.topic === null ? 'Add a topic' : current?.topic}
-              </LeftButton>
-            </LeftButtonBox>
+            <AddTopicText onClick={clickAddTopicModal}>
+              {current?.topic ?? 'Add a topic'}
+            </AddTopicText>
           )}
-        </Left>
-        <Right>
+        </LeftBox>
+        <RightBox>
           {current?.channelType === CHANNEL_TYPE.CHANNEL && (
             <RightUserBox onClick={clickShowUsersModal}>
               {makeUserIcons(users).map((icon: JoinUser) => (
@@ -160,7 +157,7 @@ const ThreadListHeader = () => {
           <Link to={`/client/1/${channelId}/detail`}>
             <RightButton>i</RightButton>
           </Link>
-        </Right>
+        </RightBox>
       </Container>
     </>
   );
