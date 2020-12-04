@@ -21,7 +21,7 @@ export interface Thread {
   email: string;
   displayName: string;
   phoneNumber: string | null;
-  image: string | null;
+  image: string;
 }
 
 export const initialThread: Thread = {
