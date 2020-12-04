@@ -5,23 +5,27 @@ import { getUserRequest } from '@/store/modules/user.slice';
 import { flex } from '@/styles/mixin';
 import { useAuthState, useUserState } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth.slice';
-import { DimModal, UserStateIcon, MenuModal } from '@/components';
+import { DimModal, UserStateIcon, MenuModal, ClockIcon } from '@/components';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 
 const Container = styled.div`
   position: relative;
   width: 100%;
   height: 2.5rem;
-  background-color: ${(props) => props.theme.color.main};
+  background-color: ${(props) => props.theme.color.purple1};
   flex-shrink: 0;
   ${flex()};
 `;
 
 const Title = styled.div`
-  font-size: 0.8rem;
   color: ${(props) => props.theme.color.gray5};
   ${flex()};
   user-select: none;
+`;
+
+const TitleText = styled.span`
+  font-size: 0.8rem;
+  padding-bottom: 0.15rem;
 `;
 
 const ProfileBox = styled.div`
@@ -74,6 +78,10 @@ const ModalListItem = styled.div`
 
 const Logout = styled(ModalListItem)``;
 
+const TitleClockIcon = styled.div`
+  margin: 0 0.5rem;
+`;
+
 const Header: React.FC = () => {
   const dispatch = useDispatch();
 
@@ -102,7 +110,12 @@ const Header: React.FC = () => {
 
   return (
     <Container>
-      <Title>{workspaceName}</Title>
+      <Title>
+        <TitleClockIcon>
+          <ClockIcon />
+        </TitleClockIcon>
+        <TitleText>{workspaceName}</TitleText>
+      </Title>
       {editProfileVisible && (
         <DimModal
           header={<UserProfileModalHeader />}
