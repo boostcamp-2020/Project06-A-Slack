@@ -4,7 +4,7 @@
 
 <img src="https://assets.brandfolder.com/q7e86i-6b7f3s-5d18mu/v/12397564/original/Windows-Slack-client-for-media-kit.en-GB%202x.png" alt="drawing" height="35%" width="35%"/> <img src="https://assets.brandfolder.com/pl546j-7le8zk-btwjnu/original/Slack_RGB.png" alt="drawing" height="35%" width="35%"/>
 
-팀 협업도구로 유명한 슬랙을 구현하는 프로젝트 입니다.✨
+팀 협업도구로 유명한 슬랙을 구현하는 프로젝트 입니다.✨  
 기본적인 회원가입부터 사용자별 권한 관리, 채널 관리, 실시간 채팅, 이모지, 멘션 등의 기능을 구현합니다.
 
 
