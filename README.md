@@ -10,6 +10,8 @@ TypeScript, React, Redux (Toolkit, Saga), Styled-Components, Axios
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
 ![Redux](https://img.shields.io/badge/React-17.0.1-green)
+![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-yellowgreen)
+
 
 ### BE
 TypeScript, Express, Swagger, SocketIO, Mysql, NodeMailer, JsonWebToken
