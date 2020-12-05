@@ -1,13 +1,13 @@
 # Slack 클론
 
-## 🎞프로젝트 소개
+### 🎞프로젝트 소개
 팀 협업도구로 유명한 슬랙을 구현하는 프로젝트 입니다.  
 기본적인 회원가입부터 사용자별 권한 관리, 채널 관리, 실시간 채팅, 이모지, 멘션 등의 기능을 구현합니다.
 
 <img src="https://assets.brandfolder.com/q7e86i-6b7f3s-5d18mu/v/12397564/original/Windows-Slack-client-for-media-kit.en-GB%202x.png" alt="drawing" height="35%" width="35%"/> <img src="https://assets.brandfolder.com/pl546j-7le8zk-btwjnu/original/Slack_RGB.png" alt="drawing" height="35%" width="35%"/>
 
-## 🧱기술 스택
-### FE
+### 🧱기술 스택
+#### FE
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf?logo=typescript)
 ![Redux](https://img.shields.io/badge/React-17.0.1-blue?logo=react)
 ![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange?logo=redux)
@@ -15,7 +15,7 @@
 ![Styled Components](https://img.shields.io/badge/Styled%20Components-5.2.1-blueviolet?logo=styled-components)
 ![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow?logo=axios)
 
-### BE
+#### BE
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf?logo=typescript)
 ![Express](https://img.shields.io/badge/Express-4.17.1-blue?logo=express)
 ![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-lightgrey?logo=socket.io)
@@ -25,9 +25,9 @@
 ![NodeMailer](https://img.shields.io/badge/Nodemailer-6.4.16-yellowgreen)
 ![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-red?logo=JSON-Web-Tokens)
 
-## 팀명
+### 팀명
 
-## 💁🏻‍♀️💁🏻‍♂️ 멤버 
+### 💁🏻‍♀️💁🏻‍♂️ 멤버 
 
 | 멘토님   | J014                                             | J020                                            | J214                                                   |
 |:-------:| :-----------------------------------------------:| :---------------------------------------------: | :----------------------------------------------------: |
