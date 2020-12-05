@@ -37,7 +37,7 @@
 <br/>
 
 ## 📔 Wiki
-프로젝트와 관련된 상세한 내용은 [Wiki(바로가기)](https://github.com/boostcamp-2020/Project06-A-Slack/wiki) 에 기록되어 있습니다!
+프로젝트와 관련된 상세한 내용은 [Wiki](https://github.com/boostcamp-2020/Project06-A-Slack/wiki)에 기록되어 있습니다!
 
 <br/>
 
