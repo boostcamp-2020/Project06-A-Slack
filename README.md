@@ -13,10 +13,17 @@ TypeScript, React, Redux (Toolkit, Saga), Styled-Components, Axios
 ![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange)
 ![Redux Saga](https://img.shields.io/badge/Redux%20Saga-1.1.3-red)
 ![Styled Component](https://img.shields.io/badge/Styled%20Component-5.2.1-blue)
-
+![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow)
 
 ### BE
 TypeScript, Express, Swagger, SocketIO, Mysql, NodeMailer, JsonWebToken
+![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
+![Express](https://img.shields.io/badge/Express-4.17.1-blue)
+![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-yellow)
+![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-blue)
+![MySQL2](https://img.shields.io/badge/MySQL2-2.2.5-yellowgreen)
+![NodeMailer](https://img.shields.io/badge/Nodemailer-6.4.16-orange)
+![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-9cf)
 
 ## 팀명
 
