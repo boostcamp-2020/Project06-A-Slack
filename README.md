@@ -6,8 +6,6 @@
 
 ## 🧱기술 스택
 ### FE
-TypeScript, React, Redux (Toolkit, Saga), Styled-Components, Axios
-
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
 ![Redux](https://img.shields.io/badge/React-17.0.1-green)
 ![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange)
@@ -16,7 +14,6 @@ TypeScript, React, Redux (Toolkit, Saga), Styled-Components, Axios
 ![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow)
 
 ### BE
-TypeScript, Express, Swagger, SocketIO, Mysql, NodeMailer, JsonWebToken
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
 ![Express](https://img.shields.io/badge/Express-4.17.1-blue)
 ![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-yellow)
