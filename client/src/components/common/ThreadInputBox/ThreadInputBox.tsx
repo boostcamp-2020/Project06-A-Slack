@@ -91,6 +91,8 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
   const [comment, setComment] = useState('');
   const dispatch = useDispatch();
 
+  const parentId = getParentId(inputBoxType, threadId);
+
   const commentRef = useRef<HTMLTextAreaElement>(null);
 
   const { current } = useChannelState();
@@ -126,7 +128,6 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
     e.preventDefault();
     if (userInfo !== null) {
       const userId = Number(userInfo.id);
-      const parentId = getParentId(inputBoxType, threadId);
       const content = comment;
       dispatch(
         createThreadRequest({
@@ -146,7 +147,7 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
           <TextArea
             onChange={handleChange}
             onKeyDown={handleKeyUp}
-            placeholder={`Send a message ${current?.name}`}
+            placeholder={parentId ? 'Reply...' : `Send a message ${current?.name}`}
             ref={commentRef}
           />
         </TextBox>
