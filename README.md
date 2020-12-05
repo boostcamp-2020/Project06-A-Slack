@@ -8,8 +8,8 @@
 
 ## 🧱기술 스택
 ### FE
-![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf)
-![Redux](https://img.shields.io/badge/React-17.0.1-blue)
+![TypeScript](https://img.shields.io/badge/typeScript-4.0.5-9cf)
+![Redux](https://img.shields.io/badge/react-17.0.1-blue)
 ![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange)
 ![Redux Saga](https://img.shields.io/badge/Redux%20Saga-1.1.3-red)
 ![Styled Component](https://img.shields.io/badge/Styled%20Component-5.2.1-blueviolet)
