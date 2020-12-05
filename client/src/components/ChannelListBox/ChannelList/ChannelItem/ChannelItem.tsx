@@ -34,6 +34,9 @@ const Icon = styled.div`
 
 const Name = styled.span`
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 interface ChannelItemProps {
