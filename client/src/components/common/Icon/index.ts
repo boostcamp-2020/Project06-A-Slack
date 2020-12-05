@@ -11,3 +11,4 @@ export { default as PoundIcon } from './PoundIcon/PoundIcon';
 export { default as AddUserIcon } from './AddUserIcon/AddUserIcon';
 export { default as ReactionIcon } from './ReactionIcon/ReactionIcon';
 export { default as CommentIcon } from './CommentIcon/CommentIcon';
+export { default as PaperPlaneIcon } from './PaperPlaneIcon/PaperPlaneIcon';
