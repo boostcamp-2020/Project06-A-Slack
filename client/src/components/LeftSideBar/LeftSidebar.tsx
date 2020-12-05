@@ -5,8 +5,10 @@ import LeftSidebarContent from './LeftSideBarContent/LeftSideBarContent';
 
 const Container = styled.div`
   width: 16.25rem;
-  background: ${(props) => props.theme.color.purple2};
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.color.purple2};
 `;
 
 const LeftSideBar = (): ReactElement => {

@@ -4,7 +4,9 @@ import ChannelListBox from '@/components/ChannelListBox/ChannelListBox';
 import { CHANNEL_TYPE } from '@/utils/constants';
 
 const Container = styled.div`
-  /* overflow-y: scroll; */
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex: 1;
 `;
 
 const LeftSideBarContent = (): ReactElement => {
