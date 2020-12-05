@@ -8,6 +8,7 @@
 기본적인 회원가입부터 사용자별 권한 관리, 채널 관리, 실시간 채팅, 이모지, 멘션 등의 기능을 구현합니다.
 
 <br/>
+
 ## 🧱기술 스택
 ### FE
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf?logo=typescript)
@@ -28,6 +29,7 @@
 ![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-red?logo=JSON-Web-Tokens)
 
 <br/>
+
 ## 💁🏻‍♀️💁🏻‍♂️ 멤버 
 
 | 멘토님   | J014                                             | J020                                            | J214                                                   |
