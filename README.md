@@ -16,8 +16,9 @@
 ### BE
 ![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
 ![Express](https://img.shields.io/badge/Express-4.17.1-blue)
-![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-yellow)
 ![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-blue)
+  
+![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-yellow)
 ![MySQL2](https://img.shields.io/badge/MySQL2-2.2.5-yellowgreen)
 ![NodeMailer](https://img.shields.io/badge/Nodemailer-6.4.16-orange)
 ![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-9cf)
