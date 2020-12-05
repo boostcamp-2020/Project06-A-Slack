@@ -67,11 +67,13 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
       <ReactionBox>
         <ReactionIcon size="1.5rem" color={theme.color.black5} />
       </ReactionBox>
-      <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
-        <CommentBox>
-          <CommentIcon size="1.2rem" color={theme.color.black5} />
-        </CommentBox>
-      </Link>
+      {!thread.parentId && (
+        <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
+          <CommentBox>
+            <CommentIcon size="1.2rem" color={theme.color.black5} />
+          </CommentBox>
+        </Link>
+      )}
       <MoreActionBox onClick={openMenuModal}>
         <DotIcon color={theme.color.black5} />
         {menuModalVisible && (
