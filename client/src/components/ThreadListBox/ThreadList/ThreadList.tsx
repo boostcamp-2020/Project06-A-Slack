@@ -7,9 +7,14 @@ import { ThreadItem } from '@/components';
 import { useThreadState } from '@/hooks';
 import { useParams } from 'react-router-dom';
 import { isNumberTypeValue } from '@/utils/utils';
+import { flex } from '@/styles/mixin';
 
 const Container = styled.div`
-  background-color: orange;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
 `;
 
 interface RightSideParams {

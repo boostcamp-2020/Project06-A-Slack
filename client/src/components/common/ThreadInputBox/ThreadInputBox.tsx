@@ -20,8 +20,9 @@ interface RightSideParams {
 }
 
 const Container = styled.form`
-  ${flex()};
-  flex-direction: column;
+  width: 100%;
+  height: 5rem;
+  flex-shrink: 0;
   border: 1px solid ${(props) => props.theme.color.lightGray1};
 `;
 

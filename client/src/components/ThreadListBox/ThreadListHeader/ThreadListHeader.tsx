@@ -17,6 +17,7 @@ const Container = styled.div`
   ${flex('center', 'space-between')}
   width: 100%;
   height: 4.3rem;
+  flex-shrink: 0;
   padding: 0 1.3rem;
   border: 1px solid ${(props) => props.theme.color.lightGray2};
   background-color: white;

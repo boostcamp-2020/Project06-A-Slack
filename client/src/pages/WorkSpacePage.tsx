@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  height: 100%;
+  height: calc(100% - 2.5rem);
 `;
 
 interface RightSideParams {

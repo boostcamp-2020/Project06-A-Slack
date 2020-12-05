@@ -32,7 +32,7 @@ const Popup = styled.div`
   display: none;
   position: absolute;
   right: 1rem;
-  top: -0.75rem;
+  /* top: -0.75rem; */ // modal 추상화 전까지 잠시 주석처리함
   border-radius: 5px;
   ${Container}:hover & {
     display: flex;
