@@ -8,8 +8,6 @@ import ThreadList from './ThreadList/ThreadList';
 
 const Container = styled.div`
   width: 100%;
-  height: calc(100% - 2.5rem);
-  background-color: gray;
   flex: 1;
   display: flex;
   flex-direction: column;

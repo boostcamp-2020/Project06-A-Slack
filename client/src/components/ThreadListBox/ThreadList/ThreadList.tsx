@@ -7,7 +7,6 @@ import { ThreadItem } from '@/components';
 import { useThreadState } from '@/hooks';
 import { useParams } from 'react-router-dom';
 import { isNumberTypeValue } from '@/utils/utils';
-import { flex } from '@/styles/mixin';
 
 const Container = styled.div`
   width: 100%;
