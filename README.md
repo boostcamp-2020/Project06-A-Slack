@@ -6,22 +6,22 @@
 
 ## 🧱기술 스택
 ### FE
-![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-blue)
-![Redux](https://img.shields.io/badge/React-17.0.1-9cf)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf)
+![Redux](https://img.shields.io/badge/React-17.0.1-blue)
 ![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange)
 ![Redux Saga](https://img.shields.io/badge/Redux%20Saga-1.1.3-red)
 ![Styled Component](https://img.shields.io/badge/Styled%20Component-5.2.1-blueviolet)
 ![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow)
 
 ### BE
-![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf)
 ![Express](https://img.shields.io/badge/Express-4.17.1-blue)
-![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-blue)
+![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-lightgrey)
   
-![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-yellow)
-![MySQL2](https://img.shields.io/badge/MySQL2-2.2.5-yellowgreen)
-![NodeMailer](https://img.shields.io/badge/Nodemailer-6.4.16-orange)
-![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-9cf)
+![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-green)
+![MySQL2](https://img.shields.io/badge/MySQL2-2.2.5-yellow)
+![NodeMailer](https://img.shields.io/badge/Nodemailer-6.4.16-yellowgreen)
+![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-red)
 
 ## 팀명
 
