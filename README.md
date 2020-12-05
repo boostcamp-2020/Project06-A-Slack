@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="https://assets.brandfolder.com/q7e86i-6b7f3s-5d18mu/v/12397564/original/Windows-Slack-client-for-media-kit.en-GB%202x.png" alt="drawing" height="35%" width="35%"/> <img src="https://assets.brandfolder.com/pl546j-7le8zk-btwjnu/original/Slack_RGB.png" alt="drawing" height="35%" width="35%"/>
+<img src="https://assets.brandfolder.com/q7e86i-6b7f3s-5d18mu/v/12397564/original/Windows-Slack-client-for-media-kit.en-GB%202x.png" alt="drawing" height="40%" width="40%"/> <img src="https://assets.brandfolder.com/pl546j-7le8zk-btwjnu/original/Slack_RGB.png" alt="drawing" height="40%" width="40%"/>
 
 </div>
 
