@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createThreadRequest } from '@/store/modules/thread.slice';
 import { useParams } from 'react-router-dom';
-import { useUserState } from '@/hooks';
+import { useChannelState, useUserState } from '@/hooks';
 import { INPUT_BOX_TYPE } from '@/utils/constants';
+import { PaperPlaneIcon } from '@/components';
+import { SubmitButton as SB } from '@/styles/shared';
+import styled from 'styled-components';
+import { flex } from '@/styles/mixin';
 
 interface ThreadInputBoxProps {
   inputBoxType: string;
@@ -14,6 +18,29 @@ interface RightSideParams {
   rightSideType: string | undefined;
   threadId: string | undefined;
 }
+
+const Container = styled.form`
+  ${flex()};
+  flex-direction: column;
+  border: 1px solid ${(props) => props.theme.color.lightGray1};
+`;
+
+const TextBox = styled.textarea`
+  width: 100%;
+`;
+
+const ControlBox = styled.div`
+  width: 100%;
+  ${flex('center', 'flex-end')};
+`;
+
+const SubmitButton = styled(SB)`
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  outline: 0;
+  ${flex()};
+`;
 
 const getParentId = (inputBoxType: string, threadId: string | undefined) => {
   if (threadId === undefined || inputBoxType === INPUT_BOX_TYPE.THREAD) {
@@ -29,7 +56,9 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
   const [inputValue, setInputValue] = useState('');
   const dispatch = useDispatch();
 
-  const inputValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { current } = useChannelState();
+
+  const inputValueHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
@@ -51,10 +80,14 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <input type="text" onChange={inputValueHandler} />
-      <input type="submit" value=">" />
-    </form>
+    <Container onSubmit={submitHandler}>
+      <TextBox onChange={inputValueHandler} placeholder={`Send a message ${current?.name}`} />
+      <ControlBox>
+        <SubmitButton>
+          <PaperPlaneIcon size="14px" color="white" />
+        </SubmitButton>
+      </ControlBox>
+    </Container>
   );
 };
 
