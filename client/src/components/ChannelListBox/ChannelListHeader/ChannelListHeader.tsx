@@ -62,7 +62,7 @@ const ModalListItem = styled.div`
 `;
 
 interface ArrowProps {
-  rotate: boolean;
+  rotated: boolean;
 }
 
 const ArrowIcon = styled.div<ArrowProps>`
@@ -77,7 +77,7 @@ const ArrowIcon = styled.div<ArrowProps>`
   border-radius: 5px;
   transition: 0.3s;
   ${(props) =>
-    props.rotate &&
+    props.rotated &&
     css`
       transform: rotate(-90deg);
       transition: 0.3s;
@@ -165,7 +165,7 @@ const ChannelListBox = ({
           </MenuModal>
         )}
         <SubWrapper>
-          <ArrowIcon rotate={!channelListVisible}>
+          <ArrowIcon rotated={!channelListVisible}>
             <ArrowDownIcon />
           </ArrowIcon>
           <Title>{channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}</Title>
