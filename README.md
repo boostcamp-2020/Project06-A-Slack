@@ -8,22 +8,22 @@
 
 ## 🧱기술 스택
 ### FE
-![TypeScript](https://img.shields.io/badge/typeScript-4.0.5-9cf)
-![Redux](https://img.shields.io/badge/react-17.0.1-blue)
-![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange)
-![Redux Saga](https://img.shields.io/badge/Redux%20Saga-1.1.3-red)
-![Styled Component](https://img.shields.io/badge/Styled%20Component-5.2.1-blueviolet)
-![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf?logo=typescript)
+![Redux](https://img.shields.io/badge/React-17.0.1-blue?logo=react)
+![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange?logo=redux)
+![Redux Saga](https://img.shields.io/badge/Redux%20Saga-1.1.3-red?logo=redux)
+![Styled Components](https://img.shields.io/badge/Styled%20Components-5.2.1-blueviolet?logo=styled-components)
+![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow?logo=axios)
 
 ### BE
-![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf)
-![Express](https://img.shields.io/badge/Express-4.17.1-blue)
-![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-lightgrey)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-9cf?logo=typescript)
+![Express](https://img.shields.io/badge/Express-4.17.1-blue?logo=express)
+![SocketIO](https://img.shields.io/badge/Socket.IO-3.0.2-lightgrey?logo=socket.io)
   
-![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-green)
-![MySQL2](https://img.shields.io/badge/MySQL2-2.2.5-yellow)
+![Swagger](https://img.shields.io/badge/Swagger%20UI%20Express-4.1.5-green?logo=swagger)
+![MySQL2](https://img.shields.io/badge/MySQL2-2.2.5-yellow?logo=mysql)
 ![NodeMailer](https://img.shields.io/badge/Nodemailer-6.4.16-yellowgreen)
-![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-red)
+![JsonWebToken](https://img.shields.io/badge/JsonWebToken-8.5.1-red?logo=JSON-Web-Tokens)
 
 ## 팀명
 
