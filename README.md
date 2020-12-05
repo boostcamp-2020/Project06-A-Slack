@@ -6,11 +6,11 @@
 
 ## 🧱기술 스택
 ### FE
-![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-brightgreen)
-![Redux](https://img.shields.io/badge/React-17.0.1-blueviolet)
+![TypeScript](https://img.shields.io/badge/TypeScript-4.0.5-blue)
+![Redux](https://img.shields.io/badge/React-17.0.1-9cf)
 ![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-1.4.0-orange)
 ![Redux Saga](https://img.shields.io/badge/Redux%20Saga-1.1.3-red)
-![Styled Component](https://img.shields.io/badge/Styled%20Component-5.2.1-blue)
+![Styled Component](https://img.shields.io/badge/Styled%20Component-5.2.1-blueviolet)
 ![Axios](https://img.shields.io/badge/Axios-0.21.0-yellow)
 
 ### BE
