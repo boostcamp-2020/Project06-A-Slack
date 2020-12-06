@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createThreadRequest } from '@/store/modules/thread.slice';
+import { createThreadRequest, addThread } from '@/store/modules/thread.slice';
+import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { useParams } from 'react-router-dom';
 import { useChannelState, useUserState } from '@/hooks';
-import { INPUT_BOX_TYPE } from '@/utils/constants';
+import { INPUT_BOX_TYPE, USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import { PaperPlaneIcon } from '@/components';
 import { SubmitButton as SB } from '@/styles/shared';
 import styled from 'styled-components';
@@ -40,12 +41,12 @@ const TextBox = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 1.7rem;
+  height: 1.8rem;
   max-height: 15rem;
   border: 0;
   outline: 0;
   resize: none;
-  line-height: 1.6;
+  line-height: 1.7;
   font-size: 0.9rem;
   &::placeholder {
     color: ${(props) => props.theme.color.gray1};
@@ -76,6 +77,14 @@ const SubmitButton = styled(SB)`
   }
 `;
 
+const Editer = styled.div`
+  outline: 0;
+  max-height: 10rem;
+  overflow-y: auto;
+  line-height: 1.8;
+  font-size: 0.9rem;
+`;
+
 const getParentId = (inputBoxType: string, threadId: string | undefined) => {
   if (!threadId || inputBoxType === INPUT_BOX_TYPE.THREAD) {
     return null;
@@ -97,58 +106,96 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
 
   const { current } = useChannelState();
 
+  const handleInput = (e: any) => {
+    console.log(e.target.innerText);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     setComment(value);
-
     if (value.trim()) {
       setDisable(false);
     } else {
       setDisable(true);
     }
-
     e.target.style.height = '1px';
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
-      if (e.ctrlKey) {
-        /* TODO: ctrl + Enter 커스텀하기 */
-        // console.log('ctrl enter', comment);
-        // const before = comment.substring(0, commentRef.current?.selectionStart);
-        // const after = comment.substring(commentRef.current?.selectionEnd as number, comment.length);
-        // console.log(`${before}\n${after}`);
-        // setComment(`${before}\n${after}`);
-      }
+      /* TODO: ctrl + Enter 눌렀을 때 줄바꿈 */
+      // if (e.ctrlKey) {
+      //   const before = comment.substring(0, commentRef.current?.selectionStart);
+      //   const after = comment.substring(commentRef.current?.selectionEnd as number, comment.length);
+      //   setComment(`${before}\n${after}`);
+
+      //   if (commentRef.current) {
+      //     commentRef.current.style.height = '1px';
+      //     commentRef.current.style.height = `${commentRef.current.scrollHeight + 24}px`;
+      //   }
+      //   return;
+      // }
+      e.preventDefault();
+      sendMessage();
+      setComment('');
+      console.log('enter only, 여기서 전송 처리');
     }
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (userInfo !== null) {
-      const userId = Number(userInfo.id);
-      const content = comment;
-      dispatch(
-        createThreadRequest({
-          content,
-          userId,
-          channelId: Number(channelId),
-          parentId,
-        }),
-      );
+  const sendMessage = () => {
+    if (userInfo) {
+      const thread = {
+        displayName: 'J020_권현준',
+        phoneNumber: '010-4999-9994',
+        image: USER_DEFAULT_PROFILE_URL,
+        email: 'rnjshippo@naver.com',
+        id: Math.floor(Math.random() * 1000),
+        userId: 1,
+        channelId: 1,
+        content: `this is my content ${Math.floor(Math.random() * 1000)}`,
+        url: 'this is url',
+        isEdited: 0,
+        isPinned: 0,
+        isDeleted: 0,
+        parentId: null,
+        emoji: [],
+        subCount: 0,
+        subThreadUserId1: null,
+        subThreadUserId2: null,
+        subThreadUserId3: null,
+        createdAt: '2020-12-06',
+        updatedAt: '2020-12-06',
+      };
+      // dispatch(addThread({ thread }));
+      dispatch(sendMessageRequest({ thread }));
+      // dispatch(
+      //   createThreadRequest({
+      //     content: comment,
+      //     userId: +userInfo.id,
+      //     channelId: +(channelId as string),
+      //     parentId,
+      //   }),
+      // );
     }
   };
 
   return (
-    <Container onSubmit={submitHandler}>
+    <Container>
       <CommentBox>
         <TextBox>
+          {/* <Editer
+            contentEditable
+            onInput={handleInput}
+            placeholder={parentId ? 'Reply...' : `Send a message ${current?.name}`}
+          /> */}
+
           <TextArea
             onChange={handleChange}
-            onKeyDown={handleKeyUp}
+            onKeyDown={handleKey}
             placeholder={parentId ? 'Reply...' : `Send a message ${current?.name}`}
             ref={commentRef}
+            value={comment}
           />
         </TextBox>
         <ControlBox>
