@@ -1,10 +1,12 @@
-import { put, all, call, take, fork, cancel } from 'redux-saga/effects';
+import { put, all, call, take, fork, cancel, cancelled } from 'redux-saga/effects';
 import {
   socketConnectRequest,
   socketConnectSuccess,
   socketConnectFailure,
   sendMessageRequest,
+  socketDisconnectRequest,
 } from '@/store/modules/socket.slice';
+import { addThread } from '@/store/modules/thread.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
@@ -25,13 +27,19 @@ function connectSocket(): Promise<Socket> {
 
 function subscribeSocket(socket: Socket) {
   return eventChannel((emit: any) => {
+    // TODO: 채널/DM 추가에 대한 이벤트 바인딩 OR 아래 message 이벤트에서 함께 처리
+
     const handleMessage = (data: any) => {
-      // TODO: handle message
-      console.log('message', data);
+      // TODO 1: room에 해당하는 채널/DM에 new message가 생겼다는 action 전송(해당 사가에서 flag on)
+
+      // TODO 2: thread에 메시지 추가
+      emit(addThread({ thread: data.thread }));
+
+      console.log('from server, message: ', data);
     };
 
     const handleDisconnect = (data: any) => {
-      // TODO: handle disconnect
+      // TODO: 서버로부터 연결이 끊겼을 때의 처리
       console.log('disconnected');
     };
 
@@ -46,16 +54,22 @@ function subscribeSocket(socket: Socket) {
 
 function* read(socket: Socket) {
   const channel = yield call(subscribeSocket, socket);
-  while (true) {
-    const action = yield take(channel);
-    yield put(action);
+  try {
+    while (true) {
+      const action = yield take(channel);
+      yield put(action);
+    }
+  } finally {
+    if (yield cancelled()) {
+      channel.close();
+    }
   }
 }
 
 function* write(socket: Socket) {
   while (true) {
     const { payload } = yield take(sendMessageRequest);
-    socket.emit('message', payload.message);
+    socket.emit(MESSAGE, payload);
   }
 }
 
@@ -70,7 +84,11 @@ function* socketFlow() {
     try {
       const socket = yield call(connectSocket);
       yield put(socketConnectSuccess({ socket }));
-      yield fork(handleIO, socket);
+      const socketTask = yield fork(handleIO, socket);
+
+      yield take(socketDisconnectRequest);
+      yield cancel(socketTask);
+      socket.close();
     } catch (err) {
       yield put(socketConnectFailure({ err }));
     }
