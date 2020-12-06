@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Thread } from '@/types';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
-
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
 

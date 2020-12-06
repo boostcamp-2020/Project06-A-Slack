@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { joinChannelRequset } from '@/store/modules/channel.slice';
 import { getUsersRequest } from '@/store/modules/user.slice';
-import { useUser } from '@/hooks';
+import { useUserState } from '@/hooks';
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';
 
@@ -66,7 +66,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   setAddUsersModalVisble,
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
-  const { usersInfo } = useUser();
+  const { usersInfo } = useUserState();
   const [text, setText] = useState('');
   const [empty, setEmpty] = useState(true);
   let matchUsers: User[] = [];

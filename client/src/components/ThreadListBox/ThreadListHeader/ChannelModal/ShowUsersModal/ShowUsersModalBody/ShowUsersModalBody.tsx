@@ -2,7 +2,7 @@
 import React, { useState, useRef, ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { useChannel } from '@/hooks';
+import { useChannelState } from '@/hooks';
 import { JoinUser } from '@/types';
 import { DimModal } from '@/components';
 import { AddUsersModalHeader, AddUsersModalBody } from '../../AddUsersModal';
@@ -58,7 +58,7 @@ interface ShowUsersModalBody {
 const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
   setShowUsersModalVisible,
 }: ShowUsersModalBody) => {
-  const { users } = useChannel();
+  const { users } = useChannelState();
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
 
   const clickAddUsersModal = () => {

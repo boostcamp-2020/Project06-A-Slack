@@ -5,7 +5,7 @@ import { flex } from '@/styles/mixin';
 import { getNotNullDataInArray } from '@/utils/utils';
 import { Link } from 'react-router-dom';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
-import { useChannel } from '@/hooks';
+import { useChannelState } from '@/hooks';
 
 const Reply = styled.button`
   ${flex('center', 'flext-start')};
@@ -29,7 +29,7 @@ const getProfile = (users: JoinUser[], subId: number | null) => {
 };
 
 const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) => {
-  const { users } = useChannel();
+  const { users } = useChannelState();
 
   const getDisplayReplyData = () => {
     const replyData = [

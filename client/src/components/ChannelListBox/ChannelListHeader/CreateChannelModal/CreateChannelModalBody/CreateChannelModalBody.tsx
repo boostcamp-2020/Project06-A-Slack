@@ -4,7 +4,7 @@ import React, { ReactElement, useRef, useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
 import { createChannelRequest } from '@/store/modules/channel.slice';
-import { useAuth, useUser, useOnClickOutside } from '@/hooks';
+import { useAuthState, useUserState, useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -165,8 +165,8 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
 }: CreateChannelModalBodyProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { userId } = useAuth();
-  const { userInfo } = useUser();
+  const { userId } = useAuthState();
+  const { userInfo } = useUserState();
 
   const dispatch = useDispatch();
 

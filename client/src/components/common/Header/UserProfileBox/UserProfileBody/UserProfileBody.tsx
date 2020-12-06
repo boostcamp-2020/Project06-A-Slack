@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { FormLabel, FormInput, SubmitButton as SB, CancelButton as CB } from '@/styles/shared';
 import { flex } from '@/styles/mixin';
-import { useUser } from '@/hooks';
+import { useUserState } from '@/hooks';
 import { editUserRequest } from '@/store/modules/user.slice';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
@@ -100,7 +100,7 @@ const fileReader = new FileReader();
 const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: ProfileBodyProps) => {
   const dispatch = useDispatch();
 
-  const { userInfo, edit } = useUser();
+  const { userInfo, edit } = useUserState();
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const profileImageRef = useRef<HTMLImageElement>(null);

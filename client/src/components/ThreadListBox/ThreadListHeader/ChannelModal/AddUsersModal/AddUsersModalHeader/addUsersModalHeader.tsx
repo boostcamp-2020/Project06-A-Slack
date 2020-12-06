@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { useChannel } from '@/hooks';
+import { useChannelState } from '@/hooks';
 
 const Header = styled.div`
   ${flex('center', 'flex-start', 'column')};
@@ -16,7 +16,7 @@ const ChannelName = styled.div`
   font-size: ${(props) => props.theme.size.s};
 `;
 const AddUserModalHeader: React.FC = () => {
-  const { current } = useChannel();
+  const { current } = useChannelState();
 
   return (
     <Header>

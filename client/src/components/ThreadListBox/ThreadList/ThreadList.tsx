@@ -4,7 +4,7 @@ import { getThreadRequest } from '@/store/modules/thread.slice';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
-import { useThread } from '@/hooks';
+import { useThreadState } from '@/hooks';
 import { useParams } from 'react-router-dom';
 import { isNumberTypeValue } from '@/utils/utils';
 
@@ -18,7 +18,7 @@ interface RightSideParams {
 
 const ThreadList = () => {
   const { channelId }: RightSideParams = useParams();
-  const { threadList } = useThread();
+  const { threadList } = useThreadState();
   const dispatch = useDispatch();
 
   useEffect(() => {
