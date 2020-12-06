@@ -113,7 +113,9 @@ const ThreadListHeader = (): ReactElement | any => {
       {addUsersModalVisible && (
         <DimModal
           header={<AddUsersModalHeader />}
-          body={<AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} />}
+          body={
+            <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} first={false} />
+          }
           visible={addUsersModalVisible}
           setVisible={clickAddUsersModal}
         />

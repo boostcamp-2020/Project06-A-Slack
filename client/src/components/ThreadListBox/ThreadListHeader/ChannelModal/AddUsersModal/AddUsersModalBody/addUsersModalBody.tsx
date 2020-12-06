@@ -80,6 +80,7 @@ const SubmitButton = styled.button`
 
 interface AddUsersModalBodyProps {
   setAddUsersModalVisible: (fn: (state: boolean) => boolean) => void;
+  first: boolean;
 }
 
 interface RightSideParams {
@@ -88,6 +89,7 @@ interface RightSideParams {
 
 const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   setAddUsersModalVisible,
+  first,
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -123,8 +125,10 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   };
 
   const clickSubmitButton = () => {
-    dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
-    setAddUsersModalVisible((state) => !state);
+    if (!first) {
+      dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
+      setAddUsersModalVisible((state) => !state);
+    }
   };
 
   return (
