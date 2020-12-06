@@ -5,6 +5,7 @@ import userIdRouter from './[userId]';
 const router = express.Router();
 
 router.get('/', usersController.getUsers);
+router.post('/match', usersController.matchUsers);
 router.use('/:userId', userIdRouter);
 
 export default router;
