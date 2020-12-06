@@ -94,7 +94,7 @@ const ThreadListHeader = (): ReactElement | any => {
     if (userInfo) {
       dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo.id }));
     }
-  }, [userInfo]);
+  }, [channelId]);
 
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
@@ -113,7 +113,7 @@ const ThreadListHeader = (): ReactElement | any => {
       {addUsersModalVisible && (
         <DimModal
           header={<AddUsersModalHeader />}
-          body={<AddUsersModalBody setAddUsersModalVisble={clickAddUsersModal} />}
+          body={<AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} />}
           visible={addUsersModalVisible}
           setVisible={clickAddUsersModal}
         />
