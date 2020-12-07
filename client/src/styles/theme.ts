@@ -9,6 +9,7 @@ const theme: DefaultTheme = {
   },
   color: {
     main: '#4a154b',
+    lightBlack: '#1d1c1d',
     black1: '#111',
     black2: '#222',
     black3: '#333',
@@ -47,6 +48,10 @@ const theme: DefaultTheme = {
     yellow: '#e8912d',
     warningRed: '#D73A49',
     onConnect: '#2bac76',
+
+    channelItemColor: '#bcabbc',
+    channelBorder: 'rgb(82,38,83)',
+    threadHover: '#faf9f9',
   },
   size: {
     xxxs: calcRem(8),

@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { Link } from 'react-router-dom';
-import { DimModal, MenuModal } from '@/components';
+import { DimModal, MenuModal, ReactionIcon, CommentIcon, DotIcon } from '@/components';
+import { flex, hoverActive } from '@/styles/mixin';
+import theme from '@/styles/theme';
 
 const Container = styled.div`
   position: relative;
-  background-color: blue;
+  ${flex()};
+  border-radius: 5px;
+  background-color: white;
+  border: 1.5px solid ${(props) => props.theme.color.lightGray1};
   button {
     font-size: ${(props) => props.theme.size.xs};
   }
@@ -16,10 +21,6 @@ const Modal = styled.div`
   position: absolute;
   top: -0.5rem;
   right: -8rem;
-`;
-
-const MoreActionButton = styled.button`
-  position: relative;
 `;
 
 const ModalListItem = styled.div`
@@ -33,11 +34,29 @@ const ModalListItem = styled.div`
   }
 `;
 
+const ModalItems = styled.div`
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 5px;
+  ${hoverActive};
+  ${flex()};
+`;
+
+const ReactionBox = styled(ModalItems)``;
+const CommentBox = styled(ModalItems)``;
+const MoreActionBox = styled(ModalItems)`
+  position: relative;
+`;
+
 interface ThreadPopupProps {
   thread: Thread;
+  isParentThreadOfRightSideBar?: boolean;
 }
 
-const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) => {
+const ThreadPopup: React.FC<ThreadPopupProps> = ({
+  thread,
+  isParentThreadOfRightSideBar,
+}: ThreadPopupProps) => {
   const [menuModalVisible, setMenuModalVisible] = useState(false);
 
   const closeMenuModal = () => setMenuModalVisible(false);
@@ -49,14 +68,18 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
 
   return (
     <Container>
-      <button type="button">reaction</button>
-      <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
-        <button type="button">replyInThread</button>
-      </Link>
-      <button type="button">shareMessage</button>
-      <button type="button">Save</button>
-      <MoreActionButton type="button" onClick={openMenuModal}>
-        MoreActions
+      <ReactionBox>
+        <ReactionIcon size="1.5rem" color={theme.color.black5} />
+      </ReactionBox>
+      {!thread.parentId && !isParentThreadOfRightSideBar && (
+        <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
+          <CommentBox>
+            <CommentIcon size="1.2rem" color={theme.color.black5} />
+          </CommentBox>
+        </Link>
+      )}
+      <MoreActionBox onClick={openMenuModal}>
+        <DotIcon color={theme.color.black5} />
         {menuModalVisible && (
           <MenuModal
             top="1rem"
@@ -71,9 +94,13 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
             <ModalListItem>Delete message</ModalListItem>
           </MenuModal>
         )}
-      </MoreActionButton>
+      </MoreActionBox>
     </Container>
   );
+};
+
+ThreadPopup.defaultProps = {
+  isParentThreadOfRightSideBar: false,
 };
 
 export default ThreadPopup;

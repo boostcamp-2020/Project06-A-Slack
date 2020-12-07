@@ -1,39 +1,53 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useRef, ReactElement } from 'react';
-import styled from 'styled-components';
+import React, { useState, ReactElement } from 'react';
+import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { DimModal, MenuModal } from '@/components';
+import { DimModal, MenuModal, ArrowDownIcon, PlusIcon, DotIcon } from '@/components';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 
 const Container = styled.div`
   position: relative;
   ${flex('center', 'space-between')}
-  margin-bottom: 10px;
+  margin-bottom: 0.65rem;
+  cursor: pointer;
 `;
 
 const PopupBox = styled.div`
   position: relative;
 `;
 
-const Button = styled.button`
+const Controls = styled.div`
+  ${flex()}
+  margin-right:0.5rem;
+`;
+
+const OptionIcon = styled.button`
+  ${flex()}
+  width: 2rem;
+  height: 2rem;
   color: ${(props) => props.theme.color.white};
   font-size: ${(props) => props.theme.size.m};
   background: transparent;
   border: none;
+  border-radius: 5px;
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
   }
   outline: 0;
+  cursor: pointer;
 `;
+
+const DotIconBox = styled(OptionIcon)``;
+const PlusIconBox = styled(OptionIcon)``;
 
 const SubWrapper = styled.div`
   ${flex()}
 `;
 
-const Content = styled.div`
-  color: #fff;
-  font-size: 12px;
+const Title = styled.div`
+  color: ${(props) => props.theme.color.channelItemColor};
+  font-size: 0.9rem;
+  user-select: none;
 `;
 
 const ModalListItem = styled.div`
@@ -45,6 +59,34 @@ const ModalListItem = styled.div`
     color: white;
     background-color: ${(props) => props.theme.color.blue1};
   }
+`;
+
+interface ArrowProps {
+  rotated: boolean;
+}
+
+const ArrowIcon = styled.div<ArrowProps>`
+  ${flex()}
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.4rem;
+  color: ${(props) => props.theme.color.white};
+  font-size: ${(props) => props.theme.size.m};
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  transition: 0.3s;
+  ${(props) =>
+    props.rotated &&
+    css`
+      transform: rotate(-90deg);
+      transition: 0.3s;
+    `}
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  outline: 0;
+  cursor: pointer;
 `;
 
 const ChannelListBox = ({
@@ -61,20 +103,22 @@ const ChannelListBox = ({
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
 
-  const clickChannel = () => {
+  const toggleChannelList = () => {
     setChannelListVisible((state: boolean) => !state);
   };
 
-  const toggleAddChannelsModal = () => {
+  const toggleAddChannelsModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     setAddChannelsModalVisible((state) => !state);
   };
 
-  const toggleSectionOptionsModal = () => {
+  const toggleSectionOptionsModal = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     setSectionOptionsModalVisible((state) => !state);
   };
 
   const clickCreateChannelModal = () => {
-    setCreateChannelModalVisible((state) => !state);
+    setCreateChannelModalVisible(true);
   };
   return (
     <>
@@ -82,6 +126,7 @@ const ChannelListBox = ({
         <DimModal
           header={<CreateChannelModalHeader secret={secret} />}
           body={
+            // eslint-disable-next-line react/jsx-wrap-multilines
             <CreateChannelModalBody
               secret={secret}
               setCreateChannelModalVisible={setCreateChannelModalVisible}
@@ -92,7 +137,7 @@ const ChannelListBox = ({
           setVisible={setCreateChannelModalVisible}
         />
       )}
-      <Container>
+      <Container onClick={toggleChannelList}>
         {addChannelsModalVisible && (
           <MenuModal
             top="1.5rem"
@@ -120,19 +165,23 @@ const ChannelListBox = ({
           </MenuModal>
         )}
         <SubWrapper>
-          <Button onClick={clickChannel}>{channelListVisible ? '▽' : '▷'}</Button>
-          <Content onClick={clickChannel}>
-            {channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}
-          </Content>
+          <ArrowIcon rotated={!channelListVisible}>
+            <ArrowDownIcon />
+          </ArrowIcon>
+          <Title>{channelType === CHANNEL_TYPE.CHANNEL ? 'Channels' : 'Direct Messages'}</Title>
         </SubWrapper>
-        <SubWrapper>
+        <Controls>
           <PopupBox onClick={toggleSectionOptionsModal}>
-            <Button>፧</Button>
+            <DotIconBox>
+              <DotIcon />
+            </DotIconBox>
           </PopupBox>
           <PopupBox onClick={toggleAddChannelsModal}>
-            <Button>+</Button>
+            <PlusIconBox>
+              <PlusIcon size="1.4rem" />
+            </PlusIconBox>
           </PopupBox>
-        </SubWrapper>
+        </Controls>
       </Container>
     </>
   );

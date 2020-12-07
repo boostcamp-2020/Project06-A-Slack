@@ -4,10 +4,11 @@ import LeftSidebarHeader from './LeftSideBarHeader/LeftSideBarHeader';
 import LeftSidebarContent from './LeftSideBarContent/LeftSideBarContent';
 
 const Container = styled.div`
-  background: ${(props) => props.theme.color.purple2};
+  width: 16.25rem;
   height: 100%;
-  min-width: 150px;
-  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background: ${(props) => props.theme.color.purple2};
 `;
 
 const LeftSideBar = (): ReactElement => {

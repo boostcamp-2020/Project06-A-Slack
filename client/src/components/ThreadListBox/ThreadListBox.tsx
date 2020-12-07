@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import { flex } from '@/styles/mixin';
 import { INPUT_BOX_TYPE } from '@/utils/constants';
 import { ThreadInputBox } from '@/components';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 import ThreadList from './ThreadList/ThreadList';
 
 const Container = styled.div`
-  background-color: pink;
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ThreadListBox = () => {

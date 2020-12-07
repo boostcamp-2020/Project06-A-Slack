@@ -57,7 +57,7 @@ const InputBox = styled.div<Props>`
   position: relative;
   &::before {
     position: absolute;
-    content: '${(props) => (props.secret ? 'O' : '#')}';
+    content: ${(props) => (props.secret ? 'O' : '#')};
     top: 15px;
     left: 10px;
     color: ${(props) => props.theme.color.gray2};
@@ -70,7 +70,7 @@ const Label = styled.label`
 `;
 
 const LabelBox = styled.div`
-  ${flex(undefined, 'flex-start')}
+  ${flex('center', 'flex-start')}
   margin-bottom: 10px;
 `;
 
@@ -111,7 +111,7 @@ const PrivateButton = styled.button<Props>`
   border-radius: 15px;
   padding: 2px;
   border: 1px ${(props) => props.theme.color.gray2} solid;
-  ${(props) => (props.secret ? flex(undefined, 'flex-end') : flex(undefined, 'flex-start'))};
+  ${(props) => (props.secret ? flex('center', 'flex-end') : flex('center', 'flex-start'))};
   &:focus {
     transition: 0.3s;
     box-shadow: ${(props) => props.theme.boxShadow.skyblue};

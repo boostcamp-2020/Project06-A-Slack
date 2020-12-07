@@ -29,14 +29,15 @@ const Container = styled.div<ContainerProps>`
       right: ${props.right};
     `}
   width: ${(props) => props.width ?? 'auto'};
+  min-width: 13rem;
   height: auto;
   background-color: ${(props) => props.backgroundColor ?? props.theme.color.modalWhite};
   border-radius: 5px;
-  border: 1px solid ${(props) => props.theme.color.gray3};
+  padding: 0.8rem 0;
   outline: 0;
   ${modalBoxShadow}
   ${flex('center', 'center', 'column')}
-  z-index: 2;
+  z-index: 10;
 `;
 
 interface MenuModalProps {

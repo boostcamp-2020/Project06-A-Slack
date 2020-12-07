@@ -35,6 +35,13 @@ const threadSlice = createSlice({
     createThreadRequest(state, action: PayloadAction<createThreadRequestPayload>) {},
     createThreadSuccess(state, action: PayloadAction<ThreadResponse>) {},
     createThreadFailure(state, action) {},
+    addThread(state, action) {
+      if (state.threadList?.length) {
+        state.threadList.push(action.payload.thread);
+      } else {
+        state.threadList = [action.payload.thread];
+      }
+    },
   },
 });
 
@@ -46,6 +53,7 @@ export const {
   createThreadRequest,
   createThreadSuccess,
   createThreadFailure,
+  addThread,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

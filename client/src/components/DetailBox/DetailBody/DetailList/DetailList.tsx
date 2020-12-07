@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
-import { JoinUser } from '@/types';
+import { JoinedUser } from '@/types';
 
 const Container = styled.div`
   padding: ${(props) => props.theme.size.m};
@@ -84,7 +84,7 @@ export const DetailList: React.FC = () => {
           <Arrow>{members ? '∨' : '＞'}</Arrow>
         </ListItem>
         {members &&
-          users?.map((user: JoinUser) => (
+          users?.map((user: JoinedUser) => (
             <MemberItem key={user.userId}>
               <MemberImg src={user.image} />
               <MemberInfo>{user.displayName}</MemberInfo>

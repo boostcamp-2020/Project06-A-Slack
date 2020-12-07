@@ -9,6 +9,7 @@ declare module 'styled-components' {
 
     color: {
       main: string;
+      lightBlack: string;
       black1: string;
       black2: string;
       black3: string;
@@ -48,6 +49,10 @@ declare module 'styled-components' {
       yellow: string;
       warningRed: string;
       onConnect: string;
+
+      channelItemColor: string;
+      channelBorder: string;
+      threadHover: string;
     };
 
     size: {

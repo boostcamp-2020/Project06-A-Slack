@@ -1,30 +1,42 @@
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
+import { WriteIcon } from '@/components';
 
 const Container = styled.div`
+  width: 16.25rem;
+  height: 4.3rem;
   padding: 15px;
   background: ${(props) => props.theme.color.purple2};
   ${flex('center', 'space-between')}
+  border-top: 1px solid ${(props) => props.theme.color.channelBorder};
+  border-bottom: 1px solid ${(props) => props.theme.color.channelBorder};
 `;
 
-const Content = styled.div`
+const Title = styled.div`
   color: ${(props) => props.theme.color.white};
+  font-weight: bold;
 `;
 
 const Button = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 50%;
   background: ${(props) => props.theme.color.white};
   border: none;
+  padding-top: 0.1rem;
+  ${flex()};
 `;
+
+const workspace = '부스트 캠프 2020 멤버십';
 
 const LeftSideBar = (): ReactElement => {
   return (
     <Container>
-      <Content>부캠하이</Content>
-      <Button />
+      <Title>{workspace}</Title>
+      <Button>
+        <WriteIcon />
+      </Button>
     </Container>
   );
 };
