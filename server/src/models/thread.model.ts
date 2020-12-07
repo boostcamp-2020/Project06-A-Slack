@@ -36,7 +36,7 @@ export const threadModel = {
     userId: number;
     channelId: number;
     content: string;
-    parentId: number;
+    parentId: number | null;
     url: string;
   }): any {
     const sql = `INSERT INTO thread (user_id, channel_id, content, parent_id, url) VALUES (?,?,?,?,?)`;
