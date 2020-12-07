@@ -3,7 +3,7 @@ import { emojiModel } from '@/models';
 import { verifyRequestData } from '@/utils/utils';
 
 /**
- * GET /api/emoji
+ * GET /api/emojis
  */
 export const getEmojiList = async (
   req: Request,
@@ -19,7 +19,7 @@ export const getEmojiList = async (
 };
 
 /**
- * POST /api/emoji
+ * POST /api/emojis
  */
 export const createEmoji = async (
   req: Request,
@@ -30,7 +30,7 @@ export const createEmoji = async (
     const { name, url } = req.body;
     if (verifyRequestData([name, url])) {
       const [createedEmojiInfo] = await emojiModel.createEmoji({ name, url });
-      res.status(200).json({ createedEmojiInfo });
+      res.status(201).json({ createedEmojiInfo });
       return;
     }
   } catch (err) {

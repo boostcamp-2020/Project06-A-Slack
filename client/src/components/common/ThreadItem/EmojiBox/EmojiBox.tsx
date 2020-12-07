@@ -18,7 +18,7 @@ const EmojiBox: React.FC<EmojiBoxProps> = ({ thread }: EmojiBoxProps) => {
     <Container>
       {thread.emoji.length > 0 &&
         thread.emoji.map((emoji) => {
-          return <EmojiBoxItem key={`${emoji.id}wrapper`} emoji={emoji} />;
+          return <EmojiBoxItem key={`${emoji.id}`} emoji={emoji} />;
         })}
     </Container>
   );

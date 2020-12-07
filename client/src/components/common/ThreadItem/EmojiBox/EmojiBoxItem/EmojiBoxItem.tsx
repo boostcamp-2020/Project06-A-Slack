@@ -19,7 +19,7 @@ const EmojiToolTip = styled.div`
   border: 1px solid black;
   visibility: hidden;
   position: absolute;
-  z-index: 22;
+  z-index: 1;
   bottom: 2rem;
   width: 10rem;
   ${Container}:hover & {
@@ -68,10 +68,9 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps)
   };
 
   const getEmojiName = (emojiId: number) => {
-    const idx = emojiList.emoji.findIndex((emojiEl) => {
+    return emojiList.emoji.find((emojiEl) => {
       return emojiEl.id === emojiId;
-    });
-    return emojiList.emoji[idx].name;
+    })?.name;
   };
 
   const getToolTipDescribe = (emojiId: number) => {
@@ -79,10 +78,9 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps)
   };
 
   const getEmojiUrl = (emojiId: number) => {
-    const idx = emojiList.emoji.findIndex((emojiEl) => {
+    return emojiList.emoji.find((emojiEl) => {
       return emojiEl.id === emojiId;
-    });
-    return emojiList.emoji[idx].url;
+    })?.url;
   };
 
   return (
