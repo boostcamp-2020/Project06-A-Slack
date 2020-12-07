@@ -16,6 +16,8 @@ const Container = styled.div`
   overflow-y: auto;
 `;
 
+const Bottom = styled.div``;
+
 interface RightSideParams {
   channelId: string | undefined;
 }
@@ -24,17 +26,10 @@ const ThreadList = () => {
   const { channelId }: RightSideParams = useParams();
   const { threadList } = useThreadState();
   const dispatch = useDispatch();
-  const ref = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  /* 
-    TODO: 
-    스크롤이 끝까지 가도록 변경(현재 어중간하게 이동함), 
-    아이템 추가할 때는 스크롤하지 않도록 변경(위에꺼 보는게 새 메시지가 와도 맨 밑으로 스크롤 될 필요 x)
-  */
   useEffect(() => {
-    ref.current?.scrollTo({
-      top: ref.current?.getBoundingClientRect().bottom,
-    });
+    bottomRef.current?.scrollIntoView();
   }, [threadList]);
 
   useEffect(() => {
@@ -44,7 +39,7 @@ const ThreadList = () => {
   }, [dispatch, channelId]);
 
   return (
-    <Container ref={ref}>
+    <Container>
       {threadList?.map((thread: Thread, index: number) => (
         <ThreadItem
           key={thread.id}
@@ -52,6 +47,7 @@ const ThreadList = () => {
           prevThreadUserId={threadList[index - 1]?.userId}
         />
       ))}
+      <Bottom ref={bottomRef} />
     </Container>
   );
 };
