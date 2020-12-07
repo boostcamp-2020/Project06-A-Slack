@@ -23,7 +23,6 @@ interface Message {
   isEdited: number;
   isPinned: number;
   createdAt: string;
-  updatedAt: string;
   emoji: Emoji[] | null;
   subCount: number;
   subThreadUserId1: number | null;
