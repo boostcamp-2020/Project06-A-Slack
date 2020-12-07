@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { getUsersRequest, matchUsersRequest } from '@/store/modules/user.slice';
+import { matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
 import { joinChannelRequset, createChannelRequest } from '@/store/modules/channel.slice';
 import { User } from '@/types';
@@ -98,11 +98,10 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const [pickUsers, setPickUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
   const { userInfo } = useUserState();
-  const { current } = useChannelState();
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      dispatch(matchUsersRequest({ pickUsers, displayName: text, channelId: +channelId }));
+      dispatch(matchUsersRequest({ first, pickUsers, displayName: text, channelId: +channelId }));
       setVisible(true);
     }, 250);
 
@@ -130,8 +129,8 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
       dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
     } else {
       const name = pickUsers.reduce((acc, cur) => {
-        return `${acc}, ${cur.email}`;
-      }, '');
+        return `${acc}, ${cur.displayName}`;
+      }, `${userInfo?.displayName}`);
       dispatch(
         createChannelRequest({
           ownerId: userInfo?.id,
@@ -140,11 +139,9 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
           name,
           description: '',
           displayName: '',
+          users: [userInfo, ...pickUsers],
         }),
       );
-      if (userInfo && current) {
-        dispatch(joinChannelRequset({ users: pickUsers, channelId: current.id }));
-      }
     }
     setAddUsersModalVisible((state) => !state);
   };
