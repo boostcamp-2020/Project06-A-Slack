@@ -1,7 +1,8 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
-import { Channel, JoinedUser } from '@/types';
+import { Channel, JoinedUser, User } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
+
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
@@ -26,6 +27,7 @@ import {
   joinChannelFailure,
   modifyLastChannelRequestPayload,
   modifyTopicChannelRequestPayload,
+  joinChannelRequsetPayload,
 } from '../modules/channel.slice';
 
 function* loadChannels() {
@@ -90,9 +92,13 @@ function* createChannel(action: any) {
   }
 }
 
-function* joinChannel({ userId, channelId }: { userId: number; channelId: number }) {
+function* joinChannel({ payload: { users, channelId } }: PayloadAction<joinChannelRequsetPayload>) {
   try {
-    yield call(channelService.joinChannel, { userId, channelId });
+    yield call(channelService.joinChannel, { users, channelId });
+    const { data, status } = yield call(channelService.getChannel, { channelId });
+    if (status === 200) {
+      yield put(joinChannelSuccess({ users: data.users }));
+    }
   } catch (err) {
     yield put(joinChannelFailure(err));
   }
@@ -107,8 +113,6 @@ function* modifyTopicChannel(action: any) {
     yield put(modifyTopicFailure({ err }));
   }
 }
-
-modifyTopicSuccess({ channelId: 1 });
 
 function* modifyLastChannel({
   payload: { lastChannelId, userId },
@@ -137,9 +141,9 @@ function* watchCreateChannel() {
   yield takeLatest(createChannelRequest, createChannel);
 }
 
-// function* watchJoinChannel() {
-//   yield takeEvery(joinChannelRequset, joinChannel);
-// }
+function* watchJoinChannel() {
+  yield takeLatest(joinChannelRequset, joinChannel);
+}
 
 function* watchModifyLastChannel() {
   yield takeLatest(modifyLastChannelRequest, modifyLastChannel);
@@ -154,7 +158,7 @@ export default function* channelSaga() {
     fork(watchLoadMyChannels),
     fork(watchCreateChannel),
     fork(watchLoadChannel),
-    // fork(watchJoinChannel),
+    fork(watchJoinChannel),
     fork(watchModifyLastChannel),
     fork(watchModifyTopicChannel),
   ]);

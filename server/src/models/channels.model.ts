@@ -9,11 +9,6 @@ interface createInfo {
   description: string;
 }
 
-interface JoinInfo {
-  userId: number;
-  channelId: number;
-}
-
 interface TopicInfo {
   channelId: number;
   topic: string;
@@ -56,9 +51,9 @@ export const channelModel = {
     const sql = `INSERT INTO channel (owner_id, name, channel_type, is_public, description) VALUES (?, ?, ?, ?, ?)`;
     return pool.execute(sql, [ownerId, name, channelType, isPublic, description]);
   },
-  joinChannel({ userId, channelId }: JoinInfo): any {
-    const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES(?, ?)`;
-    return pool.execute(sql, [userId, channelId]);
+  joinChannel(joinUsers: Array<Array<number>>): any {
+    const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES ?`;
+    return pool.query(sql, [joinUsers]);
   },
   modifyTopic({ channelId, topic }: TopicInfo) {
     const sql = 'UPDATE channel SET topic = ? WHERE id = ?';
