@@ -5,18 +5,30 @@ import {
   socketConnectFailure,
   sendMessageRequest,
   socketDisconnectRequest,
+  enterRoomRequest,
+  leaveRoomRequest,
 } from '@/store/modules/socket.slice';
 import { addThread } from '@/store/modules/thread.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
+import {
+  SocketEvent,
+  isChannelEvent,
+  isDMEvent,
+  isEmojiEvent,
+  isThreadEvent,
+  isUserEvent,
+} from '@/types';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
 export type Socket = SocketIOClient.Socket;
 
 function connectSocket(): Promise<Socket> {
-  const socket = io(`${process.env.BASE_URL as string}`);
+  const socket = io(`${process.env.BASE_URL as string}`, {
+    transports: ['websocket', 'polling'],
+  });
   return new Promise((resolve) => {
     socket.on(CONNECT, () => {
       console.log('connect');
@@ -27,13 +39,30 @@ function connectSocket(): Promise<Socket> {
 
 function subscribeSocket(socket: Socket) {
   return eventChannel((emit: any) => {
-    // TODO: 채널/DM 추가에 대한 이벤트 바인딩 OR 아래 message 이벤트에서 함께 처리
-
-    const handleMessage = (data: any) => {
-      // TODO 1: room에 해당하는 채널/DM에 new message가 생겼다는 action 전송(해당 사가에서 flag on)
+    const handleMessage = (data: SocketEvent) => {
+      if (isThreadEvent(data)) {
+        // TODO 1: room에 해당하는 채널/DM에 new message가 생겼다는 action 전송(해당 사가에서 flag ON)
+        const { room, thread, type } = data;
+        emit(addThread({ thread }));
+        return;
+      }
+      if (isEmojiEvent(data)) {
+        // TODO: Emoji 이벤트 처리
+        return;
+      }
+      if (isUserEvent(data)) {
+        // TODO: User 이벤트 처리
+        return;
+      }
+      if (isChannelEvent(data)) {
+        // TODO: Channel 이벤트 처리
+        return;
+      }
+      if (isDMEvent(data)) {
+        // TODO: DM 이벤트 처리
+      }
 
       // TODO 2: thread에 메시지 추가
-      emit(addThread({ thread: data.thread }));
 
       console.log('from server, message: ', data);
     };
@@ -73,9 +102,25 @@ function* write(socket: Socket) {
   }
 }
 
+function* enterRoom(socket: Socket) {
+  while (true) {
+    const { payload } = yield take(enterRoomRequest);
+    socket.emit(ENTER_ROOM, payload);
+  }
+}
+
+function* leaveRoom(socket: Socket) {
+  while (true) {
+    const { payload } = yield take(leaveRoomRequest);
+    socket.emit(LEAVE_ROOM, payload);
+  }
+}
+
 function* handleIO(socket: Socket) {
   yield fork(read, socket);
   yield fork(write, socket);
+  yield fork(enterRoom, socket);
+  yield fork(leaveRoom, socket);
 }
 
 function* socketFlow() {
