@@ -1,6 +1,6 @@
-interface Emoji {
-  name: string;
-  userId: number;
+export interface Emoji {
+  id: number;
+  userList: number[];
 }
 
 export interface Thread {
@@ -13,7 +13,7 @@ export interface Thread {
   isEdited: number;
   isPinned: number;
   createdAt: string;
-  emoji: Emoji[] | null;
+  emoji: Emoji[];
   subCount: number;
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
