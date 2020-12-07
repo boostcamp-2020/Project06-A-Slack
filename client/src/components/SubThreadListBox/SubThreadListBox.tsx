@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSubThreadState } from '@/hooks';
-import { useHistory, useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getSubThreadRequest } from '@/store/modules/subThread.slice';
 import { isNumberTypeValue } from '@/utils/utils';
@@ -23,9 +23,8 @@ interface RightSideParams {
 
 const SubThreadListBox: React.FC = () => {
   const dispatch = useDispatch();
-  const { threadId }: RightSideParams = useParams();
+  const { channelId, threadId }: RightSideParams = useParams();
   const { parentThread, subThreadList } = useSubThreadState();
-  const history = useHistory();
 
   useEffect(() => {
     dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
@@ -33,7 +32,7 @@ const SubThreadListBox: React.FC = () => {
 
   return (
     <>
-      {isNumberTypeValue(threadId) && parentThread !== undefined ? (
+      {isNumberTypeValue(threadId) && parentThread !== undefined && (
         <Container>
           <div>subThreadListBox</div>
           <ParentThread parentThread={parentThread} />
@@ -41,8 +40,6 @@ const SubThreadListBox: React.FC = () => {
           <SubThreadList subThreadList={subThreadList} />
           <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.SUBTHREAD} />
         </Container>
-      ) : (
-        history.goBack()
       )}
     </>
   );
