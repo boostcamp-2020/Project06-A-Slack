@@ -50,9 +50,13 @@ const MoreActionBox = styled(ModalItems)`
 
 interface ThreadPopupProps {
   thread: Thread;
+  isParentThreadOfRightSideBar?: boolean;
 }
 
-const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) => {
+const ThreadPopup: React.FC<ThreadPopupProps> = ({
+  thread,
+  isParentThreadOfRightSideBar,
+}: ThreadPopupProps) => {
   const [menuModalVisible, setMenuModalVisible] = useState(false);
 
   const closeMenuModal = () => setMenuModalVisible(false);
@@ -67,7 +71,7 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
       <ReactionBox>
         <ReactionIcon size="1.5rem" color={theme.color.black5} />
       </ReactionBox>
-      {!thread.parentId && (
+      {!thread.parentId && !isParentThreadOfRightSideBar && (
         <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
           <CommentBox>
             <CommentIcon size="1.2rem" color={theme.color.black5} />
@@ -93,6 +97,10 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({ thread }: ThreadPopupProps) =
       </MoreActionBox>
     </Container>
   );
+};
+
+ThreadPopup.defaultProps = {
+  isParentThreadOfRightSideBar: false,
 };
 
 export default ThreadPopup;
