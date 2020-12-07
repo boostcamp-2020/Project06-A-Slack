@@ -4,4 +4,5 @@ export interface ChannelInfo {
   channelType: number;
   isPublic: number;
   description: string;
+  memberCount: number;
 }
