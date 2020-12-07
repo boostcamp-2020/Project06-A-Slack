@@ -66,16 +66,12 @@ const channelSlice = createSlice({
     modifyTopicRequest(state, action) {},
     modifyTopicSuccess(state, action: PayloadAction<{ channelId: number }>) {},
     modifyTopicFailure(state, action) {},
-    modifyLastChannelRequest(state, action: PayloadAction<modifyLastChannelRequestPayload>) {},
-    modifyLastChannelSuccess() {},
-    modifyLastChannelFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
-      console.log(action);
       state.channelList.push(action.payload.channel);
       state.myChannelList.push(action.payload.channel);
       state.current = action.payload.channel;
-      state.users = [action.payload.JoinedUser];
+      state.users = action.payload.joinedUser;
     },
     createChannelFailure(state, action) {
       // todo 에러처리
@@ -112,9 +108,6 @@ export const {
   modifyTopicRequest,
   modifyTopicSuccess,
   modifyTopicFailure,
-  modifyLastChannelRequest,
-  modifyLastChannelSuccess,
-  modifyLastChannelFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,
