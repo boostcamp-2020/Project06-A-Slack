@@ -59,7 +59,7 @@ function* loadChannel(action: any) {
 
 function* createChannel(action: any) {
   try {
-    const { ownerId, channelType, isPublic, name, description, displayName } = action.payload;
+    const { ownerId, channelType, isPublic, name, description } = action.payload;
     const result = yield call(channelService.createChannel, {
       ownerId,
       channelType,
@@ -79,6 +79,7 @@ function* createChannel(action: any) {
       memberCount: 1,
     };
 
+<<<<<<< HEAD
     const joinedUser: JoinedUser = {
       displayName,
       userId: ownerId,
@@ -87,6 +88,10 @@ function* createChannel(action: any) {
     };
     yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });
     yield put(createChannelSuccess({ channel, joinedUser }));
+=======
+    yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });
+    yield put(createChannelSuccess({ channel }));
+>>>>>>> cfc6f3e... [feat] 채널인지 dm인지에 따라서 처음에 생성해주는 것을 다르게 구현(미완성)
   } catch (err) {
     yield put(createChannelFailure(err));
   }

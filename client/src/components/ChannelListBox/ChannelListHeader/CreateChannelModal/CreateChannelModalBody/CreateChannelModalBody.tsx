@@ -3,8 +3,8 @@
 import React, { ReactElement, useRef, useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { createChannelRequest } from '@/store/modules/channel.slice';
-import { useAuthState, useUserState, useOnClickOutside } from '@/hooks';
+import { useAuthState, useUserState, useChannelState, useOnClickOutside } from '@/hooks';
+import { createChannelRequest, joinChannelRequset } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -167,6 +167,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
   const [description, setDescription] = useState('');
   const { userId } = useAuthState();
   const { userInfo } = useUserState();
+  const { current } = useChannelState();
 
   const dispatch = useDispatch();
 
@@ -194,6 +195,9 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
         displayName: userInfo?.displayName,
       }),
     );
+    if (userInfo && current) {
+      dispatch(joinChannelRequset({ users: [userInfo], channelId: current.id }));
+    }
     setCreateChannelModalVisible((state) => !state);
   };
 

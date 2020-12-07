@@ -71,6 +71,7 @@ const channelSlice = createSlice({
     modifyLastChannelFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
+      console.log(action);
       state.channelList.push(action.payload.channel);
       state.myChannelList.push(action.payload.channel);
       state.current = action.payload.channel;

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { joinChannelRequset } from '@/store/modules/channel.slice';
 import { getUsersRequest, matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
+import { joinChannelRequset, createChannelRequest } from '@/store/modules/channel.slice';
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -97,15 +97,17 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const [visible, setVisible] = useState(false);
   const [pickUsers, setPickUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
+  const { userInfo } = useUserState();
+  const { current } = useChannelState();
 
   useEffect(() => {
-    const throttle = setTimeout(() => {
+    const debounce = setTimeout(() => {
       dispatch(matchUsersRequest({ pickUsers, displayName: text, channelId: +channelId }));
       setVisible(true);
-    }, 500);
+    }, 250);
 
     return () => {
-      window.clearTimeout(throttle);
+      clearTimeout(debounce);
     };
   }, [text]);
 
@@ -126,8 +128,25 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const clickSubmitButton = () => {
     if (!first) {
       dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
-      setAddUsersModalVisible((state) => !state);
+    } else {
+      const name = pickUsers.reduce((acc, cur) => {
+        return `${acc}, ${cur.email}`;
+      }, '');
+      dispatch(
+        createChannelRequest({
+          ownerId: userInfo?.id,
+          channelType: 2,
+          isPublic: false,
+          name,
+          description: '',
+          displayName: '',
+        }),
+      );
+      if (userInfo && current) {
+        dispatch(joinChannelRequset({ users: pickUsers, channelId: current.id }));
+      }
     }
+    setAddUsersModalVisible((state) => !state);
   };
 
   return (

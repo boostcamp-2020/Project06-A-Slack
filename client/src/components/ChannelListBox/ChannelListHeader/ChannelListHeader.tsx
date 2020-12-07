@@ -3,6 +3,10 @@ import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
 import { DimModal, MenuModal, ArrowDownIcon, PlusIcon, DotIcon } from '@/components';
+import {
+  AddUsersModalHeader,
+  AddUsersModalBody,
+} from '@/components/ThreadListBox/ThreadListHeader/ChannelModal/AddUsersModal';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 
 const Container = styled.div`
@@ -101,6 +105,7 @@ const ChannelListBox = ({
   const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
   const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
+  const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
 
   const toggleChannelList = () => {
@@ -120,6 +125,11 @@ const ChannelListBox = ({
   const clickCreateChannelModal = () => {
     setCreateChannelModalVisible(true);
   };
+
+  const clickAddUsersModal = () => {
+    setAddUsersModalVisible((state) => !state);
+  };
+
   return (
     <>
       {createChannelModalVisible && (
@@ -137,7 +147,15 @@ const ChannelListBox = ({
           setVisible={setCreateChannelModalVisible}
         />
       )}
-      <Container onClick={toggleChannelList}>
+      {addUsersModalVisible && (
+        <DimModal
+          header={<AddUsersModalHeader />}
+          body={<AddUsersModalBody setAddUsersModalVisible={setAddChannelsModalVisible} first />}
+          visible={addUsersModalVisible}
+          setVisible={setAddUsersModalVisible}
+        />
+      )}
+      <Container>
         {addChannelsModalVisible && (
           <MenuModal
             top="1.5rem"
@@ -145,7 +163,13 @@ const ChannelListBox = ({
             visible={addChannelsModalVisible}
             setVisible={setAddChannelsModalVisible}
           >
-            <ModalListItem onClick={clickCreateChannelModal}>
+            <ModalListItem
+              onClick={() =>
+                channelType === CHANNEL_TYPE.CHANNEL
+                  ? clickCreateChannelModal()
+                  : clickAddUsersModal()
+              }
+            >
               {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
             </ModalListItem>
             <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
