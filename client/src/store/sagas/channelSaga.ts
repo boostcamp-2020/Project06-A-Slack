@@ -13,9 +13,6 @@ import {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  modifyLastChannelRequest,
-  modifyLastChannelSuccess,
-  modifyLastChannelFailure,
   modifyTopicRequest,
   modifyTopicSuccess,
   modifyTopicFailure,
@@ -50,8 +47,12 @@ function* loadMyChannels(action: any) {
 
 function* loadChannel(action: any) {
   try {
-    const result = yield call(channelService.getChannel, { channelId: action.payload });
+    const result = yield call(channelService.getChannel, { channelId: action.payload.channelId });
     yield put(loadChannelSuccess({ channel: result.data.channel, users: result.data.users }));
+    yield call(channelService.modifyLastChannel, {
+      lastChannelId: action.payload.channelId,
+      userId: action.payload.userId,
+    });
   } catch (err) {
     yield put(loadChannelFailure(err));
   }
@@ -59,39 +60,35 @@ function* loadChannel(action: any) {
 
 function* createChannel(action: any) {
   try {
-    const { ownerId, channelType, isPublic, name, description } = action.payload;
+    const { ownerId, channelType, isPublic, name, description, users } = action.payload;
     const result = yield call(channelService.createChannel, {
       ownerId,
       channelType,
       isPublic,
       name,
       description,
+      memberCount: users.length,
     });
 
     const channel: Channel = {
       id: result.data.channel.insertId,
-      channelType: 1,
+      channelType,
       description,
       isPublic,
       name,
       topic: '',
       ownerId,
-      memberCount: 1,
+      memberCount: users.length,
     };
 
-<<<<<<< HEAD
     const joinedUser: JoinedUser = {
-      displayName,
       userId: ownerId,
-      image:
-        'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg',
+      displayName: users[0].id,
+      image: users[0].image,
     };
-    yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });
-    yield put(createChannelSuccess({ channel, joinedUser }));
-=======
-    yield call(channelService.joinChannel, { userId: ownerId, channelId: channel.id });
-    yield put(createChannelSuccess({ channel }));
->>>>>>> cfc6f3e... [feat] 채널인지 dm인지에 따라서 처음에 생성해주는 것을 다르게 구현(미완성)
+
+    yield put(createChannelSuccess({ channel, joinedUser: [joinedUser] }));
+    yield call(channelService.joinChannel, { users, channelId: result.data.channel.insertId });
   } catch (err) {
     yield put(createChannelFailure(err));
   }
@@ -119,17 +116,6 @@ function* modifyTopicChannel(action: any) {
   }
 }
 
-function* modifyLastChannel({
-  payload: { lastChannelId, userId },
-}: PayloadAction<modifyLastChannelRequestPayload>) {
-  try {
-    yield call(channelService.modifyLastChannel, { lastChannelId, userId });
-    yield put(modifyLastChannelSuccess());
-  } catch (err) {
-    yield put(modifyLastChannelFailure({ err }));
-  }
-}
-
 function* watchLoadChannels() {
   yield takeEvery(loadChannelsRequest, loadChannels);
 }
@@ -150,10 +136,6 @@ function* watchJoinChannel() {
   yield takeLatest(joinChannelRequset, joinChannel);
 }
 
-function* watchModifyLastChannel() {
-  yield takeLatest(modifyLastChannelRequest, modifyLastChannel);
-}
-
 function* watchModifyTopicChannel() {
   yield takeLatest(modifyTopicRequest, modifyTopicChannel);
 }
@@ -164,7 +146,6 @@ export default function* channelSaga() {
     fork(watchCreateChannel),
     fork(watchLoadChannel),
     fork(watchJoinChannel),
-    fork(watchModifyLastChannel),
     fork(watchModifyTopicChannel),
   ]);
 }
