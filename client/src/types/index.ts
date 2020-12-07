@@ -5,3 +5,4 @@ export * from './channelInfo';
 export * from './joinedUser';
 export * from './channel';
 export * from './service';
+export * from './socket';
