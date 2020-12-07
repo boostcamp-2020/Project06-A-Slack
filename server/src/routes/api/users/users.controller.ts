@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { userModel } from '@/models';
+import { channelModel, userModel } from '@/models';
 import { verifyRequestData } from '@/utils/utils';
 /**
  * GET /api/users
@@ -19,9 +19,9 @@ export const matchUsers = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { displayName, channelId } = req.body;
+    const { displayName, channelId, first } = req.body;
     if (verifyRequestData([displayName, channelId])) {
-      const [matchUsersInfo] = await userModel.matchUsers({ displayName, channelId });
+      const [matchUsersInfo] = await userModel.matchUsers({ displayName, channelId, first });
       res.status(200).json({ matchUsersInfo });
       return;
     }
