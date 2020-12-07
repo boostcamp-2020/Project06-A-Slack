@@ -70,7 +70,7 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
     <>
       {addUsersModalVisible && (
         <DimModal
-          header={<AddUsersModalHeader />}
+          header={<AddUsersModalHeader first={false} />}
           body={
             <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} first={false} />
           }

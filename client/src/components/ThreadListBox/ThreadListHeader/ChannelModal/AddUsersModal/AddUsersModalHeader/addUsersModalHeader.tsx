@@ -15,15 +15,22 @@ const HeaderTitle = styled.div`
 const ChannelName = styled.div`
   font-size: ${(props) => props.theme.size.s};
 `;
-const AddUserModalHeader: React.FC = () => {
+
+interface AddUsersModalHeaderProps {
+  first: boolean;
+}
+
+const AddUserModalHeader: React.FC<AddUsersModalHeaderProps> = ({
+  first,
+}: AddUsersModalHeaderProps) => {
   const { current } = useChannelState();
 
   return (
     <Header>
       <HeaderTitle>Add People</HeaderTitle>
       <ChannelName>
-        {current?.isPublic}
-        {current?.name}
+        {!first && current?.isPublic}
+        {!first && current?.name}
       </ChannelName>
     </Header>
   );
