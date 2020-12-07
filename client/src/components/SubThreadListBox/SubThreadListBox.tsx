@@ -32,7 +32,7 @@ const SubThreadListBox: React.FC = () => {
 
   return (
     <>
-      {isNumberTypeValue(threadId) && parentThread !== undefined ? (
+      {isNumberTypeValue(threadId) && parentThread !== undefined && (
         <Container>
           <div>subThreadListBox</div>
           <ParentThread parentThread={parentThread} />
@@ -40,8 +40,6 @@ const SubThreadListBox: React.FC = () => {
           <SubThreadList subThreadList={subThreadList} />
           <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.SUBTHREAD} />
         </Container>
-      ) : (
-        <></>
       )}
     </>
   );
