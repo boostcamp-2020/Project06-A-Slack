@@ -12,6 +12,7 @@ export interface UserState {
     success: boolean;
     err: Error | null;
   };
+  matchUsersInfo: User[] | null;
 }
 
 const userState: UserState = {
@@ -22,6 +23,7 @@ const userState: UserState = {
     success: false,
     err: null,
   },
+  matchUsersInfo: [],
 };
 
 export interface EditUserPayload {
@@ -78,6 +80,11 @@ const userSlice = createSlice({
       state.usersInfo = payload.usersInfo;
     },
     getUsersFailure() {},
+    matchUsersRequest(state, action) {},
+    matchUsersSuccess(state, action) {
+      state.matchUsersInfo = action.payload.matchUsersInfo;
+    },
+    matchUsersFailure(state, action) {},
   },
 });
 
@@ -92,6 +99,9 @@ export const {
   getUsersRequest,
   getUsersSuccess,
   getUsersFailure,
+  matchUsersRequest,
+  matchUsersSuccess,
+  matchUsersFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

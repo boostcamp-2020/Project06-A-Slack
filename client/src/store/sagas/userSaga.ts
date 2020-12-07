@@ -11,8 +11,12 @@ import {
   getUsersRequest,
   getUsersSuccess,
   getUsersFailure,
+  matchUsersRequest,
+  matchUsersSuccess,
+  matchUsersFailure,
 } from '@/store/modules/user.slice';
 import { userService } from '@/services';
+import { User } from '@/types';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 function* getUser({ payload }: { payload: { userId: number } }) {
@@ -95,6 +99,43 @@ function* watchGetUsers() {
   yield takeEvery(getUsersRequest, getUsers);
 }
 
+function* matchUsers({
+  payload,
+}: {
+  payload: { pickUsers: User[]; displayName: string; channelId: number };
+}) {
+  console.log(payload);
+  try {
+    if (payload.displayName.length === 0) {
+      yield put(matchUsersSuccess({ matchUsersInfo: [] }));
+    } else {
+      const { data, status } = yield call(userService.matchUsers, {
+        displayName: payload.displayName,
+        channelId: payload.channelId,
+      });
+
+      const matchUsersInfo = data.matchUsersInfo.reduce((acc: User[], cur: User) => {
+        if (payload.pickUsers.every((pu) => cur.id !== pu.id)) {
+          acc.push(cur);
+        }
+        return acc;
+      }, []);
+
+      console.log(matchUsersInfo);
+
+      if (status === 200) {
+        yield put(matchUsersSuccess({ matchUsersInfo }));
+      }
+    }
+  } catch (err) {
+    yield put(matchUsersFailure({ err }));
+  }
+}
+
+function* watchMatchUsers() {
+  yield takeLatest(matchUsersRequest, matchUsers);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchGetUsers)]);
+  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchGetUsers), fork(watchMatchUsers)]);
 }

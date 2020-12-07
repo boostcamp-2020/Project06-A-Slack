@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { JoinUser, Channel } from '@/types';
+import { JoinUser, Channel, User } from '@/types';
 
 interface ChannelState {
   channelList: Channel[];
@@ -27,6 +27,11 @@ export interface modifyLastChannelRequestPayload {
 export interface modifyTopicChannelRequestPayload {
   channelId: number;
   topic: string;
+}
+
+export interface joinChannelRequsetPayload {
+  users: User[];
+  channelId: number;
 }
 
 const channelSlice = createSlice({
@@ -74,8 +79,11 @@ const channelSlice = createSlice({
     createChannelFailure(state, action) {
       // todo 에러처리
     },
-    joinChannelRequset(state, action) {},
-    joinChannelSuccess(state, action) {},
+    joinChannelRequset(state, action: PayloadAction<joinChannelRequsetPayload>) {},
+    joinChannelSuccess(state, action: PayloadAction<{ users: JoinUser[] }>) {
+      console.log(action);
+      state.users = action.payload.users;
+    },
     joinChannelFailure(state, action) {
       // todo 에러처리
     },
