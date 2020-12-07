@@ -4,7 +4,7 @@ import { getThreadRequest } from '@/store/modules/thread.slice';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
-import { useThreadState } from '@/hooks';
+import { useThreadState, useUserState } from '@/hooks';
 import { useParams } from 'react-router-dom';
 import { isNumberTypeValue } from '@/utils/utils';
 
@@ -25,11 +25,16 @@ interface RightSideParams {
 const ThreadList = () => {
   const { channelId }: RightSideParams = useParams();
   const { threadList } = useThreadState();
+  const { userInfo } = useUserState();
   const dispatch = useDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView();
+    if (threadList) {
+      if (threadList[threadList.length - 1].userId === userInfo?.id) {
+        bottomRef.current?.scrollIntoView();
+      }
+    }
   }, [threadList]);
 
   useEffect(() => {
