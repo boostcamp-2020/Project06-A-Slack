@@ -150,7 +150,7 @@ const ChannelListBox = ({
       {addUsersModalVisible && (
         <DimModal
           header={<AddUsersModalHeader first={channelType !== CHANNEL_TYPE.CHANNEL} />}
-          body={<AddUsersModalBody setAddUsersModalVisible={setAddChannelsModalVisible} first />}
+          body={<AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} first />}
           visible={addUsersModalVisible}
           setVisible={setAddUsersModalVisible}
         />

@@ -79,7 +79,7 @@ const SubmitButton = styled.button`
 `;
 
 interface AddUsersModalBodyProps {
-  setAddUsersModalVisible: (fn: (state: boolean) => boolean) => void;
+  setAddUsersModalVisible: (a: any) => any;
   first: boolean;
 }
 
@@ -143,7 +143,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         }),
       );
     }
-    setAddUsersModalVisible((state) => !state);
+    setAddUsersModalVisible(false);
   };
 
   return (

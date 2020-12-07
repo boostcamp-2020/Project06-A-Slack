@@ -118,14 +118,14 @@ const ThreadListHeader = () => {
     setAddTopicModalVisible((state) => !state);
   };
 
+  console.log(addUsersModalVisible);
+
   return (
     <>
       {addUsersModalVisible && (
         <DimModal
           header={<AddUsersModalHeader first={false} />}
-          body={
-            <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} first={false} />
-          }
+          body={<AddUsersModalBody setAddUsersModalVisible={clickAddUsersModal} first={false} />}
           visible={addUsersModalVisible}
           setVisible={clickAddUsersModal}
         />
