@@ -22,7 +22,7 @@ export const createChannel = async (req: Request, res: Response, next: NextFunct
       isPublic,
       description,
     });
-    res.status(200).json({ channel });
+    res.status(201).json({ channel });
     return;
   }
   res.status(400).json({ message: '필수 값 누락' });
