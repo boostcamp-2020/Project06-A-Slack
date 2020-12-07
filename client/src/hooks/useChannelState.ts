@@ -13,7 +13,7 @@ const selectJoinChannelListState = (state: RootState) => state.channel.myChannel
 const selectJoinChannelList = (idx: number) =>
   createSelector(selectJoinChannelListState, (joinChannelList) => joinChannelList[idx]);
 
-export const useChannel = () => {
+export const useChannelState = () => {
   return useSelector(selectChannel);
 };
 
@@ -21,6 +21,6 @@ export const useChannelList = (idx: number) => {
   return useSelector(selectChannelList(idx));
 };
 
-export const useJoinChannelList = (idx: number) => {
+export const useJoinChannelListState = (idx: number) => {
   return useSelector(selectJoinChannelList(idx));
 };

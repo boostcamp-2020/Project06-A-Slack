@@ -55,13 +55,15 @@ function* editUser(action: PayloadAction<EditUserRequestPayload>) {
     } else if (profileImage) {
       formData.append('setDefault', '0');
       formData.append('image', profileImage);
+      if (previousFileName) {
+        formData.append('previousFileName', previousFileName);
+      }
     } else {
       formData.append('setDefault', '1');
       setDefault = true;
-    }
-
-    if (previousFileName) {
-      formData.append('previousFileName', previousFileName);
+      if (previousFileName) {
+        formData.append('previousFileName', previousFileName);
+      }
     }
 
     const {

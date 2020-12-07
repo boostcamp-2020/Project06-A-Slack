@@ -28,24 +28,25 @@ export const createThread = async (
       없으면 existSubThreadUserIdList에 현재 userId값이 있는지 비교한 후, 있으면 넘어가고 없으면 update.
       - SELECT sub_thread_user_id_1, sub_thread_user_id_2, sub_thread_user_id_3 FROM thread 
       */
-      await threadModel.updateSubCountOfThread(parentId);
-      const [[parentThread]] = await threadModel.getThread(Number(parentId));
-      const subThreadUserIdList: number[] = [
-        parentThread.subThreadUserId1,
-        parentThread.subThreadUserId2,
-        parentThread.subThreadUserId3,
-      ];
+      if (parentId) {
+        await threadModel.updateSubCountOfThread(parentId);
+        const [[parentThread]] = await threadModel.getThread(Number(parentId));
+        const subThreadUserIdList: number[] = [
+          parentThread.subThreadUserId1,
+          parentThread.subThreadUserId2,
+          parentThread.subThreadUserId3,
+        ];
 
-      if (!subThreadUserIdList.find((subThreadUserId) => subThreadUserId === userId)) {
-        const updateIndex = subThreadUserIdList.findIndex(
-          (subThreadUserId) => subThreadUserId === null,
-        );
-        // null인 자리가 있으면,
-        if (updateIndex !== -1) {
-          await threadModel.updateSubThreadUserIdOfThread(updateIndex + 1, userId, parentId);
+        if (!subThreadUserIdList.find((subThreadUserId) => subThreadUserId === userId)) {
+          const updateIndex = subThreadUserIdList.findIndex(
+            (subThreadUserId) => subThreadUserId === null,
+          );
+          // null인 자리가 있으면,
+          if (updateIndex !== -1) {
+            await threadModel.updateSubThreadUserIdOfThread(updateIndex + 1, userId, parentId);
+          }
         }
       }
-
       res.status(201).json({ result });
       return;
     } catch (err) {

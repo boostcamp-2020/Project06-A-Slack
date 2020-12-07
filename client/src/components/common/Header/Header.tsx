@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getUserRequest } from '@/store/modules/user.slice';
 import { flex } from '@/styles/mixin';
-import { useAuth, useUser } from '@/hooks';
+import { useAuthState, useUserState } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth.slice';
 import { DimModal, UserStateIcon, MenuModal } from '@/components';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
@@ -77,8 +77,8 @@ const Logout = styled(ModalListItem)``;
 const Header: React.FC = () => {
   const dispatch = useDispatch();
 
-  const { userId } = useAuth();
-  const { userInfo } = useUser();
+  const { userId } = useAuthState();
+  const { userInfo } = useUserState();
 
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [menuModalVisible, setMenuModalVisible] = useState(false);

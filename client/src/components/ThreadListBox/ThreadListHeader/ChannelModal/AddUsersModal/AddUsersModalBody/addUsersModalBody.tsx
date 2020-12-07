@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { joinChannelRequset } from '@/store/modules/channel.slice';
-import { matchUsersRequest } from '@/store/modules/user.slice';
-import { useDispatch } from 'react-redux';
-import { useChannel, useUser } from '@/hooks';
+import { getUsersRequest, matchUsersRequest } from '@/store/modules/user.slice';
+import { useChannelState, useUserState } from '@/hooks';
 import { User } from '@/types';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 interface Props {
@@ -93,14 +93,13 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
-  const { matchUsersInfo } = useUser();
+  const { matchUsersInfo } = useUserState();
   const [visible, setVisible] = useState(false);
   const [pickUsers, setPickUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
 
   useEffect(() => {
     const throttle = setTimeout(() => {
-      console.log('해해');
       dispatch(matchUsersRequest({ pickUsers, displayName: text, channelId: +channelId }));
       setVisible(true);
     }, 500);

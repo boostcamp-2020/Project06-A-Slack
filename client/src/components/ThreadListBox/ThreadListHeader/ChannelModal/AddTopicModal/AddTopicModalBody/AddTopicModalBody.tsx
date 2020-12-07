@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { modifyTopicRequest, setCurrent } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
-import { useChannel } from '@/hooks';
+import { useChannelState } from '@/hooks';
 
 const TextArea = styled.textarea`
   border: 1px ${(props) => props.theme.color.gray4} solid;
@@ -55,7 +55,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   setAddTopicModalVisible,
 }: AddTopicModalBodyProps) => {
   const [content, setContent] = useState('');
-  const { channelId, current } = useChannel();
+  const { channelId, current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

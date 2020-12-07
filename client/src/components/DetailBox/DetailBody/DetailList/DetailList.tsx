@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useChannel } from '@/hooks/useChannel';
+import { useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import { JoinUser } from '@/types';
 
@@ -10,7 +10,7 @@ const Container = styled.div`
 `;
 
 const ListItem = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const ListItemName = styled.div`
@@ -28,7 +28,7 @@ const ItemBox = styled.div`
 `;
 
 const MemberItem = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const MemberImg = styled.img`
@@ -48,7 +48,7 @@ export const DetailList: React.FC = () => {
   const [organization, setOrganization] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [files, setFiles] = useState(false);
-  const { users } = useChannel();
+  const { users } = useChannelState();
 
   const openAbout = () => {
     setAbout((about) => !about);

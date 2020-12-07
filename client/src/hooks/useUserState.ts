@@ -6,8 +6,8 @@ const selectUser = createSelector(
   (state: RootState) => state.user,
   (user) => user,
 );
-const useUser = () => {
+const useUserState = () => {
   return useSelector(selectUser);
 };
 
-export { useUser };
+export { useUserState };

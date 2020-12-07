@@ -5,7 +5,7 @@ import { flex } from '@/styles/mixin';
 import { getNotNullDataInArray } from '@/utils/utils';
 import { Link } from 'react-router-dom';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
-import { useChannel } from '@/hooks';
+import { useChannelState } from '@/hooks';
 
 const Reply = styled.button`
   ${flex('center', 'flext-start')};
@@ -20,15 +20,31 @@ interface ReplyButtonProps {
   thread: Thread;
 }
 
+const getProfile = (users: JoinUser[], subId: number | null) => {
+  const idx = users.findIndex((user) => user.userId === subId);
+  if (idx !== -1) {
+    return users[idx].image;
+  }
+  return USER_DEFAULT_PROFILE_URL;
+};
+
 const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) => {
-  const { users } = useChannel();
+  const { users } = useChannelState();
 
   const getDisplayReplyData = () => {
-    // 추후 subThreadUserId 값을 이용해, 채널 멤버의 user 정보를 활용하여 프로필을 뿌려준다.
     const replyData = [
-      { subThreadUserId: thread.subThreadUserId1, subThreadProfile: USER_DEFAULT_PROFILE_URL },
-      { subThreadUserId: thread.subThreadUserId2, subThreadProfile: USER_DEFAULT_PROFILE_URL },
-      { subThreadUserId: thread.subThreadUserId3, subThreadProfile: USER_DEFAULT_PROFILE_URL },
+      {
+        subThreadUserId: thread.subThreadUserId1,
+        subThreadProfile: getProfile(users, thread.subThreadUserId1),
+      },
+      {
+        subThreadUserId: thread.subThreadUserId2,
+        subThreadProfile: getProfile(users, thread.subThreadUserId2),
+      },
+      {
+        subThreadUserId: thread.subThreadUserId3,
+        subThreadProfile: getProfile(users, thread.subThreadUserId3),
+      },
     ];
     const results = getNotNullDataInArray(replyData)('subThreadUserId');
     return results;
