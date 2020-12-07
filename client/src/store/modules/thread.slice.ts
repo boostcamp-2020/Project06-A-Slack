@@ -8,7 +8,7 @@ interface ThreadList {
 }
 
 const threadListState: ThreadList = {
-  threadList: [initialThread],
+  threadList: null,
 };
 
 export interface getThreadRequestPayload {

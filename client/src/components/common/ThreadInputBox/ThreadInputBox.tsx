@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createThreadRequest, addThread } from '@/store/modules/thread.slice';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { useParams } from 'react-router-dom';
 import { useChannelState, useUserState } from '@/hooks';
-import { INPUT_BOX_TYPE, USER_DEFAULT_PROFILE_URL, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { PaperPlaneIcon } from '@/components';
 import { SubmitButton as SB } from '@/styles/shared';
 import styled from 'styled-components';
