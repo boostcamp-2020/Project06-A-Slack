@@ -17,7 +17,13 @@ export const createThread = async (
     // userId, channelId, content, parentId 이상한값 예외처리 추후 추가
     try {
       const url = 'temp/url'; // 추후 url 생성 부분 추가
-      const [result] = await threadModel.createThread(userId, channelId, content, parentId, url);
+      const [result] = await threadModel.createThread({
+        userId,
+        channelId,
+        content,
+        parentId,
+        url,
+      });
       // 1. threadCount 변경 2. subThread 추가 로직 구현
       /*
       1. parentId가 true면, parentId의 subCount 값 +1
@@ -30,7 +36,7 @@ export const createThread = async (
       */
       if (parentId) {
         await threadModel.updateSubCountOfThread(parentId);
-        const [[parentThread]] = await threadModel.getThread(Number(parentId));
+        const [[parentThread]] = await threadModel.getThread({ threadId: +parentId });
         const subThreadUserIdList: number[] = [
           parentThread.subThreadUserId1,
           parentThread.subThreadUserId2,
@@ -43,7 +49,11 @@ export const createThread = async (
           );
           // null인 자리가 있으면,
           if (updateIndex !== -1) {
-            await threadModel.updateSubThreadUserIdOfThread(updateIndex + 1, userId, parentId);
+            await threadModel.updateSubThreadUserIdOfThread({
+              updateIndex: updateIndex + 1,
+              userId,
+              parentId,
+            });
           }
         }
       }
@@ -70,7 +80,7 @@ export const getChannelThreads = async (
     return;
   }
   try {
-    const [threadList] = await threadModel.getThreadListInChannel(Number(channelId));
+    const [threadList] = await threadModel.getThreadListInChannel({ channelId: +channelId });
 
     res.json({ threadList });
   } catch (err) {
