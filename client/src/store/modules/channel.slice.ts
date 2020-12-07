@@ -53,7 +53,7 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     loadChannelRequest(state, action) {
-      state.channelId = action.payload;
+      state.channelId = action.payload.channelId;
     },
     loadChannelSuccess(state, action) {
       const [temp] = action.payload.channel;
