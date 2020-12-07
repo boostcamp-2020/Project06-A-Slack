@@ -50,4 +50,21 @@ instance.interceptors.request.use(
   },
 );
 
+instance.interceptors.response.use(
+  (res) => {
+    if (res.status >= 400) {
+      console.error('api 요청 실패', res);
+    }
+    return res;
+  },
+  (err) => {
+    if (axios.isCancel(err)) {
+      console.log('요청 취소', err);
+    } else {
+      console.error('api 에러', err);
+    }
+    return Promise.reject(err);
+  },
+);
+
 export default instance;
