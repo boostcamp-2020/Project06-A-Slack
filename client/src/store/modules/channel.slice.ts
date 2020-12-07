@@ -80,7 +80,7 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     joinChannelRequset(state, action: PayloadAction<joinChannelRequsetPayload>) {},
-    joinChannelSuccess(state, action: PayloadAction<{ users: JoinUser[] }>) {
+    joinChannelSuccess(state, action: PayloadAction<{ users: JoinedUser[] }>) {
       console.log(action);
       state.users = action.payload.users;
     },

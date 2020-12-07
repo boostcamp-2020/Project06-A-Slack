@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Thread } from '@/types';
+import { JoinedUser, Thread } from '@/types';
 import { flex } from '@/styles/mixin';
 import { getNotNullDataInArray } from '@/utils/utils';
 import { Link } from 'react-router-dom';
@@ -55,7 +55,7 @@ interface ReplyButtonProps {
   thread: Thread;
 }
 
-const getProfile = (users: JoinUser[], subId: number | null) => {
+const getProfile = (users: JoinedUser[], subId: number | null) => {
   const idx = users.findIndex((user) => user.userId === subId);
   if (idx !== -1) {
     return users[idx].image;
