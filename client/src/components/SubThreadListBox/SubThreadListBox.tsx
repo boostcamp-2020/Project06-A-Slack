@@ -26,8 +26,6 @@ const SubThreadListBox: React.FC = () => {
   const { channelId, threadId }: RightSideParams = useParams();
   const { parentThread, subThreadList } = useSubThreadState();
 
-  const redirectUrl = `/client/1/${channelId}`;
-
   useEffect(() => {
     dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
   }, [threadId]);
@@ -43,7 +41,7 @@ const SubThreadListBox: React.FC = () => {
           <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.SUBTHREAD} />
         </Container>
       ) : (
-        <Redirect to={redirectUrl} />
+        <></>
       )}
     </>
   );
