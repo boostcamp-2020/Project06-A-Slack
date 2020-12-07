@@ -118,8 +118,6 @@ const ThreadListHeader = () => {
     setAddTopicModalVisible((state) => !state);
   };
 
-  console.log(addUsersModalVisible);
-
   return (
     <>
       {addUsersModalVisible && (
