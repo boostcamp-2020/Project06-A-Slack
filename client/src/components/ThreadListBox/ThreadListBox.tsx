@@ -29,7 +29,7 @@ const ThreadListBox = () => {
 
   const dispatch = useDispatch();
 
-  const { current } = useChannelState();
+  const { current, users } = useChannelState();
   const { userInfo } = useUserState();
   const { threadList } = useThreadState();
 
@@ -57,7 +57,7 @@ const ThreadListBox = () => {
     <Container>
       {threadList && (
         <>
-          <ThreadListHeader />
+          <ThreadListHeader current={current} users={users} />
           <ThreadList />
           <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.THREAD} />
         </>

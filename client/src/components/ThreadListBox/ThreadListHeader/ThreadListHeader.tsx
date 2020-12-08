@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useChannelState } from '@/hooks';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { JoinedUser } from '@/types';
+import { JoinedUser, Channel } from '@/types';
 import { Link, useParams } from 'react-router-dom';
 import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/components';
 import theme from '@/styles/theme';
 import { flex, hoverActive } from '@/styles/mixin';
+
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
@@ -91,9 +91,12 @@ interface RightSideParams {
   channelId: string;
 }
 
-const ThreadListHeader = () => {
-  const { current, users } = useChannelState();
+interface ThreadListHeaderProps {
+  current: Channel | null;
+  users: JoinedUser[];
+}
 
+const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
