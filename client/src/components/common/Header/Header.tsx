@@ -6,6 +6,7 @@ import { flex } from '@/styles/mixin';
 import { useAuthState, useUserState } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth.slice';
 import { DimModal, UserStateIcon, MenuModal, ClockIcon } from '@/components';
+import theme from '@/styles/theme';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 
 const Container = styled.div`
@@ -78,6 +79,41 @@ const ModalListItem = styled.div`
   }
 `;
 
+const ModalUserProfileBox = styled.div`
+  width: 100%;
+  padding: 0.8rem 1.2rem 1.5rem 1.2rem;
+  ${flex('center', 'flex-start')};
+`;
+
+const ModalUserImage = styled.img`
+  width: 2.4rem;
+  height: 2.4rem;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 0.3rem;
+`;
+
+const ModalUserInfoBox = styled.div`
+  margin-left: 0.5rem;
+`;
+
+const ModalUserName = styled.div`
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: ${(props) => props.theme.color.lightBlack};
+`;
+
+const ModalUserStatus = styled.div`
+  ${flex('center', 'flex-start')};
+  margin: 0.2rem 0;
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.color.black8};
+`;
+
+const UserStateText = styled.div`
+  margin: 0 0.2rem;
+`;
+
 const Logout = styled(ModalListItem)``;
 
 const TitleClockIcon = styled.div`
@@ -133,6 +169,17 @@ const Header: React.FC = () => {
           visible={menuModalVisible}
           setVisible={setMenuModalVisible}
         >
+          <ModalUserProfileBox>
+            <ModalUserImage src={userInfo?.image} />
+            <ModalUserInfoBox>
+              <ModalUserName>{userInfo?.displayName}</ModalUserName>
+              <ModalUserStatus>
+                <UserStateIcon color={theme.color.green1} />
+                <UserStateText>Active</UserStateText>
+              </ModalUserStatus>
+            </ModalUserInfoBox>
+          </ModalUserProfileBox>
+          <Line />
           <ModalListItem onClick={openEditModal}>Edit profile</ModalListItem>
           <ModalListItem>View profile</ModalListItem>
           <Line />
