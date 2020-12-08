@@ -8,6 +8,7 @@ import { joinChannelRequset, createChannelRequest } from '@/store/modules/channe
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { makeDMRoomName } from '@/utils/utils';
 
 interface Props {
   visible: boolean;
@@ -127,10 +128,9 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const clickSubmitButton = () => {
     if (!first) {
       dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
-    } else {
-      const name = pickUsers.reduce((acc, cur) => {
-        return `${acc}, ${cur.displayName}`;
-      }, `${userInfo?.displayName}`);
+    } else if (userInfo) {
+      const name = makeDMRoomName(pickUsers, userInfo.displayName);
+
       dispatch(
         createChannelRequest({
           ownerId: userInfo?.id,
