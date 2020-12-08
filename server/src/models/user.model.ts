@@ -52,15 +52,15 @@ export const userModel = {
     if (!isDM) {
       const sql = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
       FROM user
-      WHERE display_name LIKE '${displayName}%' AND id NOT IN (
+      WHERE display_name LIKE ? AND id NOT IN (
         SELECT user_id FROM user_channel
         WHERE channel_id = ?
       )`;
-      return pool.execute(sql, [channelId]);
+      return pool.execute(sql, [`${displayName}%`, channelId]);
     }
     const sql = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
     FROM user
-    WHERE display_name LIKE '${displayName}%'`;
-    return pool.query(sql);
+    WHERE display_name LIKE ?`;
+    return pool.execute(sql, [`${displayName}%`]);
   },
 };
