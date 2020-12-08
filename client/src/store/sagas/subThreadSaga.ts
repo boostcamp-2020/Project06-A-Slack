@@ -16,6 +16,7 @@ function* getSubThreadList({ parentId }: GetSubThreadRequestPayload) {
       getSubThreadSuccess({
         parentThread: parentThreadData,
         subThreadList: result.data.subThreadList,
+        canScroll: true,
       }),
     );
   } catch (err) {

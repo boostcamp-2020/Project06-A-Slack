@@ -6,6 +6,7 @@ import { Thread, initialThread } from '@/types';
 interface SubThreadBox {
   parentThread: Thread;
   subThreadList: Thread[] | null;
+  canScroll: boolean;
 }
 
 export interface GetSubThreadRequestPayload {
@@ -15,6 +16,7 @@ export interface GetSubThreadRequestPayload {
 const subThreadListState: SubThreadBox = {
   parentThread: initialThread,
   subThreadList: null,
+  canScroll: false,
 };
 
 // 리듀서
@@ -26,6 +28,7 @@ const subThreadSlice = createSlice({
     getSubThreadSuccess(state, action: PayloadAction<SubThreadBox>) {
       state.parentThread = action.payload.parentThread;
       state.subThreadList = action.payload.subThreadList;
+      state.canScroll = action.payload.canScroll;
     },
     getSubThreadFailure(state, action) {},
     addSubThread(state, action) {
@@ -34,6 +37,9 @@ const subThreadSlice = createSlice({
       } else {
         state.subThreadList = [action.payload.thread];
       }
+    },
+    setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
+      state.canScroll = payload.canScroll;
     },
   },
 });
@@ -44,6 +50,7 @@ export const {
   getSubThreadSuccess,
   getSubThreadFailure,
   addSubThread,
+  setScrollable,
 } = subThreadSlice.actions; // action 나눠서 export 하기
 
 export default subThreadSlice.reducer;
