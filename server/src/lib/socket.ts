@@ -177,14 +177,23 @@ export const bindSocketServer = (server: http.Server): void => {
       if (isThreadEvent(data)) {
         const { room, thread, type } = data;
         const { userId, channelId, content, parentId } = thread;
-        const insertId = await threadService.createThread({ userId, channelId, content, parentId });
+        try {
+          const insertId = await threadService.createThread({
+            userId,
+            channelId,
+            content,
+            parentId,
+          });
 
-        namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
-        namespace.emit(MESSAGE, {
-          type: SOCKET_MESSAGE_TYPE.CHANNEL,
-          channel: { id: thread.channelId, unreadMessage: true },
-          room,
-        });
+          namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
+          namespace.emit(MESSAGE, {
+            type: SOCKET_MESSAGE_TYPE.CHANNEL,
+            channel: { id: thread.channelId, unreadMessage: true },
+            room,
+          });
+        } catch (err) {
+          console.error(err);
+        }
         return;
       }
       if (isEmojiEvent(data)) {
