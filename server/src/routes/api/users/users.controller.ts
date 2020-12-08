@@ -19,9 +19,9 @@ export const matchUsers = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { displayName, channelId, first } = req.body;
+    const { displayName, channelId, isDM } = req.body;
     if (verifyRequestData([displayName, channelId])) {
-      const [matchUsersInfo] = await userModel.matchUsers({ displayName, channelId, first });
+      const [matchUsersInfo] = await userModel.matchUsers({ displayName, channelId, isDM });
       res.status(200).json({ matchUsersInfo });
       return;
     }

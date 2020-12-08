@@ -16,12 +16,12 @@ export const userService: Service = {
   matchUsers({
     displayName,
     channelId,
-    first,
+    isDM,
   }: {
     displayName: string;
     channelId: number;
-    first: boolean;
+    isDM: boolean;
   }) {
-    return API.post('/api/users/match', { displayName, channelId, first });
+    return API.post('/api/users/match', { displayName, channelId, isDM });
   },
 };
