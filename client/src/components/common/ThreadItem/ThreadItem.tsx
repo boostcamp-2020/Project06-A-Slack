@@ -30,14 +30,11 @@ const Container = styled.div`
 `;
 
 const Popup = styled.div`
-  display: none;
+  display: flex;
   position: absolute;
   right: 1rem;
   /* top: -0.75rem; */ // modal 추상화 전까지 잠시 주석처리함
   border-radius: 5px;
-  ${Container}:hover & {
-    display: flex;
-  }
 `;
 
 const UserImgBox = styled.div``;
@@ -113,8 +110,18 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
 }: ThreadItemProps) => {
   const isSameUser = prevThreadUserId === thread.userId;
 
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  const handleMouseEnter = () => {
+    setPopupVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setPopupVisible(false);
+  };
+
   return (
-    <Container>
+    <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <UserImgBox>
         <UserImg src={thread.image} />
       </UserImgBox>
@@ -127,9 +134,14 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
         {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
         <EmojiBox thread={thread} />
       </ContentBox>
-      <Popup>
-        <ThreadPopup thread={thread} isParentThreadOfRightSideBar={isParentThreadOfRightSideBar} />
-      </Popup>
+      {popupVisible && (
+        <Popup>
+          <ThreadPopup
+            thread={thread}
+            isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
+          />
+        </Popup>
+      )}
     </Container>
   );
 };
