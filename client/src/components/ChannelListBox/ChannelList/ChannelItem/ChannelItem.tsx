@@ -1,8 +1,6 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { useJoinChannelListState, useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import { LockIcon, PoundIcon } from '@/components';
@@ -44,14 +42,14 @@ interface ChannelItemProps {
 }
 
 const ChannelItem = ({ idx }: ChannelItemProps) => {
-  const dispatch = useDispatch();
   const { id, name, isPublic } = useJoinChannelListState(idx);
   const { current } = useChannelState();
 
   const picked = id === current?.id;
 
   const onClick = () => {
-    dispatch(loadChannelRequest(id));
+    // 현재 picked 된거 바꿔주는 작업 필요합, 채널 접었다 폇다 하는거 어디갓지?
+    // 마지막 채널 갱신을 담당하는 사가는 삭제함, 그 작업은 채널 불러오면서 처리하기로 함
   };
 
   return (

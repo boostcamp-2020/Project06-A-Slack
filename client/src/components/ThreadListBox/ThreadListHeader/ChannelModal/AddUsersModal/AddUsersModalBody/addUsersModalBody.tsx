@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { joinChannelRequset } from '@/store/modules/channel.slice';
-import { getUsersRequest, matchUsersRequest } from '@/store/modules/user.slice';
+import { matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
+import { joinChannelRequset, createChannelRequest } from '@/store/modules/channel.slice';
 import { User } from '@/types';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { makeDMRoomName } from '@/utils/utils';
 
 interface Props {
   visible: boolean;
@@ -79,8 +80,8 @@ const SubmitButton = styled.button`
 `;
 
 interface AddUsersModalBodyProps {
-  setAddUsersModalVisible: (fn: (state: boolean) => boolean) => void;
-  first: boolean;
+  setAddUsersModalVisible: (a: any) => any;
+  isDM: boolean;
 }
 
 interface RightSideParams {
@@ -89,7 +90,7 @@ interface RightSideParams {
 
 const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   setAddUsersModalVisible,
-  first,
+  isDM,
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -97,15 +98,16 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const [visible, setVisible] = useState(false);
   const [pickUsers, setPickUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
+  const { userInfo } = useUserState();
 
   useEffect(() => {
-    const throttle = setTimeout(() => {
-      dispatch(matchUsersRequest({ pickUsers, displayName: text, channelId: +channelId }));
+    const debounce = setTimeout(() => {
+      dispatch(matchUsersRequest({ isDM, pickUsers, displayName: text, channelId: +channelId }));
       setVisible(true);
-    }, 500);
+    }, 250);
 
     return () => {
-      window.clearTimeout(throttle);
+      clearTimeout(debounce);
     };
   }, [text]);
 
@@ -124,10 +126,24 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   };
 
   const clickSubmitButton = () => {
-    if (!first) {
+    if (!isDM) {
       dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
-      setAddUsersModalVisible((state) => !state);
+    } else if (userInfo) {
+      const name = makeDMRoomName(pickUsers, userInfo.displayName);
+
+      dispatch(
+        createChannelRequest({
+          ownerId: userInfo?.id,
+          channelType: 2,
+          isPublic: false,
+          name,
+          description: '',
+          displayName: '',
+          users: [userInfo, ...pickUsers],
+        }),
+      );
     }
+    setAddUsersModalVisible(false);
   };
 
   return (

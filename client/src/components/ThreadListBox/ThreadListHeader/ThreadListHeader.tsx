@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinedUser } from '@/types';
 import { Link, useParams } from 'react-router-dom';
-import { loadChannelRequest, modifyLastChannelRequest } from '@/store/modules/channel.slice';
+import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/components';
 import theme from '@/styles/theme';
 import { flex, hoverActive } from '@/styles/mixin';
@@ -108,11 +108,10 @@ const ThreadListHeader = () => {
   const { channelId }: RightSideParams = useParams();
 
   useEffect(() => {
-    dispatch(loadChannelRequest(channelId));
     if (userInfo) {
-      dispatch(modifyLastChannelRequest({ lastChannelId: +channelId, userId: userInfo.id }));
+      dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo.id }));
     }
-  }, [channelId]);
+  }, [channelId, userInfo]);
 
   useEffect(() => {
     if (current) {
@@ -141,10 +140,8 @@ const ThreadListHeader = () => {
     <>
       {addUsersModalVisible && (
         <DimModal
-          header={<AddUsersModalHeader />}
-          body={
-            <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} first={false} />
-          }
+          header={<AddUsersModalHeader isDM={false} />}
+          body={<AddUsersModalBody setAddUsersModalVisible={clickAddUsersModal} isDM={false} />}
           visible={addUsersModalVisible}
           setVisible={clickAddUsersModal}
         />
@@ -183,16 +180,18 @@ const ThreadListHeader = () => {
         </LeftBox>
         <RightBox>
           {current?.channelType === CHANNEL_TYPE.CHANNEL && (
-            <UserImgBox onClick={clickShowUsersModal}>
-              {users.slice(0, 3).map((icon: JoinedUser, idx: number) => (
-                <UserImg zIndex={users.length - idx} key={icon.userId} src={icon.image} />
-              ))}
-              <UserCount>{users?.length}</UserCount>
-            </UserImgBox>
+            <>
+              <UserImgBox onClick={clickShowUsersModal}>
+                {users.slice(0, 3).map((icon: JoinedUser, idx: number) => (
+                  <UserImg zIndex={users.length - idx} key={icon.userId} src={icon.image} />
+                ))}
+                <UserCount>{users?.length}</UserCount>
+              </UserImgBox>
+              <AddUserBox onClick={clickAddUsersModal}>
+                <AddUserIcon size="1.4rem" />
+              </AddUserBox>
+            </>
           )}
-          <AddUserBox onClick={clickAddUsersModal}>
-            <AddUserIcon size="1.4rem" />
-          </AddUserBox>
           <Link to={`/client/1/${channelId}/detail`}>
             <InfoIconBox>
               <WarningIcon size="1.1rem" color={theme.color.black5} />

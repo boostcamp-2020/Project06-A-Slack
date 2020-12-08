@@ -7,6 +7,7 @@ interface createInfo {
   channelType: number;
   isPublic: number;
   description: string;
+  memberCount: number;
 }
 
 interface TopicInfo {
@@ -47,13 +48,29 @@ export const channelModel = {
     `;
     return pool.execute(sql, [channelId]);
   },
-  createChannel({ ownerId, name, channelType, isPublic, description }: createInfo): any {
-    const sql = `INSERT INTO channel (owner_id, name, channel_type, is_public, description) VALUES (?, ?, ?, ?, ?)`;
-    return pool.execute(sql, [ownerId, name, channelType, isPublic, description]);
+  createChannel({
+    ownerId,
+    name,
+    channelType,
+    isPublic,
+    description,
+    memberCount,
+  }: createInfo): any {
+    const sql = `INSERT INTO channel (owner_id, name, channel_type, is_public, description, member_count) VALUES (?, ?, ?, ?, ?, ?)`;
+    return pool.execute(sql, [ownerId, name, channelType, isPublic, description, memberCount]);
   },
-  joinChannel(joinUsers: Array<Array<number>>): any {
-    const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES ?`;
-    return pool.query(sql, [joinUsers]);
+  joinChannel({
+    joinUsers,
+    joinedNumber,
+    channelId,
+  }: {
+    joinUsers: Array<Array<number>>;
+    joinedNumber: number;
+    channelId: number;
+  }): any {
+    const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES ?;
+    UPDATE channel SET member_count = ? WHERE id = ?`;
+    return pool.query(sql, [joinUsers, joinUsers.length + joinedNumber, channelId]);
   },
   modifyTopic({ channelId, topic }: TopicInfo) {
     const sql = 'UPDATE channel SET topic = ? WHERE id = ?';

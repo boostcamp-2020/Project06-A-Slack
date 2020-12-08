@@ -1,4 +1,4 @@
-import { put, all, takeEvery, call, fork, takeLatest, delay } from 'redux-saga/effects';
+import { put, all, takeEvery, call, fork, takeLatest, debounce } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   getUserRequest,
@@ -8,9 +8,6 @@ import {
   editUserSuccess,
   editUserFailure,
   EditUserRequestPayload,
-  getUsersRequest,
-  getUsersSuccess,
-  getUsersFailure,
   matchUsersRequest,
   matchUsersSuccess,
   matchUsersFailure,
@@ -83,28 +80,11 @@ function* watchEditUser() {
   yield takeLatest(editUserRequest, editUser);
 }
 
-function* getUsers() {
-  try {
-    const { data, status } = yield call(userService.getUsers);
-    console.log(data, status);
-    if (status === 200) {
-      yield put(getUsersSuccess({ usersInfo: data.users }));
-    }
-  } catch (err) {
-    yield put(getUsersFailure());
-  }
-}
-
-function* watchGetUsers() {
-  yield takeEvery(getUsersRequest, getUsers);
-}
-
 function* matchUsers({
   payload,
 }: {
-  payload: { pickUsers: User[]; displayName: string; channelId: number };
+  payload: { first: boolean; pickUsers: User[]; displayName: string; channelId: number };
 }) {
-  console.log(payload);
   try {
     if (payload.displayName.length === 0) {
       yield put(matchUsersSuccess({ matchUsersInfo: [] }));
@@ -112,6 +92,7 @@ function* matchUsers({
       const { data, status } = yield call(userService.matchUsers, {
         displayName: payload.displayName,
         channelId: payload.channelId,
+        first: payload.first,
       });
 
       const matchUsersInfo = data.matchUsersInfo.reduce((acc: User[], cur: User) => {
@@ -120,8 +101,6 @@ function* matchUsers({
         }
         return acc;
       }, []);
-
-      console.log(matchUsersInfo);
 
       if (status === 200) {
         yield put(matchUsersSuccess({ matchUsersInfo }));
@@ -137,5 +116,5 @@ function* watchMatchUsers() {
 }
 
 export default function* userSaga() {
-  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchGetUsers), fork(watchMatchUsers)]);
+  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchMatchUsers)]);
 }

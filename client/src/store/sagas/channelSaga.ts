@@ -1,6 +1,6 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
-import { Channel, JoinedUser, User } from '@/types';
+import { Channel, JoinedUser } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
 
 import {
@@ -13,9 +13,6 @@ import {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  modifyLastChannelRequest,
-  modifyLastChannelSuccess,
-  modifyLastChannelFailure,
   modifyTopicRequest,
   modifyTopicSuccess,
   modifyTopicFailure,
@@ -25,8 +22,6 @@ import {
   joinChannelRequset,
   joinChannelSuccess,
   joinChannelFailure,
-  modifyLastChannelRequestPayload,
-  modifyTopicChannelRequestPayload,
   joinChannelRequsetPayload,
 } from '../modules/channel.slice';
 
@@ -54,10 +49,16 @@ function* loadMyChannels(action: any) {
 
 function* loadChannel(action: any) {
   try {
-    const { data, status } = yield call(channelService.getChannel, { channelId: action.payload });
+    const { data, status } = yield call(channelService.getChannel, {
+      channelId: action.payload.channelId,
+    });
     if (status === 200) {
       yield put(loadChannelSuccess({ channel: data.channel, users: data.users }));
     }
+    yield call(channelService.modifyLastChannel, {
+      lastChannelId: action.payload.channelId,
+      userId: action.payload.userId,
+    });
   } catch (err) {
     yield put(loadChannelFailure(err));
   }
@@ -65,39 +66,41 @@ function* loadChannel(action: any) {
 
 function* createChannel(action: any) {
   try {
-    const { ownerId, channelType, isPublic, name, description, displayName } = action.payload;
+    const { ownerId, channelType, isPublic, name, description, users } = action.payload;
     const { data, status } = yield call(channelService.createChannel, {
       ownerId,
       channelType,
       isPublic,
       name,
       description,
+      memberCount: users.length,
     });
 
     if (status === 201) {
       const channel: Channel = {
         id: data.channel.insertId,
-        channelType: 1,
+        channelType,
         description,
         isPublic,
         name,
         topic: '',
         ownerId,
-        memberCount: 1,
+        memberCount: users.length,
       };
 
       const joinedUser: JoinedUser = {
-        displayName,
         userId: ownerId,
-        image:
-          'https://user-images.githubusercontent.com/61396464/100354475-99660f00-3033-11eb-8304-797b93dff986.jpg',
+        displayName: users[0].id,
+        image: users[0].image,
       };
-      const { status: joinStatus } = yield call(channelService.joinChannel, {
-        userId: ownerId,
-        channelId: channel.id,
+
+      yield put(createChannelSuccess({ channel, joinedListUser: [joinedUser] }));
+      const { joinStatus } = yield call(channelService.joinChannel, {
+        users,
+        channelId: data.channel.insertId,
       });
       if (joinStatus === 200) {
-        yield put(createChannelSuccess({ channel, joinedUser }));
+        yield put(joinChannelSuccess({ users }));
       }
     }
   } catch (err) {
@@ -127,22 +130,6 @@ function* modifyTopicChannel(action: any) {
   }
 }
 
-function* modifyLastChannel({
-  payload: { lastChannelId, userId },
-}: PayloadAction<modifyLastChannelRequestPayload>) {
-  try {
-    const { status } = yield call(channelService.modifyLastChannel, {
-      lastChannelId,
-      userId,
-    });
-    if (status === 200) {
-      yield put(modifyLastChannelSuccess());
-    }
-  } catch (err) {
-    yield put(modifyLastChannelFailure({ err }));
-  }
-}
-
 function* watchLoadChannels() {
   yield takeEvery(loadChannelsRequest, loadChannels);
 }
@@ -163,13 +150,10 @@ function* watchJoinChannel() {
   yield takeLatest(joinChannelRequset, joinChannel);
 }
 
-function* watchModifyLastChannel() {
-  yield takeLatest(modifyLastChannelRequest, modifyLastChannel);
-}
-
 function* watchModifyTopicChannel() {
   yield takeLatest(modifyTopicRequest, modifyTopicChannel);
 }
+
 export default function* channelSaga() {
   yield all([
     fork(watchLoadChannels),
@@ -177,7 +161,6 @@ export default function* channelSaga() {
     fork(watchCreateChannel),
     fork(watchLoadChannel),
     fork(watchJoinChannel),
-    fork(watchModifyLastChannel),
     fork(watchModifyTopicChannel),
   ]);
 }

@@ -53,7 +53,7 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     loadChannelRequest(state, action) {
-      state.channelId = action.payload;
+      state.channelId = action.payload.channelId;
     },
     loadChannelSuccess(state, action) {
       const [temp] = action.payload.channel;
@@ -66,22 +66,18 @@ const channelSlice = createSlice({
     modifyTopicRequest(state, action) {},
     modifyTopicSuccess(state, action: PayloadAction<{ channelId: number }>) {},
     modifyTopicFailure(state, action) {},
-    modifyLastChannelRequest(state, action: PayloadAction<modifyLastChannelRequestPayload>) {},
-    modifyLastChannelSuccess() {},
-    modifyLastChannelFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
       state.channelList.push(action.payload.channel);
       state.myChannelList.push(action.payload.channel);
       state.current = action.payload.channel;
-      state.users = [action.payload.JoinedUser];
+      state.users = action.payload.joinedListUser;
     },
     createChannelFailure(state, action) {
       // todo 에러처리
     },
     joinChannelRequset(state, action: PayloadAction<joinChannelRequsetPayload>) {},
     joinChannelSuccess(state, action: PayloadAction<{ users: JoinedUser[] }>) {
-      console.log(action);
       state.users = action.payload.users;
     },
     joinChannelFailure(state, action) {
@@ -111,9 +107,6 @@ export const {
   modifyTopicRequest,
   modifyTopicSuccess,
   modifyTopicFailure,
-  modifyLastChannelRequest,
-  modifyLastChannelSuccess,
-  modifyLastChannelFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,
