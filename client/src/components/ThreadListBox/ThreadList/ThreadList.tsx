@@ -51,4 +51,4 @@ const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
   );
 };
 
-export default ThreadList;
+export default React.memo(ThreadList);

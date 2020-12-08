@@ -181,4 +181,4 @@ const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
   );
 };
 
-export default ThreadListHeader;
+export default React.memo(ThreadListHeader);
