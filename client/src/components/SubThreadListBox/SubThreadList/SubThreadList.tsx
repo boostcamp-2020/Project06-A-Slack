@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
 
-const Container = styled.div`
-  background-color: pink;
-`;
+const Container = styled.div``;
 
 const Bottom = styled.div``;
 interface SubThreadListProps {

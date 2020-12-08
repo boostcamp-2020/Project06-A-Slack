@@ -24,6 +24,7 @@ const Channel = styled.div<ChannelProps>`
       `}
   }
   background: ${(props) => (props.picked ? props.theme.color.blue1 : 'transparent')};
+  user-select: none;
 `;
 
 const Icon = styled.div`
