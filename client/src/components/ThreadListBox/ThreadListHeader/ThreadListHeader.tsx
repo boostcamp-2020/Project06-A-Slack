@@ -103,8 +103,10 @@ const ThreadListHeader = () => {
   const { channelId }: RightSideParams = useParams();
 
   useEffect(() => {
-    dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo?.id }));
-  }, [channelId]);
+    if (userInfo) {
+      dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo.id }));
+    }
+  }, [channelId, userInfo]);
 
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
