@@ -60,9 +60,13 @@ const threadSlice = createSlice({
           targetThread.subThreadUserId3,
         ];
 
-        const emptySpaceIdx: number = subThreadUserIdList.findIndex((s) => s !== null);
-        const key = `subThreadUserId${emptySpaceIdx + 1}`;
-        targetThread[key] = subThreadUserId;
+        if (!subThreadUserIdList.find((uid) => uid === subThreadUserId)) {
+          const emptySpaceIdx: number = subThreadUserIdList.findIndex((s) => s === null);
+          if (emptySpaceIdx !== -1) {
+            const key = `subThreadUserId${emptySpaceIdx + 1}`;
+            targetThread[key] = subThreadUserId;
+          }
+        }
       }
     },
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
