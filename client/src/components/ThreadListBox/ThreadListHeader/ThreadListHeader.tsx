@@ -166,9 +166,9 @@ const ThreadListHeader = () => {
         <LeftBox>
           <LeftTopBox>
             {current?.isPublic ? (
-              <PoundIcon size="0.7rem" color={theme.color.lightBlack} />
+              <PoundIcon size="11px" color={theme.color.lightBlack} />
             ) : (
-              <LockIcon size="0.7rem" color={theme.color.lightBlack} />
+              <LockIcon size="11px" color={theme.color.lightBlack} />
             )}
             <ChannelTitle>{current?.name}</ChannelTitle>
           </LeftTopBox>
@@ -188,13 +188,13 @@ const ThreadListHeader = () => {
                 <UserCount>{users?.length}</UserCount>
               </UserImgBox>
               <AddUserBox onClick={clickAddUsersModal}>
-                <AddUserIcon size="1.4rem" />
+                <AddUserIcon size="22.5px" />
               </AddUserBox>
             </>
           )}
           <Link to={`/client/1/${channelId}/detail`}>
             <InfoIconBox>
-              <WarningIcon size="1.1rem" color={theme.color.black5} />
+              <WarningIcon size="17.5px" color={theme.color.black5} />
             </InfoIconBox>
           </Link>
         </RightBox>

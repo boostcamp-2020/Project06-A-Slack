@@ -57,9 +57,9 @@ const ChannelItem = ({ idx }: ChannelItemProps) => {
       <Channel onClick={onClick} picked={picked}>
         <Icon>
           {isPublic ? (
-            <PoundIcon size="0.75rem" color={picked ? 'white' : undefined} />
+            <PoundIcon size="12px" color={picked ? 'white' : undefined} />
           ) : (
-            <LockIcon size="0.7rem" color={picked ? 'white' : undefined} />
+            <LockIcon size="11.2px" color={picked ? 'white' : undefined} />
           )}
         </Icon>
         <Name>{name}</Name>
