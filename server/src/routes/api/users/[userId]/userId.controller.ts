@@ -132,6 +132,7 @@ export const modifyLastChannel = async (
     try {
       await userModel.modifyLastChannel({ lastChannelId, userId: +userId });
       res.status(200).end();
+      return;
     } catch (err) {
       next(err);
       return;
