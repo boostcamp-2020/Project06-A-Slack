@@ -200,7 +200,7 @@ const ChannelListBox = ({
           </PopupBox>
           <PopupBox onClick={toggleAddChannelsModal}>
             <PlusIconBox>
-              <PlusIcon size="1.4rem" />
+              <PlusIcon size="22.5px" />
             </PlusIconBox>
           </PopupBox>
         </Controls>

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { flex } from '@/styles/mixin';
 import { INPUT_BOX_TYPE } from '@/utils/constants';
 import { ThreadInputBox } from '@/components';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
