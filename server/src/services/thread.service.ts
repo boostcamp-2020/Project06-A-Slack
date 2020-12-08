@@ -35,7 +35,7 @@ export const threadService = {
     if (parentId) {
       await threadModel.increaseSubCountOfThread({ parentId: +parentId });
       const [[parentThread]] = await threadModel.getThread({ threadId: +parentId });
-      const subThreadUserIdList: number[] = [
+      const subThreadUserIdList = [
         parentThread.subThreadUserId1,
         parentThread.subThreadUserId2,
         parentThread.subThreadUserId3,
