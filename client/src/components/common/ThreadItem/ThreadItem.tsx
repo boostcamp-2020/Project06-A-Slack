@@ -4,6 +4,7 @@ import { Thread } from '@/types';
 import { flex, hoverUnderline } from '@/styles/mixin';
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
+import EmojiBox from './EmojiBox/EmojiBox';
 
 interface IsSameUserStyleProp {
   isSameUserStyleProp: boolean;
@@ -124,6 +125,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
         </ContentTop>
         <ContentBottom>{thread.content}</ContentBottom>
         {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
+        <EmojiBox thread={thread} />
       </ContentBox>
       <Popup>
         <ThreadPopup thread={thread} isParentThreadOfRightSideBar={isParentThreadOfRightSideBar} />
