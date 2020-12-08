@@ -42,7 +42,7 @@ export const threadModel = {
     const sql = `INSERT INTO thread (user_id, channel_id, content, parent_id, url, emoji) VALUES (?,?,?,?,?, '[]')`;
     return pool.execute(sql, [userId, channelId, content, parentId, url]);
   },
-  updateSubCountOfThread({ parentId }: { parentId: number }): any {
+  increaseSubCountOfThread({ parentId }: { parentId: number }): any {
     const sql = `UPDATE thread SET sub_count=sub_count+1 WHERE id=?;`;
     return pool.execute(sql, [parentId]);
   },
