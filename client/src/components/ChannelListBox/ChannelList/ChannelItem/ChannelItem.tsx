@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useJoinChannelListState, useChannelState } from '@/hooks';
@@ -60,9 +60,11 @@ const ChannelItem = ({ idx }: ChannelItemProps) => {
 
   const dispatch = useDispatch();
 
-  if (picked && current) {
-    dispatch(unsetUnreadFlag({ channelId: current.id }));
-  }
+  useEffect(() => {
+    if (picked && current) {
+      dispatch(unsetUnreadFlag({ channelId: current.id }));
+    }
+  }, [current]);
 
   return (
     <Link to={`/client/1/${id}`}>
