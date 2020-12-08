@@ -39,7 +39,7 @@ const ThreadList = () => {
         bottomRef.current?.scrollIntoView();
       }
     }
-  }, [threadList]);
+  }, [threadList?.length]);
 
   useEffect(() => {
     if (isNumberTypeValue(channelId)) {
