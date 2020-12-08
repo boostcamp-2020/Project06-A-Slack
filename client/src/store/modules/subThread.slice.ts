@@ -28,6 +28,13 @@ const subThreadSlice = createSlice({
       state.subThreadList = action.payload.subThreadList;
     },
     getSubThreadFailure(state, action) {},
+    addSubThread(state, action) {
+      if (state.subThreadList?.length) {
+        state.subThreadList.push(action.payload.thread);
+      } else {
+        state.subThreadList = [action.payload.thread];
+      }
+    },
   },
 });
 
@@ -36,6 +43,7 @@ export const {
   getSubThreadRequest,
   getSubThreadSuccess,
   getSubThreadFailure,
+  addSubThread,
 } = subThreadSlice.actions; // action 나눠서 export 하기
 
 export default subThreadSlice.reducer;

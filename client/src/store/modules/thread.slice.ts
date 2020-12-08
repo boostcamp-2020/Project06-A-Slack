@@ -45,6 +45,26 @@ const threadSlice = createSlice({
         state.threadList = [action.payload.thread];
       }
     },
+    updateSubThreadInfo(
+      state,
+      { payload }: PayloadAction<{ threadId: number; subThreadUserId: number }>,
+    ) {
+      const { threadId, subThreadUserId } = payload;
+      const targetThread = state.threadList?.find((t) => t.id === threadId);
+      if (targetThread) {
+        targetThread.subCount += 1;
+
+        const subThreadUserIdList = [
+          targetThread.subThreadUserId1,
+          targetThread.subThreadUserId2,
+          targetThread.subThreadUserId3,
+        ];
+
+        const emptySpaceIdx: number = subThreadUserIdList.findIndex((s) => s !== null);
+        const key = `subThreadUserId${emptySpaceIdx + 1}`;
+        targetThread[key] = subThreadUserId;
+      }
+    },
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
       state.canScroll = payload.canScroll;
     },
@@ -61,6 +81,7 @@ export const {
   createThreadFailure,
   addThread,
   setScrollable,
+  updateSubThreadInfo,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;
