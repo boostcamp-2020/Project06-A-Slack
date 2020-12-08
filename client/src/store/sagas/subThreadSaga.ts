@@ -1,4 +1,4 @@
-import { all, fork, takeEvery, takeLatest, call, put, take } from 'redux-saga/effects';
+import { all, fork, call, put, take } from 'redux-saga/effects';
 import {
   getSubThreadRequest,
   getSubThreadSuccess,
@@ -9,15 +9,17 @@ import { subThreadService } from '@/services/subThread.service';
 
 function* getSubThreadList({ parentId }: GetSubThreadRequestPayload) {
   try {
-    const result = yield call(subThreadService.getSubThreadList, { parentId });
-    const [parentThreadData] = result.data.parentThread;
+    const { data, status } = yield call(subThreadService.getSubThreadList, { parentId });
+    if (status === 200) {
+      const [parentThreadData] = data.parentThread;
 
-    yield put(
-      getSubThreadSuccess({
-        parentThread: parentThreadData,
-        subThreadList: result.data.subThreadList,
-      }),
-    );
+      yield put(
+        getSubThreadSuccess({
+          parentThread: parentThreadData,
+          subThreadList: data.subThreadList,
+        }),
+      );
+    }
   } catch (err) {
     yield put(getSubThreadFailure(err));
   }

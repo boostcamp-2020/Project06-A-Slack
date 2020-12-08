@@ -175,8 +175,6 @@ export const bindSocketServer = (server: http.Server): void => {
 
     socket.on(MESSAGE, async (data: SocketEvent) => {
       if (isThreadEvent(data)) {
-        /* TODO 1: 새로 생성한 채널/DM에 대한 이벤트도 전달해야함 */
-
         const { room, thread, type } = data;
         const { userId, channelId, content, parentId } = thread;
         const insertId = await threadService.createThread({ userId, channelId, content, parentId });
