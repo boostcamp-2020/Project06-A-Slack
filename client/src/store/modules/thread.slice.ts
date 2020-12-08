@@ -3,12 +3,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Thread, initialThread, ThreadResponse } from '@/types';
 
-interface ThreadList {
+interface ThreadState {
   threadList: Thread[] | null;
+  canScroll: boolean;
 }
 
-const threadListState: ThreadList = {
-  threadList: [initialThread],
+const threadListState: ThreadState = {
+  threadList: null,
+  canScroll: false,
 };
 
 export interface getThreadRequestPayload {
@@ -28,8 +30,9 @@ const threadSlice = createSlice({
   initialState: threadListState,
   reducers: {
     getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {},
-    getThreadSuccess(state, action: PayloadAction<ThreadList>) {
+    getThreadSuccess(state, action: PayloadAction<ThreadState>) {
       state.threadList = action.payload.threadList;
+      state.canScroll = action.payload.canScroll;
     },
     getThreadFailure(state, action) {},
     createThreadRequest(state, action: PayloadAction<createThreadRequestPayload>) {},
@@ -41,6 +44,9 @@ const threadSlice = createSlice({
       } else {
         state.threadList = [action.payload.thread];
       }
+    },
+    setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
+      state.canScroll = payload.canScroll;
     },
   },
 });
@@ -54,6 +60,7 @@ export const {
   createThreadSuccess,
   createThreadFailure,
   addThread,
+  setScrollable,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

@@ -29,7 +29,7 @@ export const inviteChannel = async (req: Request, res: Response, next: NextFunct
     return;
   }
   if (verifyRequestData([users, channelId])) {
-    const joinUsers: Array<Array<number>> = users.reduce((acc: Array<Array<number>>, cur: User) => {
+    const joinUsers: [number[]] = users.reduce((acc: [number[]], cur: User) => {
       acc.push([cur.id, +channelId]);
       return acc;
     }, []);

@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createThreadRequest, addThread } from '@/store/modules/thread.slice';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { useParams } from 'react-router-dom';
 import { useChannelState, useUserState } from '@/hooks';
-import { INPUT_BOX_TYPE, USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
+import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { PaperPlaneIcon } from '@/components';
 import { SubmitButton as SB } from '@/styles/shared';
 import styled from 'styled-components';
@@ -146,14 +145,13 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
   const sendMessage = () => {
     if (userInfo) {
       const thread = {
-        displayName: 'J020_권현준',
-        phoneNumber: '010-4999-9994',
-        image: USER_DEFAULT_PROFILE_URL,
-        email: 'rnjshippo@naver.com',
-        id: Math.floor(Math.random() * 1000),
-        userId: 1,
-        channelId: 1,
-        content: `this is my content ${Math.floor(Math.random() * 1000)}`,
+        userId: userInfo.id,
+        displayName: userInfo.displayName,
+        phoneNumber: userInfo.phoneNumber,
+        image: userInfo.image,
+        email: userInfo.email,
+        channelId: current?.id as number,
+        content: comment,
         url: 'this is url',
         isEdited: 0,
         isPinned: 0,
@@ -164,19 +162,14 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
         subThreadUserId1: null,
         subThreadUserId2: null,
         subThreadUserId3: null,
-        createdAt: '2020-12-06',
-        updatedAt: '2020-12-06',
       };
-      // dispatch(addThread({ thread }));
-      dispatch(sendMessageRequest({ thread }));
-      // dispatch(
-      //   createThreadRequest({
-      //     content: comment,
-      //     userId: +userInfo.id,
-      //     channelId: +(channelId as string),
-      //     parentId,
-      //   }),
-      // );
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.THREAD,
+          thread,
+          room: current?.name as string,
+        }),
+      );
     }
   };
 

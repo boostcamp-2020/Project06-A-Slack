@@ -14,7 +14,7 @@ import { threadService } from '@/services/thread.service';
 function* getThreadList({ channelId }: getThreadRequestPayload) {
   try {
     const result = yield call(threadService.getThreadList, { channelId });
-    yield put(getThreadSuccess({ threadList: result.data.threadList }));
+    yield put(getThreadSuccess({ threadList: result.data.threadList, canScroll: true }));
   } catch (err) {
     yield put(getThreadFailure(err));
   }

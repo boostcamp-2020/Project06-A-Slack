@@ -17,8 +17,8 @@ export const getSubThread = async (
     return;
   }
   try {
-    const [parentThread] = await threadModel.getThread(Number(threadId));
-    const [subThreadList] = await threadModel.getSubThreadList(Number(threadId));
+    const [parentThread] = await threadModel.getThread({ threadId: +threadId });
+    const [subThreadList] = await threadModel.getSubThreadList({ threadId: +threadId });
     res.json({ parentThread, subThreadList });
   } catch (err) {
     next(err);
@@ -39,7 +39,7 @@ export const modifyThread = async (
 
   if (verifyRequestData([content])) {
     try {
-      const [result] = await threadModel.updateThread(content, Number(threadId));
+      const [result] = await threadModel.updateThread({ content, threadId: +threadId });
       res.status(200).json({ result });
       return;
     } catch (err) {
@@ -61,7 +61,7 @@ export const deleteThread = async (
   const { threadId } = req.params;
   if (verifyRequestData([threadId])) {
     try {
-      const [result] = await threadModel.deleteThread(Number(threadId));
+      const [result] = await threadModel.deleteThread({ threadId: +threadId });
       res.status(200).json({ result });
       return;
     } catch (err) {

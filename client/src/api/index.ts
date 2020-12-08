@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TOKEN_TYPE } from '@/utils/constants';
 import { verifyJWT } from '@/utils/utils';
 
-const instance = axios.create();
+const instance = axios.create({ timeout: 4000 });
 
 if (process.env.MODE !== 'dev') {
   instance.defaults.baseURL = process.env.BASE_URL;
@@ -46,6 +46,23 @@ instance.interceptors.request.use(
     return config;
   },
   (err) => {
+    return Promise.reject(err);
+  },
+);
+
+instance.interceptors.response.use(
+  (res) => {
+    if (res.status >= 400) {
+      console.error('api 요청 실패', res);
+    }
+    return res;
+  },
+  (err) => {
+    if (axios.isCancel(err)) {
+      console.log('요청 취소', err);
+    } else {
+      console.error('api 에러', err);
+    }
     return Promise.reject(err);
   },
 );
