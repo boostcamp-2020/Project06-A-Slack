@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Emoji } from '@/types/thread';
 import { flex } from '@/styles/mixin';
-import { useChannelState } from '@/hooks';
+import { useChannelState, useEmojiState } from '@/hooks';
 
 const Container = styled.div`
   background-color: #e8f5fa;
@@ -35,27 +35,7 @@ interface EmojiBoxItemProps {
 
 const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps) => {
   const { users } = useChannelState();
-
-  const emojiList = {
-    emoji: [
-      {
-        id: 1,
-        name: 'thumbsup',
-        url:
-          'https://a.slack-edge.com/production-standard-emoji-assets/10.2/google-medium/1f44d.png',
-      },
-      {
-        id: 2,
-        name: 'party-blob',
-        url: 'https://emoji.slack-edge.com/T019JFET9H7/party-blob/8d60acb47866b650.gif',
-      },
-      {
-        id: 3,
-        name: 'clapping-all',
-        url: 'https://emoji.slack-edge.com/T019JFET9H7/clapping-all/a2cf33ed57ed94f4.gif',
-      },
-    ],
-  };
+  const { emojiList } = useEmojiState();
 
   const getUserListNameInEmoji = (emojiProp: Emoji) => {
     return emojiProp.userList.reduce((acc, userId, idx, arr) => {
@@ -68,7 +48,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps)
   };
 
   const getEmojiName = (emojiId: number) => {
-    return emojiList.emoji.find((emojiEl) => {
+    return emojiList?.find((emojiEl) => {
       return emojiEl.id === emojiId;
     })?.name;
   };
@@ -78,7 +58,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps)
   };
 
   const getEmojiUrl = (emojiId: number) => {
-    return emojiList.emoji.find((emojiEl) => {
+    return emojiList?.find((emojiEl) => {
       return emojiEl.id === emojiId;
     })?.url;
   };

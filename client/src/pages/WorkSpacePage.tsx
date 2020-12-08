@@ -4,6 +4,7 @@ import { useAuthState, useUserState, useChannelState } from '@/hooks';
 import { Header, LeftSideBar, ThreadListBox, RightSideBar } from '@/components';
 import { isExistedChannel, isNumberTypeValue } from '@/utils/utils';
 import { socketConnectRequest, socketDisconnectRequest } from '@/store/modules/socket.slice';
+import { getEmojiListRequest } from '@/store/modules/emoji.slice';
 import { useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
@@ -53,6 +54,7 @@ const WorkSpacePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(socketConnectRequest());
+    dispatch(getEmojiListRequest());
     return () => {
       dispatch(socketDisconnectRequest());
     };
