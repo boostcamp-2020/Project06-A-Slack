@@ -31,7 +31,7 @@ const ThreadListBox = () => {
 
   const { current, users } = useChannelState();
   const { userInfo } = useUserState();
-  const { threadList } = useThreadState();
+  const { threadList, canScroll } = useThreadState();
 
   useEffect(() => {
     if (isNumberTypeValue(channelId)) {
@@ -58,7 +58,7 @@ const ThreadListBox = () => {
       {threadList && (
         <>
           <ThreadListHeader current={current} users={users} />
-          <ThreadList />
+          <ThreadList threadList={threadList} canScroll={canScroll} userInfo={userInfo} />
           <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.THREAD} />
         </>
       )}

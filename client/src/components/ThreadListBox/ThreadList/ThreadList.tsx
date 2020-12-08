@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setScrollable } from '@/store/modules/thread.slice';
-import { Thread } from '@/types';
+import { Thread, User } from '@/types';
 import { ThreadItem } from '@/components';
-import { useThreadState, useUserState } from '@/hooks';
 
 const Container = styled.div`
   width: 100%;
@@ -16,9 +15,13 @@ const Container = styled.div`
 
 const Bottom = styled.div``;
 
-const ThreadList = () => {
-  const { threadList, canScroll } = useThreadState();
-  const { userInfo } = useUserState();
+interface ThreadListProps {
+  threadList: Thread[] | null;
+  canScroll: boolean;
+  userInfo: User | null;
+}
+
+const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
   const dispatch = useDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
 
