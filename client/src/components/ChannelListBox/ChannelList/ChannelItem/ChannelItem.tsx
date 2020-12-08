@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useJoinChannelListState, useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import { LockIcon, PoundIcon } from '@/components';
+import { useDispatch } from 'react-redux';
+import { unsetUnreadFlag } from '@/store/modules/channel.slice';
 
 interface ChannelProps {
   picked: boolean;
@@ -31,11 +33,17 @@ const Icon = styled.div`
   margin-right: 15px;
 `;
 
-const Name = styled.span`
+interface NameProps {
+  unreadMessage: boolean;
+}
+
+const Name = styled.span<NameProps>`
   font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: ${(props) => (props.unreadMessage ? '800' : 'normal')};
+  color: ${(props) => (props.unreadMessage ? 'white' : 'inherit')};
 `;
 
 interface ChannelItemProps {
@@ -44,9 +52,17 @@ interface ChannelItemProps {
 
 const ChannelItem = ({ idx }: ChannelItemProps) => {
   const { id, name, isPublic } = useJoinChannelListState(idx);
-  const { current } = useChannelState();
+  const { current, myChannelList } = useChannelState();
+
+  const { unreadMessage } = myChannelList[idx];
 
   const picked = id === current?.id;
+
+  const dispatch = useDispatch();
+
+  if (picked && current) {
+    dispatch(unsetUnreadFlag({ channelId: current.id }));
+  }
 
   return (
     <Link to={`/client/1/${id}`}>
@@ -58,7 +74,7 @@ const ChannelItem = ({ idx }: ChannelItemProps) => {
             <LockIcon size="11.2px" color={picked ? 'white' : undefined} />
           )}
         </Icon>
-        <Name>{name}</Name>
+        <Name unreadMessage={!!unreadMessage && !picked}>{name}</Name>
       </Channel>
     </Link>
   );

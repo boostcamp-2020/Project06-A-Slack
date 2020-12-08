@@ -10,6 +10,7 @@ import {
 } from '@/store/modules/socket.slice';
 import { addThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
 import { addSubThread } from '@/store/modules/subThread.slice';
+import { updateChannel } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
@@ -62,6 +63,7 @@ function subscribeSocket(socket: Socket) {
       }
       if (isChannelEvent(data)) {
         // TODO: Channel 이벤트 처리
+        emit(updateChannel({ channel: data.channel }));
         return;
       }
       if (isDMEvent(data)) {

@@ -7,4 +7,5 @@ export interface Channel {
   name: string;
   ownerId: number;
   topic: string;
+  unreadMessage?: boolean;
 }

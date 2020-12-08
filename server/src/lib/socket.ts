@@ -99,6 +99,7 @@ interface Channel {
   description: string;
   createdAt?: string;
   updatedAt?: string;
+  unreadMessage?: boolean;
 }
 
 type DM = Channel;
@@ -181,6 +182,11 @@ export const bindSocketServer = (server: http.Server): void => {
         const insertId = await threadService.createThread({ userId, channelId, content, parentId });
 
         namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
+        namespace.emit(MESSAGE, {
+          type: SOCKET_MESSAGE_TYPE.CHANNEL,
+          channel: { id: thread.channelId, unreadMessage: true },
+          room,
+        });
         return;
       }
       if (isEmojiEvent(data)) {
