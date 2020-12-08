@@ -81,7 +81,7 @@ const SubmitButton = styled.button`
 
 interface AddUsersModalBodyProps {
   setAddUsersModalVisible: (a: any) => any;
-  first: boolean;
+  isDM: boolean;
 }
 
 interface RightSideParams {
@@ -90,7 +90,7 @@ interface RightSideParams {
 
 const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   setAddUsersModalVisible,
-  first,
+  isDM,
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -102,7 +102,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
 
   useEffect(() => {
     const debounce = setTimeout(() => {
-      dispatch(matchUsersRequest({ first, pickUsers, displayName: text, channelId: +channelId }));
+      dispatch(matchUsersRequest({ isDM, pickUsers, displayName: text, channelId: +channelId }));
       setVisible(true);
     }, 250);
 
@@ -126,7 +126,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   };
 
   const clickSubmitButton = () => {
-    if (!first) {
+    if (!isDM) {
       dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
     } else if (userInfo) {
       const name = makeDMRoomName(pickUsers, userInfo.displayName);

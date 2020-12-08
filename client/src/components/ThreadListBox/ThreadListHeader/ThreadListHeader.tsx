@@ -124,8 +124,8 @@ const ThreadListHeader = () => {
     <>
       {addUsersModalVisible && (
         <DimModal
-          header={<AddUsersModalHeader first={false} />}
-          body={<AddUsersModalBody setAddUsersModalVisible={clickAddUsersModal} first={false} />}
+          header={<AddUsersModalHeader isDM={false} />}
+          body={<AddUsersModalBody setAddUsersModalVisible={clickAddUsersModal} isDM={false} />}
           visible={addUsersModalVisible}
           setVisible={clickAddUsersModal}
         />

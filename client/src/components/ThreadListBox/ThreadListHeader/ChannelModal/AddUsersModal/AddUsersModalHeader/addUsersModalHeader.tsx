@@ -17,11 +17,11 @@ const ChannelName = styled.div`
 `;
 
 interface AddUsersModalHeaderProps {
-  first: boolean;
+  isDM: boolean;
 }
 
 const AddUserModalHeader: React.FC<AddUsersModalHeaderProps> = ({
-  first,
+  isDM,
 }: AddUsersModalHeaderProps) => {
   const { current } = useChannelState();
 
@@ -29,8 +29,8 @@ const AddUserModalHeader: React.FC<AddUsersModalHeaderProps> = ({
     <Header>
       <HeaderTitle>Add People</HeaderTitle>
       <ChannelName>
-        {!first && current?.isPublic}
-        {!first && current?.name}
+        {!isDM && current?.isPublic}
+        {!isDM && current?.name}
       </ChannelName>
     </Header>
   );
