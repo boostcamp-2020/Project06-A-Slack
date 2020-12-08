@@ -10,6 +10,7 @@ const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid ${(props) => props.theme.color.lightGray2};
 `;
 
 const ThreadListBox = () => {
