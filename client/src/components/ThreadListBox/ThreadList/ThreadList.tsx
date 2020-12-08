@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { getThreadRequest, setScrollable } from '@/store/modules/thread.slice';
 import styled from 'styled-components';
+import { setScrollable } from '@/store/modules/thread.slice';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
 import { useThreadState, useUserState } from '@/hooks';
-import { useParams } from 'react-router-dom';
-import { isNumberTypeValue } from '@/utils/utils';
 
 const Container = styled.div`
   width: 100%;
@@ -18,12 +16,7 @@ const Container = styled.div`
 
 const Bottom = styled.div``;
 
-interface RightSideParams {
-  channelId: string | undefined;
-}
-
 const ThreadList = () => {
-  const { channelId }: RightSideParams = useParams();
   const { threadList, canScroll } = useThreadState();
   const { userInfo } = useUserState();
   const dispatch = useDispatch();
@@ -40,12 +33,6 @@ const ThreadList = () => {
       }
     }
   }, [threadList?.length]);
-
-  useEffect(() => {
-    if (isNumberTypeValue(channelId)) {
-      dispatch(getThreadRequest({ channelId: Number(channelId) }));
-    }
-  }, [dispatch, channelId]);
 
   return (
     <Container>
