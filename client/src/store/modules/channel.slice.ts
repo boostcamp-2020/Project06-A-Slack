@@ -71,14 +71,13 @@ const channelSlice = createSlice({
       state.channelList.push(action.payload.channel);
       state.myChannelList.push(action.payload.channel);
       state.current = action.payload.channel;
-      state.users = action.payload.joinedUser;
+      state.users = action.payload.joinedListUser;
     },
     createChannelFailure(state, action) {
       // todo 에러처리
     },
     joinChannelRequset(state, action: PayloadAction<joinChannelRequsetPayload>) {},
     joinChannelSuccess(state, action: PayloadAction<{ users: JoinedUser[] }>) {
-      console.log(action);
       state.users = action.payload.users;
     },
     joinChannelFailure(state, action) {

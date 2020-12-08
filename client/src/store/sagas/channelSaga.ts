@@ -87,7 +87,7 @@ function* createChannel(action: any) {
       image: users[0].image,
     };
 
-    yield put(createChannelSuccess({ channel, joinedUser: [joinedUser] }));
+    yield put(createChannelSuccess({ channel, joinedListUser: [joinedUser] }));
     yield call(channelService.joinChannel, { users, channelId: result.data.channel.insertId });
   } catch (err) {
     yield put(createChannelFailure(err));
