@@ -12,8 +12,8 @@ interface ChannelProps {
 const Channel = styled.div<ChannelProps>`
   ${flex('center', 'flex-center')}
   height: 1.75rem;
-  padding-left: 2rem;
-  font-size: ${(props) => props.theme.size.m};
+  padding: 1rem 0 1rem 1.75rem;
+  font-size: 0.95rem;
   color: ${(props) =>
     props.picked ? props.theme.color.semiWhite : props.theme.color.channelItemColor};
   &:hover {
