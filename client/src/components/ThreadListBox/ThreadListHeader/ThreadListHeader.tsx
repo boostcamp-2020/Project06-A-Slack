@@ -9,11 +9,7 @@ import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/components';
 import theme from '@/styles/theme';
 import { flex, hoverActive } from '@/styles/mixin';
-import {
-  sendMessageRequest,
-  enterRoomRequest,
-  leaveRoomRequest,
-} from '@/store/modules/socket.slice';
+import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
