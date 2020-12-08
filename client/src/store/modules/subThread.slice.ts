@@ -37,6 +37,7 @@ const subThreadSlice = createSlice({
       } else {
         state.subThreadList = [action.payload.thread];
       }
+      state.parentThread.subCount += 1;
     },
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
       state.canScroll = payload.canScroll;

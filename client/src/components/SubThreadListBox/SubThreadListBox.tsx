@@ -48,7 +48,7 @@ const SubThreadListBox: React.FC = () => {
           <SubThreadListHeader />
           <ListContainer>
             <ParentThread parentThread={parentThread} />
-            <ReplyCountHorizon subCount={parentThread.subCount} />
+            {parentThread.subCount > 0 && <ReplyCountHorizon subCount={parentThread.subCount} />}
             <SubThreadList subThreadList={subThreadList} />
             <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.SUBTHREAD} />
           </ListContainer>
