@@ -155,7 +155,7 @@ const ChannelListBox = ({
           setVisible={setAddUsersModalVisible}
         />
       )}
-      <Container>
+      <Container onClick={toggleChannelList}>
         {addChannelsModalVisible && (
           <MenuModal
             top="1.5rem"
@@ -164,10 +164,8 @@ const ChannelListBox = ({
             setVisible={setAddChannelsModalVisible}
           >
             <ModalListItem
-              onClick={() =>
-                channelType === CHANNEL_TYPE.CHANNEL
-                  ? clickCreateChannelModal()
-                  : clickAddUsersModal()
+              onClick={
+                channelType === CHANNEL_TYPE.CHANNEL ? clickCreateChannelModal : clickAddUsersModal
               }
             >
               {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}

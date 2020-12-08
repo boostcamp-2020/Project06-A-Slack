@@ -83,7 +83,7 @@ function* watchEditUser() {
 function* matchUsers({
   payload,
 }: {
-  payload: { first: boolean; pickUsers: User[]; displayName: string; channelId: number };
+  payload: { isDM: boolean; pickUsers: User[]; displayName: string; channelId: number };
 }) {
   try {
     if (payload.displayName.length === 0) {
@@ -92,7 +92,7 @@ function* matchUsers({
       const { data, status } = yield call(userService.matchUsers, {
         displayName: payload.displayName,
         channelId: payload.channelId,
-        first: payload.first,
+        isDM: payload.isDM,
       });
 
       const matchUsersInfo = data.matchUsersInfo.reduce((acc: User[], cur: User) => {
