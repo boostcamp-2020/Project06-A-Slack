@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { ReactElement, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
+import { useAuthState, useChannelState, useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
-import { useAuthState, useUserState, useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -167,7 +167,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
   const [description, setDescription] = useState('');
   const { userId } = useAuthState();
   const { userInfo } = useUserState();
-
+  const { current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,7 +191,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
         isPublic,
         name,
         description,
-        displayName: userInfo?.displayName,
+        users: [userInfo],
       }),
     );
     setCreateChannelModalVisible((state) => !state);

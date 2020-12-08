@@ -11,8 +11,15 @@ export const channelService: Service = {
   getChannel({ channelId }: { channelId: number }) {
     return API.get(`/api/channels/${channelId}`);
   },
-  createChannel({ ownerId, name, channelType, isPublic, description }: ChannelInfo) {
-    return API.post('/api/channels', { ownerId, name, channelType, isPublic, description });
+  createChannel({ ownerId, name, channelType, isPublic, description, memberCount }: ChannelInfo) {
+    return API.post('/api/channels', {
+      ownerId,
+      name,
+      channelType,
+      isPublic,
+      description,
+      memberCount,
+    });
   },
   joinChannel({ users, channelId }: { users: User[]; channelId: number }) {
     return API.post(`/api/channels/${channelId}/invite`, { users });

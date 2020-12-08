@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '@/config';
-import { AuthToken, JoinedUser, Channel } from '@/types';
+import { AuthToken, JoinedUser, Channel, User } from '@/types';
 import { TOKEN_TYPE } from '@/utils/constants';
 
 import crypto from 'crypto';
@@ -59,4 +59,11 @@ export const isExistedChannel = ({
   myChannelList: Channel[];
 }): boolean => {
   return myChannelList.some((channel: Channel) => channel.id === channelId);
+};
+
+export const makeDMRoomName = (pickUsers: User[], startName: string) => {
+  const name = pickUsers.reduce((acc, cur) => {
+    return `${acc}, ${cur.displayName}`;
+  }, startName);
+  return name;
 };

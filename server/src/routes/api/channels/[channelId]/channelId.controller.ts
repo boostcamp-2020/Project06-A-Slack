@@ -33,7 +33,12 @@ export const inviteChannel = async (req: Request, res: Response, next: NextFunct
       acc.push([cur.id, +channelId]);
       return acc;
     }, []);
-    await channelModel.joinChannel(joinUsers);
+    const [joinedUsers] = await channelModel.getChannelUser({ channelId: +channelId });
+    await channelModel.joinChannel({
+      joinUsers,
+      joinedNumber: joinedUsers.length,
+      channelId: +channelId,
+    });
     res.status(200).end();
     return;
   }

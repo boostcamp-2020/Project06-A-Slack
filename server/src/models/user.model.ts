@@ -11,6 +11,7 @@ interface EditUserParams {
 interface MatchUsers {
   displayName: string;
   channelId: number;
+  first: boolean;
 }
 
 export const userModel = {
@@ -47,13 +48,20 @@ export const userModel = {
     const sql = `UPDATE user SET display_name=?, phone_number=? WHERE id=?;`;
     return pool.execute(sql, [displayName, phoneNumber, id]);
   },
-  matchUsers({ displayName, channelId }: MatchUsers): any {
-    const sql = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
+  matchUsers({ displayName, channelId, first }: MatchUsers): any {
+    const sql1 = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
     FROM user
     WHERE display_name LIKE '${displayName}%' AND id NOT IN (
       SELECT user_id FROM user_channel
       WHERE channel_id = ?
     )`;
-    return pool.execute(sql, [channelId]);
+    const sql2 = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
+    FROM user
+    WHERE display_name LIKE '${displayName}%'`;
+    if (!first) {
+      return pool.execute(sql1, [channelId]);
+    }
+
+    return pool.query(sql2);
   },
 };
