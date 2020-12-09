@@ -13,7 +13,7 @@ import { addSubThread } from '@/store/modules/subThread.slice';
 import { updateChannel, setCurrent, setUsers } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import { SOCKET_EVENT_TYPE } from '@/utils/constants';
+import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
 import {
   SocketEvent,
   isChannelEvent,
@@ -62,10 +62,14 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isChannelEvent(data)) {
-        const { room, channel, type } = data;
+        const { room, channel, subType, type } = data;
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL) {
+          emit(updateChannel({ channel: data.channel }));
+          return;
+        }
 
         // 새로운 로직으로 바꾸기
-        emit(updateChannel({ channel: data.channel }));
 
         // if (channel && channel.isUpdateUsers && channel.users) {
         //   emit(setUsers({ users: channel.joinedUsers, id: channel.id, channel }));

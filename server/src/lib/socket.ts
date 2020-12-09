@@ -1,6 +1,6 @@
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
-import { SOCKET_EVENT_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { SOCKET_EVENT_TYPE, SOCKET_MESSAGE_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
 import { threadModel, channelModel } from '@/models';
 import { threadService } from '@/services';
 
@@ -127,6 +127,7 @@ interface UserEvent {
 
 interface ChannelEvent {
   type: string;
+  subType: string;
   channel: Channel;
   room: string;
 }
@@ -185,6 +186,7 @@ export const bindSocketServer = (server: http.Server): void => {
         namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
         namespace.emit(MESSAGE, {
           type: SOCKET_MESSAGE_TYPE.CHANNEL,
+          subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL,
           channel: { id: thread.channelId, unreadMessage: true },
           room,
         });

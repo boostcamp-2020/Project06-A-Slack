@@ -40,3 +40,7 @@ export const SOCKET_MESSAGE_TYPE = {
   CHANNEL: 'channel',
   DM: 'dm',
 };
+
+export const CHANNEL_SUBTYPE = {
+  UPDATE_CHANNEL: 'update_channel',
+};

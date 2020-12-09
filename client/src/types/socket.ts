@@ -78,6 +78,7 @@ export interface UserEvent {
 
 export interface ChannelEvent {
   type: string;
+  subType: string;
   channel: Channel;
   room: string;
 }
