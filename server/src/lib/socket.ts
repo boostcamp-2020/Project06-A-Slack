@@ -128,7 +128,8 @@ interface UserEvent {
 interface ChannelEvent {
   type: string;
   subType: string;
-  channel: Channel;
+  channel?: Channel;
+  users?: JoinedUser[];
   room: string;
 }
 
@@ -209,22 +210,52 @@ export const bindSocketServer = (server: http.Server): void => {
       }
       if (isChannelEvent(data)) {
         // TODO: Channel 이벤트 처리
-        const { room, channel, type, subType } = data;
+        const { room, channel, type, subType, users } = data;
 
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
           try {
-            console.log('modify topic', room, channel);
-            await channelModel.modifyTopic({ channelId: channel.id, topic: channel.topic });
-            namespace.to(room).emit(MESSAGE, {
-              type: SOCKET_MESSAGE_TYPE.CHANNEL,
-              subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
-              channel,
-              room,
-            });
+            if (channel) {
+              await channelModel.modifyTopic({ channelId: channel.id, topic: channel.topic });
+              namespace.to(room).emit(MESSAGE, {
+                type: SOCKET_MESSAGE_TYPE.CHANNEL,
+                subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
+                channel,
+                room,
+              });
+            }
           } catch (err) {
             console.error(err.message);
           }
           return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
+          if (channel && users) {
+            try {
+              const joinUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
+                acc.push([cur.userId, channel.id]);
+                return acc;
+              }, []);
+
+              await channelModel.joinChannel({
+                joinUsers,
+                prevMemberCount: channel.memberCount,
+                channelId: channel.id,
+              });
+              const [joinedUsers] = await channelModel.getChannelUser({ channelId: channel.id });
+
+              namespace.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+                users: joinedUsers,
+                channel,
+                room,
+              });
+            } catch (err) {
+              console.log(err);
+            }
+            return;
+          }
         }
         // const { id, topic, users, memberCount, isUpdateUsers } = channel;
 

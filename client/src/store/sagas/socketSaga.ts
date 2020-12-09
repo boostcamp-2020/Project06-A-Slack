@@ -10,7 +10,11 @@ import {
 } from '@/store/modules/socket.slice';
 import { addThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
 import { addSubThread } from '@/store/modules/subThread.slice';
-import { updateChannelUnread, updateChannelTopic } from '@/store/modules/channel.slice';
+import {
+  updateChannelUnread,
+  updateChannelTopic,
+  updateChannelUsers,
+} from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
@@ -21,6 +25,8 @@ import {
   isEmojiEvent,
   isThreadEvent,
   isUserEvent,
+  Channel,
+  JoinedUser,
 } from '@/types';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
@@ -62,15 +68,20 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isChannelEvent(data)) {
-        const { room, channel, subType, type } = data;
+        const { room, channel, subType, type, users } = data;
 
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD) {
-          emit(updateChannelUnread({ channel: data.channel }));
+          emit(updateChannelUnread({ channel: data.channel as Channel }));
           return;
         }
 
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
-          emit(updateChannelTopic({ channel: data.channel }));
+          emit(updateChannelTopic({ channel: data.channel as Channel }));
+          return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
+          emit(updateChannelUsers({ users: users as JoinedUser[], channel: channel as Channel }));
           return;
         }
 

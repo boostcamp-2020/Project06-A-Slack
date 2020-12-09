@@ -8,7 +8,7 @@ interface ChannelState {
   myChannelList: Channel[];
   current: Channel | null;
   users: JoinedUser[];
-  isAddUsers: boolean;
+  reloadMyChannelList: boolean;
 }
 
 const initialState: ChannelState = {
@@ -16,7 +16,7 @@ const initialState: ChannelState = {
   myChannelList: [],
   current: null,
   users: [],
-  isAddUsers: false,
+  reloadMyChannelList: false,
 };
 
 export interface modifyLastChannelRequestPayload {
@@ -80,16 +80,6 @@ const channelSlice = createSlice({
     setCurrent(state, action) {
       state.current = action.payload;
     },
-    setUsers(state, action) {
-      state.channelList.push(action.payload.channel);
-      state.isAddUsers = true;
-      if (state.current && state.current.id === action.payload.id) {
-        state.users = action.payload.users;
-      }
-    },
-    setIsAddUsers(state) {
-      state.isAddUsers = false;
-    },
     unsetUnreadFlag(state, { payload }: PayloadAction<{ channelId: number }>) {
       const { channelId } = payload;
       if (state.current) {
@@ -118,6 +108,22 @@ const channelSlice = createSlice({
         }
       }
     },
+    updateChannelUsers(
+      state,
+      { payload }: PayloadAction<{ users: JoinedUser[]; channel: Channel }>,
+    ) {
+      const { users, channel } = payload;
+      if (state.current?.id === channel.id) {
+        state.users = users;
+      }
+      state.reloadMyChannelList = true;
+    },
+    setReloadMyChannelListFlag(
+      state,
+      { payload }: PayloadAction<{ reloadMyChannelList: boolean }>,
+    ) {
+      state.reloadMyChannelList = payload.reloadMyChannelList;
+    },
   },
 });
 
@@ -139,10 +145,10 @@ export const {
   joinChannelSuccess,
   joinChannelFailure,
   setCurrent,
-  setUsers,
-  setIsAddUsers,
   unsetUnreadFlag,
   updateChannelUnread,
   updateChannelTopic,
+  updateChannelUsers,
+  setReloadMyChannelListFlag,
 } = channelSlice.actions;
 export default channelSlice.reducer;

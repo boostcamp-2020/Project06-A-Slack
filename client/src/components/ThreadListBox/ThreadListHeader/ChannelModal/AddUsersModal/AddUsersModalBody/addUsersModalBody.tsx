@@ -6,7 +6,7 @@ import { useChannelState, useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { User } from '@/types';
-import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { makeDMRoomName } from '@/utils/utils';
@@ -131,13 +131,20 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
     if (!isDM && pickUsers.length !== 0) {
       if (current && pickUsers) {
         // TODO !! 로직 변경
-        // dispatch(
-        //   sendMessageRequest({
-        //     type: SOCKET_MESSAGE_TYPE.CHANNEL,
-        //     channel: { ...current },
-        //     room: current?.name as string,
-        //   }),
-        // );
+        const users = pickUsers.map((pu) => ({
+          userId: pu.id,
+          displayName: pu.displayName,
+          image: pu.image,
+        }));
+        dispatch(
+          sendMessageRequest({
+            type: SOCKET_MESSAGE_TYPE.CHANNEL,
+            subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+            channel: current,
+            users,
+            room: current?.name as string,
+          }),
+        );
       }
     } else if (userInfo) {
       const name = makeDMRoomName(pickUsers, userInfo.displayName);

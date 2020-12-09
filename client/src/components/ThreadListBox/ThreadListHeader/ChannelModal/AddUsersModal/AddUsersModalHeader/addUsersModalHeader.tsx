@@ -23,7 +23,6 @@ const AddUserModalHeader: React.FC<AddUsersModalHeaderProps> = ({
   isDM,
 }: AddUsersModalHeaderProps) => {
   const { current } = useChannelState();
-
   return (
     <Header>
       <HeaderTitle>Add People</HeaderTitle>
