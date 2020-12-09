@@ -99,13 +99,12 @@ interface Channel {
   channelType: number;
   topic: string;
   isPublic: number;
-  isDeleted: number;
   memberCount: number;
   description: string;
   createdAt?: string;
   updatedAt?: string;
   users?: User[];
-  joinedUser?: JoinedUser[];
+  joinedUsers?: JoinedUser[];
   isUpdateUsers: boolean;
 }
 
@@ -207,24 +206,33 @@ export const bindSocketServer = (server: http.Server): void => {
 
         if (id) {
           if (isUpdateUsers && users) {
-            const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
-              acc.push([cur.id, id]);
-              return acc;
-            }, []);
+            try {
+              const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
+                acc.push([cur.id, id]);
+                return acc;
+              }, []);
 
-            await channelModel.joinChannel({
-              joinUsers,
-              joinedNumber: memberCount,
-              channelId: id,
-            });
-            const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
+              await channelModel.joinChannel({
+                joinUsers,
+                joinedNumber: memberCount,
+                channelId: id,
+              });
+              const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
 
-            namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
+              namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
+            } catch (err) {
+              console.log(err);
+            }
           } else {
-            await channelModel.modifyTopic({ channelId: id, topic });
-            namespace.to(room).emit(MESSAGE, { type, channel, room });
+            try {
+              await channelModel.modifyTopic({ channelId: id, topic });
+              namespace.to(room).emit(MESSAGE, { type, channel, room });
+            } catch (err) {
+              console.log(err);
+            }
           }
         }
+
         return;
       }
       if (isDMEvent(data)) {

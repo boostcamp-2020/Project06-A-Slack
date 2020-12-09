@@ -50,11 +50,12 @@ interface Channel {
   channelType: number;
   topic: string;
   isPublic: number;
+  memberCount: number;
   description: string;
-  users?: User[];
-  joinedUsers?: JoinedUser[];
   createdAt?: string;
   updatedAt?: string;
+  users?: User[];
+  joinedUsers?: JoinedUser[];
   isUpdateUsers: boolean;
 }
 
