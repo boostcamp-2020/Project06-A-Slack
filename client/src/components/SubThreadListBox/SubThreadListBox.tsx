@@ -38,7 +38,9 @@ const SubThreadListBox: React.FC = () => {
   const { parentThread, subThreadList } = useSubThreadState();
 
   useEffect(() => {
-    dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
+    if (!Number.isNaN(Number(threadId))) {
+      dispatch(getSubThreadRequest({ parentId: Number(threadId) }));
+    }
   }, [threadId]);
 
   return (

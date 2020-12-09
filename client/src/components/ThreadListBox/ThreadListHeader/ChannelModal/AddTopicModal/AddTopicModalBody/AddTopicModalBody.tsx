@@ -71,13 +71,13 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   const clickSubmit = () => {
     if (current?.id) {
       // TODO !! 로직 변경
-      dispatch(
-        sendMessageRequest({
-          type: SOCKET_MESSAGE_TYPE.CHANNEL,
-          channel: { ...current, topic: content },
-          room: current?.name as string,
-        }),
-      );
+      // dispatch(
+      //   sendMessageRequest({
+      //     type: SOCKET_MESSAGE_TYPE.CHANNEL,
+      //     channel: { ...current, topic: content },
+      //     room: current?.name as string,
+      //   }),
+      // );
       setAddTopicModalVisible((state: boolean) => !state);
     }
   };

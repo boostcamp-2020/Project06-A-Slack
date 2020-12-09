@@ -131,13 +131,13 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
     if (!isDM && pickUsers.length !== 0) {
       if (current && pickUsers) {
         // TODO !! 로직 변경
-        dispatch(
-          sendMessageRequest({
-            type: SOCKET_MESSAGE_TYPE.CHANNEL,
-            channel: { ...current },
-            room: current?.name as string,
-          }),
-        );
+        // dispatch(
+        //   sendMessageRequest({
+        //     type: SOCKET_MESSAGE_TYPE.CHANNEL,
+        //     channel: { ...current },
+        //     room: current?.name as string,
+        //   }),
+        // );
       }
     } else if (userInfo) {
       const name = makeDMRoomName(pickUsers, userInfo.displayName);
