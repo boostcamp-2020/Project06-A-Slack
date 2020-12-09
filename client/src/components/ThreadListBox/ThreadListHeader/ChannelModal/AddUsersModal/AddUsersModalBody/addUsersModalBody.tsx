@@ -130,10 +130,11 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const clickSubmitButton = () => {
     if (!isDM && pickUsers.length !== 0) {
       if (current && pickUsers) {
+        // TODO !! 로직 변경
         dispatch(
           sendMessageRequest({
             type: SOCKET_MESSAGE_TYPE.CHANNEL,
-            channel: { ...current, isUpdateUsers: true, users: pickUsers },
+            channel: { ...current },
             room: current?.name as string,
           }),
         );

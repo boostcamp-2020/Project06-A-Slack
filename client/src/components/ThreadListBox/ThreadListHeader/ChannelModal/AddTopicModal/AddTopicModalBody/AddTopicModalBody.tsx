@@ -70,10 +70,11 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
 
   const clickSubmit = () => {
     if (channelId !== null && current !== null) {
+      // TODO !! 로직 변경
       dispatch(
         sendMessageRequest({
           type: SOCKET_MESSAGE_TYPE.CHANNEL,
-          channel: { ...current, isUpdateUsers: false, topic: content },
+          channel: { ...current, topic: content },
           room: current?.name as string,
         }),
       );

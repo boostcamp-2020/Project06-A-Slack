@@ -44,7 +44,7 @@ interface User {
 }
 
 interface Channel {
-  id?: number;
+  id: number;
   ownerId: number;
   name: string;
   channelType: number;
@@ -54,9 +54,7 @@ interface Channel {
   description: string;
   createdAt?: string;
   updatedAt?: string;
-  users?: User[];
-  joinedUsers?: JoinedUser[];
-  isUpdateUsers: boolean;
+  unreadMessage?: boolean;
 }
 
 type DM = Channel;

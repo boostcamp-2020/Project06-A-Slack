@@ -64,15 +64,16 @@ function subscribeSocket(socket: Socket) {
       if (isChannelEvent(data)) {
         const { room, channel, type } = data;
 
-        if (channel && channel.isUpdateUsers && channel.users) {
-          emit(setUsers({ users: channel.joinedUsers, id: channel.id, channel }));
-        } else {
-          emit(setCurrent(channel));
-        }
+        // 새로운 로직으로 바꾸기
+        emit(updateChannel({ channel: data.channel }));
+
+        // if (channel && channel.isUpdateUsers && channel.users) {
+        //   emit(setUsers({ users: channel.joinedUsers, id: channel.id, channel }));
+        // } else {
+        //   emit(setCurrent(channel));
+        // }
         // TODO: Channel 이벤트 처리
 
-        // 여기 처리해야됨
-        // emit(updateChannel({ channel: data.channel }));
         return;
       }
       if (isDMEvent(data)) {

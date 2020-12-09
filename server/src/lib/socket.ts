@@ -103,9 +103,6 @@ interface Channel {
   description: string;
   createdAt?: string;
   updatedAt?: string;
-  users?: User[];
-  joinedUsers?: JoinedUser[];
-  isUpdateUsers: boolean;
   unreadMessage?: boolean;
 }
 
@@ -204,36 +201,36 @@ export const bindSocketServer = (server: http.Server): void => {
       if (isChannelEvent(data)) {
         // TODO: Channel 이벤트 처리
         const { room, channel, type } = data;
-        const { id, topic, users, memberCount, isUpdateUsers } = channel;
+        // const { id, topic, users, memberCount, isUpdateUsers } = channel;
 
-        if (id) {
-          if (isUpdateUsers && users) {
-            try {
-              const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
-                acc.push([cur.id, id]);
-                return acc;
-              }, []);
+        // if (id) {
+        //   if (isUpdateUsers && users) {
+        //     try {
+        //       const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
+        //         acc.push([cur.id, id]);
+        //         return acc;
+        //       }, []);
 
-              await channelModel.joinChannel({
-                joinUsers,
-                joinedNumber: memberCount,
-                channelId: id,
-              });
-              const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
+        //       await channelModel.joinChannel({
+        //         joinUsers,
+        //         joinedNumber: memberCount,
+        //         channelId: id,
+        //       });
+        //       const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
 
-              namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
-            } catch (err) {
-              console.log(err);
-            }
-          } else {
-            try {
-              await channelModel.modifyTopic({ channelId: id, topic });
-              namespace.to(room).emit(MESSAGE, { type, channel, room });
-            } catch (err) {
-              console.log(err);
-            }
-          }
-        }
+        //       namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
+        //     } catch (err) {
+        //       console.log(err);
+        //     }
+        //   } else {
+        //     try {
+        //       await channelModel.modifyTopic({ channelId: id, topic });
+        //       namespace.to(room).emit(MESSAGE, { type, channel, room });
+        //     } catch (err) {
+        //       console.log(err);
+        //     }
+        //   }
+        // }
 
         return;
       }

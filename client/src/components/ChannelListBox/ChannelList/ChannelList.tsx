@@ -22,12 +22,12 @@ const ChannelList = ({
     dispatch(loadMyChannelsRequest(userId));
   }, [dispatch, userId]);
 
-  useEffect(() => {
-    if (isAddUsers) {
-      dispatch(setIsAddUsers());
-      dispatch(loadMyChannelsRequest(userId));
-    }
-  }, [isAddUsers]);
+  // useEffect(() => {
+  //   if (isAddUsers) {
+  //     dispatch(setIsAddUsers());
+  //     dispatch(loadMyChannelsRequest(userId));
+  //   }
+  // }, [isAddUsers]);
 
   return (
     <>
