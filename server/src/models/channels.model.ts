@@ -64,7 +64,7 @@ export const channelModel = {
     prevMemberCount,
     channelId,
   }: {
-    joinUsers: Array<Array<number>>;
+    joinUsers: [number[]];
     prevMemberCount: number;
     channelId: number;
   }): any {
