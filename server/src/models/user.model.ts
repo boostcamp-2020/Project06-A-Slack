@@ -50,7 +50,7 @@ export const userModel = {
   },
   matchUsers({ displayName, channelId, isDM }: MatchUsers): any {
     if (!isDM) {
-      const sql = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
+      const sql = `SELECT id, email, display_name as displayName, phone_number as phoneNumber, image
       FROM user
       WHERE display_name LIKE ? AND id NOT IN (
         SELECT user_id FROM user_channel
@@ -58,7 +58,7 @@ export const userModel = {
       )`;
       return pool.execute(sql, [`${displayName}%`, channelId]);
     }
-    const sql = `SELECT DISTINCT id, pw, email, display_name as displayName, phone_number as phoneNumber, image
+    const sql = `SELECT id, email, display_name as displayName, phone_number as phoneNumber, image
     FROM user
     WHERE display_name LIKE ?`;
     return pool.execute(sql, [`${displayName}%`]);
