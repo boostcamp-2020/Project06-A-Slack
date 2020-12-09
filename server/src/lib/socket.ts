@@ -227,7 +227,7 @@ export const bindSocketServer = (server: http.Server): void => {
           await conn.beginTransaction();
 
           const [[thread]]: any[] = await conn.execute(GET_THREAD_SQL, [threadId]);
-          const emojisOfThread: EmojiOfThread[] = thread.emoji;
+          let emojisOfThread: EmojiOfThread[] = thread.emoji;
 
           const emojiIdx = emojisOfThread.findIndex(
             (emojiOfThread: EmojiOfThread) => Number(emojiOfThread.id) === Number(emojiId),
@@ -235,7 +235,8 @@ export const bindSocketServer = (server: http.Server): void => {
 
           // 현재 emoji가 없는 경우 + 전체 이모지가 없을때
           if (emojiIdx === -1) {
-            emojisOfThread.concat({ id: Number(emojiId), userList: [userId] });
+            const newEmoji = { id: Number(emojiId), userList: [userId] };
+            emojisOfThread = [...emojisOfThread, newEmoji];
           }
 
           // emoji가 있는데, 해당 emoji의 userList에 userId가 있으면 유저 삭제, 없으면 유저 추가.

@@ -2,7 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { Link } from 'react-router-dom';
-import { DimModal, MenuModal, ReactionIcon, CommentIcon, DotIcon } from '@/components';
+import {
+  DimModal,
+  MenuModal,
+  ReactionIcon,
+  CommentIcon,
+  DotIcon,
+  EmojiListModal,
+} from '@/components';
 import { flex, hoverActive } from '@/styles/mixin';
 import theme from '@/styles/theme';
 
@@ -60,18 +67,35 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
   isParentThreadOfRightSideBar,
 }: ThreadPopupProps) => {
   const [menuModalVisible, setMenuModalVisible] = useState(false);
+  const [reactionModalVisible, setReactionModalVisible] = useState(false);
 
   const closeMenuModal = () => setMenuModalVisible(false);
   const openMenuModal = () => setMenuModalVisible(true);
+
+  const openReactionModal = () => setReactionModalVisible(true);
 
   const openEditModal = () => {
     console.log('click');
   };
 
+  const clickReactionBoxHandler = () => {
+    console.log('clicked');
+  };
+
   return (
     <Container>
-      <ReactionBox>
+      <ReactionBox onClick={openReactionModal}>
         <ReactionIcon size="23px" color={theme.color.black5} />
+        {reactionModalVisible && (
+          <MenuModal
+            top="1rem"
+            right="1rem"
+            visible={reactionModalVisible}
+            setVisible={setReactionModalVisible}
+          >
+            <EmojiListModal thread={thread} />
+          </MenuModal>
+        )}
       </ReactionBox>
       {!thread.parentId && !isParentThreadOfRightSideBar && (
         <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>

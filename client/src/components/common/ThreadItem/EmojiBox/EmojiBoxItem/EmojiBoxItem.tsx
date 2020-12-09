@@ -125,7 +125,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
       </EmojiToolTip>
       <EmojiItem onClick={clickEmojiHandler}>
         <img
-          key={`${emoji.id}`}
+          key={emoji.id}
           src={getEmojiUrl(emoji.id)}
           alt="emoji url"
           width="16px"
