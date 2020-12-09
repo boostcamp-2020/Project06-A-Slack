@@ -61,7 +61,6 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isEmojiEvent(data)) {
-        console.log('come client');
         const { room, emoji, threadId, type } = data;
         if (!(emoji && threadId)) {
           return;
