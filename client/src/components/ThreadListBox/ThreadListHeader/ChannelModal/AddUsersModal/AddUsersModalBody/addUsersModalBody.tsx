@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
-import { joinChannelRequset, createChannelRequest } from '@/store/modules/channel.slice';
+import { createChannelRequest } from '@/store/modules/channel.slice';
+import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { User } from '@/types';
+import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { makeDMRoomName } from '@/utils/utils';
@@ -98,6 +99,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   const [visible, setVisible] = useState(false);
   const [pickUsers, setPickUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
+  const { current } = useChannelState();
   const { userInfo } = useUserState();
 
   useEffect(() => {
@@ -126,8 +128,24 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   };
 
   const clickSubmitButton = () => {
-    if (!isDM) {
-      dispatch(joinChannelRequset({ users: pickUsers, channelId: +channelId }));
+    if (!isDM && pickUsers.length !== 0) {
+      if (current && pickUsers) {
+        // TODO !! 로직 변경
+        const users = pickUsers.map((pu) => ({
+          userId: pu.id,
+          displayName: pu.displayName,
+          image: pu.image,
+        }));
+        dispatch(
+          sendMessageRequest({
+            type: SOCKET_MESSAGE_TYPE.CHANNEL,
+            subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+            channel: current,
+            users,
+            room: current?.name as string,
+          }),
+        );
+      }
     } else if (userInfo) {
       const name = makeDMRoomName(pickUsers, userInfo.displayName);
 

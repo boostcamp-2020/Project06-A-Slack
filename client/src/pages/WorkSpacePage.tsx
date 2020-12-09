@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import { useAuthState, useUserState, useChannelState } from '@/hooks';
-import { Header, LeftSideBar, ThreadListBox, RightSideBar } from '@/components';
+import { Header, LeftSideBar, ThreadListBox, RightSideBar, SubThreadListBox } from '@/components';
 import { isExistedChannel, isNumberTypeValue } from '@/utils/utils';
 import { socketConnectRequest, socketDisconnectRequest } from '@/store/modules/socket.slice';
 import { getEmojiListRequest } from '@/store/modules/emoji.slice';
@@ -68,14 +68,15 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            <>
+            <SubThreadListBox />
+            {/* <>
               {rightSideType &&
                 (checkValidOfRightSideType(rightSideType) ? (
                   <RightSideBar type={rightSideType} channelId={Number(channelId)} />
                 ) : (
                   history.goBack()
                 ))}
-            </>
+            </> */}
           </Container>
         </>
       ) : (

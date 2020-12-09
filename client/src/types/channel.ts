@@ -1,10 +1,16 @@
+import { User } from '@/types';
+
 export interface Channel {
-  channelType: number;
-  description: string;
   id: number;
-  isPublic: number;
-  memberCount: number;
-  name: string;
   ownerId: number;
+  name: string;
+  channelType: number;
   topic: string;
+  isPublic: number;
+  description: string;
+  memberCount: number;
+  pickUsers?: User[];
+  createdAt?: string;
+  updatedAt?: string;
+  unreadMessage?: boolean;
 }

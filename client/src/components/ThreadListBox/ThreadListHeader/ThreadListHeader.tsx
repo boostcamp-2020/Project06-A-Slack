@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useChannelState, useUserState } from '@/hooks';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { JoinedUser } from '@/types';
+import { JoinedUser, Channel } from '@/types';
 import { Link, useParams } from 'react-router-dom';
-import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/components';
 import theme from '@/styles/theme';
 import { flex, hoverActive } from '@/styles/mixin';
-import {
-  sendMessageRequest,
-  enterRoomRequest,
-  leaveRoomRequest,
-} from '@/store/modules/socket.slice';
+
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
@@ -24,7 +17,7 @@ const Container = styled.div`
   height: 4.3rem;
   flex-shrink: 0;
   padding: 0 1.3rem;
-  border: 1px solid ${(props) => props.theme.color.lightGray2};
+  border-bottom: 1px solid ${(props) => props.theme.color.lightGray2};
   background-color: white;
 `;
 
@@ -98,31 +91,16 @@ interface RightSideParams {
   channelId: string;
 }
 
-const ThreadListHeader = () => {
-  const dispatch = useDispatch();
-  const { current, users } = useChannelState();
-  const { userInfo } = useUserState();
+interface ThreadListHeaderProps {
+  current: Channel | null;
+  users: JoinedUser[];
+}
+
+const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
   const { channelId }: RightSideParams = useParams();
-
-  useEffect(() => {
-    if (userInfo) {
-      dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo.id }));
-    }
-  }, [channelId, userInfo]);
-
-  useEffect(() => {
-    if (current) {
-      dispatch(enterRoomRequest({ room: current.name }));
-    }
-    return () => {
-      if (current) {
-        dispatch(leaveRoomRequest({ room: current.name }));
-      }
-    };
-  }, [current]);
 
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
@@ -203,4 +181,4 @@ const ThreadListHeader = () => {
   );
 };
 
-export default ThreadListHeader;
+export default React.memo(ThreadListHeader);

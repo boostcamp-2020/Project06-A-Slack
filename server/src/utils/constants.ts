@@ -41,6 +41,13 @@ export const SOCKET_MESSAGE_TYPE = {
   DM: 'dm',
 };
 
+export const CHANNEL_SUBTYPE = {
+  UPDATE_CHANNEL: 'update_channel',
+  UPDATE_CHANNEL_TOPIC: 'update_channel_topic',
+  UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
+  UPDATE_CHANNEL_USERS: 'update_channel_users',
+};
+
 export const GET_THREAD_SQL = `
   SELECT thread.id AS id, user_id AS userId, channel_id AS channelId, 
     content, url, is_edited AS isEdited, is_pinned AS isPinned, 

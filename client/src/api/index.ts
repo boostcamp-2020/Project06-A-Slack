@@ -2,7 +2,7 @@ import axios from 'axios';
 import { TOKEN_TYPE } from '@/utils/constants';
 import { verifyJWT } from '@/utils/utils';
 
-const instance = axios.create({ timeout: 4000 });
+const instance = axios.create({ timeout: 9000 });
 
 if (process.env.MODE !== 'dev') {
   instance.defaults.baseURL = process.env.BASE_URL;

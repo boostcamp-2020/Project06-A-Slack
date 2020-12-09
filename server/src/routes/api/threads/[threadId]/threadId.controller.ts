@@ -13,7 +13,7 @@ export const getSubThread = async (
 ): Promise<void> => {
   const { threadId } = req.params;
   if (Number.isNaN(Number(threadId))) {
-    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 500 });
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
   try {

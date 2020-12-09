@@ -105,6 +105,37 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
 
   const { current } = useChannelState();
 
+  const sendMessage = () => {
+    if (userInfo) {
+      const thread = {
+        userId: userInfo.id,
+        displayName: userInfo.displayName,
+        phoneNumber: userInfo.phoneNumber,
+        image: userInfo.image,
+        email: userInfo.email,
+        channelId: current?.id as number,
+        content: comment,
+        url: 'this is url',
+        isEdited: 0,
+        isPinned: 0,
+        isDeleted: 0,
+        parentId,
+        emoji: [],
+        subCount: 0,
+        subThreadUserId1: null,
+        subThreadUserId2: null,
+        subThreadUserId3: null,
+      };
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.THREAD,
+          thread,
+          room: current?.name as string,
+        }),
+      );
+    }
+  };
+
   const handleInput = (e: any) => {
     console.log(e.target.innerText);
   };
@@ -142,39 +173,14 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
     }
   };
 
-  const sendMessage = () => {
-    if (userInfo) {
-      const thread = {
-        userId: userInfo.id,
-        displayName: userInfo.displayName,
-        phoneNumber: userInfo.phoneNumber,
-        image: userInfo.image,
-        email: userInfo.email,
-        channelId: current?.id as number,
-        content: comment,
-        url: 'this is url',
-        isEdited: 0,
-        isPinned: 0,
-        isDeleted: 0,
-        parentId: null,
-        emoji: [],
-        subCount: 0,
-        subThreadUserId1: null,
-        subThreadUserId2: null,
-        subThreadUserId3: null,
-      };
-      dispatch(
-        sendMessageRequest({
-          type: SOCKET_MESSAGE_TYPE.THREAD,
-          thread,
-          room: current?.name as string,
-        }),
-      );
-    }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    sendMessage();
+    setComment('');
   };
 
   return (
-    <Container>
+    <Container onSubmit={handleSubmit}>
       <CommentBox>
         <TextBox>
           {/* <Editer

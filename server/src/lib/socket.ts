@@ -6,6 +6,7 @@ import {
   GET_THREAD_SQL,
   UPDATE_EMOJIES_OF_THREAD_SQL,
   ERROR_MESSAGE,
+  CHANNEL_SUBTYPE,
 } from '@/utils/constants';
 import { threadModel, channelModel } from '@/models';
 import { threadService } from '@/services';
@@ -87,12 +88,17 @@ interface User {
   id: number;
   email: string;
   displayName: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   image: string;
-  isDeleted: number;
   lastChannelId?: number | null;
   createdAt?: string;
   updatedAt?: string;
+}
+
+interface JoinedUser {
+  userId: number;
+  displayName: string;
+  image: string;
 }
 
 interface Channel {
@@ -102,11 +108,11 @@ interface Channel {
   channelType: number;
   topic: string;
   isPublic: number;
-  isDeleted: number;
   memberCount: number;
   description: string;
   createdAt?: string;
   updatedAt?: string;
+  unreadMessage?: boolean;
 }
 
 type DM = Channel;
@@ -133,7 +139,10 @@ interface UserEvent {
 
 interface ChannelEvent {
   type: string;
-  channel: Channel;
+  subType: string;
+  channel?: Channel;
+  users?: JoinedUser[];
+  room: string;
 }
 
 interface DMEvent {
@@ -145,7 +154,7 @@ interface RoomEvent {
   room: string;
 }
 
-type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent | RoomEvent;
+type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent;
 
 const isThreadEvent = (event: SocketEvent): event is ThreadEvent => {
   return (event as ThreadEvent).type === SOCKET_MESSAGE_TYPE.THREAD;
@@ -167,10 +176,6 @@ const isDMEvent = (event: SocketEvent): event is DMEvent => {
   return (event as DMEvent).type === SOCKET_MESSAGE_TYPE.DM;
 };
 
-const isRoomEvent = (event: SocketEvent): event is RoomEvent => {
-  return (event as RoomEvent).room !== undefined;
-};
-
 export const bindSocketServer = (server: http.Server): void => {
   const io = new SocketIO.Server(server, {
     transports: ['websocket', 'polling'],
@@ -185,13 +190,26 @@ export const bindSocketServer = (server: http.Server): void => {
 
     socket.on(MESSAGE, async (data: SocketEvent) => {
       if (isThreadEvent(data)) {
-        /* TODO 1: 새로 생성한 채널/DM에 대한 이벤트도 전달해야함 */
-
         const { room, thread, type } = data;
         const { userId, channelId, content, parentId } = thread;
-        const insertId = await threadService.createThread({ userId, channelId, content, parentId });
+        try {
+          const insertId = await threadService.createThread({
+            userId,
+            channelId,
+            content,
+            parentId,
+          });
 
-        namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
+          namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
+          namespace.emit(MESSAGE, {
+            type: SOCKET_MESSAGE_TYPE.CHANNEL,
+            subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD,
+            channel: { id: thread.channelId, unreadMessage: true },
+            room,
+          });
+        } catch (err) {
+          console.error(err);
+        }
         return;
       }
 
@@ -262,10 +280,88 @@ export const bindSocketServer = (server: http.Server): void => {
       }
       if (isChannelEvent(data)) {
         // TODO: Channel 이벤트 처리
+        const { room, channel, type, subType, users } = data;
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
+          try {
+            if (channel) {
+              await channelModel.modifyTopic({ channelId: channel.id, topic: channel.topic });
+              namespace.to(room).emit(MESSAGE, {
+                type: SOCKET_MESSAGE_TYPE.CHANNEL,
+                subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
+                channel,
+                room,
+              });
+            }
+          } catch (err) {
+            console.error(err.message);
+          }
+          return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
+          if (channel && users) {
+            try {
+              const joinUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
+                acc.push([cur.userId, channel.id]);
+                return acc;
+              }, []);
+
+              await channelModel.joinChannel({
+                joinUsers,
+                prevMemberCount: channel.memberCount,
+                channelId: channel.id,
+              });
+              const [joinedUsers] = await channelModel.getChannelUser({ channelId: channel.id });
+
+              namespace.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+                users: joinedUsers,
+                channel,
+                room,
+              });
+            } catch (err) {
+              console.log(err);
+            }
+            return;
+          }
+        }
+        // const { id, topic, users, memberCount, isUpdateUsers } = channel;
+
+        // if (id) {
+        //   if (isUpdateUsers && users) {
+        //     try {
+        //       const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
+        //         acc.push([cur.id, id]);
+        //         return acc;
+        //       }, []);
+
+        //       await channelModel.joinChannel({
+        //         joinUsers,
+        //         joinedNumber: memberCount,
+        //         channelId: id,
+        //       });
+        //       const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
+
+        //       namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
+        //     } catch (err) {
+        //       console.log(err);
+        //     }
+        //   } else {
+        //     try {
+        //       await channelModel.modifyTopic({ channelId: id, topic });
+        //       namespace.to(room).emit(MESSAGE, { type, channel, room });
+        //     } catch (err) {
+        //       console.log(err);
+        //     }
+        //   }
+        // }
+
         return;
       }
       if (isDMEvent(data)) {
-        // TODO: DM 이벤트 처리
+        // TODO: DM방 만드는 이벤트 처리
       }
     });
 

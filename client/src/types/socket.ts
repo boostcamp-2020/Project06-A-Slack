@@ -27,13 +27,18 @@ interface Thread {
   image: string;
 }
 
+export interface JoinedUser {
+  userId: number;
+  displayName: string;
+  image: string;
+}
+
 interface User {
   id: number;
   email: string;
   displayName: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   image: string;
-  isDeleted: number;
   lastChannelId?: number | null;
   createdAt?: string;
   updatedAt?: string;
@@ -46,11 +51,11 @@ interface Channel {
   channelType: number;
   topic: string;
   isPublic: number;
-  isDeleted: number;
   memberCount: number;
   description: string;
   createdAt?: string;
   updatedAt?: string;
+  unreadMessage?: boolean;
 }
 
 type DM = Channel;
@@ -77,7 +82,10 @@ export interface UserEvent {
 
 export interface ChannelEvent {
   type: string;
-  channel: Channel;
+  subType: string;
+  channel?: Channel;
+  users?: JoinedUser[];
+  room: string;
 }
 
 export interface DMEvent {
@@ -89,7 +97,7 @@ export interface RoomEvent {
   room: string;
 }
 
-export type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent | RoomEvent;
+export type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent;
 
 export const isThreadEvent = (event: SocketEvent): event is ThreadEvent => {
   return (event as ThreadEvent).type === SOCKET_MESSAGE_TYPE.THREAD;
@@ -109,8 +117,4 @@ export const isChannelEvent = (event: SocketEvent): event is ChannelEvent => {
 
 export const isDMEvent = (event: SocketEvent): event is DMEvent => {
   return (event as DMEvent).type === SOCKET_MESSAGE_TYPE.DM;
-};
-
-export const isRoomEvent = (event: SocketEvent): event is RoomEvent => {
-  return (event as RoomEvent).room !== undefined;
 };

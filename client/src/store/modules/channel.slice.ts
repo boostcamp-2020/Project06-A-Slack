@@ -8,7 +8,7 @@ interface ChannelState {
   myChannelList: Channel[];
   current: Channel | null;
   users: JoinedUser[];
-  channelId: number | null;
+  reloadMyChannelList: boolean;
 }
 
 const initialState: ChannelState = {
@@ -16,7 +16,7 @@ const initialState: ChannelState = {
   myChannelList: [],
   current: null,
   users: [],
-  channelId: null,
+  reloadMyChannelList: false,
 };
 
 export interface modifyLastChannelRequestPayload {
@@ -52,20 +52,14 @@ const channelSlice = createSlice({
     loadMyChannelsFailure(state, action) {
       // todo 에러처리
     },
-    loadChannelRequest(state, action) {
-      state.channelId = action.payload.channelId;
-    },
+    loadChannelRequest(state, action: PayloadAction<{ channelId: number; userId: number }>) {},
     loadChannelSuccess(state, action) {
-      const [temp] = action.payload.channel;
-      state.current = temp;
+      state.current = action.payload.channel;
       state.users = action.payload.users;
     },
     loadChannelFailure(state, action) {
       // todo 에러처리
     },
-    modifyTopicRequest(state, action) {},
-    modifyTopicSuccess(state, action: PayloadAction<{ channelId: number }>) {},
-    modifyTopicFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
       state.channelList.push(action.payload.channel);
@@ -83,12 +77,52 @@ const channelSlice = createSlice({
     joinChannelFailure(state, action) {
       // todo 에러처리
     },
-    setCurrent(state, action: PayloadAction<{ name: string; value: string }>) {
-      if (state.current !== null) {
-        if (action.payload.name === 'topic') {
-          state.current.topic = action.payload.value;
+    setCurrent(state, action) {
+      state.current = action.payload;
+    },
+    unsetUnreadFlag(state, { payload }: PayloadAction<{ channelId: number }>) {
+      const { channelId } = payload;
+      if (state.current) {
+        const target = state.myChannelList.find((c) => c.id === channelId);
+        if (target) {
+          target.unreadMessage = false;
         }
       }
+    },
+    updateChannelUnread(state, { payload }: PayloadAction<{ channel: Channel }>) {
+      const { channel } = payload;
+      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
+      if (state.current) {
+        if (idx !== -1 && state.myChannelList[idx].id !== state.current.id) {
+          state.myChannelList[idx] = { ...state.myChannelList[idx], ...channel };
+        }
+      }
+    },
+    updateChannelTopic(state, { payload }: PayloadAction<{ channel: Channel }>) {
+      const { channel } = payload;
+      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
+      if (idx !== -1) {
+        state.myChannelList[idx] = { ...state.myChannelList[idx], topic: channel.topic };
+        if (state.current?.id === channel.id) {
+          state.current = channel;
+        }
+      }
+    },
+    updateChannelUsers(
+      state,
+      { payload }: PayloadAction<{ users: JoinedUser[]; channel: Channel }>,
+    ) {
+      const { users, channel } = payload;
+      if (state.current?.id === channel.id) {
+        state.users = users;
+      }
+      state.reloadMyChannelList = true;
+    },
+    setReloadMyChannelListFlag(
+      state,
+      { payload }: PayloadAction<{ reloadMyChannelList: boolean }>,
+    ) {
+      state.reloadMyChannelList = payload.reloadMyChannelList;
     },
   },
 });
@@ -104,9 +138,6 @@ export const {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  modifyTopicRequest,
-  modifyTopicSuccess,
-  modifyTopicFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,
@@ -114,5 +145,10 @@ export const {
   joinChannelSuccess,
   joinChannelFailure,
   setCurrent,
+  unsetUnreadFlag,
+  updateChannelUnread,
+  updateChannelTopic,
+  updateChannelUsers,
+  setReloadMyChannelListFlag,
 } = channelSlice.actions;
 export default channelSlice.reducer;

@@ -50,6 +50,30 @@ const threadSlice = createSlice({
         state.threadList = [action.payload.thread];
       }
     },
+    updateSubThreadInfo(
+      state,
+      { payload }: PayloadAction<{ threadId: number; subThreadUserId: number }>,
+    ) {
+      const { threadId, subThreadUserId } = payload;
+      const targetThread = state.threadList?.find((t) => t.id === threadId);
+      if (targetThread) {
+        targetThread.subCount += 1;
+
+        const subThreadUserIdList = [
+          targetThread.subThreadUserId1,
+          targetThread.subThreadUserId2,
+          targetThread.subThreadUserId3,
+        ];
+
+        if (!subThreadUserIdList.find((uid) => uid === subThreadUserId)) {
+          const emptySpaceIdx: number = subThreadUserIdList.findIndex((s) => s === null);
+          if (emptySpaceIdx !== -1) {
+            const key = `subThreadUserId${emptySpaceIdx + 1}`;
+            targetThread[key] = subThreadUserId;
+          }
+        }
+      }
+    },
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
       state.canScroll = payload.canScroll;
     },
@@ -75,6 +99,7 @@ export const {
   addThread,
   setScrollable,
   changeEmoji,
+  updateSubThreadInfo,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

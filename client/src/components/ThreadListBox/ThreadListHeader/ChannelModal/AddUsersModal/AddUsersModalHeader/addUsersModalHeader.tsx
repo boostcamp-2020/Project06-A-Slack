@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import React from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
@@ -24,7 +23,6 @@ const AddUserModalHeader: React.FC<AddUsersModalHeaderProps> = ({
   isDM,
 }: AddUsersModalHeaderProps) => {
   const { current } = useChannelState();
-
   return (
     <Header>
       <HeaderTitle>Add People</HeaderTitle>
