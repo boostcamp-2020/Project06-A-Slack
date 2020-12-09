@@ -57,7 +57,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   setAddTopicModalVisible,
 }: AddTopicModalBodyProps) => {
   const [content, setContent] = useState('');
-  const { channelId, current } = useChannelState();
+  const { current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -69,7 +69,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   };
 
   const clickSubmit = () => {
-    if (channelId !== null && current !== null) {
+    if (current?.id) {
       // TODO !! 로직 변경
       dispatch(
         sendMessageRequest({

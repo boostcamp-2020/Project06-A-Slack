@@ -8,7 +8,6 @@ interface ChannelState {
   myChannelList: Channel[];
   current: Channel | null;
   users: JoinedUser[];
-  channelId: number | null;
   isAddUsers: boolean;
 }
 
@@ -17,7 +16,6 @@ const initialState: ChannelState = {
   myChannelList: [],
   current: null,
   users: [],
-  channelId: null,
   isAddUsers: false,
 };
 
@@ -55,7 +53,7 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     loadChannelRequest(state, action) {
-      state.channelId = action.payload.channelId;
+      // state.channelId = action.payload.channelId;
     },
     loadChannelSuccess(state, action) {
       const [temp] = action.payload.channel;
