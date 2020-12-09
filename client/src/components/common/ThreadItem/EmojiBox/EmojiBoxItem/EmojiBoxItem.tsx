@@ -9,12 +9,13 @@ import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { JoinedUser } from '@/types';
 
 const Container = styled.div`
-  background-color: #e8f5fa;
+  background-color: ${(props) => props.color};
   border: 1px solid #1d9bd1;
   ${flex('center', 'flex-start', 'row')};
   position: relative;
   cursor: pointer;
 `;
+// EFEFEF
 
 const EmojiToolTip = styled.div`
   background-color: black;
@@ -45,8 +46,13 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
   const { users, current } = useChannelState();
   const { emojiList } = useEmojiState();
   const dispatch = useDispatch();
+  const [backgroundColor, setbackgroundColor] = useState('#EFEFEF');
 
-  const [isClicked, setIsClicked] = useState(true);
+  useEffect(() => {
+    if (userInfo && emoji.userList.includes(userInfo.id)) {
+      setbackgroundColor('#E2EFF4');
+    }
+  }, []);
 
   const getUserListNameInEmoji = (emojiProp: EmojiOfThread) => {
     return emojiProp.userList.reduce((acc, userIdInEmojiOfThread, idx, arr) => {
@@ -83,7 +89,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
     })?.url;
   };
 
-  const clickEmojiHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const clickEmojiHandler = () => {
     if (userInfo) {
       dispatch(
         sendMessageRequest({
@@ -95,10 +101,14 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
         }),
       );
     }
+    if (backgroundColor === '#EFEFEF') {
+      return setbackgroundColor('#E2EFF4');
+    }
+    return setbackgroundColor('#EFEFEF');
   };
 
   return (
-    <Container>
+    <Container color={backgroundColor}>
       <EmojiToolTip>
         <img
           key={`${emoji.id}ToolTip`}
@@ -106,6 +116,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
           alt="emoji url"
           width="36px"
           height="36px"
+          draggable="false"
         />
         <ToolTipDescribe>
           {getUserListNameInEmoji(emoji)}
@@ -119,6 +130,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
           alt="emoji url"
           width="16px"
           height="16px"
+          draggable="false"
         />
         {emoji.userList && <span key={`${emoji.id}length`}>{emoji.userList.length}</span>}
       </EmojiItem>
