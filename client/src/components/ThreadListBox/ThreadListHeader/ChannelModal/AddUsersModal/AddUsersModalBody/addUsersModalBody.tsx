@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
-import { joinChannelRequset, createChannelRequest } from '@/store/modules/channel.slice';
+import { createChannelRequest } from '@/store/modules/channel.slice';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { User } from '@/types';
 import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
