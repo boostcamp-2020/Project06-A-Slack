@@ -93,7 +93,7 @@ interface JoinedUser {
 }
 
 interface Channel {
-  id?: number;
+  id: number;
   ownerId: number;
   name: string;
   channelType: number;
