@@ -2,14 +2,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface emoji {
+interface Emoji {
   id: number;
   name: string;
   url: string;
 }
 
 interface EmojiState {
-  emojiList: emoji[] | null;
+  emojiList: Emoji[] | null;
 }
 
 const emojiState: EmojiState = {
@@ -25,9 +25,6 @@ const emojiSlice = createSlice({
       state.emojiList = action.payload.emojiList;
     },
     getEmojiListFailure(state, action) {},
-    clickEmojiRequest() {},
-    clickEmojiSuccess() {},
-    clickEmojiFailure() {},
     createEmojiRequest(state, action) {},
     createEmojiSuccess(state, action) {},
     createEmojiFailure(state, action) {},

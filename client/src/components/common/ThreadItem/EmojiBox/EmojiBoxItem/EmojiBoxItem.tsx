@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Emoji } from '@/types/thread';
+import { EmojiOfThread, Thread } from '@/types/thread';
 import { flex } from '@/styles/mixin';
-import { useChannelState, useEmojiState } from '@/hooks';
+import { useChannelState, useEmojiState, useUserState } from '@/hooks';
+import { useDispatch } from 'react-redux';
+import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { sendMessageRequest } from '@/store/modules/socket.slice';
+import { JoinedUser } from '@/types';
 
 const Container = styled.div`
   background-color: #e8f5fa;
@@ -27,23 +31,39 @@ const EmojiToolTip = styled.div`
   }
 `;
 
+const EmojiItem = styled.div``;
+
 const ToolTipDescribe = styled.div``;
 
 interface EmojiBoxItemProps {
-  emoji: Emoji;
+  emoji: EmojiOfThread;
+  thread: Thread;
 }
 
-const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps) => {
-  const { users } = useChannelState();
+const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxItemProps) => {
+  const { userInfo } = useUserState();
+  const { users, current } = useChannelState();
   const { emojiList } = useEmojiState();
+  const dispatch = useDispatch();
 
-  const getUserListNameInEmoji = (emojiProp: Emoji) => {
-    return emojiProp.userList.reduce((acc, userId, idx, arr) => {
-      const userInfo = users.find((user) => user.userId === userId);
-      if (idx === arr.length - 1) {
-        return `${acc} ${userInfo?.displayName} `;
+  const [isClicked, setIsClicked] = useState(true);
+
+  const getUserListNameInEmoji = (emojiProp: EmojiOfThread) => {
+    return emojiProp.userList.reduce((acc, userIdInEmojiOfThread, idx, arr) => {
+      const displayName = users.find((user) => user.userId === userIdInEmojiOfThread)?.displayName;
+      const userId = users.find((user) => user.userId === userIdInEmojiOfThread)?.userId;
+      const emojiUserName = userId === userInfo?.id ? 'you' : displayName;
+
+      if (arr.length === 1) {
+        if (emojiUserName === 'you') {
+          return `${acc}you `;
+        }
+        return `${acc}${emojiUserName} `;
       }
-      return `${acc} ${userInfo?.displayName}, `;
+      if (idx === arr.length - 1) {
+        return `${acc} and ${emojiUserName} `;
+      }
+      return `${acc} ${emojiUserName}, `;
     }, '');
   };
 
@@ -63,29 +83,45 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji }: EmojiBoxItemProps)
     })?.url;
   };
 
+  const clickEmojiHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (userInfo) {
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.EMOJI,
+          emojiId: emoji.id,
+          userId: Number(userInfo.id),
+          threadId: Number(thread.id),
+          room: current?.name as string,
+        }),
+      );
+    }
+  };
+
   return (
     <Container>
       <EmojiToolTip>
         <img
           key={`${emoji.id}ToolTip`}
-          src={getEmojiUrl(Number(emoji.id))}
+          src={getEmojiUrl(emoji.id)}
           alt="emoji url"
           width="36px"
           height="36px"
         />
         <ToolTipDescribe>
           {getUserListNameInEmoji(emoji)}
-          {getToolTipDescribe(Number(emoji.id))}
+          {getToolTipDescribe(emoji.id)}
         </ToolTipDescribe>
       </EmojiToolTip>
-      <img
-        key={`${emoji.id}`}
-        src={getEmojiUrl(Number(emoji.id))}
-        alt="emoji url"
-        width="16px"
-        height="16px"
-      />
-      {emoji.userList && <span key={`${emoji.id}length`}>{emoji.userList.length}</span>}
+      <EmojiItem onClick={clickEmojiHandler}>
+        <img
+          key={`${emoji.id}`}
+          src={getEmojiUrl(emoji.id)}
+          alt="emoji url"
+          width="16px"
+          height="16px"
+        />
+        {emoji.userList && <span key={`${emoji.id}length`}>{emoji.userList.length}</span>}
+      </EmojiItem>
     </Container>
   );
 };

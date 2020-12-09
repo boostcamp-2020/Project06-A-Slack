@@ -8,7 +8,7 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread } from '@/store/modules/thread.slice';
+import { addThread, changeEmoji } from '@/store/modules/thread.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
@@ -47,7 +47,12 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isEmojiEvent(data)) {
-        // TODO: Emoji 이벤트 처리
+        console.log('come client');
+        const { room, emoji, threadId, type } = data;
+        if (!(emoji && threadId)) {
+          return;
+        }
+        emit(changeEmoji({ emoji, threadId }));
         return;
       }
       if (isUserEvent(data)) {
