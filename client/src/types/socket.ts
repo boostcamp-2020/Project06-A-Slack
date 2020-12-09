@@ -93,7 +93,7 @@ export interface RoomEvent {
   room: string;
 }
 
-export type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent | RoomEvent;
+export type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent;
 
 export const isThreadEvent = (event: SocketEvent): event is ThreadEvent => {
   return (event as ThreadEvent).type === SOCKET_MESSAGE_TYPE.THREAD;
@@ -113,8 +113,4 @@ export const isChannelEvent = (event: SocketEvent): event is ChannelEvent => {
 
 export const isDMEvent = (event: SocketEvent): event is DMEvent => {
   return (event as DMEvent).type === SOCKET_MESSAGE_TYPE.DM;
-};
-
-export const isRoomEvent = (event: SocketEvent): event is RoomEvent => {
-  return (event as RoomEvent).room !== undefined;
 };

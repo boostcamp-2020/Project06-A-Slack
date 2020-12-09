@@ -143,7 +143,7 @@ interface RoomEvent {
   room: string;
 }
 
-type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent | RoomEvent;
+type SocketEvent = ThreadEvent | EmojiEvent | UserEvent | ChannelEvent | DMEvent;
 
 const isThreadEvent = (event: SocketEvent): event is ThreadEvent => {
   return (event as ThreadEvent).type === SOCKET_MESSAGE_TYPE.THREAD;
@@ -163,10 +163,6 @@ const isChannelEvent = (event: SocketEvent): event is ChannelEvent => {
 
 const isDMEvent = (event: SocketEvent): event is DMEvent => {
   return (event as DMEvent).type === SOCKET_MESSAGE_TYPE.DM;
-};
-
-const isRoomEvent = (event: SocketEvent): event is RoomEvent => {
-  return (event as RoomEvent).room !== undefined;
 };
 
 export const bindSocketServer = (server: http.Server): void => {
