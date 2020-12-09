@@ -6,7 +6,7 @@ import { INPUT_BOX_TYPE } from '@/utils/constants';
 import { ThreadInputBox } from '@/components';
 import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
-import { useChannelState, useThreadState, useUserState } from '@/hooks';
+import { useChannelState, useSocketState, useThreadState, useUserState } from '@/hooks';
 import { getThreadRequest } from '@/store/modules/thread.slice';
 import { isNumberTypeValue } from '@/utils/utils';
 import ThreadList from './ThreadList/ThreadList';
@@ -32,6 +32,7 @@ const ThreadListBox = () => {
   const { current, users } = useChannelState();
   const { userInfo } = useUserState();
   const { threadList, canScroll } = useThreadState();
+  const { socket } = useSocketState();
 
   useEffect(() => {
     if (isNumberTypeValue(channelId)) {
@@ -43,15 +44,15 @@ const ThreadListBox = () => {
   }, [channelId, userInfo]);
 
   useEffect(() => {
-    if (current) {
+    if (current && socket) {
       dispatch(enterRoomRequest({ room: current.name }));
     }
     return () => {
-      if (current) {
+      if (current && socket) {
         dispatch(leaveRoomRequest({ room: current.name }));
       }
     };
-  }, [current]);
+  }, [current, socket]);
 
   return (
     <Container>
