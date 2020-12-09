@@ -76,4 +76,12 @@ export const channelModel = {
     const sql = 'UPDATE channel SET topic = ? WHERE id = ?';
     return pool.execute(sql, [topic, channelId]);
   },
+  getNotJoinedChannels({ userId }: { userId: number }): any {
+    const sql = `SELECT * FROM channel
+    WHERE channel.is_public = 1 AND channel.id NOT IN
+    (SELECT channel.id FROM channel 
+    JOIN user_channel 
+    WHERE user_channel.user_id = ? AND channel.id = user_channel.channel_id)`;
+    return pool.execute(sql, [userId]);
+  },
 };
