@@ -177,19 +177,25 @@ export const bindSocketServer = (server: http.Server): void => {
 
     socket.on(MESSAGE, async (data: SocketEvent) => {
       if (isThreadEvent(data)) {
-        /* TODO 1: 새로 생성한 채널/DM에 대한 이벤트도 전달해야함 */
-
         const { room, thread, type } = data;
         const { userId, channelId, content, parentId } = thread;
-        const insertId = await threadService.createThread({ userId, channelId, content, parentId });
+        try {
+          const insertId = await threadService.createThread({
+            userId,
+            channelId,
+            content,
+            parentId,
+          });
 
-        namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
-        namespace.emit(MESSAGE, {
-          type: SOCKET_MESSAGE_TYPE.CHANNEL,
-          subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL,
-          channel: { id: thread.channelId, unreadMessage: true },
-          room,
-        });
+          namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
+          namespace.emit(MESSAGE, {
+            type: SOCKET_MESSAGE_TYPE.CHANNEL,
+            channel: { id: thread.channelId, unreadMessage: true },
+            room,
+          });
+        } catch (err) {
+          console.error(err);
+        }
         return;
       }
       if (isEmojiEvent(data)) {

@@ -57,6 +57,7 @@ const ChannelItem = ({ idx }: ChannelItemProps) => {
   const { unreadMessage } = myChannelList[idx];
 
   const picked = id === current?.id;
+  const unread = !!unreadMessage && !picked;
 
   const dispatch = useDispatch();
 
@@ -71,12 +72,12 @@ const ChannelItem = ({ idx }: ChannelItemProps) => {
       <Channel picked={picked}>
         <Icon>
           {isPublic ? (
-            <PoundIcon size="12px" color={picked ? 'white' : undefined} />
+            <PoundIcon size="12px" color={picked || unread ? 'white' : undefined} />
           ) : (
-            <LockIcon size="11.2px" color={picked ? 'white' : undefined} />
+            <LockIcon size="11.2px" color={picked || unread ? 'white' : undefined} />
           )}
         </Icon>
-        <Name unreadMessage={!!unreadMessage && !picked}>{name}</Name>
+        <Name unreadMessage={unread}>{name}</Name>
       </Channel>
     </Link>
   );

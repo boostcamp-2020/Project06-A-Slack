@@ -1,12 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { getThreadRequest, setScrollable } from '@/store/modules/thread.slice';
 import styled from 'styled-components';
-import { Thread } from '@/types';
+import { setScrollable } from '@/store/modules/thread.slice';
+import { Thread, User } from '@/types';
 import { ThreadItem } from '@/components';
-import { useThreadState, useUserState } from '@/hooks';
-import { useParams } from 'react-router-dom';
-import { isNumberTypeValue } from '@/utils/utils';
 
 const Container = styled.div`
   width: 100%;
@@ -18,14 +15,13 @@ const Container = styled.div`
 
 const Bottom = styled.div``;
 
-interface RightSideParams {
-  channelId: string | undefined;
+interface ThreadListProps {
+  threadList: Thread[] | null;
+  canScroll: boolean;
+  userInfo: User | null;
 }
 
-const ThreadList = () => {
-  const { channelId }: RightSideParams = useParams();
-  const { threadList, canScroll } = useThreadState();
-  const { userInfo } = useUserState();
+const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
   const dispatch = useDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -41,12 +37,6 @@ const ThreadList = () => {
     }
   }, [threadList?.length]);
 
-  useEffect(() => {
-    if (isNumberTypeValue(channelId)) {
-      dispatch(getThreadRequest({ channelId: Number(channelId) }));
-    }
-  }, [dispatch, channelId]);
-
   return (
     <Container>
       {threadList?.map((thread: Thread, index: number) => (
@@ -61,4 +51,4 @@ const ThreadList = () => {
   );
 };
 
-export default ThreadList;
+export default React.memo(ThreadList);
