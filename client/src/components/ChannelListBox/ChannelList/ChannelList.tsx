@@ -24,7 +24,7 @@ const ChannelList = ({
 
   useEffect(() => {
     if (isAddUsers) {
-      setIsAddUsers();
+      dispatch(setIsAddUsers());
       dispatch(loadMyChannelsRequest(userId));
     }
   }, [isAddUsers]);
