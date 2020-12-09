@@ -8,8 +8,9 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread } from '@/store/modules/thread.slice';
-import { setCurrent, setUsers } from '@/store/modules/channel.slice';
+import { addThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
+import { addSubThread } from '@/store/modules/subThread.slice';
+import { updateChannel, setCurrent, setUsers } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
@@ -44,6 +45,11 @@ function subscribeSocket(socket: Socket) {
       if (isThreadEvent(data)) {
         // TODO 1: room에 해당하는 채널/DM에 new message가 생겼다는 action 전송(해당 사가에서 flag ON)
         const { room, thread, type } = data;
+        if (thread.parentId) {
+          emit(addSubThread({ thread }));
+          emit(updateSubThreadInfo({ threadId: thread.parentId, subThreadUserId: thread.userId }));
+          return;
+        }
         emit(addThread({ thread }));
         return;
       }
@@ -63,13 +69,15 @@ function subscribeSocket(socket: Socket) {
         } else {
           emit(setCurrent(channel));
         }
+        // TODO: Channel 이벤트 처리
+
+        // 여기 처리해야됨
+        // emit(updateChannel({ channel: data.channel }));
         return;
       }
       if (isDMEvent(data)) {
         // TODO: DM 이벤트 처리
       }
-
-      // TODO 2: thread에 메시지 추가
 
       console.log('from server, message: ', data);
     };

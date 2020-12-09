@@ -43,6 +43,24 @@ const commonStyle = css`
       text-decoration: none;
     }
   }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #848484;
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+  }
+  ::-webkit-scrollbar-thumb:active {
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
 `;
 
 export const GlobalStyle = createGlobalStyle`

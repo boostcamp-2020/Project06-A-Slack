@@ -12,4 +12,5 @@ export interface Channel {
   pickUsers?: User[];
   createdAt?: string;
   updatedAt?: string;
+  unreadMessage?: boolean;
 }

@@ -95,6 +95,24 @@ const channelSlice = createSlice({
     setIsAddUsers(state) {
       state.isAddUsers = false;
     },
+    unsetUnreadFlag(state, { payload }: PayloadAction<{ channelId: number }>) {
+      const { channelId } = payload;
+      if (state.current) {
+        const target = state.myChannelList.find((c) => c.id === channelId);
+        if (target) {
+          target.unreadMessage = false;
+        }
+      }
+    },
+    updateChannel(state, { payload }: PayloadAction<{ channel: Channel }>) {
+      const { channel } = payload;
+      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
+      if (state.current) {
+        if (idx !== -1 && state.myChannelList[idx].id !== state.current.id) {
+          state.myChannelList[idx] = { ...state.myChannelList[idx], ...channel };
+        }
+      }
+    },
   },
 });
 
@@ -118,5 +136,7 @@ export const {
   setCurrent,
   setUsers,
   setIsAddUsers,
+  unsetUnreadFlag,
+  updateChannel,
 } = channelSlice.actions;
 export default channelSlice.reducer;

@@ -5,7 +5,6 @@ import { ERROR_MESSAGE } from '@/utils/constants';
 import { threadService } from '@/services';
 
 /**
- * 쓰레드 추가
  * POST /api/threads
  */
 export const createThread = async (

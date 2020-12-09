@@ -50,7 +50,9 @@ const ProfileBackground = styled.div`
 
 const ProfileImg = styled.img`
   width: 1.9rem;
+  height: 1.9rem;
   border-radius: 0.35rem;
+  object-fit: cover;
 `;
 
 const Icon = styled.div`

@@ -42,7 +42,9 @@ const ModalItems = styled.div`
   ${flex()};
 `;
 
-const ReactionBox = styled(ModalItems)``;
+const ReactionBox = styled(ModalItems)`
+  padding-bottom: 0.2rem;
+`;
 const CommentBox = styled(ModalItems)``;
 const MoreActionBox = styled(ModalItems)`
   position: relative;
@@ -69,12 +71,12 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
   return (
     <Container>
       <ReactionBox>
-        <ReactionIcon size="24px" color={theme.color.black5} />
+        <ReactionIcon size="23px" color={theme.color.black5} />
       </ReactionBox>
       {!thread.parentId && !isParentThreadOfRightSideBar && (
         <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
           <CommentBox>
-            <CommentIcon size="19px" color={theme.color.black5} />
+            <CommentIcon size="18px" color={theme.color.black5} />
           </CommentBox>
         </Link>
       )}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useSubThreadState } from '@/hooks';
 import { Redirect, useParams } from 'react-router-dom';
@@ -10,9 +10,20 @@ import { INPUT_BOX_TYPE } from '@/utils/constants';
 import ParentThread from './ParentThread/ParentThread';
 import SubThreadList from './SubThreadList/SubThreadList';
 import ReplyCountHorizon from './ReplyCountHorizon/ReplyCountHorizon';
+import SubThreadListHeader from './SubThreadListHeader/SubThreadListHeader';
 
 const Container = styled.div`
-  background-color: green;
+  width: 25rem;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ListContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
 `;
 
 interface RightSideParams {
@@ -34,11 +45,13 @@ const SubThreadListBox: React.FC = () => {
     <>
       {isNumberTypeValue(threadId) && parentThread !== undefined && (
         <Container>
-          <div>subThreadListBox</div>
-          <ParentThread parentThread={parentThread} />
-          <ReplyCountHorizon subCount={parentThread.subCount} />
-          <SubThreadList subThreadList={subThreadList} />
-          <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.SUBTHREAD} />
+          <SubThreadListHeader />
+          <ListContainer>
+            <ParentThread parentThread={parentThread} />
+            {parentThread.subCount > 0 && <ReplyCountHorizon subCount={parentThread.subCount} />}
+            <SubThreadList subThreadList={subThreadList} />
+            <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.SUBTHREAD} />
+          </ListContainer>
         </Container>
       )}
     </>
