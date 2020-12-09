@@ -52,12 +52,9 @@ const channelSlice = createSlice({
     loadMyChannelsFailure(state, action) {
       // todo 에러처리
     },
-    loadChannelRequest(state, action) {
-      // state.channelId = action.payload.channelId;
-    },
+    loadChannelRequest(state, action: PayloadAction<{ channelId: number; userId: number }>) {},
     loadChannelSuccess(state, action) {
-      const [temp] = action.payload.channel;
-      state.current = temp;
+      state.current = action.payload.channel;
       state.users = action.payload.users;
     },
     loadChannelFailure(state, action) {

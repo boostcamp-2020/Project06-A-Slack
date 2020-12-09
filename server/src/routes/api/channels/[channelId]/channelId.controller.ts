@@ -13,7 +13,7 @@ export const getChannel = async (req: Request, res: Response, next: NextFunction
     next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
-  const [channel] = await channelModel.getChannel({ channelId: +channelId });
+  const [[channel]] = await channelModel.getChannel({ channelId: +channelId });
   const [users] = await channelModel.getChannelUser({ channelId: +channelId });
   res.json({ channel, users });
 };
