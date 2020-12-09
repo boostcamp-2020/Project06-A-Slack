@@ -1,8 +1,15 @@
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
-import { SOCKET_EVENT_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import {
+  SOCKET_EVENT_TYPE,
+  SOCKET_MESSAGE_TYPE,
+  GET_THREAD_SQL,
+  UPDATE_EMOJIES_OF_THREAD_SQL,
+  ERROR_MESSAGE,
+} from '@/utils/constants';
 import { threadModel, channelModel } from '@/models';
 import { threadService } from '@/services';
+import pool from '@/db';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
@@ -50,10 +57,11 @@ const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TY
 
 */
 
-interface Emoji {
-  name: string;
-  userId: number;
+interface EmojiOfThread {
+  id: number;
+  userList: number[];
 }
+
 interface Thread {
   id?: number; // 스레드 추가 요청 이벤트에는 id가 없음
   userId: number;
@@ -64,7 +72,7 @@ interface Thread {
   isEdited: number;
   isPinned: number;
   createdAt: string;
-  emoji: Emoji[] | null;
+  emoji: EmojiOfThread[] | null;
   subCount: number;
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
@@ -112,7 +120,10 @@ interface ThreadEvent {
 interface EmojiEvent {
   type: string;
   room: string;
-  emoji: Emoji; // TODO: 추후 타입 다시 결정
+  emoji?: EmojiOfThread[];
+  emojiId?: number;
+  userId?: number;
+  threadId?: number;
 }
 
 interface UserEvent {
@@ -183,8 +194,66 @@ export const bindSocketServer = (server: http.Server): void => {
         namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
         return;
       }
+
       if (isEmojiEvent(data)) {
-        // TODO: Emoji 이벤트 처리
+        const { type, emojiId, userId, threadId, room } = data;
+
+        if (!(type && emojiId && userId && threadId && room)) {
+          console.log(ERROR_MESSAGE.MISSING_REQUIRED_VALUES);
+          // valid 코드 추가 (1. emojiId, userId, threadId가 실제로 존재하는지?)
+          return;
+        }
+
+        const conn = await pool.getConnection();
+        try {
+          await conn.beginTransaction();
+
+          const [[thread]]: any[] = await conn.execute(GET_THREAD_SQL, [threadId]);
+          const emojisOfThread: EmojiOfThread[] = thread.emoji;
+
+          const emojiIdx = emojisOfThread.findIndex(
+            (emojiOfThread: EmojiOfThread) => Number(emojiOfThread.id) === Number(emojiId),
+          );
+
+          // 현재 emoji가 없는 경우 + 전체 이모지가 없을때
+          if (emojiIdx === -1) {
+            emojisOfThread.concat({ id: Number(emojiId), userList: [userId] });
+          }
+
+          // emoji가 있는데, 해당 emoji의 userList에 userId가 있으면 유저 삭제, 없으면 유저 추가.
+          if (emojiIdx !== -1 && emojisOfThread[emojiIdx]) {
+            const targetUserList = emojisOfThread[emojiIdx].userList;
+            const userIdx = targetUserList.findIndex((id: number) => Number(id) === Number(userId));
+
+            // 유저가 있으면 삭제
+            if (Number(userIdx) !== -1) {
+              targetUserList.splice(userIdx, 1);
+              if (targetUserList.length === 0) {
+                emojisOfThread.splice(emojiIdx, 1);
+              }
+            }
+
+            // 유저가 없으면 추가
+            if (Number(userIdx) === -1) {
+              const { userList } = emojisOfThread[emojiIdx];
+              userList.push(Number(userId));
+              const newEmojiState = { id: Number(emojiId), userList };
+              emojisOfThread[emojiIdx] = newEmojiState;
+            }
+          }
+          namespace.to(room).emit(MESSAGE, { type, emoji: emojisOfThread, threadId, room });
+
+          const emojisOfThreadJson = JSON.stringify(emojisOfThread);
+          const sql = conn.format(UPDATE_EMOJIES_OF_THREAD_SQL, [emojisOfThreadJson, threadId]);
+          console.log(sql);
+          await conn.execute(sql);
+          await conn.commit();
+        } catch (err) {
+          console.error(err);
+          conn.rollback();
+        } finally {
+          conn.release();
+        }
         return;
       }
       if (isUserEvent(data)) {
