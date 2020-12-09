@@ -9,6 +9,7 @@ import {
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
 import { addThread } from '@/store/modules/thread.slice';
+import { setCurrent, setUsers } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE } from '@/utils/constants';
@@ -55,7 +56,13 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isChannelEvent(data)) {
-        // TODO: Channel 이벤트 처리
+        const { room, channel, type } = data;
+
+        if (channel && channel.isUpdateUsers && channel.users) {
+          emit(setUsers({ users: channel.joinedUsers, id: channel.id, channel }));
+        } else {
+          emit(setCurrent(channel));
+        }
         return;
       }
       if (isDMEvent(data)) {

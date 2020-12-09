@@ -26,30 +26,37 @@ interface Thread {
   image: string;
 }
 
+interface JoinedUser {
+  userId: number;
+  displayName: string;
+  image: string;
+}
+
 interface User {
   id: number;
   email: string;
   displayName: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   image: string;
-  isDeleted: number;
   lastChannelId?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }
 
 interface Channel {
-  id: number;
+  id?: number;
   ownerId: number;
   name: string;
   channelType: number;
   topic: string;
   isPublic: number;
-  isDeleted: number;
   memberCount: number;
   description: string;
   createdAt?: string;
   updatedAt?: string;
+  users?: User[];
+  joinedUsers?: JoinedUser[];
+  isUpdateUsers: boolean;
 }
 
 type DM = Channel;
@@ -74,6 +81,7 @@ export interface UserEvent {
 export interface ChannelEvent {
   type: string;
   channel: Channel;
+  room: string;
 }
 
 export interface DMEvent {

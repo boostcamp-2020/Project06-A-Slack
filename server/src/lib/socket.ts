@@ -79,26 +79,33 @@ interface User {
   id: number;
   email: string;
   displayName: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
   image: string;
-  isDeleted: number;
   lastChannelId?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }
 
+interface JoinedUser {
+  userId: number;
+  displayName: string;
+  image: string;
+}
+
 interface Channel {
-  id: number;
+  id?: number;
   ownerId: number;
   name: string;
   channelType: number;
   topic: string;
   isPublic: number;
-  isDeleted: number;
   memberCount: number;
   description: string;
   createdAt?: string;
   updatedAt?: string;
+  users?: User[];
+  joinedUsers?: JoinedUser[];
+  isUpdateUsers: boolean;
 }
 
 type DM = Channel;
@@ -123,6 +130,7 @@ interface UserEvent {
 interface ChannelEvent {
   type: string;
   channel: Channel;
+  room: string;
 }
 
 interface DMEvent {
@@ -193,10 +201,42 @@ export const bindSocketServer = (server: http.Server): void => {
       }
       if (isChannelEvent(data)) {
         // TODO: Channel 이벤트 처리
+        const { room, channel, type } = data;
+        const { id, topic, users, memberCount, isUpdateUsers } = channel;
+
+        if (id) {
+          if (isUpdateUsers && users) {
+            try {
+              const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
+                acc.push([cur.id, id]);
+                return acc;
+              }, []);
+
+              await channelModel.joinChannel({
+                joinUsers,
+                joinedNumber: memberCount,
+                channelId: id,
+              });
+              const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
+
+              namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
+            } catch (err) {
+              console.log(err);
+            }
+          } else {
+            try {
+              await channelModel.modifyTopic({ channelId: id, topic });
+              namespace.to(room).emit(MESSAGE, { type, channel, room });
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }
+
         return;
       }
       if (isDMEvent(data)) {
-        // TODO: DM 이벤트 처리
+        // TODO: DM방 만드는 이벤트 처리
       }
     });
 

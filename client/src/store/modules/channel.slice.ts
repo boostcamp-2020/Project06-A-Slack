@@ -9,6 +9,7 @@ interface ChannelState {
   current: Channel | null;
   users: JoinedUser[];
   channelId: number | null;
+  isAddUsers: boolean;
 }
 
 const initialState: ChannelState = {
@@ -17,6 +18,7 @@ const initialState: ChannelState = {
   current: null,
   users: [],
   channelId: null,
+  isAddUsers: false,
 };
 
 export interface modifyLastChannelRequestPayload {
@@ -63,9 +65,6 @@ const channelSlice = createSlice({
     loadChannelFailure(state, action) {
       // todo 에러처리
     },
-    modifyTopicRequest(state, action) {},
-    modifyTopicSuccess(state, action: PayloadAction<{ channelId: number }>) {},
-    modifyTopicFailure(state, action) {},
     createChannelRequest(state, action) {},
     createChannelSuccess(state, action) {
       state.channelList.push(action.payload.channel);
@@ -83,12 +82,18 @@ const channelSlice = createSlice({
     joinChannelFailure(state, action) {
       // todo 에러처리
     },
-    setCurrent(state, action: PayloadAction<{ name: string; value: string }>) {
-      if (state.current !== null) {
-        if (action.payload.name === 'topic') {
-          state.current.topic = action.payload.value;
-        }
+    setCurrent(state, action) {
+      state.current = action.payload;
+    },
+    setUsers(state, action) {
+      state.channelList.push(action.payload.channel);
+      state.isAddUsers = true;
+      if (state.current && state.current.id === action.payload.id) {
+        state.users = action.payload.users;
       }
+    },
+    setIsAddUsers(state) {
+      state.isAddUsers = false;
     },
   },
 });
@@ -104,9 +109,6 @@ export const {
   loadChannelRequest,
   loadChannelSuccess,
   loadChannelFailure,
-  modifyTopicRequest,
-  modifyTopicSuccess,
-  modifyTopicFailure,
   createChannelRequest,
   createChannelSuccess,
   createChannelFailure,
@@ -114,5 +116,7 @@ export const {
   joinChannelSuccess,
   joinChannelFailure,
   setCurrent,
+  setUsers,
+  setIsAddUsers,
 } = channelSlice.actions;
 export default channelSlice.reducer;

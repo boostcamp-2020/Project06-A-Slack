@@ -1,9 +1,11 @@
 import React, { ReactElement, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { modifyTopicRequest, setCurrent } from '@/store/modules/channel.slice';
+import { setCurrent } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
 import { useChannelState } from '@/hooks';
+import { sendMessageRequest } from '@/store/modules/socket.slice';
+import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 
 const TextArea = styled.textarea`
   border: 1px ${(props) => props.theme.color.gray4} solid;
@@ -68,9 +70,14 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
 
   const clickSubmit = () => {
     if (channelId !== null && current !== null) {
-      dispatch(modifyTopicRequest({ channelId, topic: content }));
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.CHANNEL,
+          channel: { ...current, isUpdateUsers: false, topic: content },
+          room: current?.name as string,
+        }),
+      );
       setAddTopicModalVisible((state: boolean) => !state);
-      dispatch(setCurrent({ name: 'topic', value: content }));
     }
   };
 
