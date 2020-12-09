@@ -43,4 +43,6 @@ export const SOCKET_MESSAGE_TYPE = {
 
 export const CHANNEL_SUBTYPE = {
   UPDATE_CHANNEL: 'update_channel',
+  UPDATE_CHANNEL_TOPIC: 'update_channel_topic',
+  UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
 };

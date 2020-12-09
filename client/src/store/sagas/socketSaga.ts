@@ -10,7 +10,7 @@ import {
 } from '@/store/modules/socket.slice';
 import { addThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
 import { addSubThread } from '@/store/modules/subThread.slice';
-import { updateChannel, setCurrent, setUsers } from '@/store/modules/channel.slice';
+import { updateChannelUnread, updateChannelTopic } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
@@ -64,8 +64,13 @@ function subscribeSocket(socket: Socket) {
       if (isChannelEvent(data)) {
         const { room, channel, subType, type } = data;
 
-        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL) {
-          emit(updateChannel({ channel: data.channel }));
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD) {
+          emit(updateChannelUnread({ channel: data.channel }));
+          return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
+          emit(updateChannelTopic({ channel: data.channel }));
           return;
         }
 

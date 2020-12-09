@@ -5,7 +5,7 @@ import { setCurrent } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
 import { useChannelState } from '@/hooks';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
-import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { SOCKET_MESSAGE_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
 
 const TextArea = styled.textarea`
   border: 1px ${(props) => props.theme.color.gray4} solid;
@@ -70,14 +70,14 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
 
   const clickSubmit = () => {
     if (current?.id) {
-      // TODO !! 로직 변경
-      // dispatch(
-      //   sendMessageRequest({
-      //     type: SOCKET_MESSAGE_TYPE.CHANNEL,
-      //     channel: { ...current, topic: content },
-      //     room: current?.name as string,
-      //   }),
-      // );
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.CHANNEL,
+          subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
+          channel: { ...current, topic: content },
+          room: current?.name as string,
+        }),
+      );
       setAddTopicModalVisible((state: boolean) => !state);
     }
   };

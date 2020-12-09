@@ -190,6 +190,7 @@ export const bindSocketServer = (server: http.Server): void => {
           namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
           namespace.emit(MESSAGE, {
             type: SOCKET_MESSAGE_TYPE.CHANNEL,
+            subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD,
             channel: { id: thread.channelId, unreadMessage: true },
             room,
           });
@@ -208,7 +209,23 @@ export const bindSocketServer = (server: http.Server): void => {
       }
       if (isChannelEvent(data)) {
         // TODO: Channel 이벤트 처리
-        const { room, channel, type } = data;
+        const { room, channel, type, subType } = data;
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
+          try {
+            console.log('modify topic', room, channel);
+            await channelModel.modifyTopic({ channelId: channel.id, topic: channel.topic });
+            namespace.to(room).emit(MESSAGE, {
+              type: SOCKET_MESSAGE_TYPE.CHANNEL,
+              subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
+              channel,
+              room,
+            });
+          } catch (err) {
+            console.error(err.message);
+          }
+          return;
+        }
         // const { id, topic, users, memberCount, isUpdateUsers } = channel;
 
         // if (id) {
