@@ -93,7 +93,7 @@ interface JoinedUser {
 }
 
 interface Channel {
-  id: number;
+  id?: number; // 채널 생성시 아이디가 없음
   ownerId: number;
   name: string;
   channelType: number;
@@ -130,7 +130,7 @@ interface ChannelEvent {
   subType: string;
   channel?: Channel;
   users?: JoinedUser[];
-  room: string;
+  room?: string;
 }
 
 interface DMEvent {
@@ -214,8 +214,11 @@ export const bindSocketServer = (server: http.Server): void => {
 
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
           try {
-            if (channel) {
-              await channelModel.modifyTopic({ channelId: channel.id, topic: channel.topic });
+            if (channel && room) {
+              await channelModel.modifyTopic({
+                channelId: channel.id as number,
+                topic: channel.topic,
+              });
               namespace.to(room).emit(MESSAGE, {
                 type: SOCKET_MESSAGE_TYPE.CHANNEL,
                 subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
@@ -240,9 +243,11 @@ export const bindSocketServer = (server: http.Server): void => {
               await channelModel.joinChannel({
                 joinUsers,
                 prevMemberCount: channel.memberCount,
-                channelId: channel.id,
+                channelId: channel.id as number,
               });
-              const [joinedUsers] = await channelModel.getChannelUser({ channelId: channel.id });
+              const [joinedUsers] = await channelModel.getChannelUser({
+                channelId: channel.id as number,
+              });
 
               namespace.emit(MESSAGE, {
                 type,
@@ -257,39 +262,57 @@ export const bindSocketServer = (server: http.Server): void => {
             return;
           }
         }
-        // const { id, topic, users, memberCount, isUpdateUsers } = channel;
 
-        // if (id) {
-        //   if (isUpdateUsers && users) {
-        //     try {
-        //       const joinUsers: [number[]] = users.reduce((acc: any, cur: User) => {
-        //         acc.push([cur.id, id]);
-        //         return acc;
-        //       }, []);
+        if (subType === CHANNEL_SUBTYPE.MAKE_DM) {
+          if (users) {
+            try {
+              const {
+                ownerId,
+                name,
+                memberCount,
+                isPublic,
+                description,
+                channelType,
+              } = channel as Channel;
 
-        //       await channelModel.joinChannel({
-        //         joinUsers,
-        //         joinedNumber: memberCount,
-        //         channelId: id,
-        //       });
-        //       const [joinedUsers] = await channelModel.getChannelUser({ channelId: +id });
+              const [newChannel] = await channelModel.createChannel({
+                ownerId,
+                name,
+                memberCount,
+                isPublic,
+                description,
+                channelType,
+              });
 
-        //       namespace.emit(MESSAGE, { type, channel: { ...channel, joinedUsers }, room });
-        //     } catch (err) {
-        //       console.log(err);
-        //     }
-        //   } else {
-        //     try {
-        //       await channelModel.modifyTopic({ channelId: id, topic });
-        //       namespace.to(room).emit(MESSAGE, { type, channel, room });
-        //     } catch (err) {
-        //       console.log(err);
-        //     }
-        //   }
-        // }
+              const [joinedUsers] = await channelModel.getChannelUser({
+                channelId: newChannel.insertId,
+              });
 
-        return;
+              const joinUsers: [number[]] = users.reduce((acc: any, cur) => {
+                acc.push([cur.userId, newChannel.insertId]);
+                return acc;
+              }, []);
+
+              await channelModel.joinChannel({
+                channelId: newChannel.insertId,
+                prevMemberCount: joinedUsers.length,
+                joinUsers,
+              });
+
+              namespace.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.MAKE_DM,
+                users,
+                channel,
+              });
+            } catch (err) {
+              console.error(err);
+            }
+          }
+          return;
+        }
       }
+
       if (isDMEvent(data)) {
         // TODO: DM방 만드는 이벤트 처리
       }

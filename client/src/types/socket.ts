@@ -44,7 +44,7 @@ interface User {
 }
 
 interface Channel {
-  id: number;
+  id?: number;
   ownerId: number;
   name: string;
   channelType: number;
@@ -81,7 +81,7 @@ export interface ChannelEvent {
   subType: string;
   channel?: Channel;
   users?: JoinedUser[];
-  room: string;
+  room?: string;
 }
 
 export interface DMEvent {
