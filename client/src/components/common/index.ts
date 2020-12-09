@@ -6,3 +6,4 @@ export { default as DimModal } from './DimModal/DimModal';
 export { default as ModalCloseBox } from './ModalCloseBox/ModalCloseBox';
 export { default as MenuModal } from './MenuModal/MenuModal';
 export { default as ThreadInputBox } from './ThreadInputBox/ThreadInputBox';
+export { default as Popover } from './Popover/Popover';
