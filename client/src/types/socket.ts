@@ -26,7 +26,7 @@ interface Thread {
   image: string;
 }
 
-interface JoinedUser {
+export interface JoinedUser {
   userId: number;
   displayName: string;
   image: string;
