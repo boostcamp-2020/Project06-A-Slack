@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { ReactElement, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadMyChannelsRequest, setIsAddUsers } from '@/store/modules/channel.slice';
+import { loadMyChannelsRequest, setReloadMyChannelListFlag } from '@/store/modules/channel.slice';
 import { useChannelState, useAuthState } from '@/hooks';
 import { Channel } from '@/types';
 import ChannelItem from './ChannelItem/ChannelItem';
@@ -15,7 +15,7 @@ const ChannelList = ({
   channelListVisible: boolean;
 }): ReactElement => {
   const dispatch = useDispatch();
-  const { myChannelList, current, isAddUsers } = useChannelState();
+  const { myChannelList, current, reloadMyChannelList } = useChannelState();
   const { userId } = useAuthState();
 
   useEffect(() => {
@@ -23,11 +23,11 @@ const ChannelList = ({
   }, [dispatch, userId]);
 
   useEffect(() => {
-    if (isAddUsers) {
-      dispatch(setIsAddUsers());
+    if (reloadMyChannelList) {
       dispatch(loadMyChannelsRequest(userId));
+      dispatch(setReloadMyChannelListFlag({ reloadMyChannelList: false }));
     }
-  }, [isAddUsers]);
+  }, [reloadMyChannelList]);
 
   return (
     <>

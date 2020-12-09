@@ -8,11 +8,16 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread } from '@/store/modules/thread.slice';
-import { setCurrent, setUsers } from '@/store/modules/channel.slice';
+import { addThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
+import { addSubThread } from '@/store/modules/subThread.slice';
+import {
+  updateChannelUnread,
+  updateChannelTopic,
+  updateChannelUsers,
+} from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import { SOCKET_EVENT_TYPE } from '@/utils/constants';
+import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
 import {
   SocketEvent,
   isChannelEvent,
@@ -20,6 +25,8 @@ import {
   isEmojiEvent,
   isThreadEvent,
   isUserEvent,
+  Channel,
+  JoinedUser,
 } from '@/types';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
@@ -44,6 +51,11 @@ function subscribeSocket(socket: Socket) {
       if (isThreadEvent(data)) {
         // TODO 1: room에 해당하는 채널/DM에 new message가 생겼다는 action 전송(해당 사가에서 flag ON)
         const { room, thread, type } = data;
+        if (thread.parentId) {
+          emit(addSubThread({ thread }));
+          emit(updateSubThreadInfo({ threadId: thread.parentId, subThreadUserId: thread.userId }));
+          return;
+        }
         emit(addThread({ thread }));
         return;
       }
@@ -56,20 +68,28 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isChannelEvent(data)) {
-        const { room, channel, type } = data;
+        const { room, channel, subType, type, users } = data;
 
-        if (channel && channel.isUpdateUsers && channel.users) {
-          emit(setUsers({ users: channel.joinedUsers, id: channel.id, channel }));
-        } else {
-          emit(setCurrent(channel));
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD) {
+          emit(updateChannelUnread({ channel: data.channel as Channel }));
+          return;
         }
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
+          emit(updateChannelTopic({ channel: data.channel as Channel }));
+          return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
+          emit(updateChannelUsers({ users: users as JoinedUser[], channel: channel as Channel }));
+          return;
+        }
+
         return;
       }
       if (isDMEvent(data)) {
         // TODO: DM 이벤트 처리
       }
-
-      // TODO 2: thread에 메시지 추가
 
       console.log('from server, message: ', data);
     };

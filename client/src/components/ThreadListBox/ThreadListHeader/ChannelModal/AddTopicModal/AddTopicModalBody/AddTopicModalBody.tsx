@@ -5,7 +5,7 @@ import { setCurrent } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
 import { useChannelState } from '@/hooks';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
-import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { SOCKET_MESSAGE_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
 
 const TextArea = styled.textarea`
   border: 1px ${(props) => props.theme.color.gray4} solid;
@@ -57,7 +57,7 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   setAddTopicModalVisible,
 }: AddTopicModalBodyProps) => {
   const [content, setContent] = useState('');
-  const { channelId, current } = useChannelState();
+  const { current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -69,11 +69,12 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   };
 
   const clickSubmit = () => {
-    if (channelId !== null && current !== null) {
+    if (current?.id) {
       dispatch(
         sendMessageRequest({
           type: SOCKET_MESSAGE_TYPE.CHANNEL,
-          channel: { ...current, isUpdateUsers: false, topic: content },
+          subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC,
+          channel: { ...current, topic: content },
           room: current?.name as string,
         }),
       );

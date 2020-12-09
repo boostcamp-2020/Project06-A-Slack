@@ -1,7 +1,7 @@
 import { User } from '@/types';
 
 export interface Channel {
-  id?: number;
+  id: number;
   ownerId: number;
   name: string;
   channelType: number;
@@ -12,4 +12,5 @@ export interface Channel {
   pickUsers?: User[];
   createdAt?: string;
   updatedAt?: string;
+  unreadMessage?: boolean;
 }

@@ -4,6 +4,7 @@ export interface Emoji {
 }
 
 export interface Thread {
+  [key: string]: any;
   id: number;
   userId: number;
   channelId: number;
