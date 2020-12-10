@@ -116,7 +116,6 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
           alt="emoji url"
           width="36px"
           height="36px"
-          draggable="false"
         />
         <ToolTipDescribe>
           {getUserListNameInEmoji(emoji)}
@@ -130,7 +129,6 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
           alt="emoji url"
           width="16px"
           height="16px"
-          draggable="false"
         />
         {emoji.userList && <span key={`${emoji.id}length`}>{emoji.userList.length}</span>}
       </EmojiItem>
