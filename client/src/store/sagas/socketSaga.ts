@@ -8,7 +8,8 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
+import { addThread, changeEmoji, updateSubThreadInfo } from '@/store/modules/thread.slice';
+
 import { addSubThread } from '@/store/modules/subThread.slice';
 import {
   updateChannelUnread,
@@ -61,7 +62,10 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isEmojiEvent(data)) {
-        // TODO: Emoji 이벤트 처리
+        const { room, emoji, threadId, type } = data;
+        if (emoji && threadId) {
+          emit(changeEmoji({ emoji, threadId }));
+        }
         return;
       }
       if (isUserEvent(data)) {

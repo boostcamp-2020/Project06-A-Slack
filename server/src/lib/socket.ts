@@ -1,8 +1,13 @@
 import SocketIO, { Socket } from 'socket.io';
 import http from 'http';
-import { SOCKET_EVENT_TYPE, SOCKET_MESSAGE_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
-import { threadModel, channelModel } from '@/models';
-import { threadService } from '@/services';
+import {
+  SOCKET_EVENT_TYPE,
+  SOCKET_MESSAGE_TYPE,
+  ERROR_MESSAGE,
+  CHANNEL_SUBTYPE,
+} from '@/utils/constants';
+import { channelModel } from '@/models';
+import { emojiService, threadService } from '@/services';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
@@ -50,10 +55,11 @@ const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TY
 
 */
 
-interface Emoji {
-  name: string;
-  userId: number;
+interface EmojiOfThread {
+  id: number;
+  userList: number[];
 }
+
 interface Thread {
   id?: number; // 스레드 추가 요청 이벤트에는 id가 없음
   userId: number;
@@ -64,7 +70,7 @@ interface Thread {
   isEdited: number;
   isPinned: number;
   createdAt: string;
-  emoji: Emoji[] | null;
+  emoji: EmojiOfThread[] | null;
   subCount: number;
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
@@ -117,7 +123,10 @@ interface ThreadEvent {
 interface EmojiEvent {
   type: string;
   room: string;
-  emoji: Emoji; // TODO: 추후 타입 다시 결정
+  emoji?: EmojiOfThread[];
+  emojiId?: number;
+  userId?: number;
+  threadId?: number;
 }
 
 interface UserEvent {
@@ -200,8 +209,28 @@ export const bindSocketServer = (server: http.Server): void => {
         }
         return;
       }
+
       if (isEmojiEvent(data)) {
-        // TODO: Emoji 이벤트 처리
+        const { type, emojiId, userId, threadId, room } = data;
+
+        if (!(type && emojiId && userId && threadId && room)) {
+          console.log(ERROR_MESSAGE.MISSING_REQUIRED_VALUES);
+          // valid 코드 추가 (1. emojiId, userId, threadId가 실제로 존재하는지?)
+          return;
+        }
+
+        const { emojisOfThread, err } = await emojiService.updateEmoji({
+          emojiId,
+          userId,
+          threadId,
+        });
+
+        if (emojisOfThread) {
+          namespace.to(room).emit(MESSAGE, { type, emoji: emojisOfThread, threadId, room });
+        }
+        if (err) {
+          console.error(err);
+        }
         return;
       }
       if (isUserEvent(data)) {

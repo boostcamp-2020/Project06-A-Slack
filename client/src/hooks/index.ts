@@ -6,3 +6,4 @@ export * from './useSignupState';
 export * from './useThreadState';
 export * from './useSubThreadState';
 export * from './useSocketState';
+export * from './useEmojiState';

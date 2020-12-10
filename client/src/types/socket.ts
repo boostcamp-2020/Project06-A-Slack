@@ -1,9 +1,10 @@
 import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 
-interface Emoji {
-  name: string;
-  userId: number;
+interface EmojiOfThread {
+  id: number;
+  userList: number[];
 }
+
 interface Thread {
   id?: number; // 스레드 생성 요청 이벤트에는 id가 없음
   userId: number;
@@ -15,7 +16,7 @@ interface Thread {
   isPinned: number;
   createdAt?: string; // 생성 요청시에 없음
   updatedAt?: string; // 생성 요청시에 없음
-  emoji: Emoji[] | null;
+  emoji: EmojiOfThread[] | null;
   subCount: number;
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
@@ -68,7 +69,10 @@ export interface ThreadEvent {
 export interface EmojiEvent {
   type: string;
   room: string;
-  emoji: Emoji; // TODO: 추후 타입 다시 결정
+  emoji?: EmojiOfThread[];
+  emojiId?: number;
+  userId?: number;
+  threadId?: number;
 }
 
 export interface UserEvent {

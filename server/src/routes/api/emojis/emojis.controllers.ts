@@ -11,8 +11,8 @@ export const getEmojiList = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const [emoji] = await emojiModel.getEmojiList();
-    res.status(200).json({ emoji });
+    const [emojiList] = await emojiModel.getEmojiList();
+    res.status(200).json({ emojiList });
   } catch (err) {
     next(err);
   }

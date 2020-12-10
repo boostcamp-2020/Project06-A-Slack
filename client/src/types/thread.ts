@@ -1,4 +1,4 @@
-export interface Emoji {
+export interface EmojiOfThread {
   id: number;
   userList: number[];
 }
@@ -14,7 +14,7 @@ export interface Thread {
   isEdited: number;
   isPinned: number;
   createdAt: string;
-  emoji: Emoji[];
+  emoji: EmojiOfThread[];
   subCount: number;
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
