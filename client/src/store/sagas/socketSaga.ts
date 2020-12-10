@@ -14,6 +14,7 @@ import {
   updateChannelUnread,
   updateChannelTopic,
   updateChannelUsers,
+  setReloadMyChannelListFlag,
 } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
@@ -83,6 +84,10 @@ function subscribeSocket(socket: Socket) {
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
           emit(updateChannelUsers({ users: users as JoinedUser[], channel: channel as Channel }));
           return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.MAKE_DM) {
+          emit(setReloadMyChannelListFlag({ reloadMyChannelList: true }));
         }
 
         return;

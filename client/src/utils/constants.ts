@@ -56,4 +56,5 @@ export const CHANNEL_SUBTYPE = {
   UPDATE_CHANNEL_TOPIC: 'update_channel_topic',
   UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
   UPDATE_CHANNEL_USERS: 'update_channel_users',
+  MAKE_DM: 'make_dm',
 };
