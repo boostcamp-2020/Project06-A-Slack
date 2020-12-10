@@ -214,9 +214,9 @@ export const bindSocketServer = (server: http.Server): void => {
 
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
           try {
-            if (channel && room) {
+            if (channel?.id && room) {
               await channelModel.modifyTopic({
-                channelId: channel.id as number,
+                channelId: channel.id,
                 topic: channel.topic,
               });
               namespace.to(room).emit(MESSAGE, {
@@ -233,7 +233,7 @@ export const bindSocketServer = (server: http.Server): void => {
         }
 
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
-          if (channel && users) {
+          if (channel?.id && users) {
             try {
               const joinUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
                 acc.push([cur.userId, channel.id]);
@@ -243,10 +243,10 @@ export const bindSocketServer = (server: http.Server): void => {
               await channelModel.joinChannel({
                 joinUsers,
                 prevMemberCount: channel.memberCount,
-                channelId: channel.id as number,
+                channelId: channel.id,
               });
               const [joinedUsers] = await channelModel.getChannelUser({
-                channelId: channel.id as number,
+                channelId: channel.id,
               });
 
               namespace.emit(MESSAGE, {
@@ -264,16 +264,9 @@ export const bindSocketServer = (server: http.Server): void => {
         }
 
         if (subType === CHANNEL_SUBTYPE.MAKE_DM) {
-          if (users) {
+          if (users && channel) {
             try {
-              const {
-                ownerId,
-                name,
-                memberCount,
-                isPublic,
-                description,
-                channelType,
-              } = channel as Channel;
+              const { ownerId, name, memberCount, isPublic, description, channelType } = channel;
 
               const [newChannel] = await channelModel.createChannel({
                 ownerId,
