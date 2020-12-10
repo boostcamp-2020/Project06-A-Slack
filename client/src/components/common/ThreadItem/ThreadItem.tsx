@@ -134,8 +134,8 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
           <DateTimeBox>{get12HourTime(thread.createdAt)}</DateTimeBox>
         </ContentTop>
         <ContentBottom>{thread.content}</ContentBottom>
-        {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
         <EmojiBox thread={thread} />
+        {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
       </ContentBox>
       {popupVisible && (
         <Popup>
