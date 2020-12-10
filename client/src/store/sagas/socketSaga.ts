@@ -62,10 +62,9 @@ function subscribeSocket(socket: Socket) {
       }
       if (isEmojiEvent(data)) {
         const { room, emoji, threadId, type } = data;
-        if (!(emoji && threadId)) {
-          return;
+        if (emoji && threadId) {
+          emit(changeEmoji({ emoji, threadId }));
         }
-        emit(changeEmoji({ emoji, threadId }));
         return;
       }
       if (isUserEvent(data)) {

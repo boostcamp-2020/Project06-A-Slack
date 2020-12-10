@@ -14,6 +14,7 @@ const Container = styled.div`
 const Emoji = styled.img`
   width: 22px;
   height: 22px;
+  user-select: none;
 `;
 
 interface EmojiListModalProps {
@@ -48,7 +49,6 @@ const EmojiListModal: React.FC<EmojiListModalProps> = ({ thread }: EmojiListModa
             key={emoji.id}
             src={emoji.url}
             alt="emoji url"
-            draggable="false"
             onClick={() => clickEmojiHandler(Number(emoji.id))}
           />
         );

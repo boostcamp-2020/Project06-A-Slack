@@ -3,14 +3,11 @@ import http from 'http';
 import {
   SOCKET_EVENT_TYPE,
   SOCKET_MESSAGE_TYPE,
-  GET_THREAD_SQL,
-  UPDATE_EMOJIES_OF_THREAD_SQL,
   ERROR_MESSAGE,
   CHANNEL_SUBTYPE,
 } from '@/utils/constants';
-import { threadModel, channelModel } from '@/models';
-import { threadService } from '@/services';
-import pool from '@/db';
+import { channelModel } from '@/models';
+import { emojiService, threadService } from '@/services';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
@@ -222,56 +219,17 @@ export const bindSocketServer = (server: http.Server): void => {
           return;
         }
 
-        const conn = await pool.getConnection();
-        try {
-          await conn.beginTransaction();
+        const { emojisOfThread, err } = await emojiService.updateEmoji({
+          emojiId,
+          userId,
+          threadId,
+        });
 
-          const [[thread]]: any[] = await conn.execute(GET_THREAD_SQL, [threadId]);
-          let emojisOfThread: EmojiOfThread[] = thread.emoji;
-
-          const emojiIdx = emojisOfThread.findIndex(
-            (emojiOfThread: EmojiOfThread) => Number(emojiOfThread.id) === Number(emojiId),
-          );
-
-          // 현재 emoji가 없는 경우 + 전체 이모지가 없을때
-          if (emojiIdx === -1) {
-            const newEmoji = { id: Number(emojiId), userList: [userId] };
-            emojisOfThread = [...emojisOfThread, newEmoji];
-          }
-
-          // emoji가 있는데, 해당 emoji의 userList에 userId가 있으면 유저 삭제, 없으면 유저 추가.
-          if (emojiIdx !== -1 && emojisOfThread[emojiIdx]) {
-            const targetUserList = emojisOfThread[emojiIdx].userList;
-            const userIdx = targetUserList.findIndex((id: number) => Number(id) === Number(userId));
-
-            // 유저가 있으면 삭제
-            if (Number(userIdx) !== -1) {
-              targetUserList.splice(userIdx, 1);
-              if (targetUserList.length === 0) {
-                emojisOfThread.splice(emojiIdx, 1);
-              }
-            }
-
-            // 유저가 없으면 추가
-            if (Number(userIdx) === -1) {
-              const { userList } = emojisOfThread[emojiIdx];
-              userList.push(Number(userId));
-              const newEmojiState = { id: Number(emojiId), userList };
-              emojisOfThread[emojiIdx] = newEmojiState;
-            }
-          }
+        if (emojisOfThread) {
           namespace.to(room).emit(MESSAGE, { type, emoji: emojisOfThread, threadId, room });
-
-          const emojisOfThreadJson = JSON.stringify(emojisOfThread);
-          const sql = conn.format(UPDATE_EMOJIES_OF_THREAD_SQL, [emojisOfThreadJson, threadId]);
-          console.log(sql);
-          await conn.execute(sql);
-          await conn.commit();
-        } catch (err) {
+        }
+        if (err) {
           console.error(err);
-          conn.rollback();
-        } finally {
-          conn.release();
         }
         return;
       }

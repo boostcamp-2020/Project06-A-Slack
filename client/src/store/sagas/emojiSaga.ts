@@ -11,8 +11,10 @@ import { emojiService } from '@/services/emoji.service';
 
 function* getEmojiList() {
   try {
-    const result = yield call(emojiService.getEmojiList);
-    yield put(getEmojiListSuccess({ emojiList: result.data.emojiList }));
+    const { data, status } = yield call(emojiService.getEmojiList);
+    if (status === 200) {
+      yield put(getEmojiListSuccess({ emojiList: data.emojiList }));
+    }
   } catch (err) {
     yield put(getEmojiListFailure(err));
   }
