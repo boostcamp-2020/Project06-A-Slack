@@ -11,6 +11,7 @@ import {
 } from '@/pages';
 import theme from '@/styles/theme';
 import { GlobalStyle } from '@/styles';
+import { withAuth } from '@/hoc';
 
 const App = () => {
   return (
@@ -18,14 +19,14 @@ const App = () => {
       <GlobalStyle />
       <BrowserRouter>
         <Switch>
-          <Route path="/" exact component={HomePage} />
+          <Route path="/" exact component={withAuth(HomePage)} />
           <Route path="/login" component={LoginPage} />
           <Route path="/verify" component={EmailVerifyPage} />
           <Route path="/signup" component={SignupPage} />
           <Route
             path="/client/1/:channelId(\d+)?/:rightSideType?/:threadId(\d+)?"
             exact
-            component={WorkSpacePage}
+            component={withAuth(WorkSpacePage)}
           />
           <Redirect to="/" />
         </Switch>

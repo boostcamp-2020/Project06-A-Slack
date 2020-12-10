@@ -66,14 +66,12 @@ const WorkSpacePage: React.FC = () => {
 
   return (
     <>
-      {accessToken ? (
-        <>
-          <Header />
-          <Container>
-            <LeftSideBar />
-            <ThreadListBox />
-            <SubThreadListBox />
-            {/* <>
+      <Header />
+      <Container>
+        <LeftSideBar />
+        <ThreadListBox />
+        <SubThreadListBox />
+        {/* <>
               {rightSideType &&
                 (checkValidOfRightSideType(rightSideType) ? (
                   <RightSideBar type={rightSideType} channelId={Number(channelId)} />
@@ -81,11 +79,7 @@ const WorkSpacePage: React.FC = () => {
                   history.goBack()
                 ))}
             </> */}
-          </Container>
-        </>
-      ) : (
-        <Redirect to="/login" />
-      )}
+      </Container>
     </>
   );
 };
