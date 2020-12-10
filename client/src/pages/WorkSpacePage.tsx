@@ -21,12 +21,6 @@ interface RightSideParams {
   threadId: string | undefined;
 }
 
-const checkValidOfRightSideType = (rightSideType: string | undefined) => {
-  return (
-    rightSideType === 'detail' || rightSideType === 'user_profile' || rightSideType === 'thread'
-  );
-};
-
 const WorkSpacePage: React.FC = () => {
   const { channelId }: RightSideParams = useParams();
   const { accessToken } = useAuthState();

@@ -24,7 +24,7 @@ const App = () => {
           <Route path="/verify" component={EmailVerifyPage} />
           <Route path="/signup" component={SignupPage} />
           <Route
-            path="/client/1/:channelId(\d+)?/:rightSideType?/:threadId(\d+)?"
+            path="/client/1/:channelId(\d+)?/:rightSideType(detail|user_profile|thread)?/:threadId(\d+)?"
             exact
             component={withAuth(WorkSpacePage)}
           />
