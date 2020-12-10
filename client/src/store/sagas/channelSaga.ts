@@ -92,7 +92,7 @@ function* createChannel(action: any) {
       };
 
       yield put(createChannelSuccess({ channel, joinedListUser: [joinedUser] }));
-      const { joinStatus } = yield call(channelService.joinChannel, {
+      const { status: joinStatus } = yield call(channelService.joinChannel, {
         users,
         channelId: data.channel.insertId,
       });
