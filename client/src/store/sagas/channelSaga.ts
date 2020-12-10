@@ -2,7 +2,6 @@ import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects'
 import { channelService } from '@/services';
 import { Channel, JoinedUser } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
-
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
@@ -21,6 +20,8 @@ import {
   joinChannelFailure,
   joinChannelRequsetPayload,
 } from '../modules/channel.slice';
+
+import { modifyUserLastChannelId } from '../modules/user.slice';
 
 function* loadChannels() {
   try {
@@ -91,8 +92,9 @@ function* createChannel(action: any) {
         image: users[0].image,
       };
 
+      yield put(modifyUserLastChannelId({ lastChannelId: data.channel.insertId }));
       yield put(createChannelSuccess({ channel, joinedListUser: [joinedUser] }));
-      const { joinStatus } = yield call(channelService.joinChannel, {
+      const { status: joinStatus } = yield call(channelService.joinChannel, {
         users,
         channelId: data.channel.insertId,
       });
