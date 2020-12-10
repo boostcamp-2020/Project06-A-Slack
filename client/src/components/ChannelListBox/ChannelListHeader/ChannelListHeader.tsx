@@ -193,7 +193,7 @@ const ChannelListBox = ({
           >
             {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
           </ModalListItem>
-          <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+          {channelType === CHANNEL_TYPE.CHANNEL && <ModalListItem>채널 검색</ModalListItem>}
         </Popover>
       )}
     </>
