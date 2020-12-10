@@ -92,14 +92,14 @@ export const modifyUser = async (
           setDefault: +setDefault,
         });
 
-        if (previousFileName !== USER_DEFAULT_PROFILE_URL && previousFileName) {
-          const [, filePath] = String(previousFileName).split(prefix);
-          try {
-            const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
-          } catch (error) {
-            console.log('file delete error', error.message);
-          }
-        }
+        // if (previousFileName !== USER_DEFAULT_PROFILE_URL && previousFileName) {
+        //   const [, filePath] = String(previousFileName).split(prefix);
+        //   try {
+        //     const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
+        //   } catch (error) {
+        //     console.log('file delete error', error.message);
+        //   }
+        // }
         res.json({ image: imgUrl });
         return;
       }
@@ -128,13 +128,15 @@ export const modifyLastChannel = async (
 ): Promise<void> => {
   const { userId } = req.params;
   const { lastChannelId } = req.body;
-  if (Number.isNaN(+userId)) {
-    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
-    return;
-  }
   if (verifyRequestData([lastChannelId])) {
-    await userModel.modifyLastChannel({ lastChannelId, userId: +userId });
-    return;
+    try {
+      await userModel.modifyLastChannel({ lastChannelId, userId: +userId });
+      res.status(200).end();
+      return;
+    } catch (err) {
+      next(err);
+      return;
+    }
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };

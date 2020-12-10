@@ -1,16 +1,16 @@
 /* eslint-disable no-shadow */
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useChannel } from '@/hooks/useChannel';
+import { useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
-import { JoinUser } from '@/types';
+import { JoinedUser } from '@/types';
 
 const Container = styled.div`
   padding: ${(props) => props.theme.size.m};
 `;
 
 const ListItem = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const ListItemName = styled.div`
@@ -28,7 +28,7 @@ const ItemBox = styled.div`
 `;
 
 const MemberItem = styled.div`
-  ${flex(undefined, 'space-between')}
+  ${flex('center', 'space-between')}
 `;
 
 const MemberImg = styled.img`
@@ -48,7 +48,7 @@ export const DetailList: React.FC = () => {
   const [organization, setOrganization] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [files, setFiles] = useState(false);
-  const { users } = useChannel();
+  const { users } = useChannelState();
 
   const openAbout = () => {
     setAbout((about) => !about);
@@ -84,9 +84,9 @@ export const DetailList: React.FC = () => {
           <Arrow>{members ? '∨' : '＞'}</Arrow>
         </ListItem>
         {members &&
-          users?.map((user: JoinUser) => (
+          users?.map((user: JoinedUser) => (
             <MemberItem key={user.userId}>
-              <MemberImg src="https://mblogthumb-phinf.pstatic.net/MjAxOTEyMTJfMjYw/MDAxNTc2MTQwMDE0MjIy.F1V39cfeZPhX87yFFlqkZQqfGmycVOxXbO3vg0dFrvEg.12ulcNAMUNyNzlE7rz5Hk2NVlJfkakVTOspDnzyRkUMg.PNG.vet6390/%EA%B8%B8%EA%B3%A0%EC%96%91%EC%9D%B4_%EC%9E%85%EC%96%91.PNG?type=w800" />
+              <MemberImg src={user.image} />
               <MemberInfo>{user.displayName}</MemberInfo>
             </MemberItem>
           ))}

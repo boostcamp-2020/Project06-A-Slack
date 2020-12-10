@@ -7,11 +7,7 @@ interface createInfo {
   channelType: number;
   isPublic: number;
   description: string;
-}
-
-interface JoinInfo {
-  userId: number;
-  channelId: number;
+  memberCount: number;
 }
 
 interface TopicInfo {
@@ -52,16 +48,40 @@ export const channelModel = {
     `;
     return pool.execute(sql, [channelId]);
   },
-  createChannel({ ownerId, name, channelType, isPublic, description }: createInfo): any {
-    const sql = `INSERT INTO channel (owner_id, name, channel_type, is_public, description) VALUES (?, ?, ?, ?, ?)`;
-    return pool.execute(sql, [ownerId, name, channelType, isPublic, description]);
+  createChannel({
+    ownerId,
+    name,
+    channelType,
+    isPublic,
+    description,
+    memberCount,
+  }: createInfo): any {
+    const sql = `INSERT INTO channel (owner_id, name, channel_type, is_public, description, member_count) VALUES (?, ?, ?, ?, ?, ?)`;
+    return pool.execute(sql, [ownerId, name, channelType, isPublic, description, memberCount]);
   },
-  joinChannel({ userId, channelId }: JoinInfo): any {
-    const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES(?, ?)`;
-    return pool.execute(sql, [userId, channelId]);
+  joinChannel({
+    joinUsers,
+    prevMemberCount,
+    channelId,
+  }: {
+    joinUsers: [number[]];
+    prevMemberCount: number;
+    channelId: number;
+  }): any {
+    const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES ?;
+    UPDATE channel SET member_count = ? WHERE id = ?`;
+    return pool.query(sql, [joinUsers, joinUsers.length + prevMemberCount, channelId]);
   },
   modifyTopic({ channelId, topic }: TopicInfo) {
     const sql = 'UPDATE channel SET topic = ? WHERE id = ?';
     return pool.execute(sql, [topic, channelId]);
+  },
+  getNotJoinedChannels({ userId }: { userId: number }): any {
+    const sql = `SELECT * FROM channel
+    WHERE channel.is_public = 1 AND channel.id NOT IN
+    (SELECT channel.id FROM channel 
+    JOIN user_channel 
+    WHERE user_channel.user_id = ? AND channel.id = user_channel.channel_id)`;
+    return pool.execute(sql, [userId]);
   },
 };

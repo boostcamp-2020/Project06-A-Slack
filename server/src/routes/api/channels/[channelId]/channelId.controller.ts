@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
 import { channelModel } from '@/models';
 import { ERROR_MESSAGE } from '@/utils/constants';
+import { User } from '@/types';
 
 /**
  * GET /api/channels/:channelId
@@ -12,7 +13,7 @@ export const getChannel = async (req: Request, res: Response, next: NextFunction
     next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
-  const [channel] = await channelModel.getChannel({ channelId: +channelId });
+  const [[channel]] = await channelModel.getChannel({ channelId: +channelId });
   const [users] = await channelModel.getChannelUser({ channelId: +channelId });
   res.json({ channel, users });
 };
@@ -22,13 +23,22 @@ export const getChannel = async (req: Request, res: Response, next: NextFunction
  */
 export const inviteChannel = async (req: Request, res: Response, next: NextFunction) => {
   const { channelId } = req.params;
-  const { userId } = req.body;
+  const { users } = req.body;
   if (Number.isNaN(+channelId)) {
     next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
-  if (verifyRequestData([userId, channelId])) {
-    const [result] = await channelModel.joinChannel({ userId, channelId: +channelId });
+  if (verifyRequestData([users, channelId])) {
+    const joinUsers: [number[]] = users.reduce((acc: [number[]], cur: User) => {
+      acc.push([cur.id, +channelId]);
+      return acc;
+    }, []);
+    const [joinedUsers] = await channelModel.getChannelUser({ channelId: +channelId });
+    await channelModel.joinChannel({
+      joinUsers,
+      prevMemberCount: joinedUsers.length,
+      channelId: +channelId,
+    });
     res.status(200).end();
     return;
   }
@@ -49,6 +59,7 @@ export const modifyTopic = async (req: Request, res: Response, next: NextFunctio
   if (verifyRequestData([topic])) {
     await channelModel.modifyTopic({ channelId: +channelId, topic });
     res.status(200).end();
+    return;
   }
   res.status(400).json({ message: '필수 값 누락' });
 };

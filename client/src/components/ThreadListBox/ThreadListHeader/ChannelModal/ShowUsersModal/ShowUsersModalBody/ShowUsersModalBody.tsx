@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState, useRef, ReactElement } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { useChannel } from '@/hooks';
-import { JoinUser } from '@/types';
+import { useChannelState } from '@/hooks';
+import { JoinedUser } from '@/types';
 import { DimModal } from '@/components';
 import { AddUsersModalHeader, AddUsersModalBody } from '../../AddUsersModal';
 
@@ -58,7 +58,7 @@ interface ShowUsersModalBody {
 const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
   setShowUsersModalVisible,
 }: ShowUsersModalBody) => {
-  const { users } = useChannel();
+  const { users } = useChannelState();
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
 
   const clickAddUsersModal = () => {
@@ -70,15 +70,17 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
     <>
       {addUsersModalVisible && (
         <DimModal
-          header={<AddUsersModalHeader />}
-          body={<AddUsersModalBody setAddUsersModalVisble={clickAddUsersModal} />}
+          header={<AddUsersModalHeader isDM={false} />}
+          body={
+            <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} isDM={false} />
+          }
           visible={addUsersModalVisible}
           setVisible={clickAddUsersModal}
         />
       )}
       <Main>
         <AddButton onClick={clickAddUsersModal}>Add Users</AddButton>
-        {users?.map((user: JoinUser) => (
+        {users?.map((user: JoinedUser) => (
           <Item key={user.userId}>
             <UserInfo>
               <Img src={user.image} />

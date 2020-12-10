@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env MODE=dev webpack-dev-server --open --mode development",
+    "dev": "cross-env MODE=dev webpack-dev-server --open --mode development --progress",
     "watch": "webpack --mode development --watch",
     "build": "webpack --mode production"
   },

@@ -13,4 +13,15 @@ export const userService: Service = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+  matchUsers({
+    displayName,
+    channelId,
+    isDM,
+  }: {
+    displayName: string;
+    channelId: number;
+    isDM: boolean;
+  }) {
+    return API.post('/api/users/match', { displayName, channelId, isDM });
+  },
 };

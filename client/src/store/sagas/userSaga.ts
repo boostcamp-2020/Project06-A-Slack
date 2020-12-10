@@ -1,4 +1,4 @@
-import { put, all, takeEvery, call, fork, takeLatest, delay } from 'redux-saga/effects';
+import { put, all, takeEvery, call, fork, takeLatest, debounce } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   getUserRequest,
@@ -8,11 +8,12 @@ import {
   editUserSuccess,
   editUserFailure,
   EditUserRequestPayload,
-  getUsersRequest,
-  getUsersSuccess,
-  getUsersFailure,
+  matchUsersRequest,
+  matchUsersSuccess,
+  matchUsersFailure,
 } from '@/store/modules/user.slice';
 import { userService } from '@/services';
+import { User } from '@/types';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 function* getUser({ payload }: { payload: { userId: number } }) {
@@ -79,22 +80,41 @@ function* watchEditUser() {
   yield takeLatest(editUserRequest, editUser);
 }
 
-function* getUsers() {
+function* matchUsers({
+  payload,
+}: {
+  payload: { isDM: boolean; pickUsers: User[]; displayName: string; channelId: number };
+}) {
   try {
-    const { data, status } = yield call(userService.getUsers);
-    console.log(data, status);
-    if (status === 200) {
-      yield put(getUsersSuccess({ usersInfo: data.users }));
+    if (payload.displayName.length === 0) {
+      yield put(matchUsersSuccess({ matchUsersInfo: [] }));
+    } else {
+      const { data, status } = yield call(userService.matchUsers, {
+        displayName: payload.displayName,
+        channelId: payload.channelId,
+        isDM: payload.isDM,
+      });
+
+      const matchUsersInfo = data.matchUsersInfo.reduce((acc: User[], cur: User) => {
+        if (payload.pickUsers.every((pu) => cur.id !== pu.id)) {
+          acc.push(cur);
+        }
+        return acc;
+      }, []);
+
+      if (status === 200) {
+        yield put(matchUsersSuccess({ matchUsersInfo }));
+      }
     }
   } catch (err) {
-    yield put(getUsersFailure());
+    yield put(matchUsersFailure({ err }));
   }
 }
 
-function* watchGetUsers() {
-  yield takeEvery(getUsersRequest, getUsers);
+function* watchMatchUsers() {
+  yield takeLatest(matchUsersRequest, matchUsers);
 }
 
 export default function* userSaga() {
-  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchGetUsers)]);
+  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchMatchUsers)]);
 }

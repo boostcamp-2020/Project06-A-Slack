@@ -3,9 +3,10 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/modules';
 import { Socket } from '@/store/sagas/socketSaga';
+import { RoomEvent, SocketEvent } from '@/types';
 
 interface SocketState {
-  socket: any;
+  socket: Socket | null;
 }
 
 const socketState: SocketState = {
@@ -23,7 +24,10 @@ const socketSlice = createSlice({
     socketConnectFailure(state, { payload }: PayloadAction<{ err: Error }>) {
       console.error('socket connection failure', payload.err);
     },
-    sendMessageRequest(state, { payload }: PayloadAction<{ message: string }>) {},
+    sendMessageRequest(state, { payload }: PayloadAction<SocketEvent>) {},
+    socketDisconnectRequest() {},
+    enterRoomRequest(state, { payload }: PayloadAction<RoomEvent>) {},
+    leaveRoomRequest(state, { payload }: PayloadAction<RoomEvent>) {},
   },
 });
 
@@ -36,6 +40,9 @@ export const {
   socketConnectSuccess,
   socketConnectFailure,
   sendMessageRequest,
+  socketDisconnectRequest,
+  enterRoomRequest,
+  leaveRoomRequest,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;

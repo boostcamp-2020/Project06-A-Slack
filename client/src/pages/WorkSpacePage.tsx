@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
-import { useAuth, useUser, useChannel } from '@/hooks';
-import { Header, LeftSideBar, ThreadListBox, RightSideBar } from '@/components';
+import { useAuthState, useUserState, useChannelState } from '@/hooks';
+import { Header, LeftSideBar, ThreadListBox, RightSideBar, SubThreadListBox } from '@/components';
 import { isExistedChannel, isNumberTypeValue } from '@/utils/utils';
+import { socketConnectRequest, socketDisconnectRequest } from '@/store/modules/socket.slice';
+import { getEmojiListRequest } from '@/store/modules/emoji.slice';
+import { useDispatch } from 'react-redux';
 
 import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  height: 100%;
+  height: calc(100% - 2.5rem);
 `;
 
 interface RightSideParams {
@@ -24,29 +27,33 @@ const checkValidOfRightSideType = (rightSideType: string | undefined) => {
 };
 
 const WorkSpacePage: React.FC = () => {
-  const { channelId, rightSideType }: RightSideParams = useParams();
-  const { accessToken } = useAuth();
-  const { userInfo } = useUser();
+  const { channelId }: RightSideParams = useParams();
+  const { accessToken } = useAuthState();
+  const { userInfo } = useUserState();
   const history = useHistory();
-  const { myChannelList } = useChannel();
+  const dispatch = useDispatch();
 
-  // localshot:8080 접속시 연결될 채널을 안내
-  if (channelId === undefined && userInfo !== null) {
-    const url = `/client/1/${userInfo?.lastChannelId}`;
-    return <Redirect to={url} />;
-  }
+  /* url에 채널 아이디가 없을 때, 최근에 접속한 채널로 이동 */
+  useEffect(() => {
+    if (!channelId && userInfo?.lastChannelId) {
+      const url = `/client/1/${userInfo.lastChannelId}`;
+      history.push(url);
+    }
+    /* TODO: 권한이 안맞는 채널 & 가입 안된 public으로 이동하는 경우를 처리 */
+    // if (channelId) {
+    //   if (myChannelList.length !== 0 && !isExistedChannel({ channelId: +channelId, myChannelList })) {
+    //     // redirect 404?
+    //   }
+    // }
+  }, [userInfo]);
 
-  // 채널에 접근 불가능한 URL이 들어온 경우
-  if (channelId !== undefined) {
-    if (!isNumberTypeValue(channelId)) {
-      // 숫자가 아닌 문자열이 들어오는 경우
-      history.goBack();
-    }
-    if (myChannelList.length !== 0 && !isExistedChannel({ channelId: +channelId, myChannelList })) {
-      // 가입 안 된 채널을 부르는 경우
-      history.goBack();
-    }
-  }
+  useEffect(() => {
+    dispatch(socketConnectRequest());
+    dispatch(getEmojiListRequest());
+    return () => {
+      dispatch(socketDisconnectRequest());
+    };
+  }, []);
 
   return (
     <>
@@ -56,14 +63,15 @@ const WorkSpacePage: React.FC = () => {
           <Container>
             <LeftSideBar />
             <ThreadListBox />
-            <>
+            <SubThreadListBox />
+            {/* <>
               {rightSideType &&
                 (checkValidOfRightSideType(rightSideType) ? (
                   <RightSideBar type={rightSideType} channelId={Number(channelId)} />
                 ) : (
                   history.goBack()
                 ))}
-            </>
+            </> */}
           </Container>
         </>
       ) : (

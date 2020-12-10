@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { useAuth } from '@/hooks';
+import { useAuthState } from '@/hooks';
 
 const HomePage: React.FC = () => {
-  const { accessToken } = useAuth();
+  const { accessToken } = useAuthState();
 
   return <>{accessToken ? <Redirect to="/client/1" /> : <Redirect to="/login" />}</>;
 };

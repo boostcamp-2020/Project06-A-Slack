@@ -6,22 +6,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
   userInfo: User | null;
-  usersInfo: User[] | null;
   edit: {
     loading: boolean;
     success: boolean;
     err: Error | null;
   };
+  matchUsersInfo: User[] | null;
 }
 
 const userState: UserState = {
   userInfo: null,
-  usersInfo: null,
   edit: {
     loading: false,
     success: false,
     err: null,
   },
+  matchUsersInfo: [],
 };
 
 export interface EditUserPayload {
@@ -73,11 +73,11 @@ const userSlice = createSlice({
       state.edit.success = false;
       state.edit.err = payload.err;
     },
-    getUsersRequest() {},
-    getUsersSuccess(state, { payload }: PayloadAction<{ usersInfo: User[] }>) {
-      state.usersInfo = payload.usersInfo;
+    matchUsersRequest(state, action) {},
+    matchUsersSuccess(state, action) {
+      state.matchUsersInfo = action.payload.matchUsersInfo;
     },
-    getUsersFailure() {},
+    matchUsersFailure(state, action) {},
   },
 });
 
@@ -89,9 +89,9 @@ export const {
   editUserRequest,
   editUserSuccess,
   editUserFailure,
-  getUsersRequest,
-  getUsersSuccess,
-  getUsersFailure,
+  matchUsersRequest,
+  matchUsersSuccess,
+  matchUsersFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;

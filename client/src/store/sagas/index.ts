@@ -6,6 +6,7 @@ import userSaga from './userSaga';
 import signupSage from './signupSaga';
 import subThreadSaga from './subThreadSaga';
 import socketSaga from './socketSaga';
+import emojiSaga from './emojiSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -16,5 +17,6 @@ export default function* rootSaga() {
     fork(signupSage),
     fork(subThreadSaga),
     fork(socketSaga),
+    fork(emojiSaga),
   ]);
 }

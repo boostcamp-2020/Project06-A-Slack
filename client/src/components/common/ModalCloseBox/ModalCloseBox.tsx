@@ -22,8 +22,8 @@ const Container = styled.div`
 `;
 
 const Icon = styled.svg`
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 12px;
+  height: 12px;
 `;
 
 interface ModalCloseBoxProps {

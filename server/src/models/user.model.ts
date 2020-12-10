@@ -8,6 +8,12 @@ interface EditUserParams {
   setDefault: number;
 }
 
+interface MatchUsers {
+  displayName: string;
+  channelId: number;
+  isDM: boolean;
+}
+
 export const userModel = {
   getUsers(): any {
     const sql = `SELECT id, email, display_name as displayName, image
@@ -41,5 +47,20 @@ export const userModel = {
     }
     const sql = `UPDATE user SET display_name=?, phone_number=? WHERE id=?;`;
     return pool.execute(sql, [displayName, phoneNumber, id]);
+  },
+  matchUsers({ displayName, channelId, isDM }: MatchUsers): any {
+    if (!isDM) {
+      const sql = `SELECT id, email, display_name as displayName, phone_number as phoneNumber, image
+      FROM user
+      WHERE display_name LIKE ? AND id NOT IN (
+        SELECT user_id FROM user_channel
+        WHERE channel_id = ?
+      )`;
+      return pool.execute(sql, [`${displayName}%`, channelId]);
+    }
+    const sql = `SELECT id, email, display_name as displayName, phone_number as phoneNumber, image
+    FROM user
+    WHERE display_name LIKE ?`;
+    return pool.execute(sql, [`${displayName}%`]);
   },
 };

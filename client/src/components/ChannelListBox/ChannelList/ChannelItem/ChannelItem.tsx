@@ -1,51 +1,83 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { loadChannelRequest } from '@/store/modules/channel.slice';
-import styled from 'styled-components';
-import { useJoinChannelList, useChannel, useAuth } from '@/hooks';
+import React, { useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useJoinChannelListState, useChannelState } from '@/hooks';
+import { flex } from '@/styles/mixin';
+import { LockIcon, PoundIcon } from '@/components';
+import { useDispatch } from 'react-redux';
+import { unsetUnreadFlag } from '@/store/modules/channel.slice';
 
-interface Args {
-  key: number;
-  idx: number;
+interface ChannelProps {
+  picked: boolean;
 }
 
-interface Props {
-  pick: boolean;
-}
-
-const Channel = styled.div<Props>`
-  display: flex;
-  align-items: center;
-  padding: ${(props) => props.theme.size.m};
-  font-size: ${(props) => props.theme.size.m};
-  color: #fff;
+const Channel = styled.div<ChannelProps>`
+  ${flex('center', 'flex-center')}
+  height: 1.75rem;
+  padding: 1rem 0 1rem 1.75rem;
+  font-size: 0.95rem;
+  color: ${(props) =>
+    props.picked ? props.theme.color.semiWhite : props.theme.color.channelItemColor};
   &:hover {
-    ${(props) => (!props.pick ? 'background: rgba(0, 0, 0, 0.2);' : '')}
+    ${(props) =>
+      !props.picked &&
+      css`
+        background: rgba(0, 0, 0, 0.2);
+      `}
   }
-  background: ${(props) => (props.pick ? props.theme.color.blue1 : 'transparent')};
+  background: ${(props) => (props.picked ? props.theme.color.blue1 : 'transparent')};
+  user-select: none;
 `;
 
 const Icon = styled.div`
   margin-right: 15px;
 `;
 
-const Name = styled.div``;
+interface NameProps {
+  unreadMessage: boolean;
+}
 
-const ChannelItem = (args: Args) => {
+const Name = styled.span<NameProps>`
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: ${(props) => (props.unreadMessage ? '800' : 'normal')};
+  color: ${(props) => (props.unreadMessage ? 'white' : 'inherit')};
+`;
+
+interface ChannelItemProps {
+  idx: number;
+}
+
+const ChannelItem = ({ idx }: ChannelItemProps) => {
+  const { id, name, isPublic } = useJoinChannelListState(idx);
+  const { current, myChannelList } = useChannelState();
+
+  const { unreadMessage } = myChannelList[idx];
+
+  const picked = id === current?.id;
+  const unread = !!unreadMessage && !picked;
+
   const dispatch = useDispatch();
-  const { id, name, isPublic } = useJoinChannelList(args.idx);
-  const { current } = useChannel();
 
-  const onClick = () => {
-    dispatch(loadChannelRequest(id));
-  };
+  useEffect(() => {
+    if (picked && current) {
+      dispatch(unsetUnreadFlag({ channelId: current.id }));
+    }
+  }, [current]);
 
   return (
     <Link to={`/client/1/${id}`}>
-      <Channel onClick={onClick} pick={id === current?.id}>
-        <Icon>{isPublic ? '#' : 'O'}</Icon>
-        <Name>{name}</Name>
+      <Channel picked={picked}>
+        <Icon>
+          {isPublic ? (
+            <PoundIcon size="12px" color={picked || unread ? 'white' : undefined} />
+          ) : (
+            <LockIcon size="11.2px" color={picked || unread ? 'white' : undefined} />
+          )}
+        </Icon>
+        <Name unreadMessage={unread}>{name}</Name>
       </Channel>
     </Link>
   );

@@ -5,6 +5,7 @@ import ChannelListHeader from './ChannelListHeader/ChannelListHeader';
 
 const Container = styled.div`
   padding: ${(props) => props.theme.size.s} 0;
+  min-height: 200px;
 `;
 
 const ChannelListBox = ({ channelType }: { channelType: number }): ReactElement => {

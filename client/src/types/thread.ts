@@ -1,9 +1,10 @@
-interface Emoji {
-  name: string;
-  userId: number;
+export interface EmojiOfThread {
+  id: number;
+  userList: number[];
 }
 
 export interface Thread {
+  [key: string]: any;
   id: number;
   userId: number;
   channelId: number;
@@ -13,7 +14,7 @@ export interface Thread {
   isEdited: number;
   isPinned: number;
   createdAt: string;
-  emoji: Emoji[] | null;
+  emoji: EmojiOfThread[];
   subCount: number;
   subThreadUserId1: number | null;
   subThreadUserId2: number | null;
@@ -21,7 +22,7 @@ export interface Thread {
   email: string;
   displayName: string;
   phoneNumber: string | null;
-  image: string | null;
+  image: string;
 }
 
 export const initialThread: Thread = {

@@ -1,31 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { getThreadRequest } from '@/store/modules/thread.slice';
 import styled from 'styled-components';
-import { Thread } from '@/types';
+import { setScrollable } from '@/store/modules/thread.slice';
+import { Thread, User } from '@/types';
 import { ThreadItem } from '@/components';
-import { useThread } from '@/hooks';
-import { useParams } from 'react-router-dom';
-import { isNumberTypeValue } from '@/utils/utils';
 
 const Container = styled.div`
-  background-color: orange;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
 `;
 
-interface RightSideParams {
-  channelId: string | undefined;
+const Bottom = styled.div``;
+
+interface ThreadListProps {
+  threadList: Thread[] | null;
+  canScroll: boolean;
+  userInfo: User | null;
 }
 
-const ThreadList = () => {
-  const { channelId }: RightSideParams = useParams();
-  const { threadList } = useThread();
+const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
   const dispatch = useDispatch();
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isNumberTypeValue(channelId)) {
-      dispatch(getThreadRequest({ channelId: Number(channelId) }));
+    if (threadList && threadList.length) {
+      if (canScroll) {
+        bottomRef.current?.scrollIntoView();
+        dispatch(setScrollable({ canScroll: false }));
+      }
+      if (threadList[threadList.length - 1].userId === userInfo?.id) {
+        bottomRef.current?.scrollIntoView();
+      }
     }
-  }, [dispatch, channelId]);
+  }, [threadList?.length]);
 
   return (
     <Container>
@@ -36,8 +46,9 @@ const ThreadList = () => {
           prevThreadUserId={threadList[index - 1]?.userId}
         />
       ))}
+      <Bottom ref={bottomRef} />
     </Container>
   );
 };
 
-export default ThreadList;
+export default React.memo(ThreadList);

@@ -1,10 +1,13 @@
 export interface Channel {
-  channelType: number;
-  description: string;
   id: number;
+  ownerId: number;
+  name: string;
+  channelType: number;
+  topic: string;
   isPublic: number;
   memberCount: number;
-  name: string;
-  ownerId: number;
-  topic: string;
+  description: string;
+  createdAt?: string;
+  updatedAt?: string;
+  unreadMessage?: boolean;
 }

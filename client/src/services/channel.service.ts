@@ -1,5 +1,5 @@
 import API from '@/api';
-import { ChannelInfo, Service } from '@/types';
+import { ChannelInfo, Service, User } from '@/types';
 
 export const channelService: Service = {
   getChannels() {
@@ -11,11 +11,18 @@ export const channelService: Service = {
   getChannel({ channelId }: { channelId: number }) {
     return API.get(`/api/channels/${channelId}`);
   },
-  createChannel({ ownerId, name, channelType, isPublic, description }: ChannelInfo) {
-    return API.post('/api/channels', { ownerId, name, channelType, isPublic, description });
+  createChannel({ ownerId, name, channelType, isPublic, description, memberCount }: ChannelInfo) {
+    return API.post('/api/channels', {
+      ownerId,
+      name,
+      channelType,
+      isPublic,
+      description,
+      memberCount,
+    });
   },
-  joinChannel({ userId, channelId }: { userId: number; channelId: number }) {
-    return API.post(`/api/channels/${channelId}/invite`, { userId });
+  joinChannel({ users, channelId }: { users: User[]; channelId: number }) {
+    return API.post(`/api/channels/${channelId}/invite`, { users });
   },
   modifyChannelTopic({ channelId, topic }: { channelId: number; topic: string }) {
     return API.post(`/api/channels/${channelId}/topic`, { topic });

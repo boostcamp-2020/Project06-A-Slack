@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { ReactElement, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
+import { useAuthState, useChannelState, useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
-import { useAuth, useUser, useOnClickOutside } from '@/hooks';
 import { useDispatch } from 'react-redux';
 
 interface Props {
@@ -57,7 +57,7 @@ const InputBox = styled.div<Props>`
   position: relative;
   &::before {
     position: absolute;
-    content: '${(props) => (props.secret ? 'O' : '#')}';
+    content: ${(props) => (props.secret ? 'O' : '#')};
     top: 15px;
     left: 10px;
     color: ${(props) => props.theme.color.gray2};
@@ -70,7 +70,7 @@ const Label = styled.label`
 `;
 
 const LabelBox = styled.div`
-  ${flex(undefined, 'flex-start')}
+  ${flex('center', 'flex-start')}
   margin-bottom: 10px;
 `;
 
@@ -111,7 +111,7 @@ const PrivateButton = styled.button<Props>`
   border-radius: 15px;
   padding: 2px;
   border: 1px ${(props) => props.theme.color.gray2} solid;
-  ${(props) => (props.secret ? flex(undefined, 'flex-end') : flex(undefined, 'flex-start'))};
+  ${(props) => (props.secret ? flex('center', 'flex-end') : flex('center', 'flex-start'))};
   &:focus {
     transition: 0.3s;
     box-shadow: ${(props) => props.theme.boxShadow.skyblue};
@@ -165,9 +165,9 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
 }: CreateChannelModalBodyProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { userId } = useAuth();
-  const { userInfo } = useUser();
-
+  const { userId } = useAuthState();
+  const { userInfo } = useUserState();
+  const { current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,7 +191,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
         isPublic,
         name,
         description,
-        displayName: userInfo?.displayName,
+        users: [userInfo],
       }),
     );
     setCreateChannelModalVisible((state) => !state);

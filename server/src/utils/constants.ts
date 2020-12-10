@@ -32,3 +32,26 @@ export const SOCKET_EVENT_TYPE = {
   ENTER_ROOM: 'enter_room',
   LEAVE_ROOM: 'leave_room',
 };
+
+export const SOCKET_MESSAGE_TYPE = {
+  THREAD: 'thread',
+  EMOJI: 'emoji',
+  USER: 'user',
+  CHANNEL: 'channel',
+  DM: 'dm',
+};
+
+export const CHANNEL_SUBTYPE = {
+  UPDATE_CHANNEL: 'update_channel',
+  UPDATE_CHANNEL_TOPIC: 'update_channel_topic',
+  UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
+  UPDATE_CHANNEL_USERS: 'update_channel_users',
+  MAKE_DM: 'make_dm',
+};
+
+export const GET_EMOJI_OF_THREAD_SQL = `
+  SELECT emoji
+  FROM thread LEFT JOIN user ON (user.id = thread.user_id)
+  WHERE thread.id=? AND thread.is_deleted=0;`;
+
+export const UPDATE_EMOJIES_OF_THREAD_SQL = `UPDATE thread SET emoji=? WHERE id=?`;

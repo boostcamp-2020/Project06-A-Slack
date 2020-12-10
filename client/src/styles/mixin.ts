@@ -12,5 +12,33 @@ export const focusedInputBoxShadow = css`
 `;
 
 export const modalBoxShadow = css`
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+`;
+
+export const hoverActive = css`
+  cursor: pointer;
+  &:hover,
+  &:active {
+    background-color: ${(props) => props.theme.color.gray5};
+    path {
+      fill: ${(props) => props.theme.color.black4};
+    }
+  }
+  &:active {
+    background-color: ${(props) => props.theme.color.gray4};
+  }
+`;
+
+// 주의!! 이 mixin을 쓰면 position에 relative가 들어감!!
+export const hoverUnderline = (color: string, bottom?: string) => css`
+  position: relative;
+  &:hover:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 0.5px;
+    position: absolute;
+    bottom: ${bottom ?? '-1.5px'};
+    background-color: ${(props) => color ?? props.theme.color.black6};
+  }
 `;

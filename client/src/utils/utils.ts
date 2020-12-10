@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '@/config';
-import { AuthToken, JoinUser, Channel } from '@/types';
+import { AuthToken, JoinedUser, Channel, User } from '@/types';
 import { TOKEN_TYPE } from '@/utils/constants';
 
 import crypto from 'crypto';
@@ -25,8 +25,8 @@ export const verifyJWT = (token: string, type: AuthToken) => {
   });
 };
 
-export const makeUserIcons = (users: JoinUser[]) => {
-  const userIconList: JoinUser[] = users.slice(0, 3);
+export const makeUserIcons = (users: JoinedUser[]) => {
+  const userIconList: JoinedUser[] = users.slice(0, 3);
   return userIconList;
 };
 
@@ -59,4 +59,11 @@ export const isExistedChannel = ({
   myChannelList: Channel[];
 }): boolean => {
   return myChannelList.some((channel: Channel) => channel.id === channelId);
+};
+
+export const makeDMRoomName = (pickUsers: User[], startName: string) => {
+  const name = pickUsers.reduce((acc, cur) => {
+    return `${acc}, ${cur.displayName}`;
+  }, startName);
+  return name;
 };
