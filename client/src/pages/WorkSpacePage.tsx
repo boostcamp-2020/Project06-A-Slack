@@ -1,7 +1,16 @@
 import React, { useEffect } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
-import { useAuthState, useUserState, useChannelState, useRedirectState } from '@/hooks';
-import { Header, LeftSideBar, ThreadListBox, RightSideBar, SubThreadListBox } from '@/components';
+import { useHistory, useParams } from 'react-router-dom';
+import { useUserState, useRedirectState } from '@/hooks';
+import {
+  Header,
+  LeftSideBar,
+  ThreadListBox,
+  RightSideBar,
+  SubThreadListBox,
+  SubThreadListHeader,
+  DetailHeader,
+  DetailBody,
+} from '@/components';
 import { isExistedChannel, isNumberTypeValue } from '@/utils/utils';
 import { socketConnectRequest, socketDisconnectRequest } from '@/store/modules/socket.slice';
 import { getEmojiListRequest } from '@/store/modules/emoji.slice';
@@ -17,13 +26,12 @@ const Container = styled.div`
 
 interface RightSideParams {
   channelId: string | undefined;
-  rightSideType: string | undefined;
+  rightSideType: 'detail' | 'user_profile' | 'thread' | undefined;
   threadId: string | undefined;
 }
 
 const WorkSpacePage: React.FC = () => {
-  const { channelId }: RightSideParams = useParams();
-  const { accessToken } = useAuthState();
+  const { channelId, rightSideType, threadId }: RightSideParams = useParams();
   const { userInfo } = useUserState();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -64,15 +72,20 @@ const WorkSpacePage: React.FC = () => {
       <Container>
         <LeftSideBar />
         <ThreadListBox />
-        <SubThreadListBox />
-        {/* <>
-              {rightSideType &&
-                (checkValidOfRightSideType(rightSideType) ? (
-                  <RightSideBar type={rightSideType} channelId={Number(channelId)} />
-                ) : (
-                  history.goBack()
-                ))}
-            </> */}
+        {rightSideType === 'thread' && channelId && threadId && (
+          <RightSideBar
+            url={`/client/1/${+channelId}`}
+            header={<SubThreadListHeader />}
+            body={<SubThreadListBox />}
+          />
+        )}
+        {rightSideType === 'detail' && channelId && (
+          <RightSideBar
+            url={`/client/1/${+channelId}`}
+            header={<DetailHeader />}
+            body={<DetailBody />}
+          />
+        )}
       </Container>
     </>
   );
