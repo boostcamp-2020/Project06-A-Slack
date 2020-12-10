@@ -5,7 +5,6 @@ import { flex } from '@/styles/mixin';
 import EmojiBoxItem from './EmojiBoxItem/EmojiBoxItem';
 
 const Container = styled.div`
-  background-color: pink;
   ${flex('center', 'flex-start', 'row')};
 `;
 
