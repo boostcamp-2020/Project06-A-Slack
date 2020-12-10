@@ -4,10 +4,6 @@ import { verifyJWT } from '@/utils/utils';
 
 const instance = axios.create({ timeout: 9000 });
 
-if (process.env.MODE !== 'dev') {
-  instance.defaults.baseURL = process.env.BASE_URL;
-}
-
 instance.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem('accessToken');
