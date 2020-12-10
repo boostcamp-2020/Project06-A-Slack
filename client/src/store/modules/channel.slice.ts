@@ -64,8 +64,6 @@ const channelSlice = createSlice({
     createChannelSuccess(state, action) {
       state.channelList.push(action.payload.channel);
       state.myChannelList.push(action.payload.channel);
-      state.current = action.payload.channel;
-      state.users = action.payload.joinedListUser;
     },
     createChannelFailure(state, action) {
       // todo 에러처리

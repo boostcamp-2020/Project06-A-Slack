@@ -44,7 +44,7 @@ interface User {
   updatedAt?: string;
 }
 
-interface Channel {
+export interface Channel {
   id?: number;
   ownerId: number;
   name: string;
