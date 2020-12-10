@@ -113,8 +113,18 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
 }: ThreadItemProps) => {
   const isSameUser = prevThreadUserId === thread.userId;
 
+  const [popupVisible, setPopupVisible] = useState(false);
+
+  const handleMouseEnter = () => {
+    setPopupVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setPopupVisible(false);
+  };
+
   return (
-    <Container>
+    <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <UserImgBox>
         <UserImg src={thread.image} />
       </UserImgBox>
@@ -127,9 +137,14 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
         {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
         <EmojiBox thread={thread} />
       </ContentBox>
-      <Popup>
-        <ThreadPopup thread={thread} isParentThreadOfRightSideBar={isParentThreadOfRightSideBar} />
-      </Popup>
+      {popupVisible && (
+        <Popup>
+          <ThreadPopup
+            thread={thread}
+            isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
+          />
+        </Popup>
+      )}
     </Container>
   );
 };
