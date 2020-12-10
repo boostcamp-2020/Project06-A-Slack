@@ -149,7 +149,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
       const name = makeDMRoomName(pickUsers, userInfo.displayName);
 
       const users: JoinedUser[] = pickUsers.reduce(
-        (acc: any, cur) => {
+        (acc: JoinedUser[], cur) => {
           acc.push({ userId: cur.id, displayName: cur.displayName, image: cur.image });
           return acc;
         },
