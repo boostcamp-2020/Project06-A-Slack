@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
-import { createChannelRequest } from '@/store/modules/channel.slice';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
-import { User } from '@/types';
+import { JoinedUser, User } from '@/types';
 import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -149,15 +148,30 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
     } else if (userInfo) {
       const name = makeDMRoomName(pickUsers, userInfo.displayName);
 
+      const users: JoinedUser[] = pickUsers.reduce(
+        (acc: JoinedUser[], cur) => {
+          acc.push({ userId: cur.id, displayName: cur.displayName, image: cur.image });
+          return acc;
+        },
+        [{ userId: userInfo.id, displayName: userInfo.displayName, image: userInfo.image }],
+      );
+
+      const channel = {
+        ownerId: userInfo.id,
+        name,
+        channelType: 2,
+        topic: '',
+        isPublic: 0,
+        memberCount: 0,
+        description: '',
+      };
+
       dispatch(
-        createChannelRequest({
-          ownerId: userInfo?.id,
-          channelType: 2,
-          isPublic: false,
-          name,
-          description: '',
-          displayName: '',
-          users: [userInfo, ...pickUsers],
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.CHANNEL,
+          subType: CHANNEL_SUBTYPE.MAKE_DM,
+          channel,
+          users,
         }),
       );
     }
