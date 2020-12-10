@@ -91,7 +91,6 @@ const Popover: React.FC<PropsWithChildren<PopoverProps>> = ({
   useOnClickOutside(containerRef, () => setVisible(false));
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
     if (e.target === containerRef.current) {
       return;
     }
