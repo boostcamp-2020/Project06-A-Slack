@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
-import { useAuthState, useUserState, useChannelState } from '@/hooks';
+import { useAuthState, useUserState, useChannelState, useRedirectState } from '@/hooks';
 import { Header, LeftSideBar, ThreadListBox, RightSideBar, SubThreadListBox } from '@/components';
 import { isExistedChannel, isNumberTypeValue } from '@/utils/utils';
 import { socketConnectRequest, socketDisconnectRequest } from '@/store/modules/socket.slice';
 import { getEmojiListRequest } from '@/store/modules/emoji.slice';
 import { useDispatch } from 'react-redux';
+import { setRedirect } from '@/store/modules/redirect.slice';
 
 import styled from 'styled-components';
 
@@ -32,6 +33,14 @@ const WorkSpacePage: React.FC = () => {
   const { userInfo } = useUserState();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { url: redirectUrl } = useRedirectState();
+
+  useEffect(() => {
+    if (redirectUrl) {
+      history.push(redirectUrl);
+      dispatch(setRedirect({ url: null }));
+    }
+  }, [redirectUrl]);
 
   /* url에 채널 아이디가 없을 때, 최근에 접속한 채널로 이동 */
   useEffect(() => {
