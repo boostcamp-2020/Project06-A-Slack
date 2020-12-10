@@ -62,7 +62,7 @@ const ChannelItem = ({ idx }: ChannelItemProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (picked && current) {
+    if (picked && current?.id) {
       dispatch(unsetUnreadFlag({ channelId: current.id }));
     }
   }, [current]);
