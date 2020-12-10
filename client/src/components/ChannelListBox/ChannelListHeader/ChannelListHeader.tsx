@@ -1,8 +1,8 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, ReactElement, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { DimModal, MenuModal, ArrowDownIcon, PlusIcon, DotIcon } from '@/components';
+import { DimModal, ArrowDownIcon, PlusIcon, DotIcon, Popover } from '@/components';
 import {
   AddUsersModalHeader,
   AddUsersModalBody,
@@ -130,6 +130,8 @@ const ChannelListBox = ({
     setAddUsersModalVisible((state) => !state);
   };
 
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
     <>
       {createChannelModalVisible && (
@@ -156,36 +158,6 @@ const ChannelListBox = ({
         />
       )}
       <Container onClick={toggleChannelList}>
-        {addChannelsModalVisible && (
-          <MenuModal
-            top="1.5rem"
-            right="-5rem"
-            visible={addChannelsModalVisible}
-            setVisible={setAddChannelsModalVisible}
-          >
-            <ModalListItem
-              onClick={
-                channelType === CHANNEL_TYPE.CHANNEL ? clickCreateChannelModal : clickAddUsersModal
-              }
-            >
-              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
-            </ModalListItem>
-            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
-          </MenuModal>
-        )}
-        {sectionOptionsModalVisible && (
-          <MenuModal
-            top="1.5rem"
-            right="-3.5rem"
-            visible={sectionOptionsModalVisible}
-            setVisible={setSectionOptionsModalVisible}
-          >
-            <ModalListItem onClick={clickCreateChannelModal}>
-              {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
-            </ModalListItem>
-            <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
-          </MenuModal>
-        )}
         <SubWrapper>
           <ArrowIcon rotated={!channelListVisible}>
             <ArrowDownIcon />
@@ -198,13 +170,32 @@ const ChannelListBox = ({
               <DotIcon />
             </DotIconBox>
           </PopupBox>
-          <PopupBox onClick={toggleAddChannelsModal}>
+          <PopupBox onClick={toggleAddChannelsModal} ref={ref}>
             <PlusIconBox>
               <PlusIcon size="22.5px" />
             </PlusIconBox>
           </PopupBox>
         </Controls>
       </Container>
+      {addChannelsModalVisible && ref.current && (
+        <Popover
+          anchorEl={ref.current}
+          offset={{ top: 0, left: 5 }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          visible={addChannelsModalVisible}
+          setVisible={setAddChannelsModalVisible}
+        >
+          <ModalListItem
+            onClick={
+              channelType === CHANNEL_TYPE.CHANNEL ? clickCreateChannelModal : clickAddUsersModal
+            }
+          >
+            {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
+          </ModalListItem>
+          <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+        </Popover>
+      )}
     </>
   );
 };

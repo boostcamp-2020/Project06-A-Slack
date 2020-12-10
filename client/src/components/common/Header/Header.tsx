@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { getUserRequest } from '@/store/modules/user.slice';
 import { flex } from '@/styles/mixin';
 import { useAuthState, useUserState } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth.slice';
-import { DimModal, UserStateIcon, MenuModal, ClockIcon } from '@/components';
+import { DimModal, UserStateIcon, ClockIcon, Popover } from '@/components';
 import theme from '@/styles/theme';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 
@@ -80,7 +80,7 @@ const ModalListItem = styled.div`
 `;
 
 const ModalUserProfileBox = styled.div`
-  width: 100%;
+  width: 300px;
   padding: 0.8rem 1.2rem 1.5rem 1.2rem;
   ${flex('center', 'flex-start')};
 `;
@@ -146,6 +146,8 @@ const Header: React.FC = () => {
 
   const workspaceName = '부스트캠프 2020 멤버십';
 
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
     <Container>
       <Title>
@@ -162,10 +164,12 @@ const Header: React.FC = () => {
           setVisible={setEditProfileVisible}
         />
       )}
-      {menuModalVisible && (
-        <MenuModal
-          top="2.5rem"
-          right="1rem"
+      {menuModalVisible && ref.current && (
+        <Popover
+          anchorEl={ref.current}
+          offset={{ top: 5, left: 0 }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
           visible={menuModalVisible}
           setVisible={setMenuModalVisible}
         >
@@ -184,9 +188,9 @@ const Header: React.FC = () => {
           <ModalListItem>View profile</ModalListItem>
           <Line />
           <Logout onClick={handleLogout}>Sign out of {workspaceName}</Logout>
-        </MenuModal>
+        </Popover>
       )}
-      <ProfileBox onMouseDown={toggleMenuModal}>
+      <ProfileBox onMouseDown={toggleMenuModal} ref={ref}>
         <ProfileBackground />
         <ProfileImg src={userInfo?.image} />
         <Icon>

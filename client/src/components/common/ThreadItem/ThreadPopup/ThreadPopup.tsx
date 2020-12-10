@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { Link } from 'react-router-dom';
-import { DimModal, MenuModal, ReactionIcon, CommentIcon, DotIcon } from '@/components';
+import { Popover, MenuModal, ReactionIcon, CommentIcon, DotIcon } from '@/components';
 import { flex, hoverActive } from '@/styles/mixin';
 import theme from '@/styles/theme';
 
@@ -68,6 +68,8 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
     console.log('click');
   };
 
+  const popoverRef = useRef<HTMLDivElement>(null);
+
   return (
     <Container>
       <ReactionBox>
@@ -80,23 +82,25 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
           </CommentBox>
         </Link>
       )}
-      <MoreActionBox onClick={openMenuModal}>
+      <MoreActionBox onClick={openMenuModal} ref={popoverRef}>
         <DotIcon color={theme.color.black5} />
-        {menuModalVisible && (
-          <MenuModal
-            top="1rem"
-            right="1rem"
-            visible={menuModalVisible}
-            setVisible={setMenuModalVisible}
-          >
-            <ModalListItem onClick={openEditModal}>Unfollow message</ModalListItem>
-            <ModalListItem>Copy link</ModalListItem>
-            <ModalListItem>Pin to this conversation</ModalListItem>
-            <ModalListItem>Edit message</ModalListItem>
-            <ModalListItem>Delete message</ModalListItem>
-          </MenuModal>
-        )}
       </MoreActionBox>
+      {menuModalVisible && popoverRef.current && (
+        <Popover
+          anchorEl={popoverRef.current}
+          offset={{ top: 0, left: 5 }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'center', horizontal: 'right' }}
+          visible={menuModalVisible}
+          setVisible={setMenuModalVisible}
+        >
+          <ModalListItem onClick={openEditModal}>Unfollow message</ModalListItem>
+          <ModalListItem>Copy link</ModalListItem>
+          <ModalListItem>Pin to this conversation</ModalListItem>
+          <ModalListItem>Edit message</ModalListItem>
+          <ModalListItem>Delete message</ModalListItem>
+        </Popover>
+      )}
     </Container>
   );
 };
