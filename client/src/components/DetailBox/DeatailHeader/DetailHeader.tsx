@@ -1,48 +1,54 @@
 import React from 'react';
-import { useChannelState } from '@/hooks';
-import { useDispatch } from 'react-redux';
-import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
+import { useChannelState } from '@/hooks';
+import { flex } from '@/styles/mixin';
+import { LockIcon, PoundIcon } from '@/components';
+import theme from '@/styles/theme';
 
 const Container = styled.div`
-  border: 1px solid red;
-  width: 100%;
   ${flex('center', 'space-between')}
-`;
-const Left = styled.div`
-  padding: ${(props) => props.theme.size.m};
-`;
-
-const Title = styled.div`
-  font-size: 20px;
+  width: 100%;
+  height: 4.3rem;
+  flex-shrink: 0;
+  background-color: white;
 `;
 
-const Content = styled.div`
-  font-size: 12px;
+const LeftBox = styled.div``;
+
+const LeftTopBox = styled.div`
+  font-weight: 800;
 `;
 
-const Button = styled.button`
-  font-size: 25px;
-  background: none;
-  border: none;
-  padding: ${(props) => props.theme.size.m};
+const LeftBottomBox = styled.div`
+  width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const ChannelTitle = styled.span`
+  color: ${(props) => props.theme.color.black5};
+  font-size: 0.8rem;
+  font-weight: 200;
+  margin-left: 0.2rem;
 `;
 
 const DetailHeader: React.FC = () => {
   const { current } = useChannelState();
-  const dispatch = useDispatch();
-  const onClick = () => {
-    // Link로 연결하는 작업
-  };
+
   return (
     <Container>
-      <Left>
-        <Title>Details</Title>
-        <Content>
-          {current?.isPublic} {current?.name}
-        </Content>
-      </Left>
-      <Button onClick={onClick}>X</Button>
+      <LeftBox>
+        <LeftTopBox>Detail</LeftTopBox>
+        <LeftBottomBox>
+          {current?.isPublic ? (
+            <PoundIcon size="10px" color={theme.color.black5} />
+          ) : (
+            <LockIcon size="10px" color={theme.color.black5} />
+          )}
+          <ChannelTitle>{current?.name}</ChannelTitle>
+        </LeftBottomBox>
+      </LeftBox>
     </Container>
   );
 };
