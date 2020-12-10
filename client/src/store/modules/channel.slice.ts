@@ -89,21 +89,23 @@ const channelSlice = createSlice({
     },
     updateChannelUnread(state, { payload }: PayloadAction<{ channel: Channel }>) {
       const { channel } = payload;
-      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
-      if (state.current) {
-        if (idx !== -1 && state.myChannelList[idx].id !== state.current.id) {
-          state.myChannelList[idx] = { ...state.myChannelList[idx], ...channel };
+      state.myChannelList = state.myChannelList.map((chan) => {
+        if (chan.id === channel.id) {
+          return { ...chan, ...channel };
         }
-      }
+        return chan;
+      });
     },
     updateChannelTopic(state, { payload }: PayloadAction<{ channel: Channel }>) {
       const { channel } = payload;
-      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
-      if (idx !== -1) {
-        state.myChannelList[idx] = { ...state.myChannelList[idx], topic: channel.topic };
-        if (state.current?.id === channel.id) {
-          state.current = channel;
+      state.myChannelList = state.myChannelList.map((chan) => {
+        if (chan.id === channel.id) {
+          return { ...chan, topic: channel.topic };
         }
+        return chan;
+      });
+      if (state.current?.id === channel.id) {
+        state.current = channel;
       }
     },
     updateChannelUsers(
