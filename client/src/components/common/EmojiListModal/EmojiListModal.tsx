@@ -15,6 +15,7 @@ const Emoji = styled.img`
   width: 22px;
   height: 22px;
   user-select: none;
+  cursor: pointer;
 `;
 
 interface EmojiListModalProps {

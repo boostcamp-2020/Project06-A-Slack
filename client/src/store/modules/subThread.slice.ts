@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Thread, initialThread } from '@/types';
+import { Thread, initialThread, EmojiOfThread } from '@/types';
 
 interface SubThreadBox {
   parentThread: Thread;
@@ -29,12 +29,27 @@ const subThreadSlice = createSlice({
     },
     getSubThreadFailure(state, action) {},
     addSubThread(state, action) {
+      state.parentThread.subCount += 1;
       if (state.subThreadList?.length) {
         state.subThreadList.push(action.payload.thread);
-      } else {
-        state.subThreadList = [action.payload.thread];
+        return;
       }
-      state.parentThread.subCount += 1;
+      state.subThreadList = [action.payload.thread];
+    },
+    changeEmojiOfSubThread(
+      state,
+      { payload }: PayloadAction<{ emoji: EmojiOfThread[]; threadId: number }>,
+    ) {
+      if (state.parentThread.id === payload.threadId) {
+        state.parentThread.emoji = payload.emoji;
+        return;
+      }
+      const targetThread = state.subThreadList?.find(
+        (thread) => Number(thread.id) === Number(payload.threadId),
+      );
+      if (targetThread) {
+        targetThread.emoji = payload.emoji;
+      }
     },
   },
 });
@@ -45,6 +60,7 @@ export const {
   getSubThreadSuccess,
   getSubThreadFailure,
   addSubThread,
+  changeEmojiOfSubThread,
 } = subThreadSlice.actions; // action 나눠서 export 하기
 
 export default subThreadSlice.reducer;

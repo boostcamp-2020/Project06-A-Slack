@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Thread, ThreadResponse } from '@/types';
+import { EmojiOfThread, Thread, ThreadResponse } from '@/types';
 
 interface ThreadState {
   threadList: Thread[] | null;
@@ -22,11 +22,6 @@ export interface createThreadRequestPayload {
   channelId: number;
   content: string;
   parentId: number | null;
-}
-
-interface EmojiOfThread {
-  id: number;
-  userList: number[];
 }
 
 // 리듀서
@@ -77,7 +72,10 @@ const threadSlice = createSlice({
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
       state.canScroll = payload.canScroll;
     },
-    changeEmoji(state, { payload }: PayloadAction<{ emoji: EmojiOfThread[]; threadId: number }>) {
+    changeEmojiOfThread(
+      state,
+      { payload }: PayloadAction<{ emoji: EmojiOfThread[]; threadId: number }>,
+    ) {
       const targetThread = state.threadList?.find(
         (thread) => Number(thread.id) === Number(payload.threadId),
       );
@@ -98,7 +96,7 @@ export const {
   createThreadFailure,
   addThread,
   setScrollable,
-  changeEmoji,
+  changeEmojiOfThread,
   updateSubThreadInfo,
 } = threadSlice.actions; // action 나눠서 export 하기
 
