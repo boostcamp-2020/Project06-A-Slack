@@ -24,4 +24,7 @@ export const userService: Service = {
   }) {
     return API.post('/api/users/match', { displayName, channelId, isDM });
   },
+  getNotJoinedChannels({ userId }: { userId: number }) {
+    return API.get(`/api/users/${userId}/channels/unsubscribed`);
+  },
 };
