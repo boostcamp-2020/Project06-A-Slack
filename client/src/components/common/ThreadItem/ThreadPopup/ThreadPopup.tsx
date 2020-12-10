@@ -73,21 +73,12 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
   const openReactionModal = () => setReactionModalVisible(true);
 
   const popoverRef = useRef<HTMLDivElement>(null);
+  const reactionBoxRef = useRef<HTMLDivElement>(null);
 
   return (
     <Container>
-      <ReactionBox onClick={openReactionModal}>
+      <ReactionBox onClick={openReactionModal} ref={reactionBoxRef}>
         <ReactionIcon size="23px" color={theme.color.black5} />
-        {reactionModalVisible && (
-          <MenuModal
-            top="1rem"
-            right="1rem"
-            visible={reactionModalVisible}
-            setVisible={setReactionModalVisible}
-          >
-            <EmojiListModal thread={thread} />
-          </MenuModal>
-        )}
       </ReactionBox>
       {!thread.parentId && !isParentThreadOfRightSideBar && (
         <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
@@ -110,6 +101,18 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
         >
           <ModalListItem>Edit message</ModalListItem>
           <ModalListItem>Delete message</ModalListItem>
+        </Popover>
+      )}
+      {reactionModalVisible && reactionBoxRef.current && (
+        <Popover
+          anchorEl={reactionBoxRef.current}
+          offset={{ top: 0, left: 5 }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'center', horizontal: 'right' }}
+          visible={reactionModalVisible}
+          setVisible={setReactionModalVisible}
+        >
+          <EmojiListModal thread={thread} />
         </Popover>
       )}
     </Container>
