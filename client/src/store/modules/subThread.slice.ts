@@ -29,12 +29,12 @@ const subThreadSlice = createSlice({
     },
     getSubThreadFailure(state, action) {},
     addSubThread(state, action) {
+      state.parentThread.subCount += 1;
       if (state.subThreadList?.length) {
         state.subThreadList.push(action.payload.thread);
-      } else {
-        state.subThreadList = [action.payload.thread];
+        return;
       }
-      state.parentThread.subCount += 1;
+      state.subThreadList = [action.payload.thread];
     },
     changeEmojiOfSubThread(
       state,
@@ -42,13 +42,13 @@ const subThreadSlice = createSlice({
     ) {
       if (state.parentThread.id === payload.threadId) {
         state.parentThread.emoji = payload.emoji;
-      } else {
-        const targetThread = state.subThreadList?.find(
-          (thread) => Number(thread.id) === Number(payload.threadId),
-        );
-        if (targetThread) {
-          targetThread.emoji = payload.emoji;
-        }
+        return;
+      }
+      const targetThread = state.subThreadList?.find(
+        (thread) => Number(thread.id) === Number(payload.threadId),
+      );
+      if (targetThread) {
+        targetThread.emoji = payload.emoji;
       }
     },
   },
