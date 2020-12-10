@@ -8,9 +8,9 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread, changeEmoji, updateSubThreadInfo } from '@/store/modules/thread.slice';
+import { addThread, changeEmojiOfThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
+import { changeEmojiOfSubThread, addSubThread } from '@/store/modules/subThread.slice';
 
-import { addSubThread } from '@/store/modules/subThread.slice';
 import {
   updateChannelUnread,
   updateChannelTopic,
@@ -64,7 +64,8 @@ function subscribeSocket(socket: Socket) {
       if (isEmojiEvent(data)) {
         const { room, emoji, threadId, type } = data;
         if (emoji && threadId) {
-          emit(changeEmoji({ emoji, threadId }));
+          emit(changeEmojiOfThread({ emoji, threadId }));
+          emit(changeEmojiOfSubThread({ emoji, threadId }));
         }
         return;
       }
