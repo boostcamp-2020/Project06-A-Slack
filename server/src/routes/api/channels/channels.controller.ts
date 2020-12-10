@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
-import { channelModel } from '@/models';
+import { channelModel, userModel } from '@/models';
 /**
  * GET /api/channels
  */
@@ -22,6 +22,10 @@ export const createChannel = async (req: Request, res: Response, next: NextFunct
       isPublic,
       description,
       memberCount,
+    });
+    await userModel.modifyLastChannel({
+      lastChannelId: channel.insertId,
+      userId: ownerId,
     });
     res.status(201).json({ channel });
     return;
