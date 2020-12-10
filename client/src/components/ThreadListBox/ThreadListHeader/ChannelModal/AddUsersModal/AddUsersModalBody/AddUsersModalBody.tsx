@@ -3,14 +3,12 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { matchUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
-import { createChannelRequest } from '@/store/modules/channel.slice';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { JoinedUser, User } from '@/types';
 import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { makeDMRoomName } from '@/utils/utils';
-import { Channel } from 'redux-saga';
 
 interface Props {
   visible: boolean;
