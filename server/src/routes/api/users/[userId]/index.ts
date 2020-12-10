@@ -9,5 +9,6 @@ router.post('/', userIdController.modifyUser);
 router.delete('/', userIdController.deleteUser);
 router.post('/last-channel', userIdController.modifyLastChannel);
 router.get('/channels', userIdController.getJoinedChannels);
+router.get('/channels/unsubscribed', userIdController.getNotJoinedChannels);
 
 export default router;

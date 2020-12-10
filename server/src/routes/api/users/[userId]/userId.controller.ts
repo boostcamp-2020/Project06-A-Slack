@@ -140,3 +140,24 @@ export const modifyLastChannel = async (
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
+
+/**
+ * GET /api/users/:userId/channels/unsubscribed
+ */
+export const getNotJoinedChannels = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { userId } = req.params;
+  if (verifyRequestData([userId])) {
+    try {
+      const [notJoinedChannelList] = await channelModel.getNotJoinedChannels({ userId: +userId });
+      res.status(200).json({ notJoinedChannelList });
+      return;
+    } catch (err) {
+      next(err);
+    }
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
