@@ -79,16 +79,16 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, pw, displayName } = req.body;
   if (verifyRequestData([email, pw, displayName])) {
-    // TODO: signup
     try {
-      await userModel.addUser({ email, pw, displayName });
+      const hashPw = await bcrypt.hash(pw, 10);
+      await userModel.addUser({ email, pw: hashPw, displayName });
+
       res.status(200).end();
       return;
     } catch (err) {
       next(err);
       return;
     }
-    return;
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
