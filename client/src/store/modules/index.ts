@@ -7,7 +7,7 @@ import userSlice, { USER } from './user.slice';
 import signupSlice, { SIGNUP } from './signup.slice';
 import socketSlice, { SOCKET } from './socket.slice';
 import emojiSlice, { EMOJI } from './emoji.slice';
-import findChannelSlice, { FINDCHANNEL } from './findChannel.slice';
+import findChannelSlice, { FIND_CHANNEL } from './findChannel.slice';
 
 const rootReducer = combineReducers({
   [CHANNEL]: channelSlice,
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   [SIGNUP]: signupSlice,
   [SOCKET]: socketSlice,
   [EMOJI]: emojiSlice,
-  [FINDCHANNEL]: findChannelSlice,
+  [FIND_CHANNEL]: findChannelSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
