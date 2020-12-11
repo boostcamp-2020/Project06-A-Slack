@@ -13,6 +13,7 @@ interface SignupState {
   signup: {
     loading: boolean;
     err: { message: string } | null;
+    status: number | null;
   };
 }
 
@@ -26,6 +27,7 @@ const signupState: SignupState = {
   signup: {
     loading: false,
     err: null,
+    status: null,
   },
 };
 
@@ -70,12 +72,18 @@ const signupSlice = createSlice({
     signupRequest(state, { payload }: PayloadAction<signupRequestPayload>) {
       state.signup.loading = true;
     },
-    signupSuccess(state) {
+    signupSuccess(state, { payload }: PayloadAction<{ status: number }>) {
       state.signup.loading = false;
+      state.signup.status = payload.status;
     },
     signupFailure(state, { payload }: PayloadAction<{ err: Error }>) {
       state.signup.loading = false;
       state.signup.err = payload.err;
+    },
+    resetSignupState(state) {
+      state.signup.loading = false;
+      state.signup.err = null;
+      state.signup.status = null;
     },
   },
 });
@@ -93,6 +101,7 @@ export const {
   signupRequest,
   signupSuccess,
   signupFailure,
+  resetSignupState,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;

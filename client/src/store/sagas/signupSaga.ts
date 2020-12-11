@@ -41,7 +41,7 @@ function* signupFlow({ payload }: PayloadAction<signupRequestPayload>) {
   try {
     const { status } = yield call(authService.signup, { email, pw, displayName });
     if (status === 200) {
-      yield put(signupSuccess());
+      yield put(signupSuccess({ status }));
     }
   } catch (err) {
     yield signupFailure({ err });
