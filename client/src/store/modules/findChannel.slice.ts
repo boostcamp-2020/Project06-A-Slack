@@ -35,7 +35,7 @@ const findChannelSlice = createSlice({
   },
 });
 
-export const FINDCHANNEL = findChannelSlice.name;
+export const FIND_CHANNEL = findChannelSlice.name;
 export const {
   loadNotJoinedChannelsRequest,
   loadNotJoinedChannelsSuccess,
