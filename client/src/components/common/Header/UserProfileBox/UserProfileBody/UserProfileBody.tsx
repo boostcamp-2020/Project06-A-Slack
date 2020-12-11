@@ -96,6 +96,7 @@ interface ProfileBodyProps {
 }
 
 const fileReader = new FileReader();
+const phoneNumberRegex = /^\d{3}-\d{3,4}-\d{4}$/;
 
 const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: ProfileBodyProps) => {
   const dispatch = useDispatch();
@@ -105,6 +106,7 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
   const nameInputRef = useRef<HTMLInputElement>(null);
   const profileImageRef = useRef<HTMLImageElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
 
   const [displayName, setDisplayName] = useState(userInfo?.displayName ?? '');
   const [phoneNumber, setPhoneNumber] = useState(userInfo?.phoneNumber ?? '');
@@ -120,6 +122,11 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!phoneNumber.match(phoneNumberRegex)) {
+      alert('휴대폰 번호 형식이 올바르지 않습니다.');
+      phoneNumberRef.current?.focus();
+      return;
+    }
     if (userInfo) {
       dispatch(
         editUserRequest({
@@ -198,7 +205,13 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
           </ModalLabel>
           <ModalLabel>
             Phone number
-            <FormInput value={phoneNumber} onChange={handlePhoneNumberChange} maxLength={20} />
+            <FormInput
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+              placeholder="010-0000-0000"
+              maxLength={13}
+              ref={phoneNumberRef}
+            />
             <InputDesc>Enter a phone number.</InputDesc>
           </ModalLabel>
         </UserInfoBox>
