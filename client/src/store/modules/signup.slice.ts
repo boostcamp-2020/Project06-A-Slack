@@ -49,8 +49,10 @@ const signupSlice = createSlice({
       state.verify.loading = false;
       state.verify.err = payload.err;
     },
-    removeVerifyCodeAndEmail(state) {
+    removeVerifyCode(state) {
       state.verify.verifyCode = null;
+    },
+    removeVerifyEmail(state) {
       state.email = null;
     },
   },
@@ -64,7 +66,8 @@ export const {
   verifyEmailSendRequest,
   verifyEmailSendSuccess,
   verifyEmailSendFailure,
-  removeVerifyCodeAndEmail,
+  removeVerifyCode,
+  removeVerifyEmail,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;

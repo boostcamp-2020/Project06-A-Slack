@@ -5,7 +5,7 @@ import isAlpha from 'validator/es/lib/isAlpha';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { flex, focusedInputBoxShadow } from '@/styles/mixin';
-import { removeVerifyCodeAndEmail } from '@/store/modules/signup.slice';
+import { removeVerifyCode } from '@/store/modules/signup.slice';
 import { useSignupState } from '@/hooks';
 import { decrypt } from '@/utils/utils';
 import { WarningIcon } from '@/components';
@@ -153,7 +153,7 @@ const CodeVerifyBox = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(removeVerifyCodeAndEmail());
+      dispatch(removeVerifyCode());
     };
   }, []);
 
