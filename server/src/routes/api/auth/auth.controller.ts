@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { IncomingForm } from 'formidable';
 import bcrypt from 'bcrypt';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import {
@@ -154,4 +153,25 @@ export const verifyEmail = async (
   } catch (err) {
     next({ message: ERROR_MESSAGE.CODE_GENERATION_FAILED, status: 500 });
   }
+};
+
+/**
+ * POST /api/auth/email/check
+ */
+export const checkExistEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { email } = req.body;
+  if (verifyRequestData([email])) {
+    const [[user]] = await userModel.getUserByEmail({ email });
+    if (!user) {
+      res.status(200).end();
+      return;
+    }
+    res.status(400).json({ message: ERROR_MESSAGE.EXIST_EMAIL });
+    return;
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
