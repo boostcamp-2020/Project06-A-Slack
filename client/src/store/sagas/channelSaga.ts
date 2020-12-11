@@ -20,7 +20,8 @@ import {
   joinChannelSuccess,
   joinChannelFailure,
   joinChannelRequsetPayload,
-} from '../modules/channel.slice';
+} from '@/store/modules/channel.slice';
+import { setRedirect } from '@/store/modules/redirect.slice';
 
 function* loadChannels() {
   try {
@@ -92,12 +93,13 @@ function* createChannel(action: any) {
       };
 
       yield put(createChannelSuccess({ channel, joinedListUser: [joinedUser] }));
-      const { joinStatus } = yield call(channelService.joinChannel, {
+      const { status: joinStatus } = yield call(channelService.joinChannel, {
         users,
         channelId: data.channel.insertId,
       });
       if (joinStatus === 200) {
         yield put(joinChannelSuccess({ users }));
+        yield put(setRedirect({ url: `/client/1/${data.channel.insertId}` }));
       }
     }
   } catch (err) {

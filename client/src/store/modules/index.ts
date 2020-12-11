@@ -7,6 +7,7 @@ import userSlice, { USER } from './user.slice';
 import signupSlice, { SIGNUP } from './signup.slice';
 import socketSlice, { SOCKET } from './socket.slice';
 import emojiSlice, { EMOJI } from './emoji.slice';
+import redirectSlice, { REDIRECT } from './redirect.slice';
 
 const rootReducer = combineReducers({
   [CHANNEL]: channelSlice,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   [SIGNUP]: signupSlice,
   [SOCKET]: socketSlice,
   [EMOJI]: emojiSlice,
+  [REDIRECT]: redirectSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
