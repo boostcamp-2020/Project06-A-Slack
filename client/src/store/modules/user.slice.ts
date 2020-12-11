@@ -78,11 +78,6 @@ const userSlice = createSlice({
       state.matchUsersInfo = action.payload.matchUsersInfo;
     },
     matchUsersFailure(state, action) {},
-    modifyUserLastChannelId(state, { payload }: PayloadAction<{ lastChannelId: number }>) {
-      if (state.userInfo) {
-        state.userInfo.lastChannelId = payload.lastChannelId;
-      }
-    },
   },
 });
 
@@ -97,7 +92,6 @@ export const {
   matchUsersRequest,
   matchUsersSuccess,
   matchUsersFailure,
-  modifyUserLastChannelId,
 } = userSlice.actions;
 
 export default userSlice.reducer;

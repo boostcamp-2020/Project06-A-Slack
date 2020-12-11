@@ -23,10 +23,6 @@ export const createChannel = async (req: Request, res: Response, next: NextFunct
       description,
       memberCount,
     });
-    await userModel.modifyLastChannel({
-      lastChannelId: channel.insertId,
-      userId: ownerId,
-    });
     res.status(201).json({ channel });
     return;
   }
