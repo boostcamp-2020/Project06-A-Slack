@@ -26,4 +26,7 @@ export const authService: Service = {
   signup({ email, pw, displayName }: SignupParam) {
     return API.post('/api/auth/signup', { email, pw, displayName });
   },
+  checkExistEmail({ email }: { email: string }) {
+    return API.post('/api/auth/email/check', { email });
+  },
 };

@@ -8,11 +8,16 @@ interface SignupState {
   verify: {
     loading: boolean;
     verifyCode: string | null;
-    err: { message: string } | null;
+    err: Error | null;
   };
   signup: {
     loading: boolean;
-    err: { message: string } | null;
+    err: Error | null;
+    status: number | null;
+  };
+  checkExistEmail: {
+    loading: boolean;
+    err: Error | null;
     status: number | null;
   };
 }
@@ -25,6 +30,11 @@ const signupState: SignupState = {
     err: null,
   },
   signup: {
+    loading: false,
+    err: null,
+    status: null,
+  },
+  checkExistEmail: {
     loading: false,
     err: null,
     status: null,
@@ -85,6 +95,26 @@ const signupSlice = createSlice({
       state.signup.err = null;
       state.signup.status = null;
     },
+    checkExistEmailRequest(state, { payload }: PayloadAction<{ email: string }>) {
+      state.checkExistEmail.loading = true;
+    },
+    checkExistEmailSuccess(state, { payload }: PayloadAction<{ status: number }>) {
+      state.checkExistEmail.loading = false;
+      state.checkExistEmail.status = payload.status;
+      state.checkExistEmail.err = null;
+    },
+    checkExistEmailFailure(state, { payload }: PayloadAction<{ err: Error }>) {
+      state.checkExistEmail.loading = false;
+      state.checkExistEmail.status = null;
+      state.checkExistEmail.err = payload.err;
+    },
+    resetCheckExistEmailState(state) {
+      state.checkExistEmail = {
+        loading: false,
+        err: null,
+        status: null,
+      };
+    },
   },
 });
 
@@ -102,6 +132,10 @@ export const {
   signupSuccess,
   signupFailure,
   resetSignupState,
+  checkExistEmailRequest,
+  checkExistEmailSuccess,
+  checkExistEmailFailure,
+  resetCheckExistEmailState,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;

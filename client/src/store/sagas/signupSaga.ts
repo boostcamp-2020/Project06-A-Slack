@@ -1,4 +1,4 @@
-import { put, all, call, fork, delay, takeLatest } from 'redux-saga/effects';
+import { put, all, call, fork, delay, takeLatest, throttle, debounce } from 'redux-saga/effects';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   verifyEmailSendRequest,
@@ -10,6 +10,9 @@ import {
   signupRequest,
   signupSuccess,
   signupFailure,
+  checkExistEmailRequest,
+  checkExistEmailSuccess,
+  checkExistEmailFailure,
 } from '@/store/modules/signup.slice';
 import { authService } from '@/services';
 import { TIME_MILLIS } from '@/utils/constants';
@@ -52,6 +55,22 @@ function* watchSignupFlow() {
   yield takeLatest(signupRequest, signupFlow);
 }
 
+function* checkExistEmailFlow({ payload }: PayloadAction<{ email: string }>) {
+  const { email } = payload;
+  try {
+    const { status } = yield call(authService.checkExistEmail, { email });
+    if (status === 200) {
+      yield put(checkExistEmailSuccess({ status }));
+    }
+  } catch (err) {
+    yield put(checkExistEmailFailure({ err }));
+  }
+}
+
+function* debounceCheckExistEmailFlow() {
+  yield debounce(700, checkExistEmailRequest, checkExistEmailFlow);
+}
+
 export default function* signupSaga() {
-  yield all([fork(watchVerifyFlow), fork(watchSignupFlow)]);
+  yield all([fork(watchVerifyFlow), fork(watchSignupFlow), fork(debounceCheckExistEmailFlow)]);
 }
