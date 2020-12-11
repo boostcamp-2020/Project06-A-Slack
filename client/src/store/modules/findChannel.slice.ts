@@ -28,7 +28,6 @@ const findChannelSlice = createSlice({
       { payload }: PayloadAction<{ notJoinedChannelList: Channel[] }>,
     ) {
       state.notJoinedChannelList = payload.notJoinedChannelList;
-      console.log(payload.notJoinedChannelList);
     },
     loadNotJoinedChannelsFailure(state, action: PayloadAction<{ err: Error }>) {
       // todo 에러처리
