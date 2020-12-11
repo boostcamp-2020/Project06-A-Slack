@@ -47,13 +47,30 @@ const SignupBox: React.FC = () => {
   const { email, signup } = useSignupState();
   const [displayName, setDisplayName] = useState('');
   const [pw, setPw] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
   const [isValidPw, setIsValidPw] = useState(true);
+  const [isSamePw, setIsSamePw] = useState(pw === confirmPw);
   const [isValidDisplayName, setIsValidDisplayName] = useState(true);
   const history = useHistory();
+
+  const checkPassword = (password: string, confirmPassword: string) => {
+    if (password === confirmPassword) {
+      setIsSamePw(true);
+    } else {
+      setIsSamePw(false);
+    }
+  };
+
+  const handleConfirmPwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setConfirmPw(value);
+    checkPassword(pw, value);
+  };
 
   const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setPw(value);
+    checkPassword(value, confirmPw);
 
     if (!regex.test(value)) {
       setIsValidPw(false);
@@ -141,7 +158,26 @@ const SignupBox: React.FC = () => {
             <WarningText>8~15자의 특수문자/문자/숫자를 포함해주세요</WarningText>
           </WarningBox>
         )}
-        <SignupButton type="submit" disabled={signup.loading || !isValidPw}>
+        <Label>
+          비밀번호 확인
+          <Input
+            type="password"
+            placeholder="*********"
+            onChange={handleConfirmPwChange}
+            value={confirmPw}
+            autoComplete="off"
+            required
+          />
+        </Label>
+        {!isSamePw && (
+          <WarningBox>
+            <IconBox>
+              <WarningIcon />
+            </IconBox>
+            <WarningText>비밀번호가 일치하지 않습니다</WarningText>
+          </WarningBox>
+        )}
+        <SignupButton type="submit" disabled={signup.loading || !isValidPw || !isSamePw}>
           회원가입
         </SignupButton>
       </Form>
