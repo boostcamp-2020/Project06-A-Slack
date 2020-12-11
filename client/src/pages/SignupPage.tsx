@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useSignupState } from '@/hooks';
 import { removeVerifyEmail } from '@/store/modules/signup.slice';
+import { SignupBox } from '@/components';
 
 const SignupPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -14,18 +15,7 @@ const SignupPage: React.FC = () => {
     };
   }, []);
 
-  return (
-    <>
-      {!email ? (
-        <Redirect to="/" />
-      ) : (
-        <>
-          <Link to="/">Home</Link>
-          <h1>회원가입 페이지</h1>
-        </>
-      )}
-    </>
-  );
+  return <>{!email ? <Redirect to="/" /> : <SignupBox />}</>;
 };
 
 export default SignupPage;
