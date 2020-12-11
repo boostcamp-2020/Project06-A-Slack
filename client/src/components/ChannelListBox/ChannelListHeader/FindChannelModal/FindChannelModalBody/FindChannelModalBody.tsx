@@ -22,7 +22,7 @@ const FindChannelModalBody: React.FC<FindChannelModalProps> = ({
 }: FindChannelModalProps) => {
   const { userInfo } = useUserState();
   const dispatch = useDispatch();
-  const { notJoinedchannelList } = useFindChannelState();
+  const { notJoinedChannelList } = useFindChannelState();
 
   useEffect(() => {
     if (userInfo) {
@@ -51,7 +51,7 @@ const FindChannelModalBody: React.FC<FindChannelModalProps> = ({
 
   return (
     <Container>
-      {notJoinedchannelList.map((channel) => (
+      {notJoinedChannelList.map((channel: Channel) => (
         <ChannelInfo key={channel.id}>
           <ChannelName>{channel.name}</ChannelName>
           <JoinButton onClick={() => clickJoinButton({ channel })}>Join</JoinButton>

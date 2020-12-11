@@ -4,11 +4,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Channel } from '@/types';
 
 interface FindChannelState {
-  notJoinedchannelList: Channel[];
+  notJoinedChannelList: Channel[];
 }
 
 const initialState: FindChannelState = {
-  notJoinedchannelList: [],
+  notJoinedChannelList: [],
 };
 
 export interface FindNotJoinedChannelListRequestPayload {
@@ -27,7 +27,7 @@ const findChannelSlice = createSlice({
       state,
       { payload }: PayloadAction<{ notJoinedChannelList: Channel[] }>,
     ) {
-      state.notJoinedchannelList = payload.notJoinedChannelList;
+      state.notJoinedChannelList = payload.notJoinedChannelList;
       console.log(payload.notJoinedChannelList);
     },
     loadNotJoinedChannelsFailure(state, action: PayloadAction<{ err: Error }>) {
