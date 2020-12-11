@@ -7,6 +7,7 @@ import userSlice, { USER } from './user.slice';
 import signupSlice, { SIGNUP } from './signup.slice';
 import socketSlice, { SOCKET } from './socket.slice';
 import emojiSlice, { EMOJI } from './emoji.slice';
+import findChannelSlice, { FINDCHANNEL } from './findChannel.slice';
 import redirectSlice, { REDIRECT } from './redirect.slice';
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   [SIGNUP]: signupSlice,
   [SOCKET]: socketSlice,
   [EMOJI]: emojiSlice,
+  [FINDCHANNEL]: findChannelSlice,
   [REDIRECT]: redirectSlice,
 });
 

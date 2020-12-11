@@ -8,6 +8,7 @@ import {
   AddUsersModalBody,
 } from '@/components/ThreadListBox/ThreadListHeader/ChannelModal/AddUsersModal';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
+import { FindChannelModalBody, FindChannelModalHeader } from './FindChannelModal';
 
 const Container = styled.div`
   position: relative;
@@ -104,6 +105,7 @@ const ChannelListBox = ({
 }): ReactElement => {
   const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
   const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
+  const [findChannelsModalVisible, setFindChannelsModalVisible] = useState(false);
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
@@ -128,6 +130,10 @@ const ChannelListBox = ({
 
   const clickAddUsersModal = () => {
     setAddUsersModalVisible((state) => !state);
+  };
+
+  const clickFindChannelModal = () => {
+    setFindChannelsModalVisible((state) => !state);
   };
 
   const ref = useRef<HTMLDivElement>(null);
@@ -155,6 +161,14 @@ const ChannelListBox = ({
           body={<AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} isDM />}
           visible={addUsersModalVisible}
           setVisible={setAddUsersModalVisible}
+        />
+      )}
+      {findChannelsModalVisible && (
+        <DimModal
+          header={<FindChannelModalHeader />}
+          body={<FindChannelModalBody setFindChannelModalVisible={setFindChannelsModalVisible} />}
+          visible={findChannelsModalVisible}
+          setVisible={setFindChannelsModalVisible}
         />
       )}
       <Container onClick={toggleChannelList}>
@@ -193,7 +207,9 @@ const ChannelListBox = ({
           >
             {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
           </ModalListItem>
-          {channelType === CHANNEL_TYPE.CHANNEL && <ModalListItem>채널 검색</ModalListItem>}
+          {channelType === CHANNEL_TYPE.CHANNEL && (
+            <ModalListItem onClick={clickFindChannelModal}>채널 검색</ModalListItem>
+          )}
         </Popover>
       )}
     </>

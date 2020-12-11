@@ -2,7 +2,6 @@ import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects'
 import { channelService } from '@/services';
 import { Channel, JoinedUser } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
-
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
