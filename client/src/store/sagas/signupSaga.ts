@@ -6,6 +6,10 @@ import {
   verifyEmailSendFailure,
   removeVerifyCode,
   VerifyEmailSendRequestPayload,
+  signupRequestPayload,
+  signupRequest,
+  signupSuccess,
+  signupFailure,
 } from '@/store/modules/signup.slice';
 import { authService } from '@/services';
 import { TIME_MILLIS } from '@/utils/constants';
@@ -32,6 +36,22 @@ function* watchVerifyFlow() {
   yield takeLatest(verifyEmailSendRequest, verifyEmailSendFlow);
 }
 
+function* signupFlow({ payload }: PayloadAction<signupRequestPayload>) {
+  const { email, pw, displayName } = payload;
+  try {
+    const { status } = yield call(authService.signup, { email, pw, displayName });
+    if (status === 200) {
+      yield put(signupSuccess());
+    }
+  } catch (err) {
+    yield signupFailure({ err });
+  }
+}
+
+function* watchSignupFlow() {
+  yield takeLatest(signupRequest, signupFlow);
+}
+
 export default function* signupSaga() {
-  yield all([fork(watchVerifyFlow)]);
+  yield all([fork(watchVerifyFlow), fork(watchSignupFlow)]);
 }

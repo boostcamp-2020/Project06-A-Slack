@@ -8,9 +8,11 @@ interface SignupState {
   verify: {
     loading: boolean;
     verifyCode: string | null;
-    err: {
-      message: string;
-    } | null;
+    err: { message: string } | null;
+  };
+  signup: {
+    loading: boolean;
+    err: { message: string } | null;
   };
 }
 
@@ -19,6 +21,10 @@ const signupState: SignupState = {
   verify: {
     loading: false,
     verifyCode: null,
+    err: null,
+  },
+  signup: {
+    loading: false,
     err: null,
   },
 };
@@ -30,6 +36,12 @@ export interface VerifyEmailSendRequestPayload {
 interface VerifyEmailSendSuccessPayload {
   verifyCode: string;
   email: string;
+}
+
+export interface signupRequestPayload {
+  email: string;
+  pw: string;
+  displayName: string;
 }
 
 const signupSlice = createSlice({
@@ -55,6 +67,16 @@ const signupSlice = createSlice({
     removeVerifyEmail(state) {
       state.email = null;
     },
+    signupRequest(state, { payload }: PayloadAction<signupRequestPayload>) {
+      state.signup.loading = true;
+    },
+    signupSuccess(state) {
+      state.signup.loading = false;
+    },
+    signupFailure(state, { payload }: PayloadAction<{ err: Error }>) {
+      state.signup.loading = false;
+      state.signup.err = payload.err;
+    },
   },
 });
 
@@ -68,6 +90,9 @@ export const {
   verifyEmailSendFailure,
   removeVerifyCode,
   removeVerifyEmail,
+  signupRequest,
+  signupSuccess,
+  signupFailure,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;
