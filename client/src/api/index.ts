@@ -57,6 +57,9 @@ instance.interceptors.response.use(
     if (axios.isCancel(err)) {
       console.log('요청 취소', err);
     } else {
+      if (err.response.status === 401) {
+        window.location.href = '/login';
+      }
       console.error('api 에러', err);
     }
     return Promise.reject(err);

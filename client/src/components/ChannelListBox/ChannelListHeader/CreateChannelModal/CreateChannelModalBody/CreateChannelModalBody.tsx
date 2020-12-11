@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { useAuthState, useChannelState, useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
+import { PoundIcon, LockIcon } from '@/components';
+import theme from '@/styles/theme';
 
 interface Props {
   secret?: boolean;
@@ -55,9 +57,8 @@ const DescriptionInput = styled.input`
 
 const InputBox = styled.div<Props>`
   position: relative;
-  &::before {
+  .icon {
     position: absolute;
-    content: ${(props) => (props.secret ? 'O' : '#')};
     top: 15px;
     left: 10px;
     color: ${(props) => props.theme.color.gray2};
@@ -152,6 +153,8 @@ const CreateButton = styled.button<Props>`
       `}
 `;
 
+const IconBox = styled.div``;
+
 interface CreateChannelModalBodyProps {
   setCreateChannelModalVisible: (fn: (state: boolean) => boolean) => void;
   setSecret: (fn: (state: boolean) => boolean) => void;
@@ -209,7 +212,14 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
             <LabelContent>Name</LabelContent>
             {name === '' && <NameAlert>Don't forget to name your channel.</NameAlert>}
           </LabelBox>
-          <InputBox secret={secret}>
+          <InputBox>
+            <IconBox className="icon">
+              {secret ? (
+                <LockIcon size="12px" color={theme.color.black6} />
+              ) : (
+                <PoundIcon size="12px" color={theme.color.black6} />
+              )}
+            </IconBox>
             <NameInput onChange={changeName} value={name} required placeholder="e.g. plan-budget" />
           </InputBox>
         </Label>

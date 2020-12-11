@@ -10,10 +10,13 @@ import { JoinedUser } from '@/types';
 
 const Container = styled.div`
   background-color: ${(props) => props.color};
-  border: 1px solid #1d9bd1;
+  box-shadow: inset 0 0 0 1px rgba(29, 155, 209);
   ${flex('center', 'flex-start', 'row')};
   position: relative;
   cursor: pointer;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999em;
+  margin-right: 0.2rem;
 `;
 // EFEFEF
 
