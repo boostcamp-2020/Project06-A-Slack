@@ -29,7 +29,7 @@ const Form = styled.form`
 const SignupButton = styled(FormButton)`
   &:disabled {
     cursor: initial;
-    background-color: gray;
+    background-color: ${(props) => props.theme.color.lightGray1};
   }
 `;
 
