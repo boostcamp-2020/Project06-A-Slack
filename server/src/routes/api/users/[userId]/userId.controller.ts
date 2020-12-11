@@ -150,14 +150,11 @@ export const getNotJoinedChannels = async (
   next: NextFunction,
 ): Promise<void> => {
   const { userId } = req.params;
-  if (verifyRequestData([userId])) {
-    try {
-      const [notJoinedChannelList] = await channelModel.getNotJoinedChannels({ userId: +userId });
-      res.status(200).json({ notJoinedChannelList });
-      return;
-    } catch (err) {
-      next(err);
-    }
+  try {
+    const [notJoinedChannelList] = await channelModel.getNotJoinedChannels({ userId: +userId });
+    res.status(200).json({ notJoinedChannelList });
+    return;
+  } catch (err) {
+    next(err);
   }
-  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
