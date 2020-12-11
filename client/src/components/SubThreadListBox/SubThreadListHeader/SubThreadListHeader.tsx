@@ -14,8 +14,6 @@ const Container = styled.div`
   width: 100%;
   height: 4.3rem;
   flex-shrink: 0;
-  padding: 0 1.3rem;
-  border-bottom: 1px solid ${(props) => props.theme.color.lightGray2};
   background-color: white;
 `;
 
@@ -71,9 +69,9 @@ const SubThreadListHeader = () => {
         <LeftTopBox>Thread</LeftTopBox>
         <LeftBottomBox>
           {current?.isPublic ? (
-            <PoundIcon size="11px" color={theme.color.lightBlack} />
+            <PoundIcon size="10px" color={theme.color.black5} />
           ) : (
-            <LockIcon size="11px" color={theme.color.lightBlack} />
+            <LockIcon size="10px" color={theme.color.black5} />
           )}
           <ChannelTitle>{current?.name}</ChannelTitle>
         </LeftBottomBox>

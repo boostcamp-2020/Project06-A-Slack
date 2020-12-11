@@ -1,30 +1,58 @@
 /* eslint-disable no-shadow */
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import { JoinedUser } from '@/types';
+import { RightIcon, RightArrowLineIcon } from '@/components';
+import theme from '@/styles/theme';
 
-const Container = styled.div`
-  padding: ${(props) => props.theme.size.m};
-`;
+const Container = styled.div``;
 
 const ListItem = styled.div`
   ${flex('center', 'space-between')}
+  cursor: pointer;
 `;
 
 const ListItemName = styled.div`
   color: ${(props) => props.theme.color.black3};
-  font-size: ${(props) => props.theme.size.m};
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: ${(props) => props.theme.color.lightBlack};
 `;
 
-const Arrow = styled.div`
-  color: ${(props) => props.theme.color.gray3};
+interface ArrowProps {
+  rotated: boolean;
+}
+
+const ArrowIcon = styled.div<ArrowProps>`
+  ${flex()}
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.4rem;
+  color: ${(props) => props.theme.color.white};
   font-size: ${(props) => props.theme.size.m};
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  transition: 0.3s;
+  ${(props) =>
+    props.rotated &&
+    css`
+      transform: rotate(90deg);
+      transition: 0.3s;
+    `}
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  outline: 0;
+  cursor: pointer;
 `;
 
 const ItemBox = styled.div`
-  margin-top: 20px;
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border-bottom: 1px solid ${(props) => props.theme.color.lightGray2};
 `;
 
 const MemberItem = styled.div`
@@ -45,9 +73,6 @@ const MemberInfo = styled.div`
 export const DetailList: React.FC = () => {
   const [about, setAbout] = useState(false);
   const [members, setMembers] = useState(false);
-  const [organization, setOrganization] = useState(false);
-  const [pinned, setPinned] = useState(false);
-  const [files, setFiles] = useState(false);
   const { users } = useChannelState();
 
   const openAbout = () => {
@@ -58,30 +83,22 @@ export const DetailList: React.FC = () => {
     setMembers((members) => !members);
   };
 
-  const openOrganizations = () => {
-    setOrganization((organization) => !organization);
-  };
-
-  const openPinned = () => {
-    setPinned((pinned) => !pinned);
-  };
-
-  const openFiles = () => {
-    setFiles((files) => !files);
-  };
-
   return (
     <Container>
       <ItemBox>
         <ListItem onClick={openAbout}>
           <ListItemName>About</ListItemName>
-          <Arrow>{about ? '∨' : '＞'}</Arrow>
+          <ArrowIcon rotated={about}>
+            <RightArrowLineIcon size="14px" color={theme.color.black5} />
+          </ArrowIcon>
         </ListItem>
       </ItemBox>
       <ItemBox onClick={openMembers}>
         <ListItem>
           <ListItemName>Members</ListItemName>
-          <Arrow>{members ? '∨' : '＞'}</Arrow>
+          <ArrowIcon rotated={members}>
+            <RightArrowLineIcon size="14px" color={theme.color.black5} />
+          </ArrowIcon>
         </ListItem>
         {members &&
           users?.map((user: JoinedUser) => (
@@ -90,24 +107,6 @@ export const DetailList: React.FC = () => {
               <MemberInfo>{user.displayName}</MemberInfo>
             </MemberItem>
           ))}
-      </ItemBox>
-      <ItemBox>
-        <ListItem onClick={openOrganizations}>
-          <ListItemName>Organizations</ListItemName>
-          <Arrow>{organization ? '∨' : '＞'}</Arrow>
-        </ListItem>
-      </ItemBox>
-      <ItemBox>
-        <ListItem onClick={openPinned}>
-          <ListItemName>Pinned</ListItemName>
-          <Arrow>{pinned ? '∨' : '＞'}</Arrow>
-        </ListItem>
-      </ItemBox>
-      <ItemBox>
-        <ListItem onClick={openFiles}>
-          <ListItemName>Files</ListItemName>
-          <Arrow>{files ? '∨' : '＞'}</Arrow>
-        </ListItem>
       </ItemBox>
     </Container>
   );
