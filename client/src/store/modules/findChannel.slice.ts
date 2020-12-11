@@ -3,11 +3,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Channel } from '@/types';
 
-interface ChannelState {
+interface FindChannelState {
   notJoinedchannelList: Channel[];
 }
 
-const initialState: ChannelState = {
+const initialState: FindChannelState = {
   notJoinedchannelList: [],
 };
 
