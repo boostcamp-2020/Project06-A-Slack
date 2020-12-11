@@ -76,36 +76,21 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 /**
  * POST /api/auth/signup
  */
-export const signup = (req: Request, res: Response, next: NextFunction): void => {
-  const form = new IncomingForm();
-  form.uploadDir = './src/public/imgs/profile/';
-  form.keepExtensions = true;
-  form.multiples = true;
-
-  form.on('fileBegin', (name, file) => {
-    const imgSrc = `${Date.now()}_${file.name}`;
-    // eslint-disable-next-line no-param-reassign
-    file.path = `${form.uploadDir}${imgSrc}`;
-  });
-
-  const port = req.app.get('port');
-  const prefix = `${req.protocol}://${req.hostname}${port !== 80 ? `:${port}` : ''}`;
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
+export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { email, pw, displayName } = req.body;
+  if (verifyRequestData([email, pw, displayName])) {
+    // TODO: signup
+    try {
+      await userModel.addUser({ email, pw, displayName });
+      res.status(200).end();
+      return;
+    } catch (err) {
       next(err);
       return;
     }
-
-    const { email, pw } = fields;
-    const { image } = files;
-    console.log(image.name);
-    if (verifyRequestData([email, pw])) {
-      // TODO : DB에 회원정보 저장
-      res.json({ email, image: `${prefix}/${image.name}` });
-      return;
-    }
-    res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
-  });
+    return;
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
