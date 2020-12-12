@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
 interface InfiniteScrollProps {
-  root: HTMLElement | null;
+  root?: HTMLElement | null;
   target: HTMLElement | null;
   onIntersect: (a: any) => any;
-  threshold: number;
-  rootMargin: string;
+  threshold?: number;
+  rootMargin?: string;
 }
 
 export const useInfinteScroll = ({
@@ -23,10 +23,11 @@ export const useInfinteScroll = ({
     });
 
     if (!target) {
-      throw new Error('IntersectionObserver를 지정할 대상이 필요합니다.');
+      return;
     }
 
     observer.observe(target);
+    // eslint-disable-next-line consistent-return
     return () => {
       observer.unobserve(target);
     };
