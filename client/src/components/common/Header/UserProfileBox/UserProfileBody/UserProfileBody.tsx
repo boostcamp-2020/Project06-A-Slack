@@ -97,6 +97,7 @@ interface ProfileBodyProps {
 
 const fileReader = new FileReader();
 const phoneNumberRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+const imageRegex = /.(jpg|jpeg|png|gif)$/i;
 
 const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: ProfileBodyProps) => {
   const dispatch = useDispatch();
@@ -166,7 +167,7 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
       alert('첨부파일은 5MB 이하의 파일만 첨부 가능합니다.');
       return;
     }
-    if (!file[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
+    if (!file[0].name.match(imageRegex)) {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
