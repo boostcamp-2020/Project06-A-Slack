@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setScrollable } from '@/store/modules/thread.slice';
-import { Thread, User } from '@/types';
+import { getThreadRequest, setFirstScrollUsed, setScrollable } from '@/store/modules/thread.slice';
+import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
 import { useInfinteScroll, useThreadState, useUserState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import loadingColorIcon from '@/public/icon/loading-color.svg';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -34,41 +35,48 @@ const LoadingIcon = styled.img`
 let isFirstLoad = true;
 
 const ThreadList = () => {
+  const { channelId }: { channelId: string } = useParams();
+
   const dispatch = useDispatch();
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const LoadingBoxRef = useRef<HTMLDivElement>(null);
-  const nextThreadId = useState<number | null>(null);
-  const { userInfo } = useUserState();
-  const { threadList, canScroll, loading } = useThreadState();
 
-  const onIntersect = () => {
+  const { userInfo } = useUserState();
+  const { threadList, canScroll, loading, nextThreadId, firstScrollUsed } = useThreadState();
+
+  const onIntersect = ([{ isIntersecting }]: any) => {
     if (isFirstLoad) {
       isFirstLoad = false;
       return;
     }
-    if (loading) {
-      return;
+    if (isIntersecting && !loading) {
+      dispatch(getThreadRequest({ channelId: +channelId, nextThreadId }));
     }
-    console.log('reload!!');
   };
 
   useEffect(() => {
+    dispatch(getThreadRequest({ channelId: +channelId, nextThreadId }));
+  }, [channelId]);
+
+  useEffect(() => {
     if (threadList && threadList.length) {
-      if (canScroll) {
+      if (!firstScrollUsed) {
+        bottomRef.current?.scrollIntoView();
+        dispatch(setFirstScrollUsed({ firstScrollUsed: true }));
+      }
+      if (canScroll && threadList[threadList.length - 1].userId === userInfo?.id) {
         bottomRef.current?.scrollIntoView();
         dispatch(setScrollable({ canScroll: false }));
-      }
-      if (threadList[threadList.length - 1].userId === userInfo?.id) {
-        bottomRef.current?.scrollIntoView();
       }
     }
   }, [threadList?.length]);
 
-  useInfinteScroll({ target: LoadingBoxRef.current, onIntersect, threshold: 0.95 });
+  useInfinteScroll({ target: LoadingBoxRef.current, onIntersect, threshold: 0.9 });
 
   return (
     <Container>
-      {nextThreadId && (
+      {nextThreadId && nextThreadId !== 1 && (
         <LoadingBox ref={LoadingBoxRef}>
           Loading history...
           <LoadingIcon src={loadingColorIcon} />
