@@ -7,6 +7,7 @@ import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/compo
 import theme from '@/styles/theme';
 import { flex, hoverActive } from '@/styles/mixin';
 
+import { useChannelState } from '@/hooks';
 import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
@@ -91,16 +92,12 @@ interface RightSideParams {
   channelId: string;
 }
 
-interface ThreadListHeaderProps {
-  current: Channel | null;
-  users: JoinedUser[];
-}
-
-const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
+const ThreadListHeader = () => {
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
   const { channelId }: RightSideParams = useParams();
+  const { current, users } = useChannelState();
 
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
@@ -181,4 +178,4 @@ const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
   );
 };
 
-export default React.memo(ThreadListHeader);
+export default ThreadListHeader;

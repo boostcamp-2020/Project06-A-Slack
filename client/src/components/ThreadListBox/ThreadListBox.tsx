@@ -6,8 +6,7 @@ import { INPUT_BOX_TYPE } from '@/utils/constants';
 import { ThreadInputBox } from '@/components';
 import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
-import { useChannelState, useSocketState, useThreadState, useUserState } from '@/hooks';
-import { getThreadRequest } from '@/store/modules/thread.slice';
+import { useChannelState, useSocketState, useUserState } from '@/hooks';
 import { isNumberTypeValue } from '@/utils/utils';
 import ThreadList from './ThreadList/ThreadList';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
@@ -29,9 +28,8 @@ const ThreadListBox = () => {
 
   const dispatch = useDispatch();
 
-  const { current, users } = useChannelState();
+  const { current } = useChannelState();
   const { userInfo } = useUserState();
-  const { threadList, canScroll } = useThreadState();
   const { socket } = useSocketState();
 
   useEffect(() => {
@@ -39,9 +37,8 @@ const ThreadListBox = () => {
       if (userInfo) {
         dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo.id }));
       }
-      dispatch(getThreadRequest({ channelId: Number(channelId) }));
     }
-  }, [channelId, userInfo]);
+  }, [userInfo]);
 
   useEffect(() => {
     if (current && socket) {
@@ -56,13 +53,9 @@ const ThreadListBox = () => {
 
   return (
     <Container>
-      {threadList && (
-        <>
-          <ThreadListHeader current={current} users={users} />
-          <ThreadList threadList={threadList} canScroll={canScroll} userInfo={userInfo} />
-          <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.THREAD} />
-        </>
-      )}
+      <ThreadListHeader />
+      <ThreadList />
+      <ThreadInputBox inputBoxType={INPUT_BOX_TYPE.THREAD} />
     </Container>
   );
 };

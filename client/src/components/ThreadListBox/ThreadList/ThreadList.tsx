@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setScrollable } from '@/store/modules/thread.slice';
 import { Thread, User } from '@/types';
 import { ThreadItem } from '@/components';
-import { useInfinteScroll } from '@/hooks';
+import { useInfinteScroll, useThreadState, useUserState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import loadingColorIcon from '@/public/icon/loading-color.svg';
 
@@ -31,22 +31,22 @@ const LoadingIcon = styled.img`
   padding-top: 5px;
 `;
 
-interface ThreadListProps {
-  threadList: Thread[] | null;
-  canScroll: boolean;
-  userInfo: User | null;
-}
-
 let isFirstLoad = true;
 
-const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
+const ThreadList = () => {
   const dispatch = useDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
   const LoadingBoxRef = useRef<HTMLDivElement>(null);
+  const nextThreadId = useState<number | null>(null);
+  const { userInfo } = useUserState();
+  const { threadList, canScroll, loading } = useThreadState();
 
   const onIntersect = () => {
     if (isFirstLoad) {
       isFirstLoad = false;
+      return;
+    }
+    if (loading) {
       return;
     }
     console.log('reload!!');
@@ -68,10 +68,12 @@ const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
 
   return (
     <Container>
-      <LoadingBox ref={LoadingBoxRef}>
-        Loading history...
-        <LoadingIcon src={loadingColorIcon} />
-      </LoadingBox>
+      {nextThreadId && (
+        <LoadingBox ref={LoadingBoxRef}>
+          Loading history...
+          <LoadingIcon src={loadingColorIcon} />
+        </LoadingBox>
+      )}
       {threadList?.map((thread: Thread, index: number) => (
         <ThreadItem
           key={thread.id}
@@ -84,4 +86,4 @@ const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
   );
 };
 
-export default React.memo(ThreadList);
+export default ThreadList;
