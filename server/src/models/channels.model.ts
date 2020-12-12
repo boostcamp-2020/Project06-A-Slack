@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import pool from '@/db';
+import { Model } from '@/types';
 
 interface createInfo {
   ownerId: number;
@@ -15,13 +16,13 @@ interface TopicInfo {
   topic: string;
 }
 
-export const channelModel = {
+export const channelModel: Model = {
   getChannels() {
     const sql = `SELECT channel_type as channelType, id, description, is_public as isPublic, 
     member_count as memeberCount, name, owner_id as ownerId, topic FROM channel WHERE is_deleted = 0 AND is_public=1`;
     return pool.query(sql);
   },
-  getJoinChannels({ userId }: { userId: number }): any {
+  getJoinChannels({ userId }: { userId: number }) {
     const sql = `SELECT channel_type as channelType, id, description, is_public as isPublic, 
     member_count as memeberCount, name, owner_id as ownerId, topic
     FROM channel 
@@ -31,7 +32,7 @@ export const channelModel = {
     `;
     return pool.execute(sql, [userId]);
   },
-  getChannelUser({ channelId }: { channelId: number }): any {
+  getChannelUser({ channelId }: { channelId: number }) {
     const sql = `SELECT user_channel.user_id as userId, 
     user.display_name as displayName, user.image as image
     FROM user
@@ -40,7 +41,7 @@ export const channelModel = {
     `;
     return pool.execute(sql, [channelId]);
   },
-  getChannel({ channelId }: { channelId: number }): any {
+  getChannel({ channelId }: { channelId: number }) {
     const sql = `SELECT id, owner_id as ownerId, name, channel_type as channelType, is_public as isPublic, 
     is_deleted as isDeleted, member_count as memberCount, description, topic
     FROM channel
@@ -48,14 +49,7 @@ export const channelModel = {
     `;
     return pool.execute(sql, [channelId]);
   },
-  createChannel({
-    ownerId,
-    name,
-    channelType,
-    isPublic,
-    description,
-    memberCount,
-  }: createInfo): any {
+  createChannel({ ownerId, name, channelType, isPublic, description, memberCount }: createInfo) {
     const sql = `INSERT INTO channel (owner_id, name, channel_type, is_public, description, member_count) VALUES (?, ?, ?, ?, ?, ?)`;
     return pool.execute(sql, [ownerId, name, channelType, isPublic, description, memberCount]);
   },
@@ -67,7 +61,7 @@ export const channelModel = {
     joinUsers: [number[]];
     prevMemberCount: number;
     channelId: number;
-  }): any {
+  }) {
     const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES ?;
     UPDATE channel SET member_count = ? WHERE id = ?`;
     return pool.query(sql, [joinUsers, joinUsers.length + prevMemberCount, channelId]);
@@ -76,7 +70,7 @@ export const channelModel = {
     const sql = 'UPDATE channel SET topic = ? WHERE id = ?';
     return pool.execute(sql, [topic, channelId]);
   },
-  getNotJoinedChannels({ userId }: { userId: number }): any {
+  getNotJoinedChannels({ userId }: { userId: number }) {
     const sql = `SELECT * FROM channel
     WHERE channel.is_public = 1 AND channel.id NOT IN
     (SELECT channel.id FROM channel 

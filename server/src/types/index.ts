@@ -1,3 +1,5 @@
+import { FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
+
 export interface Error {
   status?: number;
   message?: string;
@@ -14,3 +16,11 @@ export interface User {
 }
 
 export type AuthToken = 'ACCESS' | 'REFRESH';
+
+export type PoolReturnType = Promise<
+  [RowDataPacket[][] | RowDataPacket[] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]]
+>;
+
+export interface Model {
+  [key: string]: (param?: any) => any;
+}
