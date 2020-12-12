@@ -35,14 +35,26 @@ export const getChannelThreads = async (
   next: NextFunction,
 ): Promise<void> => {
   const { channelId } = req.params;
+  const { nextThreadId } = req.query;
   if (Number.isNaN(Number(channelId))) {
     next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
     return;
   }
-  try {
-    const [threadList] = await threadModel.getThreadListInChannel({ channelId: +channelId });
 
-    res.json({ threadList });
+  if (nextThreadId && Number.isNaN(+nextThreadId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+
+  try {
+    const options = { channelId: +channelId, limit: 22 };
+    if (nextThreadId) {
+      Object.assign(options, { nextThreadId: +nextThreadId });
+    }
+    const [threadList] = await threadModel.getThreadListByLimit({ ...options });
+    const threadListLength = threadList.length;
+    const nextId = threadListLength ? threadList[threadListLength - 1].id : null;
+    res.json({ threadList: threadList.reverse(), nextThreadId: nextId });
   } catch (err) {
     next(err);
   }
