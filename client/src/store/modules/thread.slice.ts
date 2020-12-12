@@ -15,6 +15,7 @@ const threadListState: ThreadState = {
 
 export interface getThreadRequestPayload {
   channelId: number;
+  nextThreadId?: number;
 }
 
 export interface createThreadRequestPayload {
