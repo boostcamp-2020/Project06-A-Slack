@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { setScrollable } from '@/store/modules/thread.slice';
 import { Thread, User } from '@/types';
 import { ThreadItem } from '@/components';
+import { useInfinteScroll } from '@/hooks';
+import { flex } from '@/styles/mixin';
+import loadingColorIcon from '@/public/icon/loading-color.svg';
 
 const Container = styled.div`
   width: 100%;
@@ -14,6 +17,19 @@ const Container = styled.div`
 `;
 
 const Bottom = styled.div``;
+const LoadingBox = styled.div`
+  width: 100%;
+  height: 4rem;
+  flex-shrink: 0;
+  background-color: white;
+  ${flex()};
+`;
+
+const LoadingIcon = styled.img`
+  width: 35px;
+  height: 35px;
+  padding-top: 5px;
+`;
 
 interface ThreadListProps {
   threadList: Thread[] | null;
@@ -21,9 +37,20 @@ interface ThreadListProps {
   userInfo: User | null;
 }
 
+let isFirstLoad = true;
+
 const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
   const dispatch = useDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const LoadingBoxRef = useRef<HTMLDivElement>(null);
+
+  const onIntersect = () => {
+    if (isFirstLoad) {
+      isFirstLoad = false;
+      return;
+    }
+    console.log('reload!!');
+  };
 
   useEffect(() => {
     if (threadList && threadList.length) {
@@ -37,8 +64,14 @@ const ThreadList = ({ threadList, canScroll, userInfo }: ThreadListProps) => {
     }
   }, [threadList?.length]);
 
+  useInfinteScroll({ target: LoadingBoxRef.current, onIntersect, threshold: 0.95 });
+
   return (
     <Container>
+      <LoadingBox ref={LoadingBoxRef}>
+        Loading history...
+        <LoadingIcon src={loadingColorIcon} />
+      </LoadingBox>
       {threadList?.map((thread: Thread, index: number) => (
         <ThreadItem
           key={thread.id}
