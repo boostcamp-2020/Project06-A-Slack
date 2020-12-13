@@ -81,7 +81,7 @@ const Description = styled.span`
 
 const Bottom = styled.div`
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 `;
 
 const Bottomheader = styled.div`
