@@ -41,11 +41,9 @@ const Container = styled.div<ContainerProps>`
 `;
 
 const Header = styled.div`
+  position: relative;
   ${flex()}
   width: 100%;
-  min-height: 5.6rem;
-  padding: 1.4rem;
-  padding-left: 1.7rem;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
 `;
@@ -56,9 +54,13 @@ const Title = styled.div`
 
 const Body = styled.div`
   width: 100%;
-  padding: 0 1.4rem;
   border-radius: 0 0 5px 5px;
   overflow: auto;
+`;
+
+const CloseIcon = styled.div`
+  position: absolute;
+  right: 20px;
 `;
 
 interface DimModalProps {
@@ -94,7 +96,9 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
       <Container ref={containerRef} width={width}>
         <Header>
           <Title>{header}</Title>
-          <ModalCloseBox handleClose={handleClose} />
+          <CloseIcon>
+            <ModalCloseBox handleClose={handleClose} />
+          </CloseIcon>
         </Header>
         <Body>{body}</Body>
       </Container>
