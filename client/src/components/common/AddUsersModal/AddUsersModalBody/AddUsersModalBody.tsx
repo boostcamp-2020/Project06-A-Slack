@@ -214,14 +214,16 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         value={text}
         placeholder="Search by name, email, or user group"
       />
-      <SearchedUserContainer>
-        {searchedUserList?.map((user: User) => (
-          <SearchedUserBox key={user.id} onClick={() => clickUser(user)}>
-            <ProfileImg src={user.image} />
-            <UserName>{user.displayName}</UserName>
-          </SearchedUserBox>
-        ))}
-      </SearchedUserContainer>
+      {visible && (
+        <SearchedUserContainer>
+          {searchedUserList?.map((user: User) => (
+            <SearchedUserBox key={user.id} onClick={() => clickUser(user)}>
+              <ProfileImg src={user.image} />
+              <UserName>{user.displayName}</UserName>
+            </SearchedUserBox>
+          ))}
+        </SearchedUserContainer>
+      )}
       <ModalFooter>
         <SubmitButton onClick={clickSubmitButton} disabled={pickedUsers.length === 0}>
           Done
