@@ -56,8 +56,8 @@ interface AddTopicModalBodyProps {
 const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   setAddTopicModalVisible,
 }: AddTopicModalBodyProps) => {
-  const [content, setContent] = useState('');
   const { current } = useChannelState();
+  const [content, setContent] = useState(current?.topic ?? '');
   const dispatch = useDispatch();
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
