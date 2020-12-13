@@ -46,20 +46,24 @@ function* loadMyChannels(action: PayloadAction<{ userId: number }>) {
   }
 }
 
-function* loadChannel(action: any) {
+function* loadChannel(action: PayloadAction<{ channelId: number; userId: number }>) {
+  const { channelId, userId } = action.payload;
   try {
     const { data, status } = yield call(channelService.getChannel, {
-      channelId: action.payload.channelId,
+      channelId,
     });
+
     if (status === 200) {
       yield put(loadChannelSuccess({ channel: data.channel, users: data.users }));
     }
+
     const { status: resStatus } = yield call(channelService.modifyLastChannel, {
-      lastChannelId: action.payload.channelId,
-      userId: action.payload.userId,
+      lastChannelId: channelId,
+      userId,
     });
+
     if (resStatus === 200) {
-      yield put(setLastChannel({ channelId: action.payload.channelId }));
+      yield put(setLastChannel({ channelId }));
     }
   } catch (err) {
     yield put(loadChannelFailure(err));
