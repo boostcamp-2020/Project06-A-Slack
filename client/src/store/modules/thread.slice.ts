@@ -43,18 +43,34 @@ const threadSlice = createSlice({
   reducers: {
     getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
       state.loading = true;
+      state.nextThreadId = null;
+      state.firstScrollUsed = false;
     },
     getThreadSuccess(state, action: PayloadAction<getThreadSuccessPayload>) {
       const { threadList, nextThreadId } = action.payload;
-      if (threadList) {
-        state.threadList = state.threadList ? [...threadList, ...state.threadList] : threadList;
-        state.nextThreadId = nextThreadId;
-      } else {
-        state.nextThreadId = -1;
-      }
       state.loading = false;
+      state.threadList = threadList;
+      console.log('set to next', nextThreadId);
+      state.nextThreadId = nextThreadId;
     },
     getThreadFailure(state, action) {
+      state.loading = false;
+    },
+    addThreadListRequest(state, action: PayloadAction<getThreadRequestPayload>) {
+      state.loading = true;
+    },
+    addThreadListSuccess(
+      state,
+      action: PayloadAction<{ threadList: Thread[]; nextThreadId: number }>,
+    ) {
+      const { threadList, nextThreadId } = action.payload;
+      state.loading = false;
+      if (state.threadList && threadList.length) {
+        state.threadList = threadList.concat(state.threadList);
+      }
+      state.nextThreadId = nextThreadId;
+    },
+    addThreadListFailure(state) {
       state.loading = false;
     },
     createThreadRequest(state, action: PayloadAction<createThreadRequestPayload>) {},
@@ -97,6 +113,9 @@ const threadSlice = createSlice({
     setFirstScrollUsed(state, { payload }: PayloadAction<{ firstScrollUsed: boolean }>) {
       state.firstScrollUsed = payload.firstScrollUsed;
     },
+    resetNextThreadId(state) {
+      state.nextThreadId = null;
+    },
     changeEmojiOfThread(
       state,
       { payload }: PayloadAction<{ emoji: EmojiOfThread[]; threadId: number }>,
@@ -124,6 +143,10 @@ export const {
   changeEmojiOfThread,
   updateSubThreadInfo,
   setFirstScrollUsed,
+  resetNextThreadId,
+  addThreadListRequest,
+  addThreadListSuccess,
+  addThreadListFailure,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

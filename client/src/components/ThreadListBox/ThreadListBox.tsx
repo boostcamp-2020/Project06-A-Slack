@@ -8,7 +8,11 @@ import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
 import { useChannelState, useSocketState, useUserState } from '@/hooks';
 import { isNumberTypeValue } from '@/utils/utils';
-import { getThreadRequest } from '@/store/modules/thread.slice';
+import {
+  getThreadRequest,
+  resetNextThreadId,
+  setFirstScrollUsed,
+} from '@/store/modules/thread.slice';
 import ThreadList from './ThreadList/ThreadList';
 import ThreadListHeader from './ThreadListHeader/ThreadListHeader';
 
@@ -38,6 +42,8 @@ const ThreadListBox = () => {
       if (userInfo) {
         dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo.id }));
       }
+      // dispatch(resetNextThreadId());
+      // dispatch(setFirstScrollUsed({ firstScrollUsed: false }));
       dispatch(getThreadRequest({ channelId: Number(channelId) }));
     }
   }, [channelId, userInfo]);

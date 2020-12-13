@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { getThreadRequest, setFirstScrollUsed, setScrollable } from '@/store/modules/thread.slice';
+import {
+  addThreadListRequest,
+  getThreadRequest,
+  setFirstScrollUsed,
+  setScrollable,
+} from '@/store/modules/thread.slice';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
 import { useInfinteScroll, useThreadState, useUserState } from '@/hooks';
@@ -20,7 +25,7 @@ const Container = styled.div`
 const Bottom = styled.div``;
 const LoadingBox = styled.div`
   width: 100%;
-  height: 4rem;
+  height: 5rem;
   flex-shrink: 0;
   background-color: white;
   ${flex()};
@@ -31,8 +36,6 @@ const LoadingIcon = styled.img`
   height: 35px;
   padding-top: 5px;
 `;
-
-let isFirstLoad = true;
 
 const ThreadList = () => {
   const { channelId }: { channelId: string } = useParams();
@@ -45,18 +48,28 @@ const ThreadList = () => {
   const { userInfo } = useUserState();
   const { threadList, canScroll, loading, nextThreadId, firstScrollUsed } = useThreadState();
 
-  const onIntersect = ([{ isIntersecting }]: any) => {
-    if (isFirstLoad) {
-      isFirstLoad = false;
+  const onIntersect = ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
+    // console.log('call');
+    if (isIntersecting) {
+      // console.log('inter');
+    }
+    if (!firstScrollUsed) {
+      // console.log('dont fetch');
       return;
     }
     if (isIntersecting && !loading) {
-      dispatch(getThreadRequest({ channelId: +channelId, nextThreadId }));
+      console.log('get list from id:', nextThreadId);
+      if (nextThreadId !== -1) {
+        dispatch(addThreadListRequest({ channelId: +channelId, nextThreadId }));
+      }
     }
   };
 
   useEffect(() => {
-    dispatch(getThreadRequest({ channelId: +channelId, nextThreadId }));
+    if (Number.isInteger(+channelId)) {
+      console.log('reload');
+      dispatch(getThreadRequest({ channelId: Number(channelId) }));
+    }
   }, [channelId]);
 
   useEffect(() => {
@@ -73,10 +86,11 @@ const ThreadList = () => {
   }, [threadList?.length]);
 
   useInfinteScroll({ target: LoadingBoxRef.current, onIntersect, threshold: 0.9 });
+  console.log('id', nextThreadId);
 
   return (
     <Container>
-      {nextThreadId && nextThreadId !== 1 && (
+      {nextThreadId && nextThreadId !== -1 && (
         <LoadingBox ref={LoadingBoxRef}>
           Loading history...
           <LoadingIcon src={loadingColorIcon} />

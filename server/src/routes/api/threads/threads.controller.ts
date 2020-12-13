@@ -47,13 +47,15 @@ export const getChannelThreads = async (
   }
 
   try {
-    const options = { channelId: +channelId, limit: 22 };
+    const options = { channelId: +channelId, limit: 15 };
     if (nextThreadId) {
       Object.assign(options, { nextThreadId: +nextThreadId });
     }
+    console.log('input nextid', nextThreadId);
     const [threadList] = await threadModel.getThreadListByLimit({ ...options });
     const threadListLength = threadList.length;
-    const nextId = threadListLength ? threadList[threadListLength - 1].id : null;
+    const nextId = threadListLength ? threadList[threadListLength - 1].id : -1;
+    console.log('next****', nextId);
     res.json({ threadList: threadList.reverse(), nextThreadId: nextId });
   } catch (err) {
     next(err);
