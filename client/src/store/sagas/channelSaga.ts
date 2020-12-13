@@ -1,6 +1,6 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
-import { Channel, JoinedUser } from '@/types';
+import { Channel, JoinedUser, User } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
   loadChannelsRequest,
@@ -100,8 +100,14 @@ function* createChannel(action: any) {
         users,
         channelId: data.channel.insertId,
       });
+
+      const members = users.map((user: User) => {
+        const { id, displayName, image } = user;
+        return { userId: id, displayName, image };
+      });
+
       if (joinStatus === 200) {
-        yield put(joinChannelSuccess({ users }));
+        yield put(joinChannelSuccess({ users: members }));
         yield put(setRedirect({ url: `/client/1/${data.channel.insertId}` }));
       }
     }
