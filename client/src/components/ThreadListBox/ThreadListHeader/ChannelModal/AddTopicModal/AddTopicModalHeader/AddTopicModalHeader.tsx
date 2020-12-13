@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const HeaderContent = styled.div`
-  font-size: ${(props) => props.theme.size.l};
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: ${(props) => props.theme.color.lightBlack};
 `;
 
 const AddTopicModalHeader: React.FC = () => {

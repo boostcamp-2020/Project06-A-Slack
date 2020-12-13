@@ -31,7 +31,7 @@ interface ContainerProps {
 
 const Container = styled.div<ContainerProps>`
   ${flex('center', 'center', 'column')}
-  width: 43rem;
+  width: ${(props) => props.width ?? '43rem'};
   height: auto;
   max-height: 90vh;
   background-color: white;
@@ -66,6 +66,7 @@ interface DimModalProps {
   body: React.ReactNode;
   visible: boolean;
   setVisible: (a: any) => any;
+  width?: string;
 }
 
 const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
@@ -73,6 +74,7 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
   body,
   visible,
   setVisible,
+  width,
 }: PropsWithChildren<DimModalProps>) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -89,7 +91,7 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
 
   return (
     <DimLayer visible={visible}>
-      <Container ref={containerRef}>
+      <Container ref={containerRef} width={width}>
         <Header>
           <Title>{header}</Title>
           <ModalCloseBox handleClose={handleClose} />

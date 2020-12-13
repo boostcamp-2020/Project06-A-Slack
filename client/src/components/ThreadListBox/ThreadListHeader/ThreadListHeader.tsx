@@ -123,6 +123,7 @@ const ThreadListHeader = () => {
       )}
       {addTopicModalVisible && (
         <DimModal
+          width="520px"
           header={<AddTopicModalHeader />}
           body={<AddTopicModalBody setAddTopicModalVisible={clickAddTopicModal} />}
           visible={addTopicModalVisible}
