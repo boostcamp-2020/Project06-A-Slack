@@ -7,7 +7,9 @@ import { useUserState } from '@/hooks';
 import { editUserRequest } from '@/store/modules/user.slice';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
-const Container = styled.form``;
+const Container = styled.form`
+  padding: 1.4rem;
+`;
 
 const ModalBody = styled.div`
   ${flex()};
@@ -78,7 +80,7 @@ const RemovePhotoButton = styled.button`
 const ModalFooter = styled.div`
   width: 100%;
   height: 100%;
-  margin: 2rem 0;
+  margin: 1rem 0;
   border-radius: 0 0 5px 5px;
   ${flex('center', 'flex-end')};
 `;
