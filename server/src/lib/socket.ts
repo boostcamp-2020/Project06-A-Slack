@@ -261,7 +261,10 @@ export const bindSocketServer = (server: http.Server): void => {
           return;
         }
 
-        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
+        if (
+          subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS ||
+          subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL
+        ) {
           if (channel?.id && users) {
             try {
               const joinUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
@@ -285,6 +288,13 @@ export const bindSocketServer = (server: http.Server): void => {
                 channel,
                 room,
               });
+
+              if (subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL) {
+                socket.emit(MESSAGE, {
+                  type,
+                  subType: CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL,
+                });
+              }
             } catch (err) {
               console.log(err);
             }
