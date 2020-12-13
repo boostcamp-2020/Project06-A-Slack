@@ -45,9 +45,9 @@ const channelSlice = createSlice({
     loadChannelsFailure(state, action) {
       // todo 에러처리
     },
-    loadMyChannelsRequest(state, action) {},
-    loadMyChannelsSuccess(state, action) {
-      state.myChannelList = action.payload.joinChannelList;
+    loadMyChannelsRequest(state, action: PayloadAction<{ userId: number }>) {},
+    loadMyChannelsSuccess(state, action: PayloadAction<{ myChannelList: Channel[] }>) {
+      state.myChannelList = action.payload.myChannelList;
     },
     loadMyChannelsFailure(state, action) {
       // todo 에러처리

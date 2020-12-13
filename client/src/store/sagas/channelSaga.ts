@@ -34,11 +34,12 @@ function* loadChannels() {
   }
 }
 
-function* loadMyChannels(action: any) {
+function* loadMyChannels(action: PayloadAction<{ userId: number }>) {
+  const { userId } = action.payload;
   try {
-    const { data, status } = yield call(channelService.getJoinChannels, { userId: action.payload });
+    const { data, status } = yield call(channelService.getJoinChannels, { userId });
     if (status === 200) {
-      yield put(loadMyChannelsSuccess({ joinChannelList: data.channelList }));
+      yield put(loadMyChannelsSuccess({ myChannelList: data.channelList }));
     }
   } catch (err) {
     yield put(loadMyChannelsFailure(err));
