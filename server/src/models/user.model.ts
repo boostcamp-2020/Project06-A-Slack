@@ -57,12 +57,12 @@ export const userModel: Model = {
         SELECT user_id FROM user_channel
         WHERE channel_id = ?
       )`;
-      return pool.execute(sql, [`${displayName}%`, channelId]);
+      return pool.execute(sql, [`%${displayName}%`, channelId]);
     }
     const sql = `SELECT id, email, display_name as displayName, phone_number as phoneNumber, image
     FROM user
     WHERE display_name LIKE ?`;
-    return pool.execute(sql, [`${displayName}%`]);
+    return pool.execute(sql, [`%${displayName}%`]);
   },
   addUser({ email, pw, displayName }: { email: string; pw: string; displayName: string }) {
     const sql = `INSERT INTO user (email, pw, display_name) VALUES (?, ?, ?);`;
