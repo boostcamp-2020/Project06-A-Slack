@@ -53,7 +53,7 @@ const channelSlice = createSlice({
       // todo 에러처리
     },
     loadChannelRequest(state, action: PayloadAction<{ channelId: number; userId: number }>) {},
-    loadChannelSuccess(state, action) {
+    loadChannelSuccess(state, action: PayloadAction<{ channel: Channel; users: JoinedUser[] }>) {
       state.current = action.payload.channel;
       state.users = action.payload.users;
     },
@@ -75,9 +75,6 @@ const channelSlice = createSlice({
     },
     joinChannelFailure(state, action) {
       // todo 에러처리
-    },
-    setCurrent(state, action) {
-      state.current = action.payload;
     },
     unsetUnreadFlag(state, { payload }: PayloadAction<{ channelId: number }>) {
       const { channelId } = payload;
@@ -145,7 +142,6 @@ export const {
   joinChannelRequset,
   joinChannelSuccess,
   joinChannelFailure,
-  setCurrent,
   unsetUnreadFlag,
   updateChannelUnread,
   updateChannelTopic,

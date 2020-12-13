@@ -169,7 +169,6 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const { userInfo } = useUserState();
-  const { current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
