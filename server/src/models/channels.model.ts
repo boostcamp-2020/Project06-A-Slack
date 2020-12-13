@@ -54,17 +54,17 @@ export const channelModel: Model = {
     return pool.execute(sql, [ownerId, name, channelType, isPublic, description, memberCount]);
   },
   joinChannel({
-    joinUsers,
+    selectedUsers,
     prevMemberCount,
     channelId,
   }: {
-    joinUsers: [number[]];
+    selectedUsers: [number[]];
     prevMemberCount: number;
     channelId: number;
   }) {
     const sql = `INSERT INTO user_channel (user_id, channel_id) VALUES ?;
     UPDATE channel SET member_count = ? WHERE id = ?`;
-    return pool.query(sql, [joinUsers, joinUsers.length + prevMemberCount, channelId]);
+    return pool.query(sql, [selectedUsers, selectedUsers.length + prevMemberCount, channelId]);
   },
   modifyTopic({ channelId, topic }: TopicInfo) {
     const sql = 'UPDATE channel SET topic = ? WHERE id = ?';

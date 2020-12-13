@@ -21,7 +21,11 @@ export const getChannel = async (req: Request, res: Response, next: NextFunction
 /**
  * POST /api/channels/:channelId/invite
  */
-export const inviteChannel = async (req: Request, res: Response, next: NextFunction) => {
+export const inviteChannel = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { channelId } = req.params;
   const { users } = req.body;
   if (Number.isNaN(+channelId)) {
@@ -29,13 +33,13 @@ export const inviteChannel = async (req: Request, res: Response, next: NextFunct
     return;
   }
   if (verifyRequestData([users, channelId])) {
-    const joinUsers: [number[]] = users.reduce((acc: [number[]], cur: User) => {
+    const selectedUsers: [number[]] = users.reduce((acc: [number[]], cur: User) => {
       acc.push([cur.id, +channelId]);
       return acc;
     }, []);
     const [joinedUsers] = await channelModel.getChannelUser({ channelId: +channelId });
     await channelModel.joinChannel({
-      joinUsers,
+      selectedUsers,
       prevMemberCount: joinedUsers.length,
       channelId: +channelId,
     });
@@ -49,7 +53,11 @@ export const inviteChannel = async (req: Request, res: Response, next: NextFunct
  * POST /api/channels/:channelId/topic
  */
 
-export const modifyTopic = async (req: Request, res: Response, next: NextFunction) => {
+export const modifyTopic = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { channelId } = req.params;
   const { topic } = req.body;
   if (Number.isNaN(+channelId)) {
@@ -67,7 +75,7 @@ export const modifyTopic = async (req: Request, res: Response, next: NextFunctio
 /**
  * POST /api/channels/:channelId
  */
-export const modifyChannel = (req: Request, res: Response, next: NextFunction) => {
+export const modifyChannel = (req: Request, res: Response, next: NextFunction): void => {
   const { title } = req.body;
   if (verifyRequestData([title])) {
     res.status(200).end();
