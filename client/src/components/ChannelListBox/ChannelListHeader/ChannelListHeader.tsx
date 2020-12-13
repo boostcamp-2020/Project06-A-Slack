@@ -2,11 +2,15 @@ import React, { useState, ReactElement, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { DimModal, ArrowDownIcon, PlusIcon, DotIcon, Popover } from '@/components';
 import {
+  DimModal,
+  ArrowDownIcon,
+  PlusIcon,
+  DotIcon,
+  Popover,
   AddUsersModalHeader,
   AddUsersModalBody,
-} from '@/components/ThreadListBox/ThreadListHeader/ChannelModal/AddUsersModal';
+} from '@/components';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
 import { FindChannelModalBody, FindChannelModalHeader } from './FindChannelModal';
 

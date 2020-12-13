@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannelState } from '@/hooks';
 import { JoinedUser } from '@/types';
-import { DimModal } from '@/components';
-import { AddUsersModalHeader, AddUsersModalBody } from '../../AddUsersModal';
+import { DimModal, AddUsersModalHeader, AddUsersModalBody } from '@/components';
 
 const AddButton = styled.button`
   display: block;
