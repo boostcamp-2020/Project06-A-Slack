@@ -5,6 +5,7 @@ const HeaderContent = styled.div`
   font-size: 1.4rem;
   font-weight: 800;
   color: ${(props) => props.theme.color.lightBlack};
+  padding: 0.5rem 0;
 `;
 
 const AddTopicModalHeader: React.FC = () => {

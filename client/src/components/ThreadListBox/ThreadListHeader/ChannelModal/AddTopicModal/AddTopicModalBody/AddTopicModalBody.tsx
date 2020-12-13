@@ -9,7 +9,7 @@ import { FormInput, SubmitButton as SB, CancelButton as CB } from '@/styles/shar
 
 const ModalBody = styled.div`
   ${flex()};
-  padding: 0 0.5rem;
+  padding: 0 1.4rem;
 `;
 
 const TextArea = styled(FormInput)`
@@ -22,7 +22,8 @@ const TextArea = styled(FormInput)`
 const ModalFooter = styled.div`
   width: 100%;
   height: 100%;
-  margin: 1.5rem 0;
+  margin: 1.4rem 0;
+  padding: 0 1rem;
   border-radius: 0 0 5px 5px;
   ${flex('center', 'flex-end')};
 `;
@@ -49,7 +50,8 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   const dispatch = useDispatch();
 
   const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
+    const { value } = e.target;
+    setContent(value);
   };
 
   const clickCancel = () => {
@@ -57,6 +59,10 @@ const AddTopicModalBody: React.FC<AddTopicModalBodyProps> = ({
   };
 
   const clickSubmit = () => {
+    if (!content.trim()) {
+      alert('토픽을 입력해주세요');
+      return;
+    }
     if (current?.id) {
       dispatch(
         sendMessageRequest({
