@@ -61,24 +61,12 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
 
   const clickAddUsersModal = () => {
-    // setShowUsersModalVisible((state: boolean) => !state);
     setAddUsersModalVisible(true);
   };
 
   return (
     <>
-      {addUsersModalVisible && (
-        <DimModal
-          header={<AddUsersModalHeader isDM={false} />}
-          body={
-            <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} isDM={false} />
-          }
-          visible={addUsersModalVisible}
-          setVisible={clickAddUsersModal}
-        />
-      )}
       <Main>
-        <AddButton onClick={clickAddUsersModal}>Add Users</AddButton>
         {users?.map((user: JoinedUser) => (
           <Item key={user.userId}>
             <UserInfo>
