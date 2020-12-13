@@ -168,7 +168,6 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
 }: CreateChannelModalBodyProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { userId } = useAuthState();
   const { userInfo } = useUserState();
   const { current } = useChannelState();
   const dispatch = useDispatch();
@@ -187,16 +186,21 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
 
   const clickCreateChannel = async () => {
     const isPublic = secret ? 0 : 1;
-    dispatch(
-      createChannelRequest({
-        ownerId: userId,
-        channelType: 1,
-        isPublic,
-        name,
-        description,
-        users: [userInfo],
-      }),
-    );
+    if (userInfo) {
+      dispatch(
+        createChannelRequest({
+          channelInfo: {
+            ownerId: userInfo.id,
+            channelType: 1,
+            isPublic,
+            name,
+            description,
+            memberCount: 1,
+          },
+          user: userInfo,
+        }),
+      );
+    }
     setCreateChannelModalVisible((state) => !state);
   };
 

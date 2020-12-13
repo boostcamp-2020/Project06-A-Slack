@@ -141,6 +141,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
 
   const clickSubmitButton = () => {
     if (!isDM && pickedUsers.length !== 0) {
+      // 채널에 유저 추가하는 동작
       if (current && pickedUsers) {
         const users = pickedUsers.map((pu) => ({
           userId: pu.id,
@@ -159,6 +160,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         );
       }
     } else if (userInfo) {
+      // DM을 생성하는 동작
       const name = makeDMRoomName(pickedUsers, userInfo.displayName);
 
       const users: JoinedUser[] = pickedUsers.reduce(
