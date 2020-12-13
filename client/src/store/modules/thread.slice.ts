@@ -9,6 +9,7 @@ interface ThreadState {
   loading: boolean;
   nextThreadId: number | null;
   firstScrollUsed: boolean;
+  prevTopThreadId: number | null;
 }
 
 const threadListState: ThreadState = {
@@ -17,8 +18,13 @@ const threadListState: ThreadState = {
   loading: false,
   nextThreadId: null,
   firstScrollUsed: false,
+  prevTopThreadId: null,
 };
 
+export interface addThreadRequestPayload {
+  channelId: number;
+  nextThreadId: number;
+}
 export interface getThreadRequestPayload {
   channelId: number;
   nextThreadId?: number | null;
@@ -50,14 +56,14 @@ const threadSlice = createSlice({
       const { threadList, nextThreadId } = action.payload;
       state.loading = false;
       state.threadList = threadList;
-      console.log('set to next', nextThreadId);
       state.nextThreadId = nextThreadId;
     },
     getThreadFailure(state, action) {
       state.loading = false;
     },
-    addThreadListRequest(state, action: PayloadAction<getThreadRequestPayload>) {
+    addThreadListRequest(state, { payload }: PayloadAction<addThreadRequestPayload>) {
       state.loading = true;
+      state.prevTopThreadId = payload.nextThreadId;
     },
     addThreadListSuccess(
       state,

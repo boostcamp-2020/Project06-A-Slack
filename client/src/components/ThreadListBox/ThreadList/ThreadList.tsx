@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {
   addThreadListRequest,
-  getThreadRequest,
   setFirstScrollUsed,
   setScrollable,
 } from '@/store/modules/thread.slice';
@@ -23,6 +22,9 @@ const Container = styled.div`
 `;
 
 const Bottom = styled.div``;
+
+const Wrapper = styled.div``;
+
 const LoadingBox = styled.div`
   width: 100%;
   height: 5rem;
@@ -43,66 +45,72 @@ const ThreadList = () => {
   const dispatch = useDispatch();
 
   const bottomRef = useRef<HTMLDivElement>(null);
-  const LoadingBoxRef = useRef<HTMLDivElement>(null);
+
+  const [observeTarget, setObserveTarget] = useState<HTMLDivElement | null>(null);
 
   const { userInfo } = useUserState();
-  const { threadList, canScroll, loading, nextThreadId, firstScrollUsed } = useThreadState();
+  const {
+    threadList,
+    canScroll,
+    loading,
+    nextThreadId,
+    firstScrollUsed,
+    prevTopThreadId,
+  } = useThreadState();
 
   const onIntersect = ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
-    // console.log('call');
-    if (isIntersecting) {
-      // console.log('inter');
-    }
-    if (!firstScrollUsed) {
-      // console.log('dont fetch');
-      return;
-    }
     if (isIntersecting && !loading) {
-      console.log('get list from id:', nextThreadId);
-      if (nextThreadId !== -1) {
+      if (nextThreadId && nextThreadId !== -1) {
         dispatch(addThreadListRequest({ channelId: +channelId, nextThreadId }));
       }
     }
   };
 
   useEffect(() => {
-    if (Number.isInteger(+channelId)) {
-      console.log('reload');
-      dispatch(getThreadRequest({ channelId: Number(channelId) }));
-    }
-  }, [channelId]);
-
-  useEffect(() => {
-    if (threadList && threadList.length) {
+    if (threadList) {
       if (!firstScrollUsed) {
         bottomRef.current?.scrollIntoView();
         dispatch(setFirstScrollUsed({ firstScrollUsed: true }));
       }
-      if (canScroll && threadList[threadList.length - 1].userId === userInfo?.id) {
+    }
+  }, [threadList?.length, firstScrollUsed]);
+
+  useEffect(() => {
+    if (threadList) {
+      if (
+        threadList.length &&
+        canScroll &&
+        threadList[threadList.length - 1].userId === userInfo?.id
+      ) {
         bottomRef.current?.scrollIntoView();
         dispatch(setScrollable({ canScroll: false }));
+      }
+      if (prevTopThreadId && !canScroll) {
+        const prevTopElement = document.getElementById(`thread-${prevTopThreadId}`);
+        prevTopElement?.scrollIntoView();
       }
     }
   }, [threadList?.length]);
 
-  useInfinteScroll({ target: LoadingBoxRef.current, onIntersect, threshold: 0.9 });
-  console.log('id', nextThreadId);
+  useInfinteScroll({ target: observeTarget, onIntersect, threshold: 0.95 });
 
   return (
     <Container>
-      {nextThreadId && nextThreadId !== -1 && (
-        <LoadingBox ref={LoadingBoxRef}>
-          Loading history...
-          <LoadingIcon src={loadingColorIcon} />
-        </LoadingBox>
+      {threadList && (
+        <>
+          {nextThreadId && nextThreadId !== -1 && (
+            <LoadingBox ref={setObserveTarget}>
+              Loading history...
+              <LoadingIcon src={loadingColorIcon} />
+            </LoadingBox>
+          )}
+          {threadList?.map((thread: Thread, index: number) => (
+            <Wrapper id={`thread-${thread.id}`} key={thread.id}>
+              <ThreadItem thread={thread} prevThreadUserId={threadList[index - 1]?.userId} />
+            </Wrapper>
+          ))}
+        </>
       )}
-      {threadList?.map((thread: Thread, index: number) => (
-        <ThreadItem
-          key={thread.id}
-          thread={thread}
-          prevThreadUserId={threadList[index - 1]?.userId}
-        />
-      ))}
       <Bottom ref={bottomRef} />
     </Container>
   );

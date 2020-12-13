@@ -100,13 +100,11 @@ function subscribeSocket(socket: Socket) {
       if (isDMEvent(data)) {
         // TODO: DM 이벤트 처리
       }
-
-      console.log('from server, message: ', data);
     };
 
     const handleDisconnect = (data: any) => {
       // TODO: 서버로부터 연결이 끊겼을 때의 처리
-      console.log('disconnected');
+      console.log('disconnected from server');
     };
 
     socket.on(MESSAGE, handleMessage);

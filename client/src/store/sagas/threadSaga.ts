@@ -11,6 +11,7 @@ import {
   addThreadListRequest,
   addThreadListSuccess,
   addThreadListFailure,
+  addThreadRequestPayload,
 } from '@/store/modules/thread.slice';
 import { threadService } from '@/services/thread.service';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -55,7 +56,7 @@ function* watchcreateThread() {
   }
 }
 
-function* addThreadList({ payload }: PayloadAction<getThreadRequestPayload>) {
+function* addThreadList({ payload }: PayloadAction<addThreadRequestPayload>) {
   const { channelId, nextThreadId: nid } = payload;
   try {
     const { data, status } = yield call(threadService.getThreadList, {
