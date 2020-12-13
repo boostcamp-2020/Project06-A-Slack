@@ -17,7 +17,8 @@
 <br/>
 
 ## 🧱 기술 스택
-![tech_stack](https://user-images.githubusercontent.com/13213473/102011613-a485a280-3d88-11eb-8dc6-c3e5364f369a.jpg)
+
+<img src="https://user-images.githubusercontent.com/13213473/102011613-a485a280-3d88-11eb-8dc6-c3e5364f369a.jpg" alt="tech_stack" height="60%" width="60%"/> 
 
 <br/>
 
