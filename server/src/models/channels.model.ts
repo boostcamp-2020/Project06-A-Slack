@@ -77,7 +77,8 @@ export const channelModel = {
     return pool.execute(sql, [topic, channelId]);
   },
   getNotJoinedChannels({ userId }: { userId: number }): any {
-    const sql = `SELECT * FROM channel
+    const sql = `SELECT id, owner_id as ownerId, name, channel_type as channelType, is_public as isPublic, 
+    is_deleted as isDeleted, member_count as memberCount, description, topic FROM channel
     WHERE channel.is_public = 1 AND channel.id NOT IN
     (SELECT channel.id FROM channel 
     JOIN user_channel 
