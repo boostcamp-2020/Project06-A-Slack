@@ -9,7 +9,7 @@ interface EditUserParams {
   setDefault: number;
 }
 
-interface MatchUsers {
+interface SearchUserParams {
   displayName: string;
   channelId: number;
   isDM: boolean;
@@ -49,7 +49,7 @@ export const userModel: Model = {
     const sql = `UPDATE user SET display_name=?, phone_number=? WHERE id=?;`;
     return pool.execute(sql, [displayName, phoneNumber, id]);
   },
-  matchUsers({ displayName, channelId, isDM }: MatchUsers) {
+  searchUsers({ displayName, channelId, isDM }: SearchUserParams) {
     if (!isDM) {
       const sql = `SELECT id, email, display_name as displayName, phone_number as phoneNumber, image
       FROM user

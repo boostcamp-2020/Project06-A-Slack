@@ -13,7 +13,7 @@ export const userService: Service = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
-  matchUsers({
+  searchUsers({
     displayName,
     channelId,
     isDM,
@@ -22,7 +22,7 @@ export const userService: Service = {
     channelId: number;
     isDM: boolean;
   }) {
-    return API.post('/api/users/match', { displayName, channelId, isDM });
+    return API.post('/api/users/search', { displayName, channelId, isDM });
   },
   getNotJoinedChannels({ userId }: { userId: number }) {
     return API.get(`/api/users/${userId}/channels/unsubscribed`);

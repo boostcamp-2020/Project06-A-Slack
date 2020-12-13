@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { matchedUsersRequest } from '@/store/modules/user.slice';
+import { searchUserRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { JoinedUser, User } from '@/types';
@@ -21,7 +21,7 @@ const SearchInput = styled(FormInput)`
   font-size: ${(props) => props.theme.size.l};
 `;
 
-const MatchedUserContainer = styled.div`
+const SearchedUserContainer = styled.div`
   width: 100%;
   max-height: 10rem;
   overflow-y: scroll;
@@ -29,7 +29,7 @@ const MatchedUserContainer = styled.div`
   padding: 0 0.2rem;
 `;
 
-const MatchedUserBox = styled.div`
+const SearchedUserBox = styled.div`
   padding: 5px;
   border-radius: 5px;
   ${flex('center', 'flex-start')}
@@ -102,7 +102,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
-  const { matchedUsersInfo } = useUserState();
+  const { searchedUserList } = useUserState();
   const [visible, setVisible] = useState(false);
   const [pickedUsers, setPickedUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
@@ -114,9 +114,9 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   useEffect(() => {
     const debounce = setTimeout(() => {
       dispatch(
-        matchedUsersRequest({
+        searchUserRequest({
           isDM,
-          pickUsers: pickedUsers,
+          pickedUsers,
           displayName: text,
           channelId: +channelId,
         }),
@@ -214,14 +214,14 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         value={text}
         placeholder="Search by name, email, or user group"
       />
-      <MatchedUserContainer>
-        {matchedUsersInfo?.map((user: User) => (
-          <MatchedUserBox key={user.id} onClick={() => clickUser(user)}>
+      <SearchedUserContainer>
+        {searchedUserList?.map((user: User) => (
+          <SearchedUserBox key={user.id} onClick={() => clickUser(user)}>
             <ProfileImg src={user.image} />
             <UserName>{user.displayName}</UserName>
-          </MatchedUserBox>
+          </SearchedUserBox>
         ))}
-      </MatchedUserContainer>
+      </SearchedUserContainer>
       <ModalFooter>
         <SubmitButton onClick={clickSubmitButton} disabled={pickedUsers.length === 0}>
           Done
