@@ -47,7 +47,7 @@ export const CHANNEL_SUBTYPE = {
   UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
   UPDATE_CHANNEL_USERS: 'update_channel_users',
   MAKE_DM: 'make_dm',
-  JOIN_CHANNEL: `join_channel`,
+  FIND_AND_JOIN_CHANNEL: `find_and_join_channel`,
 };
 
 export const GET_EMOJI_OF_THREAD_SQL = `
