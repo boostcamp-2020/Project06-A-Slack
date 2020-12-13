@@ -146,6 +146,7 @@ const ChannelListBox = ({
     <>
       {createChannelModalVisible && (
         <DimModal
+          width="520px"
           header={<CreateChannelModalHeader secret={secret} />}
           body={
             // eslint-disable-next-line react/jsx-wrap-multilines
@@ -161,6 +162,7 @@ const ChannelListBox = ({
       )}
       {addUsersModalVisible && (
         <DimModal
+          width="520px"
           header={<AddUsersModalHeader isDM={channelType === CHANNEL_TYPE.DM} />}
           body={<AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} isDM />}
           visible={addUsersModalVisible}
@@ -169,6 +171,7 @@ const ChannelListBox = ({
       )}
       {findChannelsModalVisible && (
         <DimModal
+          width="520px"
           header={<FindChannelModalHeader />}
           body={<FindChannelModalBody setFindChannelModalVisible={setFindChannelsModalVisible} />}
           visible={findChannelsModalVisible}
