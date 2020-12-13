@@ -7,7 +7,6 @@ import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { LockIcon, PoundIcon } from '@/components';
 import theme from '@/styles/theme';
 import { flex } from '@/styles/mixin';
-import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
 
 const Container = styled.div`
   ${flex('center', 'space-between')}
