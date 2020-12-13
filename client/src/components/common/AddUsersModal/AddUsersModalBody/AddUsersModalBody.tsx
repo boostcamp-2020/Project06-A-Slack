@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { makeDMRoomName } from '@/utils/utils';
 import { FormInput, SubmitButton as SB, CancelButton as CB } from '@/styles/shared';
+import { CloseIconBox } from '@/components';
 
 const Container = styled.div`
   padding: 0 28px;
@@ -18,6 +19,7 @@ const Container = styled.div`
 const SearchInput = styled(FormInput)`
   width: 100%;
   height: 50px;
+  margin-bottom: 1rem;
   font-size: ${(props) => props.theme.size.l};
 `;
 
@@ -25,7 +27,6 @@ const SearchedUserContainer = styled.div`
   width: 100%;
   max-height: 10rem;
   overflow-y: scroll;
-  margin-top: 1rem;
   padding: 0 0.2rem;
 `;
 
@@ -41,35 +42,30 @@ const SearchedUserBox = styled.div`
   }
 `;
 
+const PickedUserBox = styled.div`
+  border-radius: 5px;
+  background-color: rgba(29, 155, 209, 0.1);
+  ${flex()};
+`;
+
+const RemoveBox = styled.div``;
+
 const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 5px 0 0 5px;
 `;
 
 const UserName = styled.div`
-  font-size: 0.9rem;
-  margin-left: 0.5rem;
+  font-size: 1rem;
+  margin: 0 0.7rem;
+  padding-bottom: 0.25rem;
   font-weight: bold;
 `;
 
 const SearchResultBox = styled.div`
   ${flex('center', 'flex-start')}
-`;
-
-const PickedUserBox = styled.div`
-  border-radius: 5px;
-  display: inline-flex;
-`;
-
-const LeftBox = styled.div`
-  ${flex()}
-  margin-right: 5px;
-`;
-
-const RemoveButton = styled(CB)`
-  font-size: 0.8rem;
 `;
 
 const ModalFooter = styled.div`
@@ -139,7 +135,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
     setText('');
   };
 
-  const clickRemoveButton = (userId: number) => {
+  const handleRemoveUser = (userId: number) => {
     setPickedUsers(pickedUsers.filter((user: User) => user.id !== userId));
   };
 
@@ -200,11 +196,11 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
       <SearchResultBox>
         {pickedUsers.map((user) => (
           <PickedUserBox key={user.id}>
-            <LeftBox>
-              <ProfileImg src={user.image} />
-              <UserName>{user.displayName}</UserName>
-            </LeftBox>
-            <RemoveButton onClick={() => clickRemoveButton(user.id)}>삭제</RemoveButton>
+            <ProfileImg src={user.image} />
+            <UserName>{user.displayName}</UserName>
+            <RemoveBox onClick={() => handleRemoveUser(user.id)}>
+              <CloseIconBox />
+            </RemoveBox>
           </PickedUserBox>
         ))}
       </SearchResultBox>
