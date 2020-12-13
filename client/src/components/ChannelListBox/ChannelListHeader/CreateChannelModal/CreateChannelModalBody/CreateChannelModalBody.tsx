@@ -136,6 +136,7 @@ const CreateButton = styled(SubmitButton)<Props>`
   margin-left: auto;
   &:disabled {
     cursor: initial;
+    color: ${(props) => props.theme.color.black3};
     border: 1px solid ${(props) => props.theme.color.gray6};
     background-color: ${(props) => props.theme.color.gray3};
   }
