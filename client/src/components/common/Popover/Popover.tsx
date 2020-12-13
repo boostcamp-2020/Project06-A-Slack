@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, PropsWithChildren, ReactNode } from 'react';
+import React, { useRef, PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 import { flex, modalBoxShadow } from '@/styles/mixin';
 import { useOnClickOutside } from '@/hooks';
@@ -44,7 +44,7 @@ const Container = styled.div<ContainerProps>`
   border-radius: 5px;
   padding: 0.8rem 0;
   outline: 0;
-  ${modalBoxShadow}
+  border: 1px solid ${(props) => props.theme.color.gray3};
   ${flex('center', 'center', 'column')}
   z-index: 10;
 `;

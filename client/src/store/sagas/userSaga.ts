@@ -8,9 +8,9 @@ import {
   editUserSuccess,
   editUserFailure,
   EditUserRequestPayload,
-  matchUsersRequest,
-  matchUsersSuccess,
-  matchUsersFailure,
+  matchedUsersRequest,
+  matchedUsersSuccess,
+  matchedUsersFailure,
 } from '@/store/modules/user.slice';
 import { userService } from '@/services';
 import { User } from '@/types';
@@ -80,22 +80,22 @@ function* watchEditUser() {
   yield takeLatest(editUserRequest, editUser);
 }
 
-function* matchUsers({
+function* setMatchedUsers({
   payload,
 }: {
   payload: { isDM: boolean; pickUsers: User[]; displayName: string; channelId: number };
 }) {
   try {
     if (payload.displayName.length === 0) {
-      yield put(matchUsersSuccess({ matchUsersInfo: [] }));
+      yield put(matchedUsersSuccess({ matchedUsersInfo: [] }));
     } else {
-      const { data, status } = yield call(userService.matchUsers, {
+      const { data, status } = yield call(userService.matchedUsers, {
         displayName: payload.displayName,
         channelId: payload.channelId,
         isDM: payload.isDM,
       });
 
-      const matchUsersInfo = data.matchUsersInfo.reduce((acc: User[], cur: User) => {
+      const matchedUsersInfo = data.matchedUsersInfo.reduce((acc: User[], cur: User) => {
         if (payload.pickUsers.every((pu) => cur.id !== pu.id)) {
           acc.push(cur);
         }
@@ -103,18 +103,18 @@ function* matchUsers({
       }, []);
 
       if (status === 200) {
-        yield put(matchUsersSuccess({ matchUsersInfo }));
+        yield put(matchedUsersSuccess({ matchedUsersInfo }));
       }
     }
   } catch (err) {
-    yield put(matchUsersFailure({ err }));
+    yield put(matchedUsersFailure({ err }));
   }
 }
 
-function* watchMatchUsers() {
-  yield takeLatest(matchUsersRequest, matchUsers);
+function* watchMatchedUserRequest() {
+  yield takeLatest(matchedUsersRequest, setMatchedUsers);
 }
 
 export default function* userSaga() {
-  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchMatchUsers)]);
+  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchMatchedUserRequest)]);
 }

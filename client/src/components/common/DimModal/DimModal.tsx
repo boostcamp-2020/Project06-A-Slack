@@ -44,6 +44,7 @@ const Header = styled.div`
   position: relative;
   ${flex()}
   width: 100%;
+  padding: 12px 28px;
   border-radius: 5px 5px 0 0;
   overflow: hidden;
 `;

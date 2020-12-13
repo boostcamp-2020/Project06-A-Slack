@@ -11,7 +11,7 @@ export interface UserState {
     success: boolean;
     err: Error | null;
   };
-  matchUsersInfo: User[] | null;
+  matchedUsersInfo: User[] | null;
 }
 
 const userState: UserState = {
@@ -21,7 +21,7 @@ const userState: UserState = {
     success: false,
     err: null,
   },
-  matchUsersInfo: [],
+  matchedUsersInfo: [],
 };
 
 export interface EditUserPayload {
@@ -73,11 +73,11 @@ const userSlice = createSlice({
       state.edit.success = false;
       state.edit.err = payload.err;
     },
-    matchUsersRequest(state, action) {},
-    matchUsersSuccess(state, action) {
-      state.matchUsersInfo = action.payload.matchUsersInfo;
+    matchedUsersRequest(state, action) {},
+    matchedUsersSuccess(state, action) {
+      state.matchedUsersInfo = action.payload.matchedUsersInfo;
     },
-    matchUsersFailure(state, action) {},
+    matchedUsersFailure(state, action) {},
     setLastChannel(state, { payload }: PayloadAction<{ channelId: number }>) {
       if (state.userInfo) {
         state.userInfo.lastChannelId = payload.channelId;
@@ -94,9 +94,9 @@ export const {
   editUserRequest,
   editUserSuccess,
   editUserFailure,
-  matchUsersRequest,
-  matchUsersSuccess,
-  matchUsersFailure,
+  matchedUsersRequest,
+  matchedUsersSuccess,
+  matchedUsersFailure,
   setLastChannel,
 } = userSlice.actions;
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
-import { matchUsersRequest } from '@/store/modules/user.slice';
+import { matchedUsersRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { JoinedUser, User } from '@/types';
@@ -9,74 +9,82 @@ import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { makeDMRoomName } from '@/utils/utils';
+import { FormInput, SubmitButton as SB, CancelButton as CB } from '@/styles/shared';
 
-interface Props {
-  visible: boolean;
-}
+const Container = styled.div`
+  padding: 0 28px;
+`;
 
-const Container = styled.div``;
-
-const Input = styled.input`
-  display: block;
-  width: 100%;
-  font-size: ${(props) => props.theme.size.l};
-  border: 1px ${(props) => props.theme.color.gray4} solid;
-  border-radius: 3px;
+const SearchInput = styled(FormInput)`
   width: 100%;
   height: 50px;
-  padding: 0 5px;
-  &:focus {
-    transition: 0.3s;
-    box-shadow: ${(props) => props.theme.boxShadow.skyblue};
+  font-size: ${(props) => props.theme.size.l};
+`;
+
+const MatchedUserContainer = styled.div`
+  width: 100%;
+  max-height: 10rem;
+  overflow-y: scroll;
+  margin-top: 1rem;
+  padding: 0 0.2rem;
+`;
+
+const MatchedUserBox = styled.div`
+  padding: 5px;
+  border-radius: 5px;
+  ${flex('center', 'flex-start')}
+  cursor: pointer;
+  color: ${(props) => props.theme.color.lightBlack};
+  &:hover {
+    color: white;
+    background-color: ${(props) => props.theme.color.blue1};
   }
 `;
 
-const Item = styled.div`
-  padding: 5px;
+const ProfileImg = styled.img`
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 5px;
+`;
+
+const UserName = styled.div`
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  font-weight: bold;
+`;
+
+const SearchResultBox = styled.div`
   ${flex('center', 'flex-start')}
 `;
 
-const Img = styled.img`
-  display: block;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 2px;
-`;
-
-const Name = styled.div`
-  font-size: 0.8rem;
-  margin-left: 10px;
-`;
-
-const MatchUsersInfoBox = styled.div<Props>`
-  display: ${(props) => (props.visible ? 'block' : 'none')};
-  margin-top: 1rem;
-  overflow-y: scroll;
-`;
-
-const PickUsersBox = styled.div`
-  ${flex('center', 'flex-start')}
-`;
-
-const PickUserItem = styled.div`
-  border: 1px ${(props) => props.theme.color.gray4} solid;
-  border-radius: 2px;
+const PickedUserBox = styled.div`
+  border-radius: 5px;
   display: inline-flex;
-  margin: 0 0 5px 10px;
-  padding: 2px;
 `;
 
-const PickUserInfo = styled.div`
+const LeftBox = styled.div`
   ${flex()}
   margin-right: 5px;
 `;
 
-const RemoveButton = styled.button`
+const RemoveButton = styled(CB)`
   font-size: 0.8rem;
 `;
 
-const SubmitButton = styled.button`
-  font-size: 1.5rem;
+const ModalFooter = styled.div`
+  padding: 20px 0;
+`;
+
+const SubmitButton = styled(SB)`
+  &:disabled {
+    cursor: initial;
+    color: ${(props) => props.theme.color.black3};
+    background-color: ${(props) => props.theme.color.lightGray1};
+    border: 1px solid ${(props) => props.theme.color.lightGray1};
+  }
+  ${flex()};
+  margin-left: auto;
 `;
 
 interface AddUsersModalBodyProps {
@@ -94,16 +102,25 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
 }: AddUsersModalBodyProps) => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
-  const { matchUsersInfo } = useUserState();
+  const { matchedUsersInfo } = useUserState();
   const [visible, setVisible] = useState(false);
-  const [pickUsers, setPickUsers] = useState<User[]>([]);
+  const [pickedUsers, setPickedUsers] = useState<User[]>([]);
   const { channelId }: RightSideParams = useParams();
   const { current } = useChannelState();
   const { userInfo } = useUserState();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     const debounce = setTimeout(() => {
-      dispatch(matchUsersRequest({ isDM, pickUsers, displayName: text, channelId: +channelId }));
+      dispatch(
+        matchedUsersRequest({
+          isDM,
+          pickUsers: pickedUsers,
+          displayName: text,
+          channelId: +channelId,
+        }),
+      );
       setVisible(true);
     }, 250);
 
@@ -117,24 +134,24 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
   };
 
   const clickUser = (user: User) => {
-    setPickUsers([...pickUsers, user]);
+    setPickedUsers([...pickedUsers, user]);
     setVisible(false);
     setText('');
   };
 
   const clickRemoveButton = (userId: number) => {
-    setPickUsers(pickUsers.filter((user: User) => user.id !== userId));
+    setPickedUsers(pickedUsers.filter((user: User) => user.id !== userId));
   };
 
   const clickSubmitButton = () => {
-    if (!isDM && pickUsers.length !== 0) {
-      if (current && pickUsers) {
-        // TODO !! 로직 변경
-        const users = pickUsers.map((pu) => ({
+    if (!isDM && pickedUsers.length !== 0) {
+      if (current && pickedUsers) {
+        const users = pickedUsers.map((pu) => ({
           userId: pu.id,
           displayName: pu.displayName,
           image: pu.image,
         }));
+
         dispatch(
           sendMessageRequest({
             type: SOCKET_MESSAGE_TYPE.CHANNEL,
@@ -146,9 +163,9 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         );
       }
     } else if (userInfo) {
-      const name = makeDMRoomName(pickUsers, userInfo.displayName);
+      const name = makeDMRoomName(pickedUsers, userInfo.displayName);
 
-      const users: JoinedUser[] = pickUsers.reduce(
+      const users: JoinedUser[] = pickedUsers.reduce(
         (acc: JoinedUser[], cur) => {
           acc.push({ userId: cur.id, displayName: cur.displayName, image: cur.image });
           return acc;
@@ -180,29 +197,36 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
 
   return (
     <Container>
-      <PickUsersBox>
-        {pickUsers.map((user) => (
-          <PickUserItem key={user.id}>
-            <PickUserInfo>
-              <Img src={user.image} />
-              <Name>{user.displayName}</Name>
-            </PickUserInfo>
+      <SearchResultBox>
+        {pickedUsers.map((user) => (
+          <PickedUserBox key={user.id}>
+            <LeftBox>
+              <ProfileImg src={user.image} />
+              <UserName>{user.displayName}</UserName>
+            </LeftBox>
             <RemoveButton onClick={() => clickRemoveButton(user.id)}>삭제</RemoveButton>
-          </PickUserItem>
+          </PickedUserBox>
         ))}
-      </PickUsersBox>
-      <Input onChange={changeText} value={text} />
-      <MatchUsersInfoBox visible={visible}>
-        {matchUsersInfo?.map((user: User) => (
-          <Item key={user.id} onClick={() => clickUser(user)}>
-            <Img src={user.image} />
-            <Name>{user.displayName}</Name>
-          </Item>
+      </SearchResultBox>
+      <SearchInput
+        ref={inputRef}
+        onChange={changeText}
+        value={text}
+        placeholder="Search by name, email, or user group"
+      />
+      <MatchedUserContainer>
+        {matchedUsersInfo?.map((user: User) => (
+          <MatchedUserBox key={user.id} onClick={() => clickUser(user)}>
+            <ProfileImg src={user.image} />
+            <UserName>{user.displayName}</UserName>
+          </MatchedUserBox>
         ))}
-      </MatchUsersInfoBox>
-      <SubmitButton onClick={clickSubmitButton} disabled={pickUsers.length === 0}>
-        제출
-      </SubmitButton>
+      </MatchedUserContainer>
+      <ModalFooter>
+        <SubmitButton onClick={clickSubmitButton} disabled={pickedUsers.length === 0}>
+          Done
+        </SubmitButton>
+      </ModalFooter>
     </Container>
   );
 };
