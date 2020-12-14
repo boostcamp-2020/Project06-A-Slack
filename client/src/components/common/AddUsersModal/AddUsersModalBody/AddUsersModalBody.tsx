@@ -32,6 +32,7 @@ const SearchedUserContainer = styled.div`
 
 const SearchedUserBox = styled.div`
   padding: 5px;
+  margin-bottom: 0.5rem;
   border-radius: 5px;
   ${flex('center', 'flex-start')}
   cursor: pointer;
@@ -57,7 +58,7 @@ const ProfileImg = styled.img`
   width: 2rem;
   height: 2rem;
   object-fit: cover;
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px;
 `;
 
 const UserName = styled.div`
@@ -85,6 +86,14 @@ const SubmitButton = styled(SB)`
   }
   ${flex()};
   margin-left: auto;
+`;
+
+const NoResultBox = styled.div`
+  height: 2.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  color: ${(props) => props.theme.color.lightBlack};
+  padding: 0.5rem;
 `;
 
 interface AddUsersModalBodyProps {
@@ -216,6 +225,7 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         value={text}
         placeholder="Search by name, email, or user group"
       />
+      {!searchedUserList?.length && <NoResultBox>검색 결과가 없습니다.</NoResultBox>}
       {visible && (
         <SearchedUserContainer>
           {searchedUserList?.map((user: User) => (
