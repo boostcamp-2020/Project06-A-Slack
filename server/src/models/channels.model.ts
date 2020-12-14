@@ -79,4 +79,8 @@ export const channelModel: Model = {
     WHERE user_channel.user_id = ? AND channel.id = user_channel.channel_id)`;
     return pool.execute(sql, [userId]);
   },
+  checkDuplicatedChannel({ channelName }: { channelName: string }) {
+    const sql = `SELECT id FROM channel WHERE name=?;`;
+    return pool.execute(sql, [channelName]);
+  },
 };
