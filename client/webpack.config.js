@@ -84,6 +84,7 @@ module.exports = {
         keepClosingSlash: true,
         removeComments: true,
       },
+      favicon: './src/public/icon/slack.ico',
     }),
     new CleanWebpackPlugin(),
     new Dotenv({
