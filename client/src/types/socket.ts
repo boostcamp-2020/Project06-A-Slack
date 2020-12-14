@@ -77,7 +77,9 @@ export interface EmojiEvent {
 
 export interface UserEvent {
   type: string;
-  user: User;
+  user?: User;
+  channelId?: number;
+  parentThreadId: string | undefined;
 }
 
 export interface ChannelEvent {
