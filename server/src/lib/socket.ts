@@ -131,7 +131,9 @@ interface EmojiEvent {
 
 interface UserEvent {
   type: string;
-  user: User;
+  user?: User;
+  channelId?: number;
+  parentThreadId: string | undefined;
 }
 
 interface ChannelEvent {
@@ -234,7 +236,23 @@ export const bindSocketServer = (server: http.Server): void => {
         return;
       }
       if (isUserEvent(data)) {
-        // TODO: User 이벤트 처리
+        try {
+          const { user, parentThreadId } = data;
+          if (user?.id) {
+            const [joinedChannels] = await channelModel.getJoinChannels({ userId: user.id });
+            joinedChannels.map((channel: Channel) =>
+              namespace.to(channel.name).emit(MESSAGE, {
+                type: SOCKET_MESSAGE_TYPE.USER,
+                user,
+                channelId: channel.id,
+                room: channel.name,
+                parentThreadId,
+              }),
+            );
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
         return;
       }
       if (isChannelEvent(data)) {
