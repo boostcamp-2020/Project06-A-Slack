@@ -8,15 +8,25 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread, changeEmojiOfThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
-import { changeEmojiOfSubThread, addSubThread } from '@/store/modules/subThread.slice';
-
 import {
+  addThread,
+  getThreadRequest,
+  changeEmojiOfThread,
+  updateSubThreadInfo,
+} from '@/store/modules/thread.slice';
+import {
+  changeEmojiOfSubThread,
+  addSubThread,
+  getSubThreadRequest,
+} from '@/store/modules/subThread.slice';
+import {
+  loadChannelRequest,
   updateChannelUnread,
   updateChannelTopic,
   updateChannelUsers,
   setReloadMyChannelListFlag,
 } from '@/store/modules/channel.slice';
+
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
@@ -70,7 +80,14 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isUserEvent(data)) {
-        // TODO: User 이벤트 처리
+        const { channelId, user, parentThreadId } = data;
+        if (channelId && user) {
+          emit(loadChannelRequest({ channelId: +channelId, userId: user.id }));
+          emit(getThreadRequest({ channelId: +channelId }));
+          if (parentThreadId) {
+            emit(getSubThreadRequest({ parentId: +parentThreadId }));
+          }
+        }
         return;
       }
       if (isChannelEvent(data)) {
