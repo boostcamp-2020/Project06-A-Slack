@@ -83,4 +83,16 @@ export const channelModel: Model = {
     const sql = `SELECT id FROM channel WHERE name=?;`;
     return pool.execute(sql, [channelName]);
   },
+  setChannelUnreadFlag({
+    unread,
+    userId,
+    channelId,
+  }: {
+    unread: boolean;
+    userId: number;
+    channelId: number;
+  }) {
+    const sql = `UPDATE user_channel SET unread = ? WHERE user_id = ? AND channel_id = ?;`;
+    return pool.execute(sql, [unread, userId, channelId]);
+  },
 };

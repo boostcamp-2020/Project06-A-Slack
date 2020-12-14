@@ -46,7 +46,7 @@ export const inviteChannel = async (
     res.status(200).end();
     return;
   }
-  res.status(400).json({ message: '필수 값 누락' });
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
@@ -65,11 +65,38 @@ export const modifyTopic = async (
     return;
   }
   if (verifyRequestData([topic])) {
-    await channelModel.modifyTopic({ channelId: +channelId, topic });
+    try {
+      await channelModel.modifyTopic({ channelId: +channelId, topic });
+      res.status(200).end();
+      return;
+    } catch (err) {
+      next(err);
+      return;
+    }
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
+
+/**
+ * POST /api/channels/:channelId/unread
+ */
+export const setChannelUnreadFlag = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { channelId } = req.params;
+  const { userId, unread } = req.body;
+  if (Number.isNaN(+channelId)) {
+    next({ message: ERROR_MESSAGE.WRONG_PARAMS, status: 400 });
+    return;
+  }
+  if (verifyRequestData([userId, unread])) {
+    await channelModel.setChannelUnreadFlag({ unread, userId, channelId: +channelId });
     res.status(200).end();
     return;
   }
-  res.status(400).json({ message: '필수 값 누락' });
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
@@ -81,7 +108,7 @@ export const modifyChannel = (req: Request, res: Response, next: NextFunction): 
     res.status(200).end();
     return;
   }
-  res.status(400).json({ message: '필수 값 누락' });
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
