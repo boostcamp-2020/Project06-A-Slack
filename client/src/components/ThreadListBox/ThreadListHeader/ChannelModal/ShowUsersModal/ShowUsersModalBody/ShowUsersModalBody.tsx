@@ -51,6 +51,9 @@ const UserName = styled.div`
   margin: 0 0.7rem;
   padding-bottom: 0.25rem;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const ShowUsersModalBody: React.FC = () => {
