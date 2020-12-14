@@ -107,6 +107,9 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
   const { current } = useChannelState();
 
   const sendMessage = () => {
+    if (!comment.trim()) {
+      return;
+    }
     if (userInfo) {
       const thread = {
         userId: userInfo.id,
