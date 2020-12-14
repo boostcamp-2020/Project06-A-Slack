@@ -111,7 +111,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
   };
 
   return (
-    <Container color={backgroundColor}>
+    <Container color={backgroundColor} onClick={clickEmojiHandler}>
       <EmojiToolTip>
         <img
           key={`${emoji.id}ToolTip`}
@@ -125,7 +125,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
           {getToolTipDescribe(emoji.id)}
         </ToolTipDescribe>
       </EmojiToolTip>
-      <EmojiItem onClick={clickEmojiHandler}>
+      <EmojiItem>
         <img
           key={emoji.id}
           src={getEmojiUrl(emoji.id)}
