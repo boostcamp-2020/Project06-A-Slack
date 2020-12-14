@@ -90,6 +90,11 @@ const userSlice = createSlice({
         state.userInfo.lastChannelId = payload.channelId;
       }
     },
+    setEditDefault(state) {
+      state.edit.loading = false;
+      state.edit.success = false;
+      state.edit.err = null;
+    },
   },
 });
 
@@ -105,6 +110,7 @@ export const {
   searchUserSuccess,
   searchUserFailure,
   setLastChannel,
+  setEditDefault,
 } = userSlice.actions;
 
 export default userSlice.reducer;
