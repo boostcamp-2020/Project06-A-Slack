@@ -20,6 +20,8 @@ export const ERROR_MESSAGE = {
   SEND_EMAIL_FAILED: '인증 메일 전송 실패',
   CODE_GENERATION_FAILED: '인증 코드 생성 실패',
   ENCRYPT_DECRYPT_FAILED: '암호화/복호화 실패',
+  EXIST_EMAIL: '존재하는 이메일',
+  NOT_ALLOWED_FILE_TYPE: '허용되지 않은 파일타입',
 };
 
 export const USER_DEFAULT_PROFILE_URL =
@@ -47,6 +49,7 @@ export const CHANNEL_SUBTYPE = {
   UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
   UPDATE_CHANNEL_USERS: 'update_channel_users',
   MAKE_DM: 'make_dm',
+  FIND_AND_JOIN_CHANNEL: `find_and_join_channel`,
 };
 
 export const GET_EMOJI_OF_THREAD_SQL = `

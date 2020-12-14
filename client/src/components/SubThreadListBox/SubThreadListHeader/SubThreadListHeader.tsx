@@ -7,15 +7,12 @@ import { loadChannelRequest } from '@/store/modules/channel.slice';
 import { LockIcon, PoundIcon } from '@/components';
 import theme from '@/styles/theme';
 import { flex } from '@/styles/mixin';
-import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
 
 const Container = styled.div`
   ${flex('center', 'space-between')}
   width: 100%;
   height: 4.3rem;
   flex-shrink: 0;
-  padding: 0 1.3rem;
-  border-bottom: 1px solid ${(props) => props.theme.color.lightGray2};
   background-color: white;
 `;
 
@@ -54,26 +51,15 @@ const SubThreadListHeader = () => {
     }
   }, [channelId, userInfo]);
 
-  useEffect(() => {
-    if (current) {
-      dispatch(enterRoomRequest({ room: current.name }));
-    }
-    return () => {
-      if (current) {
-        dispatch(leaveRoomRequest({ room: current.name }));
-      }
-    };
-  }, [current]);
-
   return (
     <Container>
       <LeftBox>
         <LeftTopBox>Thread</LeftTopBox>
         <LeftBottomBox>
           {current?.isPublic ? (
-            <PoundIcon size="11px" color={theme.color.lightBlack} />
+            <PoundIcon size="10px" color={theme.color.black5} />
           ) : (
-            <LockIcon size="11px" color={theme.color.lightBlack} />
+            <LockIcon size="10px" color={theme.color.black5} />
           )}
           <ChannelTitle>{current?.name}</ChannelTitle>
         </LeftBottomBox>

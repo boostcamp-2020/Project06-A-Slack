@@ -6,15 +6,33 @@ import { EmojiOfThread, Thread, ThreadResponse } from '@/types';
 interface ThreadState {
   threadList: Thread[] | null;
   canScroll: boolean;
+  loading: boolean;
+  nextThreadId: number | null;
+  firstScrollUsed: boolean;
+  prevTopThreadId: number | null;
 }
 
 const threadListState: ThreadState = {
   threadList: null,
   canScroll: false,
+  loading: false,
+  nextThreadId: null,
+  firstScrollUsed: false,
+  prevTopThreadId: null,
 };
 
+export interface addThreadRequestPayload {
+  channelId: number;
+  nextThreadId: number;
+}
 export interface getThreadRequestPayload {
   channelId: number;
+  nextThreadId?: number | null;
+}
+export interface getThreadSuccessPayload {
+  threadList: Thread[];
+  canScroll: boolean;
+  nextThreadId: number | null;
 }
 
 export interface createThreadRequestPayload {
@@ -29,12 +47,38 @@ const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
-    getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {},
-    getThreadSuccess(state, action: PayloadAction<ThreadState>) {
-      state.threadList = action.payload.threadList;
-      state.canScroll = action.payload.canScroll;
+    getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
+      state.loading = true;
+      state.nextThreadId = null;
+      state.firstScrollUsed = false;
     },
-    getThreadFailure(state, action) {},
+    getThreadSuccess(state, action: PayloadAction<getThreadSuccessPayload>) {
+      const { threadList, nextThreadId } = action.payload;
+      state.loading = false;
+      state.threadList = threadList;
+      state.nextThreadId = nextThreadId;
+    },
+    getThreadFailure(state, action) {
+      state.loading = false;
+    },
+    addThreadListRequest(state, { payload }: PayloadAction<addThreadRequestPayload>) {
+      state.loading = true;
+      state.prevTopThreadId = payload.nextThreadId;
+    },
+    addThreadListSuccess(
+      state,
+      action: PayloadAction<{ threadList: Thread[]; nextThreadId: number }>,
+    ) {
+      const { threadList, nextThreadId } = action.payload;
+      state.loading = false;
+      if (state.threadList && threadList.length) {
+        state.threadList = threadList.concat(state.threadList);
+      }
+      state.nextThreadId = nextThreadId;
+    },
+    addThreadListFailure(state) {
+      state.loading = false;
+    },
     createThreadRequest(state, action: PayloadAction<createThreadRequestPayload>) {},
     createThreadSuccess(state, action: PayloadAction<ThreadResponse>) {},
     createThreadFailure(state, action) {},
@@ -72,6 +116,12 @@ const threadSlice = createSlice({
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
       state.canScroll = payload.canScroll;
     },
+    setFirstScrollUsed(state, { payload }: PayloadAction<{ firstScrollUsed: boolean }>) {
+      state.firstScrollUsed = payload.firstScrollUsed;
+    },
+    resetNextThreadId(state) {
+      state.nextThreadId = null;
+    },
     changeEmojiOfThread(
       state,
       { payload }: PayloadAction<{ emoji: EmojiOfThread[]; threadId: number }>,
@@ -98,6 +148,11 @@ export const {
   setScrollable,
   changeEmojiOfThread,
   updateSubThreadInfo,
+  setFirstScrollUsed,
+  resetNextThreadId,
+  addThreadListRequest,
+  addThreadListSuccess,
+  addThreadListFailure,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

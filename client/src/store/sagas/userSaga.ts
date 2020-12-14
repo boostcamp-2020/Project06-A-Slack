@@ -8,9 +8,10 @@ import {
   editUserSuccess,
   editUserFailure,
   EditUserRequestPayload,
-  matchUsersRequest,
-  matchUsersSuccess,
-  matchUsersFailure,
+  searchUserRequest,
+  searchUserSuccess,
+  searchUserFailure,
+  SearchUserRequestPayload,
 } from '@/store/modules/user.slice';
 import { userService } from '@/services';
 import { User } from '@/types';
@@ -80,41 +81,38 @@ function* watchEditUser() {
   yield takeLatest(editUserRequest, editUser);
 }
 
-function* matchUsers({
-  payload,
-}: {
-  payload: { isDM: boolean; pickUsers: User[]; displayName: string; channelId: number };
-}) {
+function* setSearchedUserList({ payload }: PayloadAction<SearchUserRequestPayload>) {
   try {
     if (payload.displayName.length === 0) {
-      yield put(matchUsersSuccess({ matchUsersInfo: [] }));
+      yield put(searchUserSuccess({ searchedUserList: [] }));
     } else {
-      const { data, status } = yield call(userService.matchUsers, {
+      const { data, status } = yield call(userService.searchUsers, {
         displayName: payload.displayName,
         channelId: payload.channelId,
         isDM: payload.isDM,
       });
 
-      const matchUsersInfo = data.matchUsersInfo.reduce((acc: User[], cur: User) => {
-        if (payload.pickUsers.every((pu) => cur.id !== pu.id)) {
+      const searchedUserList = data.users.reduce((acc: User[], cur: User) => {
+        if (payload.pickedUsers.every((pu) => cur.id !== pu.id)) {
           acc.push(cur);
         }
         return acc;
       }, []);
 
       if (status === 200) {
-        yield put(matchUsersSuccess({ matchUsersInfo }));
+        yield put(searchUserSuccess({ searchedUserList }));
       }
     }
   } catch (err) {
-    yield put(matchUsersFailure({ err }));
+    console.log('err', err);
+    yield put(searchUserFailure({ err }));
   }
 }
 
-function* watchMatchUsers() {
-  yield takeLatest(matchUsersRequest, matchUsers);
+function* watchSearchUserRequest() {
+  yield takeLatest(searchUserRequest, setSearchedUserList);
 }
 
 export default function* userSaga() {
-  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchMatchUsers)]);
+  yield all([fork(watchGetUser), fork(watchEditUser), fork(watchSearchUserRequest)]);
 }

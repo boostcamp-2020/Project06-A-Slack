@@ -11,7 +11,7 @@ export interface UserState {
     success: boolean;
     err: Error | null;
   };
-  matchUsersInfo: User[] | null;
+  searchedUserList: User[] | null;
 }
 
 const userState: UserState = {
@@ -21,7 +21,7 @@ const userState: UserState = {
     success: false,
     err: null,
   },
-  matchUsersInfo: [],
+  searchedUserList: [],
 };
 
 export interface EditUserPayload {
@@ -39,6 +39,13 @@ export interface EditUserRequestPayload extends EditUserPayload {
 export interface EditUserSuccessPayload extends EditUserPayload {
   image: string;
   setDefault: boolean;
+}
+
+export interface SearchUserRequestPayload {
+  isDM: boolean;
+  pickedUsers: User[];
+  displayName: string;
+  channelId: number;
 }
 
 const userSlice = createSlice({
@@ -73,11 +80,16 @@ const userSlice = createSlice({
       state.edit.success = false;
       state.edit.err = payload.err;
     },
-    matchUsersRequest(state, action) {},
-    matchUsersSuccess(state, action) {
-      state.matchUsersInfo = action.payload.matchUsersInfo;
+    searchUserRequest(state, action: PayloadAction<SearchUserRequestPayload>) {},
+    searchUserSuccess(state, action: PayloadAction<{ searchedUserList: User[] | null }>) {
+      state.searchedUserList = action.payload.searchedUserList;
     },
-    matchUsersFailure(state, action) {},
+    searchUserFailure(state, action) {},
+    setLastChannel(state, { payload }: PayloadAction<{ channelId: number }>) {
+      if (state.userInfo) {
+        state.userInfo.lastChannelId = payload.channelId;
+      }
+    },
   },
 });
 
@@ -89,9 +101,10 @@ export const {
   editUserRequest,
   editUserSuccess,
   editUserFailure,
-  matchUsersRequest,
-  matchUsersSuccess,
-  matchUsersFailure,
+  searchUserRequest,
+  searchUserSuccess,
+  searchUserFailure,
+  setLastChannel,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -2,12 +2,17 @@ import React, { useState, ReactElement, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { CHANNEL_TYPE } from '@/utils/constants';
-import { DimModal, ArrowDownIcon, PlusIcon, DotIcon, Popover } from '@/components';
 import {
+  DimModal,
+  ArrowDownIcon,
+  PlusIcon,
+  DotIcon,
+  Popover,
   AddUsersModalHeader,
   AddUsersModalBody,
-} from '@/components/ThreadListBox/ThreadListHeader/ChannelModal/AddUsersModal';
+} from '@/components';
 import { CreateChannelModalHeader, CreateChannelModalBody } from './CreateChannelModal';
+import { FindChannelModalBody, FindChannelModalHeader } from './FindChannelModal';
 
 const Container = styled.div`
   position: relative;
@@ -104,6 +109,7 @@ const ChannelListBox = ({
 }): ReactElement => {
   const [addChannelsModalVisible, setAddChannelsModalVisible] = useState(false);
   const [sectionOptionsModalVisible, setSectionOptionsModalVisible] = useState(false);
+  const [findChannelsModalVisible, setFindChannelsModalVisible] = useState(false);
   const [createChannelModalVisible, setCreateChannelModalVisible] = useState(false);
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [secret, setSecret] = useState(false);
@@ -130,12 +136,17 @@ const ChannelListBox = ({
     setAddUsersModalVisible((state) => !state);
   };
 
+  const clickFindChannelModal = () => {
+    setFindChannelsModalVisible((state) => !state);
+  };
+
   const ref = useRef<HTMLDivElement>(null);
 
   return (
     <>
       {createChannelModalVisible && (
         <DimModal
+          width="520px"
           header={<CreateChannelModalHeader secret={secret} />}
           body={
             // eslint-disable-next-line react/jsx-wrap-multilines
@@ -151,10 +162,20 @@ const ChannelListBox = ({
       )}
       {addUsersModalVisible && (
         <DimModal
-          header={<AddUsersModalHeader isDM={channelType !== CHANNEL_TYPE.CHANNEL} />}
+          width="520px"
+          header={<AddUsersModalHeader isDM={channelType === CHANNEL_TYPE.DM} />}
           body={<AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} isDM />}
           visible={addUsersModalVisible}
           setVisible={setAddUsersModalVisible}
+        />
+      )}
+      {findChannelsModalVisible && (
+        <DimModal
+          width="520px"
+          header={<FindChannelModalHeader />}
+          body={<FindChannelModalBody setFindChannelModalVisible={setFindChannelsModalVisible} />}
+          visible={findChannelsModalVisible}
+          setVisible={setFindChannelsModalVisible}
         />
       )}
       <Container onClick={toggleChannelList}>
@@ -193,7 +214,9 @@ const ChannelListBox = ({
           >
             {channelType === CHANNEL_TYPE.CHANNEL ? '채널 추가' : '대화 상대 추가'}
           </ModalListItem>
-          <ModalListItem>{channelType === CHANNEL_TYPE.CHANNEL && '채널 검색'}</ModalListItem>
+          {channelType === CHANNEL_TYPE.CHANNEL && (
+            <ModalListItem onClick={clickFindChannelModal}>채널 검색</ModalListItem>
+          )}
         </Popover>
       )}
     </>

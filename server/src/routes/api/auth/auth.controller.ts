@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { IncomingForm } from 'formidable';
 import bcrypt from 'bcrypt';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import {
@@ -21,19 +20,10 @@ import isEmail from 'validator/lib/isEmail';
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, pw } = req.body;
   if (verifyRequestData([email, pw])) {
-    let decryptedEmail;
-    let decryptedPw;
-    try {
-      decryptedEmail = decrypt(email);
-      decryptedPw = decrypt(pw);
-    } catch (err) {
-      next({ message: ERROR_MESSAGE.ENCRYPT_DECRYPT_FAILED, status: 400 });
-    }
-
-    const [[user]] = await userModel.getUserByEmail({ email: decryptedEmail as string });
+    const [[user]] = await userModel.getUserByEmail({ email });
     if (user) {
       try {
-        const match = await bcrypt.compare(decryptedPw, user.pw);
+        const match = await bcrypt.compare(pw, user.pw);
         if (match) {
           // 비번 일치 할 때
           const { pw: userPw, phoneNumber, image, ...userInfo } = user;
@@ -76,36 +66,21 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 /**
  * POST /api/auth/signup
  */
-export const signup = (req: Request, res: Response, next: NextFunction): void => {
-  const form = new IncomingForm();
-  form.uploadDir = './src/public/imgs/profile/';
-  form.keepExtensions = true;
-  form.multiples = true;
+export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { email, pw, displayName } = req.body;
+  if (verifyRequestData([email, pw, displayName])) {
+    try {
+      const hashPw = await bcrypt.hash(pw, 10);
+      await userModel.addUser({ email, pw: hashPw, displayName });
 
-  form.on('fileBegin', (name, file) => {
-    const imgSrc = `${Date.now()}_${file.name}`;
-    // eslint-disable-next-line no-param-reassign
-    file.path = `${form.uploadDir}${imgSrc}`;
-  });
-
-  const port = req.app.get('port');
-  const prefix = `${req.protocol}://${req.hostname}${port !== 80 ? `:${port}` : ''}`;
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
+      res.status(200).end();
+      return;
+    } catch (err) {
       next(err);
       return;
     }
-
-    const { email, pw } = fields;
-    const { image } = files;
-    console.log(image.name);
-    if (verifyRequestData([email, pw])) {
-      // TODO : DB에 회원정보 저장
-      res.json({ email, image: `${prefix}/${image.name}` });
-      return;
-    }
-    res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
-  });
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };
 
 /**
@@ -169,4 +144,25 @@ export const verifyEmail = async (
   } catch (err) {
     next({ message: ERROR_MESSAGE.CODE_GENERATION_FAILED, status: 500 });
   }
+};
+
+/**
+ * POST /api/auth/email/check
+ */
+export const checkExistEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { email } = req.body;
+  if (verifyRequestData([email])) {
+    const [[user]] = await userModel.getUserByEmail({ email });
+    if (!user) {
+      res.status(200).end();
+      return;
+    }
+    res.status(400).json({ message: ERROR_MESSAGE.EXIST_EMAIL });
+    return;
+  }
+  res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
 };

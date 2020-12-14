@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { JoinedUser, Channel, User } from '@/types';
+import { JoinedUser, Channel, User, ChannelInfo } from '@/types';
 
 interface ChannelState {
   channelList: Channel[];
@@ -45,27 +45,28 @@ const channelSlice = createSlice({
     loadChannelsFailure(state, action) {
       // todo 에러처리
     },
-    loadMyChannelsRequest(state, action) {},
-    loadMyChannelsSuccess(state, action) {
-      state.myChannelList = action.payload.joinChannelList;
+    loadMyChannelsRequest(state, action: PayloadAction<{ userId: number }>) {},
+    loadMyChannelsSuccess(state, action: PayloadAction<{ myChannelList: Channel[] }>) {
+      state.myChannelList = action.payload.myChannelList;
     },
     loadMyChannelsFailure(state, action) {
       // todo 에러처리
     },
     loadChannelRequest(state, action: PayloadAction<{ channelId: number; userId: number }>) {},
-    loadChannelSuccess(state, action) {
+    loadChannelSuccess(state, action: PayloadAction<{ channel: Channel; users: JoinedUser[] }>) {
       state.current = action.payload.channel;
       state.users = action.payload.users;
     },
     loadChannelFailure(state, action) {
       // todo 에러처리
     },
-    createChannelRequest(state, action) {},
-    createChannelSuccess(state, action) {
-      state.channelList.push(action.payload.channel);
-      state.myChannelList.push(action.payload.channel);
+    createChannelRequest(state, action: PayloadAction<{ channelInfo: ChannelInfo; user: User }>) {},
+    createChannelSuccess(state, action: PayloadAction<{ channel: Channel }>) {
+      const { channel } = action.payload;
+      state.channelList.push(channel);
+      state.myChannelList.push(channel);
     },
-    createChannelFailure(state, action) {
+    createChannelFailure(state, action: PayloadAction<{ err: Error }>) {
       // todo 에러처리
     },
     joinChannelRequset(state, action: PayloadAction<joinChannelRequsetPayload>) {},
@@ -74,9 +75,6 @@ const channelSlice = createSlice({
     },
     joinChannelFailure(state, action) {
       // todo 에러처리
-    },
-    setCurrent(state, action) {
-      state.current = action.payload;
     },
     unsetUnreadFlag(state, { payload }: PayloadAction<{ channelId: number }>) {
       const { channelId } = payload;
@@ -89,21 +87,23 @@ const channelSlice = createSlice({
     },
     updateChannelUnread(state, { payload }: PayloadAction<{ channel: Channel }>) {
       const { channel } = payload;
-      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
-      if (state.current) {
-        if (idx !== -1 && state.myChannelList[idx].id !== state.current.id) {
-          state.myChannelList[idx] = { ...state.myChannelList[idx], ...channel };
+      state.myChannelList = state.myChannelList.map((chan) => {
+        if (chan.id === channel.id) {
+          return { ...chan, ...channel };
         }
-      }
+        return chan;
+      });
     },
     updateChannelTopic(state, { payload }: PayloadAction<{ channel: Channel }>) {
       const { channel } = payload;
-      const idx = state.myChannelList.findIndex((c) => c.id === channel.id);
-      if (idx !== -1) {
-        state.myChannelList[idx] = { ...state.myChannelList[idx], topic: channel.topic };
-        if (state.current?.id === channel.id) {
-          state.current = channel;
+      state.myChannelList = state.myChannelList.map((chan) => {
+        if (chan.id === channel.id) {
+          return { ...chan, topic: channel.topic };
         }
+        return chan;
+      });
+      if (state.current?.id === channel.id) {
+        state.current = channel;
       }
     },
     updateChannelUsers(
@@ -142,7 +142,6 @@ export const {
   joinChannelRequset,
   joinChannelSuccess,
   joinChannelFailure,
-  setCurrent,
   unsetUnreadFlag,
   updateChannelUnread,
   updateChannelTopic,

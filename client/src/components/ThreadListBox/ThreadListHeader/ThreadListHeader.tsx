@@ -3,11 +3,19 @@ import styled from 'styled-components';
 import { CHANNEL_TYPE } from '@/utils/constants';
 import { JoinedUser, Channel } from '@/types';
 import { Link, useParams } from 'react-router-dom';
-import { DimModal, LockIcon, PoundIcon, WarningIcon, AddUserIcon } from '@/components';
+import {
+  DimModal,
+  LockIcon,
+  PoundIcon,
+  WarningIcon,
+  AddUserIcon,
+  AddUsersModalHeader,
+  AddUsersModalBody,
+} from '@/components';
 import theme from '@/styles/theme';
 import { flex, hoverActive } from '@/styles/mixin';
 
-import { AddUsersModalHeader, AddUsersModalBody } from './ChannelModal/AddUsersModal';
+import { useChannelState } from '@/hooks';
 import { AddTopicModalHeader, AddTopicModalBody } from './ChannelModal/AddTopicModal';
 import { ShowUsersModalHeader, ShowUsersModalBody } from './ChannelModal/ShowUsersModal';
 
@@ -91,16 +99,12 @@ interface RightSideParams {
   channelId: string;
 }
 
-interface ThreadListHeaderProps {
-  current: Channel | null;
-  users: JoinedUser[];
-}
-
-const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
+const ThreadListHeader = () => {
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
   const [addTopicModalVisible, setAddTopicModalVisible] = useState(false);
   const [showUsersModalVisible, setShowUsersModalVisible] = useState(false);
   const { channelId }: RightSideParams = useParams();
+  const { current, users } = useChannelState();
 
   const clickShowUsersModal = () => {
     setShowUsersModalVisible((state) => !state);
@@ -118,6 +122,7 @@ const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
     <>
       {addUsersModalVisible && (
         <DimModal
+          width="520px"
           header={<AddUsersModalHeader isDM={false} />}
           body={<AddUsersModalBody setAddUsersModalVisible={clickAddUsersModal} isDM={false} />}
           visible={addUsersModalVisible}
@@ -126,6 +131,7 @@ const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
       )}
       {addTopicModalVisible && (
         <DimModal
+          width="520px"
           header={<AddTopicModalHeader />}
           body={<AddTopicModalBody setAddTopicModalVisible={clickAddTopicModal} />}
           visible={addTopicModalVisible}
@@ -181,4 +187,4 @@ const ThreadListHeader = ({ current, users }: ThreadListHeaderProps) => {
   );
 };
 
-export default React.memo(ThreadListHeader);
+export default ThreadListHeader;

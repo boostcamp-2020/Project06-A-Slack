@@ -4,8 +4,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 const HeaderContent = styled.div`
-  font-size: ${(props) => props.theme.size.xxxl};
-  font-weight: 700;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: ${(props) => props.theme.color.lightBlack};
+  padding: 14px 0;
 `;
 
 interface CreateChannelModalHeaderProps {

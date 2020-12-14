@@ -1,11 +1,21 @@
 import React, { useEffect } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
-import { useAuthState, useUserState, useChannelState } from '@/hooks';
-import { Header, LeftSideBar, ThreadListBox, RightSideBar, SubThreadListBox } from '@/components';
+import { useHistory, useParams } from 'react-router-dom';
+import { useUserState, useRedirectState } from '@/hooks';
+import {
+  Header,
+  LeftSideBar,
+  ThreadListBox,
+  RightSideBar,
+  SubThreadListBox,
+  SubThreadListHeader,
+  DetailHeader,
+  DetailBody,
+} from '@/components';
 import { isExistedChannel, isNumberTypeValue } from '@/utils/utils';
 import { socketConnectRequest, socketDisconnectRequest } from '@/store/modules/socket.slice';
 import { getEmojiListRequest } from '@/store/modules/emoji.slice';
 import { useDispatch } from 'react-redux';
+import { setRedirect } from '@/store/modules/redirect.slice';
 
 import styled from 'styled-components';
 
@@ -16,22 +26,23 @@ const Container = styled.div`
 
 interface RightSideParams {
   channelId: string | undefined;
-  rightSideType: string | undefined;
+  rightSideType: 'detail' | 'user_profile' | 'thread' | undefined;
   threadId: string | undefined;
 }
 
-const checkValidOfRightSideType = (rightSideType: string | undefined) => {
-  return (
-    rightSideType === 'detail' || rightSideType === 'user_profile' || rightSideType === 'thread'
-  );
-};
-
 const WorkSpacePage: React.FC = () => {
-  const { channelId }: RightSideParams = useParams();
-  const { accessToken } = useAuthState();
+  const { channelId, rightSideType, threadId }: RightSideParams = useParams();
   const { userInfo } = useUserState();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { url: redirectUrl } = useRedirectState();
+
+  useEffect(() => {
+    if (redirectUrl) {
+      history.push(redirectUrl);
+      dispatch(setRedirect({ url: null }));
+    }
+  }, [redirectUrl]);
 
   /* url에 채널 아이디가 없을 때, 최근에 접속한 채널로 이동 */
   useEffect(() => {
@@ -57,26 +68,25 @@ const WorkSpacePage: React.FC = () => {
 
   return (
     <>
-      {accessToken ? (
-        <>
-          <Header />
-          <Container>
-            <LeftSideBar />
-            <ThreadListBox />
-            <SubThreadListBox />
-            {/* <>
-              {rightSideType &&
-                (checkValidOfRightSideType(rightSideType) ? (
-                  <RightSideBar type={rightSideType} channelId={Number(channelId)} />
-                ) : (
-                  history.goBack()
-                ))}
-            </> */}
-          </Container>
-        </>
-      ) : (
-        <Redirect to="/login" />
-      )}
+      <Header />
+      <Container>
+        <LeftSideBar />
+        <ThreadListBox />
+        {rightSideType === 'thread' && channelId && threadId && (
+          <RightSideBar
+            url={`/client/1/${+channelId}`}
+            header={<SubThreadListHeader />}
+            body={<SubThreadListBox />}
+          />
+        )}
+        {rightSideType === 'detail' && channelId && (
+          <RightSideBar
+            url={`/client/1/${+channelId}`}
+            header={<DetailHeader />}
+            body={<DetailBody />}
+          />
+        )}
+      </Container>
     </>
   );
 };

@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import { useChannelState } from '@/hooks';
 import { JoinedUser } from '@/types';
-import { DimModal } from '@/components';
-import { AddUsersModalHeader, AddUsersModalBody } from '../../AddUsersModal';
+import { DimModal, AddUsersModalHeader, AddUsersModalBody } from '@/components';
 
 const AddButton = styled.button`
   display: block;
@@ -62,24 +61,12 @@ const ShowUsersModalBody: React.FC<ShowUsersModalBody> = ({
   const [addUsersModalVisible, setAddUsersModalVisible] = useState(false);
 
   const clickAddUsersModal = () => {
-    // setShowUsersModalVisible((state: boolean) => !state);
     setAddUsersModalVisible(true);
   };
 
   return (
     <>
-      {addUsersModalVisible && (
-        <DimModal
-          header={<AddUsersModalHeader isDM={false} />}
-          body={
-            <AddUsersModalBody setAddUsersModalVisible={setAddUsersModalVisible} isDM={false} />
-          }
-          visible={addUsersModalVisible}
-          setVisible={clickAddUsersModal}
-        />
-      )}
       <Main>
-        <AddButton onClick={clickAddUsersModal}>Add Users</AddButton>
         {users?.map((user: JoinedUser) => (
           <Item key={user.userId}>
             <UserInfo>

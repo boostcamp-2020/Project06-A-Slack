@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { verifyRequestData } from '@/utils/utils';
 import { userModel, channelModel } from '@/models';
-import { ERROR_MESSAGE, USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
+import { ERROR_MESSAGE } from '@/utils/constants';
 
 /* userId 공통 처리 함수 */
 export const checkUserIdParam = (req: Request, res: Response, next: NextFunction): void => {
@@ -63,6 +63,7 @@ export const modifyUser = async (
     form.multiples = true;
 
     let imgSrc: string;
+    const imageRegex = /.(jpg|jpeg|png|gif)$/i;
 
     form.on('fileBegin', (name, file) => {
       imgSrc = `${Date.now()}_${file.name}`;
@@ -79,8 +80,19 @@ export const modifyUser = async (
         return;
       }
 
-      const { displayName, phoneNumber, setDefault, previousFileName } = fields;
+      const { displayName, phoneNumber, setDefault } = fields;
       const { image } = files;
+
+      if (image?.name && !image.name.match(imageRegex)) {
+        try {
+          await fs.unlink(path.join(__dirname, '../../../../../', image.path));
+        } catch (error) {
+          console.log('file delete error', error.message);
+        }
+
+        res.status(500).json({ message: ERROR_MESSAGE.NOT_ALLOWED_FILE_TYPE });
+        return;
+      }
 
       if (verifyRequestData([displayName, phoneNumber, setDefault])) {
         const imgUrl = image ? `${prefix}/imgs/profile/${imgSrc}` : undefined;
@@ -92,14 +104,6 @@ export const modifyUser = async (
           setDefault: +setDefault,
         });
 
-        // if (previousFileName !== USER_DEFAULT_PROFILE_URL && previousFileName) {
-        //   const [, filePath] = String(previousFileName).split(prefix);
-        //   try {
-        //     const r = await fs.unlink(path.join(__dirname, '../../../../public/', filePath));
-        //   } catch (error) {
-        //     console.log('file delete error', error.message);
-        //   }
-        // }
         res.json({ image: imgUrl });
         return;
       }
@@ -139,4 +143,22 @@ export const modifyLastChannel = async (
     }
   }
   res.status(400).json({ message: ERROR_MESSAGE.MISSING_REQUIRED_VALUES });
+};
+
+/**
+ * GET /api/users/:userId/channels/unsubscribed
+ */
+export const getNotJoinedChannels = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { userId } = req.params;
+  try {
+    const [notJoinedChannelList] = await channelModel.getNotJoinedChannels({ userId: +userId });
+    res.status(200).json({ notJoinedChannelList });
+    return;
+  } catch (err) {
+    next(err);
+  }
 };

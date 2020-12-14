@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyRequestData } from '@/utils/utils';
-import { channelModel } from '@/models';
+import { channelModel, userModel } from '@/models';
 /**
  * GET /api/channels
  */

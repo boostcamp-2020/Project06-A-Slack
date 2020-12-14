@@ -3,18 +3,26 @@
 import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { useAuthState, useChannelState, useUserState } from '@/hooks';
+import { useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
 import { useDispatch } from 'react-redux';
+import { PoundIcon, LockIcon } from '@/components';
+import theme from '@/styles/theme';
+import { SubmitButton, FormButton, FormInput, FormLabel } from '@/styles/shared';
 
 interface Props {
   secret?: boolean;
   name?: string;
 }
 
-const Explain = styled.div`
+const Container = styled.div`
+  padding: 0 28px;
+`;
+
+const TopDesc = styled.div`
   font-size: ${(props) => props.theme.size.s};
-  color: ${(props) => props.theme.color.gray2};
+  color: ${(props) => props.theme.color.black6};
+  line-height: 1.4;
 `;
 
 const Form = styled.form``;
@@ -23,77 +31,64 @@ const LabelContent = styled.div`
   font-size: ${(props) => props.theme.size.m};
   margin-right: 10px;
 `;
-const NameInput = styled.input`
-  display: block;
-  width: 100%;
-  font-size: ${(props) => props.theme.size.l};
-  border: 1px ${(props) => props.theme.color.gray4} solid;
-  border-radius: 3px;
+
+const NameInput = styled(FormInput)`
   width: 100%;
   height: 50px;
   padding: 0 35px;
-  &:focus {
-    transition: 0.3s;
-    box-shadow: ${(props) => props.theme.boxShadow.skyblue};
-  }
+  font-size: 1rem;
 `;
 
-const DescriptionInput = styled.input`
-  display: block;
-  width: 100%;
-  font-size: ${(props) => props.theme.size.l};
-  border: 1px ${(props) => props.theme.color.gray4} solid;
-  border-radius: 3px;
+const DescriptionInput = styled(FormInput)`
   width: 100%;
   height: 50px;
-  padding: 0 5px;
-  &:focus {
-    transition: 0.3s;
-    box-shadow: ${(props) => props.theme.boxShadow.skyblue};
-  }
+  font-size: 1rem;
 `;
 
 const InputBox = styled.div<Props>`
   position: relative;
-  &::before {
+  ${flex()};
+  .icon {
     position: absolute;
-    content: ${(props) => (props.secret ? 'O' : '#')};
-    top: 15px;
+    top: 27px;
     left: 10px;
     color: ${(props) => props.theme.color.gray2};
   }
 `;
 
-const Label = styled.label`
+const Label = styled(FormLabel)`
   margin: 25px 0;
   display: ${flex('center', 'flex-start', 'column')};
 `;
 
 const LabelBox = styled.div`
   ${flex('center', 'flex-start')}
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
-const NameAlert = styled.div`
-  font-size: ${(props) => props.theme.size.xs};
+const NameAlert = styled.span`
+  font-size: ${(props) => props.theme.size.s};
   color: ${(props) => props.theme.color.yellow};
+  font-weight: 800;
+  margin-left: 0.3rem;
 `;
 
-const Description = styled.div`
-  font-size: ${(props) => props.theme.size.xs};
-  color: ${(props) => props.theme.color.gray3};
+const Description = styled.span`
+  font-size: ${(props) => props.theme.size.s};
+  color: ${(props) => props.theme.color.black7};
+  margin-left: 0.3rem;
 `;
 
 const Bottom = styled.div`
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 `;
 
 const Bottomheader = styled.div`
   font-size: ${(props) => props.theme.size.m};
 `;
 
-const BottomContent = styled.label`
+const BottomContent = styled(FormLabel)`
   width: 100%;
   ${flex('center', 'space-between')};
 `;
@@ -101,8 +96,10 @@ const BottomContent = styled.label`
 const BottomExplain = styled.div`
   width: 300px;
   word-wrap: break-word;
-  color: ${(props) => props.theme.color.gray2};
-  font-size: ${(props) => props.theme.size.xs};
+  color: ${(props) => props.theme.color.gray1};
+  font-size: 0.9rem;
+  font-weight: 200;
+  line-height: 1.4;
 `;
 
 const PrivateButton = styled.button<Props>`
@@ -116,10 +113,10 @@ const PrivateButton = styled.button<Props>`
     transition: 0.3s;
     box-shadow: ${(props) => props.theme.boxShadow.skyblue};
   }
-  ${(props) =>
-    props.secret
-      ? `background: ${props.theme.color.green1}`
-      : `background: ${props.theme.color.white}`}
+  background-color: ${(props) =>
+    props.secret ? props.theme.color.green1 : props.theme.color.white};
+  outline: 0;
+  cursor: pointer;
 `;
 
 const Circle = styled.div<Props>`
@@ -127,30 +124,25 @@ const Circle = styled.div<Props>`
   height: 20px;
   border-radius: 50%;
   border: ${(props) => props.theme.color.gray2};
-  ${(props) =>
-    props.secret
-      ? `background: ${props.theme.color.white}`
-      : `background: ${props.theme.color.gray2}`}
+  background-color: ${(props) =>
+    props.secret ? props.theme.color.white : props.theme.color.gray2};
 `;
 
-const CreateButtonBox = styled.div`
-  ${flex('center', 'flex-end')}
+const ModalFooter = styled.div`
+  padding: 20px 0;
 `;
-const CreateButton = styled.button<Props>`
-  border: 1px ${(props) => props.theme.color.gray6} solid;
-  border-radius: 5px;
-  color: ${(props) => props.theme.color.white};
-  padding: 10px;
-  ${(props) =>
-    props.name !== ''
-      ? ` background:  ${props.theme.color.green1};
-    &:hover {
-      transition: 0.3s;
-      background: ${props.theme.color.green2};
-    }`
-      : `background: ${props.theme.color.gray3}
-      `}
+
+const CreateButton = styled(SubmitButton)<Props>`
+  margin-left: auto;
+  &:disabled {
+    cursor: initial;
+    color: ${(props) => props.theme.color.black3};
+    border: 1px solid ${(props) => props.theme.color.gray6};
+    background-color: ${(props) => props.theme.color.gray3};
+  }
 `;
+
+const IconBox = styled.div``;
 
 interface CreateChannelModalBodyProps {
   setCreateChannelModalVisible: (fn: (state: boolean) => boolean) => void;
@@ -165,9 +157,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
 }: CreateChannelModalBodyProps) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const { userId } = useAuthState();
   const { userInfo } = useUserState();
-  const { current } = useChannelState();
   const dispatch = useDispatch();
 
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,39 +174,59 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
 
   const clickCreateChannel = async () => {
     const isPublic = secret ? 0 : 1;
-    dispatch(
-      createChannelRequest({
-        ownerId: userId,
-        channelType: 1,
-        isPublic,
-        name,
-        description,
-        users: [userInfo],
-      }),
-    );
+    if (userInfo) {
+      dispatch(
+        createChannelRequest({
+          channelInfo: {
+            ownerId: userInfo.id,
+            channelType: 1,
+            isPublic,
+            name,
+            description,
+            memberCount: 1,
+          },
+          user: userInfo,
+        }),
+      );
+    }
     setCreateChannelModalVisible((state) => !state);
   };
 
   return (
-    <>
-      <Explain>
+    <Container>
+      <TopDesc>
         Channels are where your team communicates. They’re best when organized around a topic —
         #marketing, for example.
-      </Explain>
+      </TopDesc>
       <Form>
         <Label>
           <LabelBox>
-            <LabelContent>Name</LabelContent>
-            {name === '' && <NameAlert>Don't forget to name your channel.</NameAlert>}
+            <LabelContent>
+              Name {name === '' && <NameAlert>Don't forget to name your channel.</NameAlert>}
+            </LabelContent>
           </LabelBox>
-          <InputBox secret={secret}>
-            <NameInput onChange={changeName} value={name} required placeholder="e.g. plan-budget" />
+          <InputBox>
+            <IconBox className="icon">
+              {secret ? (
+                <LockIcon size="12px" color={theme.color.black6} />
+              ) : (
+                <PoundIcon size="12px" color={theme.color.black6} />
+              )}
+            </IconBox>
+            <NameInput
+              onChange={changeName}
+              value={name}
+              required
+              placeholder="e.g. plan-budget"
+              maxLength={80}
+            />
           </InputBox>
         </Label>
         <Label>
           <LabelBox>
-            <LabelContent>Description</LabelContent>
-            <Description>(optional)</Description>
+            <LabelContent>
+              Description<Description>(optional)</Description>
+            </LabelContent>
           </LabelBox>
           <DescriptionInput onChange={changeDescription} value={description} />
           <Description>What's this channel about?</Description>
@@ -235,12 +245,12 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
           </PrivateButton>
         </BottomContent>
       </Bottom>
-      <CreateButtonBox>
+      <ModalFooter>
         <CreateButton type="submit" name={name} onClick={clickCreateChannel} disabled={name === ''}>
           Create
         </CreateButton>
-      </CreateButtonBox>
-    </>
+      </ModalFooter>
+    </Container>
   );
 };
 

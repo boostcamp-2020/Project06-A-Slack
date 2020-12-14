@@ -91,7 +91,10 @@ function subscribeSocket(socket: Socket) {
           return;
         }
 
-        if (subType === CHANNEL_SUBTYPE.MAKE_DM) {
+        if (
+          subType === CHANNEL_SUBTYPE.MAKE_DM ||
+          subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL
+        ) {
           emit(setReloadMyChannelListFlag({ reloadMyChannelList: true }));
         }
 
@@ -100,13 +103,11 @@ function subscribeSocket(socket: Socket) {
       if (isDMEvent(data)) {
         // TODO: DM 이벤트 처리
       }
-
-      console.log('from server, message: ', data);
     };
 
     const handleDisconnect = (data: any) => {
       // TODO: 서버로부터 연결이 끊겼을 때의 처리
-      console.log('disconnected');
+      console.log('disconnected from server');
     };
 
     socket.on(MESSAGE, handleMessage);

@@ -4,10 +4,6 @@ import { verifyJWT } from '@/utils/utils';
 
 const instance = axios.create({ timeout: 9000 });
 
-if (process.env.MODE !== 'dev') {
-  instance.defaults.baseURL = process.env.BASE_URL;
-}
-
 instance.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem('accessToken');
@@ -61,6 +57,11 @@ instance.interceptors.response.use(
     if (axios.isCancel(err)) {
       console.log('요청 취소', err);
     } else {
+      if (err.response.status === 401) {
+        if (err.response.config.url !== '/api/auth/login') {
+          window.location.href = '/login';
+        }
+      }
       console.error('api 에러', err);
     }
     return Promise.reject(err);

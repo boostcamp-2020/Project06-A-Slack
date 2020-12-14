@@ -1,8 +1,7 @@
 import { all, fork, takeEvery, call, put, takeLatest } from 'redux-saga/effects';
 import { channelService } from '@/services';
-import { Channel, JoinedUser } from '@/types';
+import { Channel, ChannelInfo, JoinedUser, User } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
-
 import {
   loadChannelsRequest,
   loadChannelsSuccess,
@@ -20,7 +19,9 @@ import {
   joinChannelSuccess,
   joinChannelFailure,
   joinChannelRequsetPayload,
-} from '../modules/channel.slice';
+} from '@/store/modules/channel.slice';
+import { setRedirect } from '@/store/modules/redirect.slice';
+import { setLastChannel } from '@/store/modules/user.slice';
 
 function* loadChannels() {
   try {
@@ -33,44 +34,53 @@ function* loadChannels() {
   }
 }
 
-function* loadMyChannels(action: any) {
+function* loadMyChannels(action: PayloadAction<{ userId: number }>) {
+  const { userId } = action.payload;
   try {
-    const { data, status } = yield call(channelService.getJoinChannels, { userId: action.payload });
+    const { data, status } = yield call(channelService.getJoinChannels, { userId });
     if (status === 200) {
-      yield put(loadMyChannelsSuccess({ joinChannelList: data.channelList }));
+      yield put(loadMyChannelsSuccess({ myChannelList: data.channelList }));
     }
   } catch (err) {
     yield put(loadMyChannelsFailure(err));
   }
 }
 
-function* loadChannel(action: any) {
+function* loadChannel(action: PayloadAction<{ channelId: number; userId: number }>) {
+  const { channelId, userId } = action.payload;
   try {
     const { data, status } = yield call(channelService.getChannel, {
-      channelId: action.payload.channelId,
+      channelId,
     });
+
     if (status === 200) {
       yield put(loadChannelSuccess({ channel: data.channel, users: data.users }));
     }
-    yield call(channelService.modifyLastChannel, {
-      lastChannelId: action.payload.channelId,
-      userId: action.payload.userId,
+
+    const { status: resStatus } = yield call(channelService.modifyLastChannel, {
+      lastChannelId: channelId,
+      userId,
     });
+
+    if (resStatus === 200) {
+      yield put(setLastChannel({ channelId }));
+    }
   } catch (err) {
     yield put(loadChannelFailure(err));
   }
 }
 
-function* createChannel(action: any) {
+function* createChannel(action: PayloadAction<{ channelInfo: ChannelInfo; user: User }>) {
   try {
-    const { ownerId, channelType, isPublic, name, description, users } = action.payload;
+    const { channelInfo, user } = action.payload;
+    const { ownerId, channelType, isPublic, name, description } = channelInfo;
     const { data, status } = yield call(channelService.createChannel, {
       ownerId,
       channelType,
       isPublic,
       name,
       description,
-      memberCount: users.length,
+      memberCount: 1,
     });
 
     if (status === 201) {
@@ -82,26 +92,28 @@ function* createChannel(action: any) {
         name,
         topic: '',
         ownerId,
-        memberCount: users.length,
+        memberCount: 1,
       };
 
       const joinedUser: JoinedUser = {
         userId: ownerId,
-        displayName: users[0].id,
-        image: users[0].image,
+        displayName: user.displayName,
+        image: user.image,
       };
 
-      yield put(createChannelSuccess({ channel, joinedListUser: [joinedUser] }));
-      const { joinStatus } = yield call(channelService.joinChannel, {
-        users,
+      yield put(createChannelSuccess({ channel }));
+      const { status: joinStatus } = yield call(channelService.joinChannel, {
+        users: [user],
         channelId: data.channel.insertId,
       });
+
       if (joinStatus === 200) {
-        yield put(joinChannelSuccess({ users }));
+        yield put(joinChannelSuccess({ users: [{ ...joinedUser }] }));
+        yield put(setRedirect({ url: `/client/1/${data.channel.insertId}` }));
       }
     }
   } catch (err) {
-    yield put(createChannelFailure(err));
+    yield put(createChannelFailure({ err }));
   }
 }
 

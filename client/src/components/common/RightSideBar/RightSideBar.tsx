@@ -4,19 +4,22 @@ import RightSideBarHeader from './RightSideBarHeader/RightSideBarHeader';
 import RightSideBarBody from './RightSideBarBody/RightSideBarBody';
 
 const Container = styled.div`
-  background-color: orange;
+  width: 25rem;
+  display: flex;
+  flex-direction: column;
 `;
 
 interface RightSideBarProps {
-  type: string;
-  channelId: number;
+  url: string;
+  header: React.ReactNode;
+  body: React.ReactNode;
 }
 
-const RightSideBar: React.FC<RightSideBarProps> = ({ type, channelId }: RightSideBarProps) => {
+const RightSideBar: React.FC<RightSideBarProps> = ({ url, header, body }: RightSideBarProps) => {
   return (
     <Container>
-      <RightSideBarHeader title={type} channelId={channelId} channelName="channel name" />
-      <RightSideBarBody type={type} />
+      <RightSideBarHeader url={url}>{header}</RightSideBarHeader>
+      <RightSideBarBody>{body}</RightSideBarBody>
     </Container>
   );
 };

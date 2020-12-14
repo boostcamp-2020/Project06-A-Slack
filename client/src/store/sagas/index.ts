@@ -7,6 +7,7 @@ import signupSage from './signupSaga';
 import subThreadSaga from './subThreadSaga';
 import socketSaga from './socketSaga';
 import emojiSaga from './emojiSaga';
+import findChannelSaga from './findChannelSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -18,5 +19,6 @@ export default function* rootSaga() {
     fork(subThreadSaga),
     fork(socketSaga),
     fork(emojiSaga),
+    fork(findChannelSaga),
   ]);
 }
