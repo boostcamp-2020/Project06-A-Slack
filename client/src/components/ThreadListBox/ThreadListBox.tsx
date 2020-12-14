@@ -2,10 +2,15 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { INPUT_BOX_TYPE } from '@/utils/constants';
+import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { ThreadInputBox } from '@/components';
 import { loadChannelRequest } from '@/store/modules/channel.slice';
-import { enterRoomRequest, leaveRoomRequest } from '@/store/modules/socket.slice';
+import {
+  enterRoomRequest,
+  leaveRoomRequest,
+  sendMessageRequest,
+} from '@/store/modules/socket.slice';
+import { setEditDefault } from '@/store/modules/user.slice';
 import { useChannelState, useSocketState, useUserState } from '@/hooks';
 import { isNumberTypeValue } from '@/utils/utils';
 import { getThreadRequest } from '@/store/modules/thread.slice';
@@ -22,15 +27,16 @@ const Container = styled.div`
 
 interface RightSideParams {
   channelId: string;
+  threadId: string;
 }
 
 const ThreadListBox = () => {
-  const { channelId }: RightSideParams = useParams();
+  const { channelId, threadId }: RightSideParams = useParams();
 
   const dispatch = useDispatch();
 
   const { current } = useChannelState();
-  const { userInfo } = useUserState();
+  const { userInfo, edit } = useUserState();
   const { socket } = useSocketState();
 
   useEffect(() => {
@@ -46,6 +52,19 @@ const ThreadListBox = () => {
       dispatch(getThreadRequest({ channelId: +channelId }));
     }
   }, [channelId]);
+
+  useEffect(() => {
+    if (edit.success && userInfo) {
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.USER,
+          user: userInfo,
+          parentThreadId: threadId,
+        }),
+      );
+      dispatch(setEditDefault());
+    }
+  }, [edit]);
 
   useEffect(() => {
     if (current && socket) {
