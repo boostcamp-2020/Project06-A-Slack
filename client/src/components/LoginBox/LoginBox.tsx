@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const Form = styled.form`
   width: 25rem;
-  margin: 10rem auto;
+  margin: 5rem auto;
 `;
 
 const SignupButton = styled(LoginButton)`

@@ -16,14 +16,14 @@ const Container = styled.div`
 
 const Title = styled.div`
   font-size: 1.8rem;
-  font-weight: bold;
+  font-weight: 800;
   text-align: center;
-  margin: 3rem auto;
+  margin: 1.5rem auto 1rem auto;
 `;
 
 const Form = styled.form`
   width: 25rem;
-  margin: 6rem auto;
+  margin: 2rem auto 0 auto;
 `;
 
 const SignupButton = styled(FormButton)`
