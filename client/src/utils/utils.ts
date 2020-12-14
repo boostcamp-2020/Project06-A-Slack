@@ -67,3 +67,16 @@ export const makeDMRoomName = (pickUsers: User[], startName: string) => {
   }, startName);
   return name;
 };
+
+export const getFormattedDate = (d: Date): string => {
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const date = d.getDate();
+  const hour = d.getHours();
+  const minute = d.getMinutes();
+  const second = d.getSeconds();
+
+  return `${year}-${`0${month}`.slice(-2)}-${`0${date}`.slice(-2)} ${`0${hour}`.slice(
+    -2,
+  )}:${`0${minute}`.slice(-2)}:${`0${second}`.slice(-2)}`;
+};

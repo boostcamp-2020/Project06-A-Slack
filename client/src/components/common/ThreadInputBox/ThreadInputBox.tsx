@@ -10,6 +10,8 @@ import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import theme from '@/styles/theme';
 import { setScrollable } from '@/store/modules/thread.slice';
+import { Thread } from '@/types';
+import { getFormattedDate } from '@/utils/utils';
 
 interface ThreadInputBoxProps {
   inputBoxType: string;
@@ -110,6 +112,7 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
     if (!comment.trim()) {
       return;
     }
+
     if (userInfo) {
       const thread = {
         userId: userInfo.id,
@@ -129,6 +132,7 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
         subThreadUserId1: null,
         subThreadUserId2: null,
         subThreadUserId3: null,
+        createdAt: getFormattedDate(new Date()),
       };
       dispatch(
         sendMessageRequest({
