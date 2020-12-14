@@ -38,9 +38,14 @@ const ThreadListBox = () => {
       if (userInfo) {
         dispatch(loadChannelRequest({ channelId: +channelId, userId: userInfo.id }));
       }
-      dispatch(getThreadRequest({ channelId: Number(channelId) }));
     }
   }, [channelId, userInfo]);
+
+  useEffect(() => {
+    if (Number.isInteger(+channelId)) {
+      dispatch(getThreadRequest({ channelId: +channelId }));
+    }
+  }, [channelId]);
 
   useEffect(() => {
     if (current && socket) {
