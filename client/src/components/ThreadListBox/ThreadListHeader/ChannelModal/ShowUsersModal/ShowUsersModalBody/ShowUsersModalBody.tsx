@@ -27,7 +27,7 @@ const SearchedUserContainer = styled.div`
 `;
 
 const SearchedUserBox = styled.div`
-  padding: 8px 5px;
+  padding: 8px;
   margin: 0.5rem 0;
   border-radius: 5px;
   ${flex('center', 'flex-start')}
