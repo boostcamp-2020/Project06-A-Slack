@@ -67,6 +67,8 @@ const UserImg = styled.img`
 `;
 
 const UserNameBox = styled.span`
+  max-width: 16rem;
+  word-break: break-all;
   font-weight: 800;
   font-size: 1rem;
   color: ${(props) => props.theme.color.lightBlack};
