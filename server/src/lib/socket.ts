@@ -8,6 +8,7 @@ import {
 } from '@/utils/constants';
 import { channelModel } from '@/models';
 import { emojiService, threadService } from '@/services';
+import { channelService } from '@/services/channel.service';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
@@ -262,7 +263,7 @@ export const bindSocketServer = (server: http.Server): void => {
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
           try {
             if (channel?.id && room) {
-              await channelModel.modifyTopic({
+              await channelService.updateChannelTopic({
                 channelId: channel.id,
                 topic: channel.topic,
               });
@@ -285,20 +286,7 @@ export const bindSocketServer = (server: http.Server): void => {
         ) {
           if (channel?.id && users) {
             try {
-              const selectedUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
-                acc.push([cur.userId, channel.id]);
-                return acc;
-              }, []);
-
-              await channelModel.joinChannel({
-                selectedUsers,
-                prevMemberCount: channel.memberCount,
-                channelId: channel.id,
-              });
-              const [joinedUsers] = await channelModel.getChannelUser({
-                channelId: channel.id,
-              });
-
+              const joinedUsers = await channelService.updateChannelUsers({ users, channel });
               namespace.emit(MESSAGE, {
                 type,
                 subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
@@ -325,30 +313,15 @@ export const bindSocketServer = (server: http.Server): void => {
             try {
               const { ownerId, name, memberCount, isPublic, description, channelType } = channel;
 
-              const [newChannel] = await channelModel.createChannel({
+              await channelService.makeDM({
                 ownerId,
                 name,
                 memberCount,
                 isPublic,
                 description,
                 channelType,
+                users,
               });
-
-              const [joinedUsers] = await channelModel.getChannelUser({
-                channelId: newChannel.insertId,
-              });
-
-              const selectedUsers: [number[]] = users.reduce((acc: any, cur) => {
-                acc.push([cur.userId, newChannel.insertId]);
-                return acc;
-              }, []);
-
-              await channelModel.joinChannel({
-                channelId: newChannel.insertId,
-                prevMemberCount: joinedUsers.length,
-                selectedUsers,
-              });
-
               namespace.emit(MESSAGE, {
                 type,
                 subType: CHANNEL_SUBTYPE.MAKE_DM,
