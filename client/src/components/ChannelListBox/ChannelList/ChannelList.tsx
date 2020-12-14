@@ -19,12 +19,16 @@ const ChannelList = ({
   const { userId } = useAuthState();
 
   useEffect(() => {
-    dispatch(loadMyChannelsRequest(userId));
+    if (userId) {
+      dispatch(loadMyChannelsRequest({ userId: +userId }));
+    }
   }, [dispatch, userId]);
 
   useEffect(() => {
     if (reloadMyChannelList) {
-      dispatch(loadMyChannelsRequest(userId));
+      if (userId) {
+        dispatch(loadMyChannelsRequest({ userId: +userId }));
+      }
       dispatch(setReloadMyChannelListFlag({ reloadMyChannelList: false }));
     }
   }, [reloadMyChannelList]);

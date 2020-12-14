@@ -2,14 +2,7 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types';
 import { Link } from 'react-router-dom';
-import {
-  Popover,
-  MenuModal,
-  ReactionIcon,
-  CommentIcon,
-  DotIcon,
-  EmojiListModal,
-} from '@/components';
+import { Popover, ReactionIcon, CommentIcon, DotIcon, EmojiListModal } from '@/components';
 import { flex, hoverActive } from '@/styles/mixin';
 import theme from '@/styles/theme';
 

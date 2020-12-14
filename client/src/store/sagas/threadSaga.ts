@@ -8,14 +8,21 @@ import {
   createThreadFailure,
   getThreadRequestPayload,
   createThreadRequestPayload,
+  addThreadListRequest,
+  addThreadListSuccess,
+  addThreadListFailure,
+  addThreadRequestPayload,
 } from '@/store/modules/thread.slice';
 import { threadService } from '@/services/thread.service';
+import { PayloadAction } from '@reduxjs/toolkit';
 
-function* getThreadList({ channelId }: getThreadRequestPayload) {
+function* getThreadList({ payload }: PayloadAction<getThreadRequestPayload>) {
+  const { channelId } = payload;
   try {
     const { data, status } = yield call(threadService.getThreadList, { channelId });
+    const { threadList, nextThreadId } = data;
     if (status === 200) {
-      yield put(getThreadSuccess({ threadList: data.threadList, canScroll: true }));
+      yield put(getThreadSuccess({ threadList, canScroll: true, nextThreadId }));
     }
   } catch (err) {
     yield put(getThreadFailure(err));
@@ -23,12 +30,7 @@ function* getThreadList({ channelId }: getThreadRequestPayload) {
 }
 
 function* watchGetThreadList() {
-  while (true) {
-    const {
-      payload: { channelId },
-    } = yield take(getThreadRequest);
-    yield fork(getThreadList, { channelId });
-  }
+  yield takeEvery(getThreadRequest, getThreadList);
 }
 
 function* createThread({ content, userId, channelId, parentId }: createThreadRequestPayload) {
@@ -54,6 +56,26 @@ function* watchcreateThread() {
   }
 }
 
+function* addThreadList({ payload }: PayloadAction<addThreadRequestPayload>) {
+  const { channelId, nextThreadId: nid } = payload;
+  try {
+    const { data, status } = yield call(threadService.getThreadList, {
+      channelId,
+      nextThreadId: nid,
+    });
+    const { threadList, nextThreadId } = data;
+    if (status === 200) {
+      yield put(addThreadListSuccess({ threadList, nextThreadId }));
+    }
+  } catch (err) {
+    yield put(addThreadListFailure());
+  }
+}
+
+function* watchAddThreadList() {
+  yield takeEvery(addThreadListRequest, addThreadList);
+}
+
 export default function* threadSaga() {
-  yield all([fork(watchGetThreadList), fork(watchcreateThread)]);
+  yield all([fork(watchGetThreadList), fork(watchcreateThread), fork(watchAddThreadList)]);
 }

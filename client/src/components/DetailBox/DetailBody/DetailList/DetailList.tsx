@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { useChannelState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import { JoinedUser } from '@/types';
-import { RightIcon, RightArrowLineIcon } from '@/components';
+import { RightArrowLineIcon } from '@/components';
 import theme from '@/styles/theme';
 
 const Container = styled.div``;
@@ -15,7 +15,6 @@ const ListItem = styled.div`
 `;
 
 const ListItemName = styled.div`
-  color: ${(props) => props.theme.color.black3};
   font-size: 0.9rem;
   font-weight: bold;
   color: ${(props) => props.theme.color.lightBlack};
@@ -55,24 +54,50 @@ const ItemBox = styled.div`
   border-bottom: 1px solid ${(props) => props.theme.color.lightGray2};
 `;
 
-const MemberItem = styled.div`
-  ${flex('center', 'space-between')}
-`;
-
-const MemberImg = styled.img`
-  display: block;
-  width: 40px;
-  height: 40px;
+const ListRightBox = styled.div`
+  ${flex()}
 `;
 
 const MemberInfo = styled.div`
-  color: ${(props) => props.theme.color.black2};
+  color: ${(props) => props.theme.color.lightBlack};
   font-size: ${(props) => props.theme.size.m};
+  font-weight: bold;
+  margin-left: 0.5rem;
+`;
+
+const MemberItem = styled.div`
+  ${flex('center', 'flex-start')}
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.1s;
+  margin: 0.2rem 0;
+  &:hover {
+    transition: 0.1s;
+    color: white;
+    background-color: ${(props) => props.theme.color.blue1};
+    ${MemberInfo} {
+      color: white;
+    }
+  }
+`;
+
+const MemberImg = styled.img`
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  object-fit: cover;
+`;
+
+const MemberCount = styled.span`
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: ${(props) => props.theme.color.black2};
 `;
 
 export const DetailList: React.FC = () => {
   const [about, setAbout] = useState(false);
-  const [members, setMembers] = useState(false);
+  const [memberBoxVisible, setMemberBoxVisible] = useState(false);
   const { users } = useChannelState();
 
   const openAbout = () => {
@@ -80,7 +105,11 @@ export const DetailList: React.FC = () => {
   };
 
   const openMembers = () => {
-    setMembers((members) => !members);
+    setMemberBoxVisible((visible) => !visible);
+  };
+
+  const handleMemberClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
   };
 
   return (
@@ -96,13 +125,16 @@ export const DetailList: React.FC = () => {
       <ItemBox onClick={openMembers}>
         <ListItem>
           <ListItemName>Members</ListItemName>
-          <ArrowIcon rotated={members}>
-            <RightArrowLineIcon size="14px" color={theme.color.black5} />
-          </ArrowIcon>
+          <ListRightBox>
+            <MemberCount>{users.length}</MemberCount>
+            <ArrowIcon rotated={memberBoxVisible}>
+              <RightArrowLineIcon size="14px" color={theme.color.black5} />
+            </ArrowIcon>
+          </ListRightBox>
         </ListItem>
-        {members &&
+        {memberBoxVisible &&
           users?.map((user: JoinedUser) => (
-            <MemberItem key={user.userId}>
+            <MemberItem key={user.userId} onClick={handleMemberClick}>
               <MemberImg src={user.image} />
               <MemberInfo>{user.displayName}</MemberInfo>
             </MemberItem>

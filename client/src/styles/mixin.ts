@@ -12,7 +12,7 @@ export const focusedInputBoxShadow = css`
 `;
 
 export const modalBoxShadow = css`
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.3);
 `;
 
 export const hoverActive = css`

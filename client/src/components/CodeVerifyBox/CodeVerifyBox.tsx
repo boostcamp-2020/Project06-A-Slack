@@ -89,7 +89,7 @@ const InvaildBox = styled.div`
   border: 1px solid ${(props) => props.theme.color.warningRed};
   border-radius: 5px;
   background-color: rgba(224, 30, 90, 0.1);
-  ${flex('center')};
+  ${flex()};
 `;
 
 const WarningText = styled.span`

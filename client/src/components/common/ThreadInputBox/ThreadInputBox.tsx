@@ -9,6 +9,7 @@ import { SubmitButton as SB } from '@/styles/shared';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import theme from '@/styles/theme';
+import { setScrollable } from '@/store/modules/thread.slice';
 
 interface ThreadInputBoxProps {
   inputBoxType: string;
@@ -92,7 +93,7 @@ const getParentId = (inputBoxType: string, threadId: string | undefined) => {
 };
 
 const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadInputBoxProps) => {
-  const { channelId, threadId }: RightSideParams = useParams();
+  const { threadId }: RightSideParams = useParams();
   const { userInfo } = useUserState();
 
   const [disable, setDisable] = useState(true);
@@ -133,6 +134,9 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
           room: current?.name as string,
         }),
       );
+      if (!parentId) {
+        dispatch(setScrollable({ canScroll: true }));
+      }
     }
   };
 

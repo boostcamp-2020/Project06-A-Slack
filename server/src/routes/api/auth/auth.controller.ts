@@ -20,19 +20,10 @@ import isEmail from 'validator/lib/isEmail';
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { email, pw } = req.body;
   if (verifyRequestData([email, pw])) {
-    let decryptedEmail;
-    let decryptedPw;
-    try {
-      decryptedEmail = decrypt(email);
-      decryptedPw = decrypt(pw);
-    } catch (err) {
-      next({ message: ERROR_MESSAGE.ENCRYPT_DECRYPT_FAILED, status: 400 });
-    }
-
-    const [[user]] = await userModel.getUserByEmail({ email: decryptedEmail as string });
+    const [[user]] = await userModel.getUserByEmail({ email });
     if (user) {
       try {
-        const match = await bcrypt.compare(decryptedPw, user.pw);
+        const match = await bcrypt.compare(pw, user.pw);
         if (match) {
           // 비번 일치 할 때
           const { pw: userPw, phoneNumber, image, ...userInfo } = user;

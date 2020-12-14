@@ -21,6 +21,7 @@ export const ERROR_MESSAGE = {
   CODE_GENERATION_FAILED: '인증 코드 생성 실패',
   ENCRYPT_DECRYPT_FAILED: '암호화/복호화 실패',
   EXIST_EMAIL: '존재하는 이메일',
+  NOT_ALLOWED_FILE_TYPE: '허용되지 않은 파일타입',
 };
 
 export const USER_DEFAULT_PROFILE_URL =

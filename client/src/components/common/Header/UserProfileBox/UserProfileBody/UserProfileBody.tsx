@@ -7,7 +7,9 @@ import { useUserState } from '@/hooks';
 import { editUserRequest } from '@/store/modules/user.slice';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
-const Container = styled.form``;
+const Container = styled.form`
+  padding: 1.4rem;
+`;
 
 const ModalBody = styled.div`
   ${flex()};
@@ -78,7 +80,7 @@ const RemovePhotoButton = styled.button`
 const ModalFooter = styled.div`
   width: 100%;
   height: 100%;
-  margin: 2rem 0;
+  margin: 1rem 0;
   border-radius: 0 0 5px 5px;
   ${flex('center', 'flex-end')};
 `;
@@ -97,6 +99,7 @@ interface ProfileBodyProps {
 
 const fileReader = new FileReader();
 const phoneNumberRegex = /^\d{3}-\d{3,4}-\d{4}$/;
+const imageRegex = /.(jpg|jpeg|png|gif)$/i;
 
 const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: ProfileBodyProps) => {
   const dispatch = useDispatch();
@@ -166,7 +169,7 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
       alert('첨부파일은 5MB 이하의 파일만 첨부 가능합니다.');
       return;
     }
-    if (!file[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
+    if (!file[0].name.match(imageRegex)) {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
