@@ -18,7 +18,7 @@ export const threadModel: Model = {
     FROM thread t
     LEFT JOIN user u
     ON u.id = t.user_id 
-    WHERE t.is_deleted = 0 AND channel_id = ? `;
+    WHERE t.is_deleted = 0 AND channel_id = ? AND parent_id is null `;
     const condition = nextThreadId
       ? 'AND t.id < ? ORDER BY t.id DESC LIMIT ?'
       : 'ORDER BY t.id DESC LIMIT ?;';
