@@ -88,6 +88,9 @@ const channelSlice = createSlice({
     updateChannelUnread(state, { payload }: PayloadAction<{ channel: Channel }>) {
       const { channel } = payload;
       state.myChannelList = state.myChannelList.map((chan) => {
+        if (chan.id === state.current?.id) {
+          return chan;
+        }
         if (chan.id === channel.id) {
           return { ...chan, ...channel };
         }
