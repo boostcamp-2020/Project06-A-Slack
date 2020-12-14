@@ -264,13 +264,13 @@ export const bindSocketServer = (server: http.Server): void => {
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
           if (channel?.id && users) {
             try {
-              const joinUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
+              const selectedUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
                 acc.push([cur.userId, channel.id]);
                 return acc;
               }, []);
 
               await channelModel.joinChannel({
-                joinUsers,
+                selectedUsers,
                 prevMemberCount: channel.memberCount,
                 channelId: channel.id,
               });
@@ -310,7 +310,7 @@ export const bindSocketServer = (server: http.Server): void => {
                 channelId: newChannel.insertId,
               });
 
-              const joinUsers: [number[]] = users.reduce((acc: any, cur) => {
+              const selectedUsers: [number[]] = users.reduce((acc: any, cur) => {
                 acc.push([cur.userId, newChannel.insertId]);
                 return acc;
               }, []);
@@ -318,7 +318,7 @@ export const bindSocketServer = (server: http.Server): void => {
               await channelModel.joinChannel({
                 channelId: newChannel.insertId,
                 prevMemberCount: joinedUsers.length,
-                joinUsers,
+                selectedUsers,
               });
 
               namespace.emit(MESSAGE, {
