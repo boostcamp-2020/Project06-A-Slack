@@ -19,9 +19,16 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const Title = styled.div`
+  font-size: 2.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 1rem auto 0 auto;
+`;
+
 const Form = styled.form`
   width: 25rem;
-  margin: 5rem auto;
+  margin: 3rem auto;
 `;
 
 const SignupButton = styled(LoginButton)`
@@ -68,6 +75,7 @@ const LoginBox: React.FC = () => {
 
   return (
     <Container>
+      <Title>Slack에 로그인</Title>
       <Form onSubmit={handleSubmit}>
         <Label>
           이메일 주소

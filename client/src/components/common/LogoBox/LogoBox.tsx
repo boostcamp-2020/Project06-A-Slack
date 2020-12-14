@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import slackLogo from '@/public/icon/slack-logo.svg';
 import { flex } from '@/styles/mixin';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100%;
@@ -18,7 +19,9 @@ const SlackLogo = styled.img`
 const LogoBox: React.FC = () => {
   return (
     <Container>
-      <SlackLogo src={slackLogo} />
+      <Link to="/">
+        <SlackLogo src={slackLogo} />
+      </Link>
     </Container>
   );
 };

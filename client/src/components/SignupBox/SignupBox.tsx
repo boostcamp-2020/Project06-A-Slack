@@ -15,10 +15,10 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 1.8rem;
-  font-weight: 800;
+  font-size: 2.3rem;
+  font-weight: bold;
   text-align: center;
-  margin: 1.5rem auto 1rem auto;
+  margin: 1rem auto 1rem auto;
 `;
 
 const Form = styled.form`

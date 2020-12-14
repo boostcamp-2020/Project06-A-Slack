@@ -17,7 +17,7 @@ const SignupPage: React.FC = () => {
 
   return (
     <>
-      {email ? (
+      {!email ? (
         <Redirect to="/" />
       ) : (
         <>

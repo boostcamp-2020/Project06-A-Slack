@@ -8,7 +8,7 @@ import { flex, focusedInputBoxShadow } from '@/styles/mixin';
 import { removeVerifyCode } from '@/store/modules/signup.slice';
 import { useSignupState } from '@/hooks';
 import { decrypt } from '@/utils/utils';
-import { WarningIcon } from '@/components';
+import { WarningIcon, LogoBox } from '@/components';
 
 const Container = styled.div`
   width: 50rem;
@@ -16,16 +16,10 @@ const Container = styled.div`
   ${flex('center', 'center', 'column')};
 `;
 
-const AppIcon = styled.div`
-  margin: 1rem auto;
-  font-size: 2rem;
-  font-weight: bold;
-`;
-
 const Title = styled.div`
-  margin: 0.5rem auto;
+  margin: 0.7rem auto;
   font-size: 2.8rem;
-  font-weight: 800;
+  font-weight: bold;
   color: ${(props) => props.theme.color.black1};
 `;
 
@@ -179,7 +173,7 @@ const CodeVerifyBox = () => {
 
   return (
     <Container>
-      <AppIcon>Slack</AppIcon>
+      <LogoBox />
       <Title>코드는 이메일에서 확인하세요</Title>
       <SubTitle>
         <BoldText>{email}</BoldText>(으)로 6자 코드를 보냈습니다. 코드는 잠시 후에 만료되니 빨리

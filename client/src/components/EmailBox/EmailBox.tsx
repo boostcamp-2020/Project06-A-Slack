@@ -4,7 +4,7 @@ import isEmail from 'validator/es/lib/isEmail';
 import { useDispatch } from 'react-redux';
 import { FormButton, FormInput } from '@/styles/shared';
 import { flex } from '@/styles/mixin';
-import { WarningIcon, DimModal } from '@/components';
+import { WarningIcon, LogoBox } from '@/components';
 import { useSignupState } from '@/hooks';
 import {
   verifyEmailSendRequest,
@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   width: 30rem;
-  margin: 4rem auto 2rem auto;
+  margin: 1rem auto 2rem auto;
 `;
 
 const Title = styled.div`
@@ -126,6 +126,7 @@ const EmailBox: React.FC = () => {
 
   return (
     <Container>
+      <LogoBox />
       <Header>
         <Title>우선 이메일 입력하기</Title>
         <SubTitle>
