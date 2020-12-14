@@ -31,7 +31,6 @@ const FindChannelModalBody: React.FC<FindChannelModalProps> = ({
   }, []);
 
   const clickJoinButton = ({ channel }: { channel: Channel }) => {
-    console.log(channel);
     if (userInfo) {
       const users = [
         { userId: userInfo.id, displayName: userInfo.displayName, image: userInfo.image },
@@ -39,7 +38,7 @@ const FindChannelModalBody: React.FC<FindChannelModalProps> = ({
       dispatch(
         sendMessageRequest({
           type: SOCKET_MESSAGE_TYPE.CHANNEL,
-          subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+          subType: CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL,
           channel,
           users,
           room: channel.name,

@@ -91,7 +91,10 @@ function subscribeSocket(socket: Socket) {
           return;
         }
 
-        if (subType === CHANNEL_SUBTYPE.MAKE_DM) {
+        if (
+          subType === CHANNEL_SUBTYPE.MAKE_DM ||
+          subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL
+        ) {
           emit(setReloadMyChannelListFlag({ reloadMyChannelList: true }));
         }
 
