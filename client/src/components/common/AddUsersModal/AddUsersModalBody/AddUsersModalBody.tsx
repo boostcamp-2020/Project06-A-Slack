@@ -46,6 +46,7 @@ const PickedUserBox = styled.div`
   border-radius: 5px;
   background-color: rgba(29, 155, 209, 0.1);
   ${flex()};
+  margin-right: 0.5rem;
 `;
 
 const RemoveBox = styled.div``;
