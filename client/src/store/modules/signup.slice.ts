@@ -8,9 +8,17 @@ interface SignupState {
   verify: {
     loading: boolean;
     verifyCode: string | null;
-    err: {
-      message: string;
-    } | null;
+    err: Error | null;
+  };
+  signup: {
+    loading: boolean;
+    err: Error | null;
+    status: number | null;
+  };
+  checkExistEmail: {
+    loading: boolean;
+    err: Error | null;
+    status: number | null;
   };
 }
 
@@ -21,6 +29,16 @@ const signupState: SignupState = {
     verifyCode: null,
     err: null,
   },
+  signup: {
+    loading: false,
+    err: null,
+    status: null,
+  },
+  checkExistEmail: {
+    loading: false,
+    err: null,
+    status: null,
+  },
 };
 
 export interface VerifyEmailSendRequestPayload {
@@ -30,6 +48,12 @@ export interface VerifyEmailSendRequestPayload {
 interface VerifyEmailSendSuccessPayload {
   verifyCode: string;
   email: string;
+}
+
+export interface signupRequestPayload {
+  email: string;
+  pw: string;
+  displayName: string;
 }
 
 const signupSlice = createSlice({
@@ -49,9 +73,47 @@ const signupSlice = createSlice({
       state.verify.loading = false;
       state.verify.err = payload.err;
     },
-    removeVerifyCodeAndEmail(state) {
+    removeVerifyCode(state) {
       state.verify.verifyCode = null;
+    },
+    removeVerifyEmail(state) {
       state.email = null;
+    },
+    signupRequest(state, { payload }: PayloadAction<signupRequestPayload>) {
+      state.signup.loading = true;
+    },
+    signupSuccess(state, { payload }: PayloadAction<{ status: number }>) {
+      state.signup.loading = false;
+      state.signup.status = payload.status;
+    },
+    signupFailure(state, { payload }: PayloadAction<{ err: Error }>) {
+      state.signup.loading = false;
+      state.signup.err = payload.err;
+    },
+    resetSignupState(state) {
+      state.signup.loading = false;
+      state.signup.err = null;
+      state.signup.status = null;
+    },
+    checkExistEmailRequest(state, { payload }: PayloadAction<{ email: string }>) {
+      state.checkExistEmail.loading = true;
+    },
+    checkExistEmailSuccess(state, { payload }: PayloadAction<{ status: number }>) {
+      state.checkExistEmail.loading = false;
+      state.checkExistEmail.status = payload.status;
+      state.checkExistEmail.err = null;
+    },
+    checkExistEmailFailure(state, { payload }: PayloadAction<{ err: Error }>) {
+      state.checkExistEmail.loading = false;
+      state.checkExistEmail.status = null;
+      state.checkExistEmail.err = payload.err;
+    },
+    resetCheckExistEmailState(state) {
+      state.checkExistEmail = {
+        loading: false,
+        err: null,
+        status: null,
+      };
     },
   },
 });
@@ -64,7 +126,16 @@ export const {
   verifyEmailSendRequest,
   verifyEmailSendSuccess,
   verifyEmailSendFailure,
-  removeVerifyCodeAndEmail,
+  removeVerifyCode,
+  removeVerifyEmail,
+  signupRequest,
+  signupSuccess,
+  signupFailure,
+  resetSignupState,
+  checkExistEmailRequest,
+  checkExistEmailSuccess,
+  checkExistEmailFailure,
+  resetCheckExistEmailState,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;

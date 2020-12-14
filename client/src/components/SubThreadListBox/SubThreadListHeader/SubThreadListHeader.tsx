@@ -52,17 +52,6 @@ const SubThreadListHeader = () => {
     }
   }, [channelId, userInfo]);
 
-  useEffect(() => {
-    if (current) {
-      dispatch(enterRoomRequest({ room: current.name }));
-    }
-    return () => {
-      if (current) {
-        dispatch(leaveRoomRequest({ room: current.name }));
-      }
-    };
-  }, [current]);
-
   return (
     <Container>
       <LeftBox>

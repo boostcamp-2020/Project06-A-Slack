@@ -1,26 +1,21 @@
-import React from 'react';
-import { Link, Redirect, useLocation } from 'react-router-dom';
-
-interface LocationState {
-  email: string;
-}
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { useSignupState } from '@/hooks';
+import { removeVerifyEmail } from '@/store/modules/signup.slice';
+import { SignupBox } from '@/components';
 
 const SignupPage: React.FC = () => {
-  const location = useLocation<LocationState>();
-  const { email } = location.state;
+  const dispatch = useDispatch();
+  const { email } = useSignupState();
 
-  return (
-    <>
-      {!email ? (
-        <Redirect to="/" />
-      ) : (
-        <>
-          <Link to="/">Home</Link>
-          <h1>회원가입 페이지</h1>
-        </>
-      )}
-    </>
-  );
+  useEffect(() => {
+    return () => {
+      dispatch(removeVerifyEmail());
+    };
+  }, []);
+
+  return <>{!email ? <Redirect to="/" /> : <SignupBox />}</>;
 };
 
 export default SignupPage;

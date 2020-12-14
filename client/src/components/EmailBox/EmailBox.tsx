@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import isEmail from 'validator/es/lib/isEmail';
 import { useDispatch } from 'react-redux';
@@ -6,7 +6,12 @@ import { FormButton, FormInput } from '@/styles/shared';
 import { flex } from '@/styles/mixin';
 import { WarningIcon, DimModal } from '@/components';
 import { useSignupState } from '@/hooks';
-import { verifyEmailSendRequest } from '@/store/modules/signup.slice';
+import {
+  verifyEmailSendRequest,
+  checkExistEmailRequest,
+  resetCheckExistEmailState,
+} from '@/store/modules/signup.slice';
+import LoadingSvg from '@/public/icon/loading.svg';
 
 const Container = styled.div`
   width: 100%;
@@ -58,22 +63,43 @@ export const WarningText = styled.div`
 
 const Button = styled(FormButton)`
   &:disabled {
-    cursor: wait;
+    cursor: initial;
+    background-color: ${(props) => props.theme.color.lightGray1};
   }
+  ${flex()}
 `;
+
+const LoadingButton = styled(FormButton)`
+  height: 50px;
+  cursor: initial;
+  ${flex()}
+`;
+
+const LoadingIcon = styled.img`
+  width: 40px;
+  height: 40px;
+`;
+
+const notValidEmailMessage = '유효하지 않은 이메일 주소입니다.';
+const existEmailMessage = '이미 가입된 이메일입니다.';
 
 const EmailBox: React.FC = () => {
   const [email, setEmail] = useState('');
   const [valid, setValid] = useState(true);
-  const {
-    verify: { loading },
-  } = useSignupState();
+  const [isExistEmail, setIsExistEmail] = useState(false);
+  const { verify, checkExistEmail } = useSignupState();
 
   const dispatch = useDispatch();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    const { value } = e.target;
+    setEmail(value);
+    if (!isEmail(value)) {
+      setValid(false);
+      return;
+    }
     setValid(true);
+    dispatch(checkExistEmailRequest({ email: value }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -84,6 +110,19 @@ const EmailBox: React.FC = () => {
     }
     dispatch(verifyEmailSendRequest({ email }));
   };
+
+  useEffect(() => {
+    if (checkExistEmail.status === 200) {
+      setIsExistEmail(false);
+      return;
+    }
+    if (checkExistEmail.err) {
+      setIsExistEmail(true);
+      dispatch(resetCheckExistEmailState());
+    }
+  }, [checkExistEmail]);
+
+  const warningMessage = !valid ? notValidEmailMessage : existEmailMessage;
 
   return (
     <Container>
@@ -101,17 +140,23 @@ const EmailBox: React.FC = () => {
           value={email}
           required
         />
-        {!valid && (
+        {(!valid || isExistEmail) && !(verify.loading || checkExistEmail.loading) && (
           <WarningBox>
             <IconBox>
               <WarningIcon />
             </IconBox>
-            <WarningText>유효하지 않은 이메일 주소입니다.</WarningText>
+            <WarningText>{warningMessage}</WarningText>
           </WarningBox>
         )}
-        <Button disabled={loading} type="submit">
-          인증 코드 전송
-        </Button>
+        {verify.loading || checkExistEmail.loading ? (
+          <LoadingButton type="submit">
+            <LoadingIcon src={LoadingSvg} />
+          </LoadingButton>
+        ) : (
+          <Button disabled={!valid || isExistEmail} type="submit">
+            인증 코드 전송
+          </Button>
+        )}
       </Form>
     </Container>
   );

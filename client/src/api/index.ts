@@ -58,7 +58,9 @@ instance.interceptors.response.use(
       console.log('요청 취소', err);
     } else {
       if (err.response.status === 401) {
-        window.location.href = '/login';
+        if (err.response.config.url !== '/api/auth/login') {
+          window.location.href = '/login';
+        }
       }
       console.error('api 에러', err);
     }

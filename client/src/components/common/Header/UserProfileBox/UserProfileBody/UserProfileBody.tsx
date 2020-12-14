@@ -96,6 +96,7 @@ interface ProfileBodyProps {
 }
 
 const fileReader = new FileReader();
+const phoneNumberRegex = /^\d{3}-\d{3,4}-\d{4}$/;
 
 const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: ProfileBodyProps) => {
   const dispatch = useDispatch();
@@ -104,6 +105,8 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const profileImageRef = useRef<HTMLImageElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
 
   const [displayName, setDisplayName] = useState(userInfo?.displayName ?? '');
   const [phoneNumber, setPhoneNumber] = useState(userInfo?.phoneNumber ?? '');
@@ -119,6 +122,11 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!phoneNumber.match(phoneNumberRegex)) {
+      alert('휴대폰 번호 형식이 올바르지 않습니다.');
+      phoneNumberRef.current?.focus();
+      return;
+    }
     if (userInfo) {
       dispatch(
         editUserRequest({
@@ -151,6 +159,20 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files as FileList;
+    if (file[0].size > 5 * 1024 * 1024) {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      alert('첨부파일은 5MB 이하의 파일만 첨부 가능합니다.');
+      return;
+    }
+    if (!file[0].name.match(/.(jpg|jpeg|png|gif)$/i)) {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      alert('이미지 파일만 사용할 수 있습니다.\n(JPG, JPEG, PNG, GIF 포맷)');
+      return;
+    }
     setProfileImage(file[0]);
     fileReader.readAsDataURL(file[0]);
   };
@@ -183,7 +205,13 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
           </ModalLabel>
           <ModalLabel>
             Phone number
-            <FormInput value={phoneNumber} onChange={handlePhoneNumberChange} maxLength={20} />
+            <FormInput
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+              placeholder="010-0000-0000"
+              maxLength={13}
+              ref={phoneNumberRef}
+            />
             <InputDesc>Enter a phone number.</InputDesc>
           </ModalLabel>
         </UserInfoBox>
@@ -192,7 +220,12 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
           <ProfileImage src={userInfo?.image as string} ref={profileImageRef} />
           <FileLabel>
             Upload an image
-            <FileSelectInput type="file" onChange={handleFileChange} />
+            <FileSelectInput
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpg, image/jpeg, image/gif, image/png"
+              onChange={handleFileChange}
+            />
           </FileLabel>
           <RemovePhotoButton type="button" onClick={removeProfileImage}>
             Remove photo

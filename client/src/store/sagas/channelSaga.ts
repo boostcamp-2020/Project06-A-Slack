@@ -21,6 +21,7 @@ import {
   joinChannelRequsetPayload,
 } from '@/store/modules/channel.slice';
 import { setRedirect } from '@/store/modules/redirect.slice';
+import { setLastChannel } from '@/store/modules/user.slice';
 
 function* loadChannels() {
   try {
@@ -52,10 +53,13 @@ function* loadChannel(action: any) {
     if (status === 200) {
       yield put(loadChannelSuccess({ channel: data.channel, users: data.users }));
     }
-    yield call(channelService.modifyLastChannel, {
+    const { status: resStatus } = yield call(channelService.modifyLastChannel, {
       lastChannelId: action.payload.channelId,
       userId: action.payload.userId,
     });
+    if (resStatus === 200) {
+      yield put(setLastChannel({ channelId: action.payload.channelId }));
+    }
   } catch (err) {
     yield put(loadChannelFailure(err));
   }

@@ -63,4 +63,8 @@ export const userModel = {
     WHERE display_name LIKE ?`;
     return pool.execute(sql, [`${displayName}%`]);
   },
+  addUser({ email, pw, displayName }: { email: string; pw: string; displayName: string }): any {
+    const sql = `INSERT INTO user (email, pw, display_name) VALUES (?, ?, ?);`;
+    return pool.execute(sql, [email, pw, displayName]);
+  },
 };
