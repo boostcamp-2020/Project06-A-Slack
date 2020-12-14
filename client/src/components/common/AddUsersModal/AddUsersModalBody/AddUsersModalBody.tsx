@@ -43,10 +43,12 @@ const SearchedUserBox = styled.div`
 `;
 
 const PickedUserBox = styled.div`
+  padding: 0.5rem;
   border-radius: 5px;
   background-color: rgba(29, 155, 209, 0.1);
   ${flex()};
   margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
 `;
 
 const RemoveBox = styled.div``;
@@ -67,6 +69,7 @@ const UserName = styled.div`
 
 const SearchResultBox = styled.div`
   ${flex('center', 'flex-start')}
+  flex-wrap:wrap;
 `;
 
 const ModalFooter = styled.div`
