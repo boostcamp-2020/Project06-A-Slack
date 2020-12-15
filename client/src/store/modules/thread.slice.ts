@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EmojiOfThread, Thread, ThreadResponse } from '@/types';
+import { EmojiOfThread, JoinedUser, Thread, ThreadResponse } from '@/types';
 
 interface ThreadState {
   threadList: Thread[] | null;
@@ -150,6 +150,24 @@ const threadSlice = createSlice({
         targetThread.emoji = payload.emoji;
       }
     },
+    replaceThreadsAfterUpdateUserProfile(
+      state,
+      { payload }: PayloadAction<{ changedJoinedUserInfo: JoinedUser }>,
+    ) {
+      const { changedJoinedUserInfo } = payload;
+      if (state.threadList) {
+        state.threadList = state.threadList.map((thread) => {
+          if (thread.userId === changedJoinedUserInfo.userId) {
+            return {
+              ...thread,
+              displayName: changedJoinedUserInfo.displayName,
+              image: changedJoinedUserInfo.image,
+            };
+          }
+          return thread;
+        });
+      }
+    },
   },
 });
 
@@ -173,6 +191,7 @@ export const {
   addThreadListRequest,
   addThreadListSuccess,
   addThreadListFailure,
+  replaceThreadsAfterUpdateUserProfile,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

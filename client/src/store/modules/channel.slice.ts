@@ -128,6 +128,22 @@ const channelSlice = createSlice({
     ) {
       state.reloadMyChannelList = payload.reloadMyChannelList;
     },
+    replaceUserAfterUpdateUserProfile(
+      state,
+      { payload }: PayloadAction<{ changedJoinedUserInfo: JoinedUser }>,
+    ) {
+      const { changedJoinedUserInfo } = payload;
+      state.users = state.users.map((u) => {
+        if (u.userId === changedJoinedUserInfo.userId) {
+          return {
+            ...u,
+            displayName: changedJoinedUserInfo.displayName,
+            image: changedJoinedUserInfo.image,
+          };
+        }
+        return u;
+      });
+    },
   },
 });
 
@@ -154,5 +170,6 @@ export const {
   updateChannelTopic,
   updateChannelUsers,
   setReloadMyChannelListFlag,
+  replaceUserAfterUpdateUserProfile,
 } = channelSlice.actions;
 export default channelSlice.reducer;
