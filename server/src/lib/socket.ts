@@ -280,10 +280,25 @@ export const bindSocketServer = (server: http.Server): void => {
           return;
         }
 
-        if (
-          subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS ||
-          subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL
-        ) {
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
+          if (channel?.id && users) {
+            try {
+              const joinedUsers = await channelService.updateChannelUsers({ users, channel });
+              namespace.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+                users: joinedUsers,
+                channel,
+                room,
+              });
+            } catch (err) {
+              console.error(err.message);
+            }
+            return;
+          }
+        }
+
+        if (subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL) {
           if (channel?.id && users) {
             try {
               const joinedUsers = await channelService.updateChannelUsers({ users, channel });
@@ -295,14 +310,12 @@ export const bindSocketServer = (server: http.Server): void => {
                 room,
               });
 
-              if (subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL) {
-                socket.emit(MESSAGE, {
-                  type,
-                  subType: CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL,
-                });
-              }
+              socket.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL,
+              });
             } catch (err) {
-              console.log(err);
+              console.error(err.message);
             }
             return;
           }
@@ -329,7 +342,7 @@ export const bindSocketServer = (server: http.Server): void => {
                 channel,
               });
             } catch (err) {
-              console.error(err);
+              console.error(err.message);
             }
           }
           return;
