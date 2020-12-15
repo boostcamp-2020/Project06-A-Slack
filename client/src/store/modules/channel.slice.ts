@@ -2,9 +2,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { JoinedUser, Channel, User, ChannelInfo } from '@/types';
-import { userInfo } from 'os';
-import { userService } from '@/services';
-import { actionChannel } from 'redux-saga/effects';
 
 interface ChannelState {
   channelList: Channel[];
