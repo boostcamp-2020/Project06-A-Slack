@@ -10,7 +10,6 @@ import {
   leaveRoomRequest,
   sendMessageRequest,
 } from '@/store/modules/socket.slice';
-import { setEditDefault } from '@/store/modules/user.slice';
 import { useChannelState, useSocketState, useUserState } from '@/hooks';
 import { isNumberTypeValue } from '@/utils/utils';
 import { getThreadRequest } from '@/store/modules/thread.slice';
@@ -62,7 +61,6 @@ const ThreadListBox = () => {
           parentThreadId: threadId,
         }),
       );
-      dispatch(setEditDefault());
     }
   }, [edit]);
 
