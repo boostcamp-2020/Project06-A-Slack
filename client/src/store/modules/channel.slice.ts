@@ -2,6 +2,9 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { JoinedUser, Channel, User, ChannelInfo } from '@/types';
+import { userInfo } from 'os';
+import { userService } from '@/services';
+import { actionChannel } from 'redux-saga/effects';
 
 interface ChannelState {
   channelList: Channel[];
@@ -125,6 +128,18 @@ const channelSlice = createSlice({
     ) {
       state.reloadMyChannelList = payload.reloadMyChannelList;
     },
+    replaceUserAfterUpdateUserProfile(
+      state,
+      { payload }: PayloadAction<{ changeUserInfo: JoinedUser }>,
+    ) {
+      const { changeUserInfo } = payload;
+      state.users = state.users.map((u) => {
+        if (u.userId === changeUserInfo.userId) {
+          return { ...u, displayName: changeUserInfo.displayName, image: changeUserInfo.image };
+        }
+        return u;
+      });
+    },
   },
 });
 
@@ -150,5 +165,6 @@ export const {
   updateChannelTopic,
   updateChannelUsers,
   setReloadMyChannelListFlag,
+  replaceUserAfterUpdateUserProfile,
 } = channelSlice.actions;
 export default channelSlice.reducer;
