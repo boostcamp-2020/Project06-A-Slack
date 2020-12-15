@@ -43,13 +43,19 @@ export const SOCKET_MESSAGE_TYPE = {
   DM: 'dm',
 };
 
+export const THREAD_SUBTYPE = {
+  CREATE_THREAD: 'create_thread',
+  EDIT_THREAD: 'edit_thread',
+  DELETE_THREAD: 'delete_thread',
+};
+
 export const CHANNEL_SUBTYPE = {
   UPDATE_CHANNEL: 'update_channel',
   UPDATE_CHANNEL_TOPIC: 'update_channel_topic',
   UPDATE_CHANNEL_UNREAD: 'update_channel_unread',
   UPDATE_CHANNEL_USERS: 'update_channel_users',
   MAKE_DM: 'make_dm',
-  FIND_AND_JOIN_CHANNEL: `find_and_join_channel`,
+  FIND_AND_JOIN_CHANNEL: 'find_and_join_channel',
 };
 
 export const GET_EMOJI_OF_THREAD_SQL = `
@@ -58,3 +64,23 @@ export const GET_EMOJI_OF_THREAD_SQL = `
   WHERE thread.id=? AND thread.is_deleted=0;`;
 
 export const UPDATE_EMOJIES_OF_THREAD_SQL = `UPDATE thread SET emoji=? WHERE id=?`;
+
+export const DELETE_THREAD_SQL = `UPDATE thread SET is_deleted=1 WHERE id=?;`;
+
+export const DECREASE_SUB_COUNT_OF_THREAD_SQL = `UPDATE thread SET sub_count=sub_count-1 WHERE id=?;`;
+
+export const GET_THREAD_SQL = `
+  SELECT thread.id AS id, user_id AS userId, channel_id AS channelId, content, url, is_edited AS isEdited, is_pinned AS isPinned, 
+  thread.is_deleted AS isDeleted, parent_id AS parentId, emoji, thread.created_at AS createdAt, sub_count AS subCount, 
+  sub_thread_user_id_1 AS subThreadUserId1, sub_thread_user_id_2 AS subThreadUserId2, sub_thread_user_id_3 AS subThreadUserId3, 
+  email, display_name AS displayName, phone_number AS phoneNumber, image
+  FROM thread LEFT JOIN user ON (user.id = thread.user_id)
+  WHERE thread.id=?`;
+
+export const GET_SUB_THREAD_LIST_SQL = `
+  SELECT thread.id, user_id AS userId, channel_id AS channelId, content, url, is_edited AS isEdited, is_pinned AS isPinned, 
+  thread.is_deleted AS isDeleted, parent_id AS parentId, emoji, thread.created_at AS createdAt, sub_count AS subCount, 
+  sub_thread_user_id_1 AS subThreadUserId1, sub_thread_user_id_2 AS subThreadUserId2, sub_thread_user_id_3 AS subThreadUserId3, 
+  email, display_name AS displayName, phone_number AS phoneNumber, image
+  FROM thread LEFT JOIN user ON (user.id = thread.user_id)
+  WHERE parent_id=?;`;
