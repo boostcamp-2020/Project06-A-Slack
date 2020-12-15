@@ -77,14 +77,16 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
   const reactionBoxRef = useRef<HTMLDivElement>(null);
 
   const clickDeleteMessage = () => {
-    dispatch(
-      sendMessageRequest({
-        type: SOCKET_MESSAGE_TYPE.THREAD,
-        room: current?.name as string,
-        subType: THREAD_SUBTYPE.DELETE_THREAD,
-        thread,
-      }),
-    );
+    if (confirm('해당 스레드를 삭제 하시겠습니까?')) {
+      dispatch(
+        sendMessageRequest({
+          type: SOCKET_MESSAGE_TYPE.THREAD,
+          room: current?.name as string,
+          subType: THREAD_SUBTYPE.DELETE_THREAD,
+          thread,
+        }),
+      );
+    }
   };
 
   return (
