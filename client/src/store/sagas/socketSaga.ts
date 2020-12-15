@@ -14,22 +14,22 @@ import {
   updateAddSubThreadInfo,
   deleteThread,
   updateDeleteSubThreadInfo,
-  getThreadRequest,
+  replaceThreadsAfterUpdateUserProfile,
 } from '@/store/modules/thread.slice';
 import {
   changeEmojiOfSubThread,
   addSubThread,
   deleteSubThread,
   deleteSubParentThread,
-  getSubThreadRequest,
+  replaceSubThreadsAfterUpdateUserProfile,
 } from '@/store/modules/subThread.slice';
 
 import {
-  loadChannelRequest,
   updateChannelUnread,
   updateChannelTopic,
   updateChannelUsers,
   setReloadMyChannelListFlag,
+  replaceUserAfterUpdateUserProfile,
 } from '@/store/modules/channel.slice';
 
 import io from 'socket.io-client';
@@ -140,12 +140,18 @@ function subscribeSocket(socket: Socket) {
       if (isUserEvent(data)) {
         const { channelId, user, parentThreadId } = data;
         if (channelId && user) {
-          emit(loadChannelRequest({ channelId: +channelId, userId: user.id }));
-          emit(getThreadRequest({ channelId: +channelId }));
+          const changeUserInfo = {
+            userId: user?.id,
+            displayName: user?.displayName,
+            image: user?.image,
+          };
+          emit(replaceUserAfterUpdateUserProfile({ changeUserInfo }));
+          emit(replaceThreadsAfterUpdateUserProfile({ changeUserInfo }));
           if (parentThreadId) {
-            emit(getSubThreadRequest({ parentId: +parentThreadId }));
+            emit(replaceSubThreadsAfterUpdateUserProfile({ changeUserInfo }));
           }
         }
+
         return;
       }
       if (isChannelEvent(data)) {
