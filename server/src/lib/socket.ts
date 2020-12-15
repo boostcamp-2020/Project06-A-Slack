@@ -5,8 +5,9 @@ import {
   SOCKET_MESSAGE_TYPE,
   ERROR_MESSAGE,
   CHANNEL_SUBTYPE,
+  THREAD_SUBTYPE,
 } from '@/utils/constants';
-import { channelModel } from '@/models';
+import { channelModel, threadModel } from '@/models';
 import { emojiService, threadService } from '@/services';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
@@ -69,6 +70,7 @@ interface Thread {
   url: string;
   isEdited: number;
   isPinned: number;
+  isDeleted: boolean;
   createdAt: string;
   emoji: EmojiOfThread[] | null;
   subCount: number;
@@ -116,8 +118,10 @@ type DM = Channel;
 
 interface ThreadEvent {
   type: string;
+  subType: string;
   room: string;
   thread: Thread;
+  parentThread?: Thread;
 }
 
 interface EmojiEvent {
@@ -187,23 +191,45 @@ export const bindSocketServer = (server: http.Server): void => {
 
     socket.on(MESSAGE, async (data: SocketEvent) => {
       if (isThreadEvent(data)) {
-        const { room, thread, type } = data;
-        const { userId, channelId, content, parentId } = thread;
+        const { type, subType, room, thread } = data;
         try {
-          const insertId = await threadService.createThread({
-            userId,
-            channelId,
-            content,
-            parentId,
-          });
+          if (subType === THREAD_SUBTYPE.CREATE_THREAD) {
+            const { userId, channelId, content, parentId } = thread;
+            const insertId = await threadService.createThread({
+              userId,
+              channelId,
+              content,
+              parentId,
+            });
 
-          namespace.to(room).emit(MESSAGE, { type, thread: { ...thread, id: insertId }, room });
-          namespace.emit(MESSAGE, {
-            type: SOCKET_MESSAGE_TYPE.CHANNEL,
-            subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD,
-            channel: { id: thread.channelId, unreadMessage: true },
-            room,
-          });
+            const [[insertedThread]] = await threadModel.getThread({ threadId: insertId });
+            namespace.to(room).emit(MESSAGE, { type, subType, thread: insertedThread, room });
+
+            namespace.emit(MESSAGE, {
+              type: SOCKET_MESSAGE_TYPE.CHANNEL,
+              subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_UNREAD,
+              channel: { id: thread.channelId, unreadMessage: true },
+              room,
+            });
+          }
+
+          if (subType === THREAD_SUBTYPE.DELETE_THREAD) {
+            const { id, parentId, userId } = thread;
+            if (id && parentId !== undefined && userId) {
+              const { deletedThread, parentThread } = await threadService.deleteThread({
+                id,
+                parentId,
+                userId,
+              });
+              namespace.to(room).emit(MESSAGE, {
+                type,
+                subType,
+                thread: deletedThread,
+                parentThread,
+                room,
+              });
+            }
+          }
         } catch (err) {
           console.error(err);
         }

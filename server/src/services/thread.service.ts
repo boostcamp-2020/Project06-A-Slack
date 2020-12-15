@@ -1,10 +1,24 @@
 import { threadModel } from '@/models';
+import { Thread } from '@/types';
+import pool from '@/db';
+import {
+  DECREASE_SUB_COUNT_OF_THREAD_SQL,
+  DELETE_THREAD_SQL,
+  GET_SUB_THREAD_LIST_SQL,
+  GET_THREAD_SQL,
+} from '@/utils/constants';
 
 interface CreateThreadParams {
   userId: number;
   channelId: number;
   content: string;
   parentId: number | null;
+}
+
+interface DeleteThreadParams {
+  id: number;
+  parentId: number | null;
+  userId: number;
 }
 
 export const threadService = {
@@ -56,5 +70,68 @@ export const threadService = {
       }
     }
     return insertId;
+  },
+  async deleteThread({
+    id,
+    parentId,
+    userId,
+  }: DeleteThreadParams): Promise<{ deletedThread?: Thread; parentThread?: Thread; err?: Error }> {
+    // const deletedId = await threadModel.deleteThread({ threadId: id });
+    const conn = await pool.getConnection();
+    try {
+      await conn.beginTransaction();
+      await conn.execute(DELETE_THREAD_SQL, [id]);
+
+      if (parentId === null) {
+        const [[deletedThread]]: any[] = await conn.execute(GET_THREAD_SQL, [id]);
+        await conn.commit();
+        return { deletedThread };
+      }
+
+      const [[parentThread]]: any[] = await conn.execute(GET_THREAD_SQL, [parentId]);
+      if (parentThread.subCount === 0) {
+        const [[deletedThread]]: any[] = await conn.execute(GET_THREAD_SQL, [id]);
+        await conn.commit();
+        return { deletedThread, parentThread };
+      }
+
+      // parentThread.subCount > 0 일때 이후의 작업
+      const subThreadUserIdList = [
+        parentThread.subThreadUserId1,
+        parentThread.subThreadUserId2,
+        parentThread.subThreadUserId3,
+      ];
+
+      const updateIndex = subThreadUserIdList.findIndex(
+        (subThreadUserId) => subThreadUserId === userId,
+      );
+
+      await conn.execute(DECREASE_SUB_COUNT_OF_THREAD_SQL, [parentId]);
+      const [subThreadList]: any[] = await conn.execute(GET_SUB_THREAD_LIST_SQL, [parentId]);
+
+      // 지금 subThread에 userId가 작성한 subThread가 있는지. 체크. 있으면 pass.
+      const lengthOfsameUsersInSubThread = subThreadList.filter(
+        (st: Thread) => st.userId === userId && st.isDeleted === 0,
+      ).length;
+
+      if (lengthOfsameUsersInSubThread === 0) {
+        await conn.execute(
+          `
+        UPDATE thread SET sub_thread_user_id_${updateIndex + 1}=? WHERE id=?;`,
+          [null, parentId],
+        );
+      }
+      const [[deletedThread]]: any[] = await conn.execute(GET_THREAD_SQL, [id]);
+      const [[updatedParentThread]]: any[] = await conn.execute(GET_THREAD_SQL, [parentId]);
+
+      await conn.commit();
+      return { deletedThread, parentThread: updatedParentThread };
+    } catch (err) {
+      conn.rollback();
+      console.error(err);
+      return { err };
+    } finally {
+      conn.release();
+    }
   },
 };
