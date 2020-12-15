@@ -14,6 +14,7 @@ interface Thread {
   url: string;
   isEdited: number;
   isPinned: number;
+  isDeleted: number;
   createdAt?: string; // 생성 요청시에 없음
   updatedAt?: string; // 생성 요청시에 없음
   emoji: EmojiOfThread[] | null;
@@ -62,8 +63,10 @@ type DM = Channel;
 
 export interface ThreadEvent {
   type: string;
+  subType: string;
   room: string;
   thread: Thread;
+  parentThread?: Thread;
 }
 
 export interface EmojiEvent {
