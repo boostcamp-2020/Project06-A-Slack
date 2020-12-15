@@ -17,10 +17,10 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  margin: 0.7rem auto;
+  margin: 1.4rem auto 0.4rem auto;
   font-size: 2.8rem;
   font-weight: bold;
-  color: ${(props) => props.theme.color.black1};
+  color: #453841;
 `;
 
 const SubTitle = styled.div`
@@ -174,10 +174,10 @@ const CodeVerifyBox = () => {
   return (
     <Container>
       <LogoBox />
-      <Title>코드는 이메일에서 확인하세요</Title>
+      <Title>코드는 이메일에서 확인해 주세요</Title>
       <SubTitle>
         <BoldText>{email}</BoldText>(으)로 6자 코드를 보냈습니다. 코드는 잠시 후에 만료되니 빨리
-        입력하세요.
+        입력해 주세요.
       </SubTitle>
       <CodeBox>
         <LeftCodeBox>
@@ -219,7 +219,7 @@ const CodeVerifyBox = () => {
       {!valid && (
         <InvaildBox>
           <WarningIcon />
-          <WarningText>유효하지 않은 코드입니다. 다시 시도해보세요!</WarningText>
+          <WarningText>유효하지 않은 코드입니다. 코드를 확인 후 다시 시도해보세요!</WarningText>
         </InvaildBox>
       )}
       <InfoText>고객님의 코드를 찾을 수 없나요? 스팸 폴더를 확인해 보세요!</InfoText>

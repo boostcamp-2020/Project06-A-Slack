@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import slackLogo from '@/public/icon/slack-logo.svg';
+import slackLogo from '@/public/icon/slack-logo.webp';
 import { flex } from '@/styles/mixin';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,8 @@ const Container = styled.div`
 `;
 
 const SlackLogo = styled.img`
-  width: 12rem;
+  width: 14rem;
+  margin-right: 3rem;
 `;
 
 const LogoBox: React.FC = () => {

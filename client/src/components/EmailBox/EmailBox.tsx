@@ -20,14 +20,15 @@ const Container = styled.div`
 
 const Header = styled.div`
   width: 30rem;
-  margin: 1rem auto 2rem auto;
+  margin: 2rem auto 1rem auto;
 `;
 
 const Title = styled.div`
-  font-size: 2.3rem;
+  font-size: 2.4rem;
   font-weight: bold;
-  margin: 0 auto 2rem auto;
+  margin: 1rem auto 1.5rem auto;
   ${flex()}
+  color: #453841;
 `;
 
 const SubTitle = styled(Title)`
