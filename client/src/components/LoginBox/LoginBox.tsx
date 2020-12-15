@@ -34,7 +34,7 @@ const DescText = styled.div`
 
 const Form = styled.form`
   width: 25rem;
-  margin: 1.5rem auto;
+  margin: 0 auto 1.5rem auto;
 `;
 
 const SignupButton = styled(FormButton)`
@@ -67,6 +67,29 @@ const LoadingButton = styled(FormButton)`
   height: 50px;
   cursor: initial;
   ${flex()}
+`;
+
+const LineWithText = styled.div`
+  width: 25rem;
+  ${flex()};
+  position: relative;
+  margin: 1rem 0;
+`;
+
+const LineText = styled.div`
+  padding: 0 20px;
+  padding-bottom: 3px;
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: ${(props) => props.theme.color.black8};
+`;
+
+const Line = styled.hr`
+  border: none;
+  border-top: 1px solid ${(props) => props.theme.color.lightGray1};
+  flex: 1;
 `;
 
 const GoogleLoginBox = styled.a`
@@ -128,6 +151,11 @@ const LoginBox: React.FC = () => {
         <GoogleLogoIcon size="18px" />
         <GoogleText>Google로 계속</GoogleText>
       </GoogleLoginBox>
+      <LineWithText>
+        <Line />
+        <LineText>또는</LineText>
+        <Line />
+      </LineWithText>
       <Form onSubmit={handleSubmit}>
         <Label>
           이메일 주소
