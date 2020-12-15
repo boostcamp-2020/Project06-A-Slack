@@ -27,7 +27,7 @@ function* login({ email, pw }: LoginRequestPayload) {
       );
     }
   } catch (err) {
-    yield put(loginFailure());
+    yield put(loginFailure({ err }));
   }
 }
 
