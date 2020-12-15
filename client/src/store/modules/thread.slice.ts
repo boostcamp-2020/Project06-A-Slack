@@ -47,6 +47,9 @@ const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
+    resetThreadState() {
+      return threadListState;
+    },
     getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
       state.loading = true;
       state.nextThreadId = null;
@@ -152,6 +155,7 @@ const threadSlice = createSlice({
 
 export const THREAD = threadSlice.name;
 export const {
+  resetThreadState,
   getThreadRequest,
   getThreadSuccess,
   getThreadFailure,

@@ -52,6 +52,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState: userState,
   reducers: {
+    resetUserState() {
+      return userState;
+    },
     getUserRequest(state, action: PayloadAction<{ userId: number }>) {},
     getUserSuccess(state, { payload }: PayloadAction<{ userInfo: User }>) {
       state.userInfo = payload.userInfo;
@@ -90,14 +93,12 @@ const userSlice = createSlice({
         state.userInfo.lastChannelId = payload.channelId;
       }
     },
-    resetUserInfo(state) {
-      state.userInfo = null;
-    },
   },
 });
 
 export const USER = userSlice.name;
 export const {
+  resetUserState,
   getUserRequest,
   getUserSuccess,
   getUserFailure,
@@ -108,7 +109,6 @@ export const {
   searchUserSuccess,
   searchUserFailure,
   setLastChannel,
-  resetUserInfo,
 } = userSlice.actions;
 
 export default userSlice.reducer;

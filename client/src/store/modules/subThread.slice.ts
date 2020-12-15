@@ -22,6 +22,9 @@ const subThreadSlice = createSlice({
   name: 'subThread',
   initialState: subThreadListState,
   reducers: {
+    resetSubThreadState() {
+      return subThreadListState;
+    },
     getSubThreadRequest(state, action: PayloadAction<GetSubThreadRequestPayload>) {},
     getSubThreadSuccess(state, action: PayloadAction<SubThreadBox>) {
       state.parentThread = action.payload.parentThread;
@@ -75,6 +78,7 @@ const subThreadSlice = createSlice({
 
 export const SUBTHREAD = subThreadSlice.name;
 export const {
+  resetSubThreadState,
   getSubThreadRequest,
   getSubThreadSuccess,
   getSubThreadFailure,

@@ -19,7 +19,7 @@ const duplicatedChannelSlice = createSlice({
   initialState,
   reducers: {
     checkDuplicateRequest(state, { payload }: PayloadAction<{ channelName: string }>) {
-      state.loading = true;
+      return { ...initialState, loading: true };
     },
     checkDuplicateSuccess(state, { payload }: PayloadAction<{ isDuplicated: boolean }>) {
       state.loading = false;
