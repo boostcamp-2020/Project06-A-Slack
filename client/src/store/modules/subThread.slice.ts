@@ -72,16 +72,16 @@ const subThreadSlice = createSlice({
     },
     replaceSubThreadsAfterUpdateUserProfile(
       state,
-      { payload }: PayloadAction<{ changeUserInfo: JoinedUser }>,
+      { payload }: PayloadAction<{ changedJoinedUserInfo: JoinedUser }>,
     ) {
-      const { changeUserInfo } = payload;
+      const { changedJoinedUserInfo } = payload;
       if (state.subThreadList) {
         state.subThreadList = state.subThreadList.map((subThread) => {
-          if (subThread.userId === changeUserInfo.userId) {
+          if (subThread.userId === changedJoinedUserInfo.userId) {
             return {
               ...subThread,
-              displayName: changeUserInfo.displayName,
-              image: changeUserInfo.image,
+              displayName: changedJoinedUserInfo.displayName,
+              image: changedJoinedUserInfo.image,
             };
           }
           return subThread;

@@ -140,15 +140,15 @@ function subscribeSocket(socket: Socket) {
       if (isUserEvent(data)) {
         const { channelId, user, parentThreadId } = data;
         if (channelId && user) {
-          const changeUserInfo = {
+          const changedJoinedUserInfo = {
             userId: user?.id,
             displayName: user?.displayName,
             image: user?.image,
           };
-          emit(replaceUserAfterUpdateUserProfile({ changeUserInfo }));
-          emit(replaceThreadsAfterUpdateUserProfile({ changeUserInfo }));
+          emit(replaceUserAfterUpdateUserProfile({ changedJoinedUserInfo }));
+          emit(replaceThreadsAfterUpdateUserProfile({ changedJoinedUserInfo }));
           if (parentThreadId) {
-            emit(replaceSubThreadsAfterUpdateUserProfile({ changeUserInfo }));
+            emit(replaceSubThreadsAfterUpdateUserProfile({ changedJoinedUserInfo }));
           }
         }
 

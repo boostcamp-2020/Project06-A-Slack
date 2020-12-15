@@ -127,12 +127,16 @@ const channelSlice = createSlice({
     },
     replaceUserAfterUpdateUserProfile(
       state,
-      { payload }: PayloadAction<{ changeUserInfo: JoinedUser }>,
+      { payload }: PayloadAction<{ changedJoinedUserInfo: JoinedUser }>,
     ) {
-      const { changeUserInfo } = payload;
+      const { changedJoinedUserInfo } = payload;
       state.users = state.users.map((u) => {
-        if (u.userId === changeUserInfo.userId) {
-          return { ...u, displayName: changeUserInfo.displayName, image: changeUserInfo.image };
+        if (u.userId === changedJoinedUserInfo.userId) {
+          return {
+            ...u,
+            displayName: changedJoinedUserInfo.displayName,
+            image: changedJoinedUserInfo.image,
+          };
         }
         return u;
       });
