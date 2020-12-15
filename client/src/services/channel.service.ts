@@ -30,4 +30,7 @@ export const channelService: Service = {
   modifyLastChannel({ lastChannelId, userId }: { lastChannelId: number; userId: number }) {
     return API.post(`/api/users/${userId}/last-channel`, { lastChannelId });
   },
+  checkDuplicatedChannel({ channelName }: { channelName: string }) {
+    return API.post('/api/channels/check-duplicated', { channelName });
+  },
 };

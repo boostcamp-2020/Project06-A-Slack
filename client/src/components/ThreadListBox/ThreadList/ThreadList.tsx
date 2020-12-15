@@ -92,7 +92,7 @@ const ThreadList = () => {
     }
   }, [threadList?.length]);
 
-  useInfinteScroll({ target: observeTarget, onIntersect, threshold: 0.95 });
+  useInfinteScroll({ target: observeTarget, onIntersect, threshold: 0 });
 
   return (
     <Container>

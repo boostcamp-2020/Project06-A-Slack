@@ -8,7 +8,7 @@ import { flex, focusedInputBoxShadow } from '@/styles/mixin';
 import { removeVerifyCode } from '@/store/modules/signup.slice';
 import { useSignupState } from '@/hooks';
 import { decrypt } from '@/utils/utils';
-import { WarningIcon } from '@/components';
+import { WarningIcon, LogoBox } from '@/components';
 
 const Container = styled.div`
   width: 50rem;
@@ -16,17 +16,11 @@ const Container = styled.div`
   ${flex('center', 'center', 'column')};
 `;
 
-const AppIcon = styled.div`
-  margin: 1rem auto;
-  font-size: 2rem;
-  font-weight: bold;
-`;
-
 const Title = styled.div`
-  margin: 0.5rem auto;
+  margin: 1.4rem auto 0.4rem auto;
   font-size: 2.8rem;
-  font-weight: 800;
-  color: ${(props) => props.theme.color.black1};
+  font-weight: bold;
+  color: #453841;
 `;
 
 const SubTitle = styled.div`
@@ -179,11 +173,11 @@ const CodeVerifyBox = () => {
 
   return (
     <Container>
-      <AppIcon>Slack</AppIcon>
-      <Title>코드는 이메일에서 확인하세요</Title>
+      <LogoBox />
+      <Title>코드는 이메일에서 확인해 주세요</Title>
       <SubTitle>
         <BoldText>{email}</BoldText>(으)로 6자 코드를 보냈습니다. 코드는 잠시 후에 만료되니 빨리
-        입력하세요.
+        입력해 주세요.
       </SubTitle>
       <CodeBox>
         <LeftCodeBox>
@@ -225,7 +219,7 @@ const CodeVerifyBox = () => {
       {!valid && (
         <InvaildBox>
           <WarningIcon />
-          <WarningText>유효하지 않은 코드입니다. 다시 시도해보세요!</WarningText>
+          <WarningText>유효하지 않은 코드입니다. 코드를 확인 후 다시 시도해보세요!</WarningText>
         </InvaildBox>
       )}
       <InfoText>고객님의 코드를 찾을 수 없나요? 스팸 폴더를 확인해 보세요!</InfoText>

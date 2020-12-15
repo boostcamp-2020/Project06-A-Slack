@@ -9,6 +9,7 @@ import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 const Container = styled.form`
   padding: 1.4rem;
+  padding-top: 0;
 `;
 
 const ModalBody = styled.div`

@@ -146,7 +146,7 @@ const ChannelListBox = ({
     <>
       {createChannelModalVisible && (
         <DimModal
-          width="520px"
+          width="600px"
           header={<CreateChannelModalHeader secret={secret} />}
           body={
             // eslint-disable-next-line react/jsx-wrap-multilines

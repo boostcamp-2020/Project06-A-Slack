@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
-import { useUserState } from '@/hooks';
+import { useDuplicatedChannelState, useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
+import { checkDuplicateRequest } from '@/store/modules/duplicatedChannel.slice';
 import { useDispatch } from 'react-redux';
 import { PoundIcon, LockIcon } from '@/components';
 import theme from '@/styles/theme';
@@ -144,6 +145,10 @@ const CreateButton = styled(SubmitButton)<Props>`
 
 const IconBox = styled.div``;
 
+const WarningMessage = styled(NameAlert)`
+  margin-left: 0;
+`;
+
 interface CreateChannelModalBodyProps {
   setCreateChannelModalVisible: (fn: (state: boolean) => boolean) => void;
   setSecret: (fn: (state: boolean) => boolean) => void;
@@ -155,13 +160,18 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
   setSecret,
   secret,
 }: CreateChannelModalBodyProps) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const { userInfo } = useUserState();
   const dispatch = useDispatch();
 
-  const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  const { userInfo } = useUserState();
+  const { isDuplicated, loading } = useDuplicatedChannelState();
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value: channelName } = e.target;
+    setName(channelName);
+    dispatch(checkDuplicateRequest({ channelName }));
   };
 
   const changeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -205,6 +215,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
               Name {name === '' && <NameAlert>Don't forget to name your channel.</NameAlert>}
             </LabelContent>
           </LabelBox>
+          {isDuplicated && !loading && <WarningMessage>중복된 채널 이름입니다.</WarningMessage>}
           <InputBox>
             <IconBox className="icon">
               {secret ? (
@@ -214,7 +225,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
               )}
             </IconBox>
             <NameInput
-              onChange={changeName}
+              onChange={handleNameChange}
               value={name}
               required
               placeholder="e.g. plan-budget"
@@ -246,7 +257,12 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
         </BottomContent>
       </Bottom>
       <ModalFooter>
-        <CreateButton type="submit" name={name} onClick={clickCreateChannel} disabled={name === ''}>
+        <CreateButton
+          type="submit"
+          name={name}
+          onClick={clickCreateChannel}
+          disabled={name === '' || isDuplicated}
+        >
           Create
         </CreateButton>
       </ModalFooter>

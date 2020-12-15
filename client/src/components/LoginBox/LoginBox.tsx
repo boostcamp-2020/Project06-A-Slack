@@ -19,9 +19,17 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const Title = styled.div`
+  font-size: 2.15rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 1rem auto 1rem auto;
+  color: #453841;
+`;
+
 const Form = styled.form`
   width: 25rem;
-  margin: 10rem auto;
+  margin: 1.5rem auto;
 `;
 
 const SignupButton = styled(LoginButton)`
@@ -69,6 +77,7 @@ const LoginBox: React.FC = () => {
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
+        <Title>로그인</Title>
         <Label>
           이메일 주소
           <Input

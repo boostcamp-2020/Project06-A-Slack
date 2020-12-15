@@ -9,3 +9,4 @@ export { default as EmojiListModal } from './EmojiListModal/EmojiListModal';
 export { default as Popover } from './Popover/Popover';
 export { default as CloseIconBox } from './CloseIconBox/CloseIconBox';
 export * from './AddUsersModal';
+export { default as LogoBox } from './LogoBox/LogoBox';

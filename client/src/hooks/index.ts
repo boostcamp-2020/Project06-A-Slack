@@ -10,3 +10,4 @@ export * from './useEmojiState';
 export * from './useFindChannel';
 export * from './useRedirectState';
 export * from './useInfiniteScroll';
+export * from './useDuplicatedChannelState';
