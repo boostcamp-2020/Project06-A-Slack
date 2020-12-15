@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { EmojiOfThread, Thread } from '@/types/thread';
 import { flex } from '@/styles/mixin';
@@ -6,38 +6,57 @@ import { useChannelState, useEmojiState, useUserState } from '@/hooks';
 import { useDispatch } from 'react-redux';
 import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
-import { JoinedUser } from '@/types';
+import TooltipPopup from './TooltipPopup/TooltipPopup';
 
-const Container = styled.div`
-  background-color: ${(props) => props.color};
-  box-shadow: inset 0 0 0 1px rgba(29, 155, 209);
-  ${flex('center', 'flex-start', 'row')};
+interface ContainerProps {
+  isMine: boolean;
+}
+
+const Container = styled.div<ContainerProps>`
+  background-color: ${(props) => (props.isMine ? '#E2EFF4' : '#EFEFEF')};
+  box-shadow: inset 0 0 0 1px ${(props) => (props.isMine ? '#1D9BD1' : '#EFEFEF')};
+  ${flex()};
   position: relative;
   cursor: pointer;
-  padding: 0.15rem 0.4rem;
+  width: 2.6rem;
+  height: 1.6rem;
   border-radius: 999em;
   margin-right: 0.2rem;
 `;
-// EFEFEF
 
 const EmojiToolTip = styled.div`
+  width: 12rem;
+  ${flex('center', 'center', 'column')};
+  padding: 0.8rem;
   background-color: black;
-  /* color: #505050; */
   color: white;
   border: 1px solid black;
-  visibility: hidden;
-  position: absolute;
-  z-index: 1;
-  bottom: 2rem;
-  width: 10rem;
-  ${Container}:hover & {
-    visibility: visible;
-  }
+  border-radius: 8px;
 `;
 
-const EmojiItem = styled.div``;
+const EmojiItem = styled.div`
+  ${flex()};
+`;
+const TooltipImg = styled.img`
+  width: 36px;
+  height: 36px;
+  margin-bottom: 0.4rem;
+  background-color: white;
+  border-radius: 8px;
+  padding: 4px;
+`;
 
-const ToolTipDescribe = styled.div``;
+const ToolTipDescribe = styled.div`
+  font-size: 0.9rem;
+  word-break: break-all;
+`;
+
+const EmojiCount = styled.span`
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin: 0 3px;
+  color: ${(props) => props.theme.color.blue1};
+`;
 
 interface EmojiBoxItemProps {
   emoji: EmojiOfThread;
@@ -49,13 +68,15 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
   const { users, current } = useChannelState();
   const { emojiList } = useEmojiState();
   const dispatch = useDispatch();
-  const [backgroundColor, setbackgroundColor] = useState('#EFEFEF');
+  const [isMine, setIsMine] = useState(false);
 
   useEffect(() => {
     if (userInfo && emoji.userList.includes(userInfo.id)) {
-      setbackgroundColor('#E2EFF4');
+      setIsMine(true);
+    } else {
+      setIsMine(false);
     }
-  }, []);
+  }, [emoji]);
 
   const getUserListNameInEmoji = (emojiProp: EmojiOfThread) => {
     return emojiProp.userList.reduce((acc, userIdInEmojiOfThread, idx, arr) => {
@@ -83,7 +104,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
   };
 
   const getToolTipDescribe = (emojiId: number) => {
-    return `reacted width ${getEmojiName(emojiId)}`;
+    return `${getEmojiName(emojiId)}`;
   };
 
   const getEmojiUrl = (emojiId: number) => {
@@ -104,36 +125,34 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
         }),
       );
     }
-    if (backgroundColor === '#EFEFEF') {
-      return setbackgroundColor('#E2EFF4');
-    }
-    return setbackgroundColor('#EFEFEF');
+    setIsMine((mine) => !mine);
   };
 
+  const ref = useRef<HTMLDivElement>(null);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+
   return (
-    <Container color={backgroundColor} onClick={clickEmojiHandler}>
-      <EmojiToolTip>
-        <img
-          key={`${emoji.id}ToolTip`}
-          src={getEmojiUrl(emoji.id)}
-          alt="emoji url"
-          width="36px"
-          height="36px"
-        />
-        <ToolTipDescribe>
-          {getUserListNameInEmoji(emoji)}
-          {getToolTipDescribe(emoji.id)}
-        </ToolTipDescribe>
-      </EmojiToolTip>
+    <Container
+      isMine={isMine}
+      onClick={clickEmojiHandler}
+      ref={ref}
+      onMouseEnter={() => setTooltipVisible(true)}
+      onMouseLeave={() => setTooltipVisible(false)}
+    >
+      {ref.current && tooltipVisible && (
+        <TooltipPopup anchorEl={ref.current} top={-10} left={-30}>
+          <EmojiToolTip>
+            <TooltipImg src={getEmojiUrl(emoji.id)} />
+            <ToolTipDescribe>
+              {getUserListNameInEmoji(emoji)}
+              {`reacted with :${getToolTipDescribe(emoji.id)}:`}
+            </ToolTipDescribe>
+          </EmojiToolTip>
+        </TooltipPopup>
+      )}
       <EmojiItem>
-        <img
-          key={emoji.id}
-          src={getEmojiUrl(emoji.id)}
-          alt="emoji url"
-          width="16px"
-          height="16px"
-        />
-        {emoji.userList && <span key={`${emoji.id}length`}>{emoji.userList.length}</span>}
+        <img src={getEmojiUrl(emoji.id)} alt="emoji url" width="16px" height="16px" />
+        {emoji.userList && <EmojiCount>{emoji.userList.length}</EmojiCount>}
       </EmojiItem>
     </Container>
   );

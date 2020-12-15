@@ -202,7 +202,7 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
 
           <TextArea
             onChange={handleChange}
-            onKeyDown={handleKey}
+            onKeyPress={handleKey}
             placeholder={parentId ? 'Reply...' : `Send a message ${current?.name}`}
             ref={commentRef}
             value={comment}
