@@ -9,6 +9,7 @@ import {
 } from '@/utils/constants';
 import { channelModel, threadModel } from '@/models';
 import { emojiService, threadService } from '@/services';
+import { channelService } from '@/services/channel.service';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
 
@@ -135,7 +136,9 @@ interface EmojiEvent {
 
 interface UserEvent {
   type: string;
-  user: User;
+  user?: User;
+  channelId?: number;
+  parentThreadId: string | undefined;
 }
 
 interface ChannelEvent {
@@ -260,7 +263,23 @@ export const bindSocketServer = (server: http.Server): void => {
         return;
       }
       if (isUserEvent(data)) {
-        // TODO: User 이벤트 처리
+        try {
+          const { user, parentThreadId } = data;
+          if (user?.id) {
+            const [joinedChannels] = await channelModel.getJoinChannels({ userId: user.id });
+            joinedChannels.map((channel: Channel) =>
+              namespace.to(channel.name).emit(MESSAGE, {
+                type: SOCKET_MESSAGE_TYPE.USER,
+                user,
+                channelId: channel.id,
+                room: channel.name,
+                parentThreadId,
+              }),
+            );
+          }
+        } catch (err) {
+          console.error(err.message);
+        }
         return;
       }
       if (isChannelEvent(data)) {
@@ -270,7 +289,7 @@ export const bindSocketServer = (server: http.Server): void => {
         if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_TOPIC) {
           try {
             if (channel?.id && room) {
-              await channelModel.modifyTopic({
+              await channelService.updateChannelTopic({
                 channelId: channel.id,
                 topic: channel.topic,
               });
@@ -287,26 +306,28 @@ export const bindSocketServer = (server: http.Server): void => {
           return;
         }
 
-        if (
-          subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS ||
-          subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL
-        ) {
+        if (subType === CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS) {
           if (channel?.id && users) {
             try {
-              const selectedUsers: [number[]] = users.reduce((acc: any, cur: JoinedUser) => {
-                acc.push([cur.userId, channel.id]);
-                return acc;
-              }, []);
-
-              await channelModel.joinChannel({
-                selectedUsers,
-                prevMemberCount: channel.memberCount,
-                channelId: channel.id,
+              const joinedUsers = await channelService.updateChannelUsers({ users, channel });
+              namespace.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
+                users: joinedUsers,
+                channel,
+                room,
               });
-              const [joinedUsers] = await channelModel.getChannelUser({
-                channelId: channel.id,
-              });
+            } catch (err) {
+              console.error(err.message);
+            }
+            return;
+          }
+        }
 
+        if (subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL) {
+          if (channel?.id && users) {
+            try {
+              const joinedUsers = await channelService.updateChannelUsers({ users, channel });
               namespace.emit(MESSAGE, {
                 type,
                 subType: CHANNEL_SUBTYPE.UPDATE_CHANNEL_USERS,
@@ -315,14 +336,12 @@ export const bindSocketServer = (server: http.Server): void => {
                 room,
               });
 
-              if (subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL) {
-                socket.emit(MESSAGE, {
-                  type,
-                  subType: CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL,
-                });
-              }
+              socket.emit(MESSAGE, {
+                type,
+                subType: CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL,
+              });
             } catch (err) {
-              console.error(err);
+              console.error(err.message);
             }
             return;
           }
@@ -333,30 +352,15 @@ export const bindSocketServer = (server: http.Server): void => {
             try {
               const { ownerId, name, memberCount, isPublic, description, channelType } = channel;
 
-              const [newChannel] = await channelModel.createChannel({
+              await channelService.makeDM({
                 ownerId,
                 name,
                 memberCount,
                 isPublic,
                 description,
                 channelType,
+                users,
               });
-
-              const [joinedUsers] = await channelModel.getChannelUser({
-                channelId: newChannel.insertId,
-              });
-
-              const selectedUsers: [number[]] = users.reduce((acc: any, cur) => {
-                acc.push([cur.userId, newChannel.insertId]);
-                return acc;
-              }, []);
-
-              await channelModel.joinChannel({
-                channelId: newChannel.insertId,
-                prevMemberCount: joinedUsers.length,
-                selectedUsers,
-              });
-
               namespace.emit(MESSAGE, {
                 type,
                 subType: CHANNEL_SUBTYPE.MAKE_DM,
@@ -364,7 +368,7 @@ export const bindSocketServer = (server: http.Server): void => {
                 channel,
               });
             } catch (err) {
-              console.error(err);
+              console.error(err.message);
             }
           }
           return;

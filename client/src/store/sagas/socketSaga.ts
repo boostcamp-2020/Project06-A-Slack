@@ -14,20 +14,24 @@ import {
   updateAddSubThreadInfo,
   deleteThread,
   updateDeleteSubThreadInfo,
+  getThreadRequest,
 } from '@/store/modules/thread.slice';
 import {
   changeEmojiOfSubThread,
   addSubThread,
   deleteSubThread,
   deleteSubParentThread,
+  getSubThreadRequest,
 } from '@/store/modules/subThread.slice';
 
 import {
+  loadChannelRequest,
   updateChannelUnread,
   updateChannelTopic,
   updateChannelUsers,
   setReloadMyChannelListFlag,
 } from '@/store/modules/channel.slice';
+
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE, THREAD_SUBTYPE } from '@/utils/constants';
@@ -134,7 +138,14 @@ function subscribeSocket(socket: Socket) {
         return;
       }
       if (isUserEvent(data)) {
-        // TODO: User 이벤트 처리
+        const { channelId, user, parentThreadId } = data;
+        if (channelId && user) {
+          emit(loadChannelRequest({ channelId: +channelId, userId: user.id }));
+          emit(getThreadRequest({ channelId: +channelId }));
+          if (parentThreadId) {
+            emit(getSubThreadRequest({ parentId: +parentThreadId }));
+          }
+        }
         return;
       }
       if (isChannelEvent(data)) {
@@ -155,11 +166,14 @@ function subscribeSocket(socket: Socket) {
           return;
         }
 
-        if (
-          subType === CHANNEL_SUBTYPE.MAKE_DM ||
-          subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL
-        ) {
+        if (subType === CHANNEL_SUBTYPE.MAKE_DM) {
           emit(setReloadMyChannelListFlag({ reloadMyChannelList: true }));
+          return;
+        }
+
+        if (subType === CHANNEL_SUBTYPE.FIND_AND_JOIN_CHANNEL) {
+          emit(setReloadMyChannelListFlag({ reloadMyChannelList: true }));
+          return;
         }
 
         return;
