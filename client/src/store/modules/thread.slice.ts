@@ -89,7 +89,14 @@ const threadSlice = createSlice({
         state.threadList = [action.payload.thread];
       }
     },
-    updateSubThreadInfo(
+    deleteThread(state, { payload }: PayloadAction<{ threadId: number }>) {
+      const { threadId } = payload;
+      const targetThread = state.threadList?.find((t) => t.id === threadId);
+      if (targetThread) {
+        targetThread.isDeleted = 1;
+      }
+    },
+    updateAddSubThreadInfo(
       state,
       { payload }: PayloadAction<{ threadId: number; subThreadUserId: number }>,
     ) {
@@ -111,6 +118,13 @@ const threadSlice = createSlice({
             targetThread[key] = subThreadUserId;
           }
         }
+      }
+    },
+    updateDeleteSubThreadInfo(state, { payload }: PayloadAction<{ thread: Thread }>) {
+      const { thread } = payload;
+      if (state.threadList) {
+        const targetIdx = state.threadList?.findIndex((el) => el.id === thread.id);
+        state.threadList[targetIdx] = thread;
       }
     },
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
@@ -145,9 +159,11 @@ export const {
   createThreadSuccess,
   createThreadFailure,
   addThread,
+  deleteThread,
   setScrollable,
   changeEmojiOfThread,
-  updateSubThreadInfo,
+  updateAddSubThreadInfo,
+  updateDeleteSubThreadInfo,
   setFirstScrollUsed,
   resetNextThreadId,
   addThreadListRequest,

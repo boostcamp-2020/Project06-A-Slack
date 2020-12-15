@@ -8,8 +8,19 @@ import {
   enterRoomRequest,
   leaveRoomRequest,
 } from '@/store/modules/socket.slice';
-import { addThread, changeEmojiOfThread, updateSubThreadInfo } from '@/store/modules/thread.slice';
-import { changeEmojiOfSubThread, addSubThread } from '@/store/modules/subThread.slice';
+import {
+  addThread,
+  changeEmojiOfThread,
+  updateAddSubThreadInfo,
+  deleteThread,
+  updateDeleteSubThreadInfo,
+} from '@/store/modules/thread.slice';
+import {
+  changeEmojiOfSubThread,
+  addSubThread,
+  deleteSubThread,
+  deleteSubParentThread,
+} from '@/store/modules/subThread.slice';
 
 import {
   updateChannelUnread,
@@ -19,7 +30,7 @@ import {
 } from '@/store/modules/channel.slice';
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE } from '@/utils/constants';
+import { SOCKET_EVENT_TYPE, CHANNEL_SUBTYPE, THREAD_SUBTYPE } from '@/utils/constants';
 import {
   SocketEvent,
   isChannelEvent,
@@ -29,6 +40,8 @@ import {
   isUserEvent,
   Channel,
   JoinedUser,
+  Thread,
+  EmojiOfThread,
 } from '@/types';
 
 const { CONNECT, MESSAGE, ENTER_ROOM, LEAVE_ROOM, DISCONNECT } = SOCKET_EVENT_TYPE;
@@ -52,14 +65,68 @@ function subscribeSocket(socket: Socket) {
     const handleMessage = (data: SocketEvent) => {
       if (isThreadEvent(data)) {
         // TODO 1: room에 해당하는 채널/DM에 new message가 생겼다는 action 전송(해당 사가에서 flag ON)
-        const { room, thread, type } = data;
-        if (thread.parentId) {
-          emit(addSubThread({ thread }));
-          emit(updateSubThreadInfo({ threadId: thread.parentId, subThreadUserId: thread.userId }));
+        const { type, subType, room, thread } = data;
+        if (subType === THREAD_SUBTYPE.CREATE_THREAD) {
+          if (thread.parentId) {
+            if (thread.id && thread.emoji && thread.createdAt) {
+              emit(
+                addSubThread({
+                  thread: {
+                    ...thread,
+                    id: thread.id,
+                    createdAt: thread.createdAt,
+                    emoji: thread.emoji,
+                  },
+                }),
+              );
+              emit(
+                updateAddSubThreadInfo({
+                  threadId: thread.parentId,
+                  subThreadUserId: thread.userId,
+                }),
+              );
+            }
+            return;
+          }
+          emit(addThread({ thread }));
           return;
         }
-        emit(addThread({ thread }));
-        return;
+        if (subType === THREAD_SUBTYPE.DELETE_THREAD) {
+          const { parentThread } = data;
+          console.log('come in here');
+          if (thread.id) {
+            if (thread.parentId !== null) {
+              if (thread.emoji && thread.createdAt) {
+                emit(
+                  deleteSubThread({
+                    thread: {
+                      ...thread,
+                      id: thread.id,
+                      createdAt: thread.createdAt,
+                      emoji: thread.emoji,
+                    },
+                  }),
+                );
+              }
+              if (parentThread && parentThread.id && parentThread.emoji && parentThread.createdAt) {
+                emit(
+                  updateDeleteSubThreadInfo({
+                    thread: {
+                      ...parentThread,
+                      id: parentThread.id,
+                      createdAt: parentThread.createdAt,
+                      emoji: parentThread.emoji,
+                    },
+                  }),
+                );
+                // emit(updateDeleteSubThreadInfoInSubThread)
+              }
+            }
+            console.log('delete main Thread');
+            emit(deleteThread({ threadId: thread.id }));
+            emit(deleteSubParentThread({ threadId: thread.id }));
+          }
+        }
       }
       if (isEmojiEvent(data)) {
         const { room, emoji, threadId, type } = data;

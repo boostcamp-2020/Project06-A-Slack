@@ -59,3 +59,9 @@ export const CHANNEL_SUBTYPE = {
   MAKE_DM: 'make_dm',
   FIND_AND_JOIN_CHANNEL: 'find_and_join_channel',
 };
+
+export const THREAD_SUBTYPE = {
+  CREATE_THREAD: 'create thread',
+  EDIT_THREAD: 'edit thread',
+  DELETE_THREAD: 'delete thread',
+};

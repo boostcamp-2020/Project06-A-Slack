@@ -28,13 +28,33 @@ const subThreadSlice = createSlice({
       state.subThreadList = action.payload.subThreadList;
     },
     getSubThreadFailure(state, action) {},
-    addSubThread(state, action) {
-      state.parentThread.subCount += 1;
-      if (state.subThreadList?.length) {
-        state.subThreadList.push(action.payload.thread);
-        return;
+    addSubThread(state, { payload }: PayloadAction<{ thread: Thread }>) {
+      const { thread } = payload;
+      console.log(state.parentThread.id);
+      if (state.parentThread.id === thread.parentId) {
+        state.parentThread.subCount += 1;
+        if (state.subThreadList?.length) {
+          state.subThreadList.push(thread);
+          return;
+        }
+        state.subThreadList = [thread];
       }
-      state.subThreadList = [action.payload.thread];
+    },
+    deleteSubThread(state, { payload }: PayloadAction<{ thread: Thread }>) {
+      const { thread } = payload;
+      if (state.parentThread.id === thread.parentId) {
+        state.parentThread.subCount -= 1;
+        const targetThread = state.subThreadList?.find((st) => st.id === thread.id);
+        if (targetThread) {
+          targetThread.isDeleted = 1;
+        }
+      }
+    },
+    deleteSubParentThread(state, { payload }: PayloadAction<{ threadId: number }>) {
+      const { threadId } = payload;
+      if (state.parentThread.id === threadId) {
+        state.parentThread.isDeleted = 1;
+      }
     },
     changeEmojiOfSubThread(
       state,
@@ -60,6 +80,8 @@ export const {
   getSubThreadSuccess,
   getSubThreadFailure,
   addSubThread,
+  deleteSubThread,
+  deleteSubParentThread,
   changeEmojiOfSubThread,
 } = subThreadSlice.actions; // action 나눠서 export 하기
 
