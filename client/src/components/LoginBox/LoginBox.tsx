@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
 import isEmail from 'validator/es/lib/isEmail';
 import { loginRequest } from '@/store/modules/auth.slice';
-import {
-  FormButton as LoginButton,
-  FormInput as Input,
-  FormLabel as Label,
-} from '@/styles/shared/form';
+import { FormButton, FormInput as Input, FormLabel as Label } from '@/styles/shared/form';
 import { WarningIcon } from '@/components';
 import { IconBox, WarningText } from '@/components/EmailBox/EmailBox';
 import { flex } from '@/styles/mixin';
+import { useAuthState } from '@/hooks';
+import LoadingSvg from '@/public/icon/loading.svg';
 
 const Container = styled.div`
   width: 100%;
@@ -32,7 +30,7 @@ const Form = styled.form`
   margin: 1.5rem auto;
 `;
 
-const SignupButton = styled(LoginButton)`
+const SignupButton = styled(FormButton)`
   border: 1px solid ${(props) => props.theme.color.main};
   color: ${(props) => props.theme.color.main};
   background-color: white;
@@ -49,20 +47,39 @@ const WarningBox = styled.div`
   ${flex('center', 'flex-start')};
 `;
 
+const LoadingIcon = styled.img`
+  width: 40px;
+  height: 40px;
+`;
+
+const LoginButton = styled(FormButton)`
+  ${flex()}
+`;
+
+const LoadingButton = styled(FormButton)`
+  height: 50px;
+  cursor: initial;
+  ${flex()}
+`;
+
 const LoginBox: React.FC = () => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [valid, setValid] = useState(true);
+  const [loginFailed, setLoginFailed] = useState(false);
+  const { login: loginState } = useAuthState();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setValid(true);
+    setLoginFailed(false);
   };
 
   const handlePwChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPw(e.target.value);
+    setLoginFailed(false);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -73,6 +90,12 @@ const LoginBox: React.FC = () => {
     }
     dispatch(loginRequest({ email, pw }));
   };
+
+  useEffect(() => {
+    if (loginState.err?.response?.status === 401) {
+      setLoginFailed(true);
+    }
+  }, [loginState.err]);
 
   return (
     <Container>
@@ -105,11 +128,25 @@ const LoginBox: React.FC = () => {
             value={pw}
             required
           />
-          <LoginButton type="submit">로그인</LoginButton>
-          <Link to="/verify">
-            <SignupButton type="button">회원가입</SignupButton>
-          </Link>
         </Label>
+        {loginFailed && (
+          <WarningBox>
+            <IconBox>
+              <WarningIcon />
+            </IconBox>
+            <WarningText>이메일 또는 비밀번호가 일치하지 않습니다.</WarningText>
+          </WarningBox>
+        )}
+        {loginState.loading ? (
+          <LoadingButton type="submit">
+            <LoadingIcon src={LoadingSvg} />
+          </LoadingButton>
+        ) : (
+          <LoginButton type="submit">로그인</LoginButton>
+        )}
+        <Link to="/verify">
+          <SignupButton type="button">회원가입</SignupButton>
+        </Link>
       </Form>
     </Container>
   );

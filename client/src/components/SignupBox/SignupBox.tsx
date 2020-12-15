@@ -40,7 +40,7 @@ const WarningBox = styled.div`
   ${flex('center', 'flex-start')};
 `;
 
-const regex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+const passwordRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
 const SignupBox: React.FC = () => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const SignupBox: React.FC = () => {
     setPw(value);
     checkPassword(value, confirmPw);
 
-    if (!regex.test(value)) {
+    if (!passwordRegex.test(value)) {
       setIsValidPw(false);
     } else {
       setIsValidPw(true);
