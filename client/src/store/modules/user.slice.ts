@@ -90,6 +90,9 @@ const userSlice = createSlice({
         state.userInfo.lastChannelId = payload.channelId;
       }
     },
+    resetUserInfo(state) {
+      state.userInfo = null;
+    },
   },
 });
 
@@ -105,6 +108,7 @@ export const {
   searchUserSuccess,
   searchUserFailure,
   setLastChannel,
+  resetUserInfo,
 } = userSlice.actions;
 
 export default userSlice.reducer;

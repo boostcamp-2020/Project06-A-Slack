@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { getUserRequest } from '@/store/modules/user.slice';
+import { getUserRequest, resetUserInfo } from '@/store/modules/user.slice';
 import { flex } from '@/styles/mixin';
 import { useAuthState, useUserState } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth.slice';
+
 import { DimModal, UserStateIcon, ClockIcon, Popover } from '@/components';
 import theme from '@/styles/theme';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
@@ -139,6 +140,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutRequest());
+    dispatch(resetUserInfo());
   };
 
   useEffect(() => {
