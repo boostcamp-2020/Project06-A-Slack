@@ -8,6 +8,7 @@ import subThreadSaga from './subThreadSaga';
 import socketSaga from './socketSaga';
 import emojiSaga from './emojiSaga';
 import findChannelSaga from './findChannelSaga';
+import duplicatedChannelSaga from './duplicatedChannelSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -20,5 +21,6 @@ export default function* rootSaga() {
     fork(socketSaga),
     fork(emojiSaga),
     fork(findChannelSaga),
+    fork(duplicatedChannelSaga),
   ]);
 }

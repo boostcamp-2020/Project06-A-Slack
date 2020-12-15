@@ -8,6 +8,10 @@ import {
   logoutFailure,
   LoginRequestPayload,
 } from '@/store/modules/auth.slice';
+import { resetUserState } from '@/store/modules/user.slice';
+import { resetChannelState } from '@/store/modules/channel.slice';
+import { resetThreadState } from '@/store/modules/thread.slice';
+import { resetSubThreadState } from '@/store/modules/subThread.slice';
 import { authService } from '@/services';
 
 function* login({ email, pw }: LoginRequestPayload) {
@@ -23,7 +27,7 @@ function* login({ email, pw }: LoginRequestPayload) {
       );
     }
   } catch (err) {
-    yield put(loginFailure());
+    yield put(loginFailure({ err }));
   }
 }
 
@@ -35,6 +39,12 @@ function* logout() {
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userId');
       yield put(logoutSuccess());
+      yield all([
+        put(resetUserState()),
+        put(resetChannelState()),
+        put(resetThreadState()),
+        put(resetSubThreadState()),
+      ]);
     }
   } catch (err) {
     yield put(logoutFailure());

@@ -2,16 +2,23 @@
 /* eslint-disable no-param-reassign */
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/modules';
+import { AxiosError } from 'axios';
 
 interface AuthState {
-  loading: boolean;
+  login: {
+    loading: boolean;
+    err: AxiosError | null;
+  };
   accessToken: string | null;
   refreshToken: string | null;
   userId: number | null;
 }
 
 const authState: AuthState = {
-  loading: false,
+  login: {
+    loading: false,
+    err: null,
+  },
   accessToken: localStorage.getItem('accessToken'),
   refreshToken: localStorage.getItem('refreshToken'),
   userId: localStorage.getItem('userId') ? Number(localStorage.getItem('userId')) : null,
@@ -32,7 +39,7 @@ const authSlice = createSlice({
   initialState: authState,
   reducers: {
     loginRequest(state, action: PayloadAction<LoginRequestPayload>) {
-      state.loading = true;
+      state.login.loading = true;
     },
     loginSuccess(state, { payload }: PayloadAction<LoginSuccessPayload>) {
       const { accessToken, refreshToken, userId } = payload;
@@ -40,16 +47,21 @@ const authSlice = createSlice({
       state.refreshToken = refreshToken;
       state.userId = userId;
 
-      state.loading = false;
+      state.login.loading = false;
+      state.login.err = null;
     },
-    loginFailure(state) {
-      state.loading = false;
+    loginFailure(state, { payload }: PayloadAction<{ err: AxiosError }>) {
+      state.login.loading = false;
+      state.login.err = payload.err;
     },
     logoutRequest() {},
     logoutSuccess(state) {
       state.accessToken = null;
       state.refreshToken = null;
       state.userId = null;
+
+      state.login.loading = false;
+      state.login.err = null;
     },
     logoutFailure() {},
   },

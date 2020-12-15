@@ -92,7 +92,7 @@ const ThreadList = () => {
     }
   }, [threadList?.length]);
 
-  useInfinteScroll({ target: observeTarget, onIntersect, threshold: 0.95 });
+  useInfinteScroll({ target: observeTarget, onIntersect, threshold: 0 });
 
   return (
     <Container>
@@ -104,11 +104,24 @@ const ThreadList = () => {
               <LoadingIcon src={loadingColorIcon} />
             </LoadingBox>
           )}
-          {threadList?.map((thread: Thread, index: number) => (
-            <Wrapper id={`thread-${thread.id}`} key={thread.id}>
-              <ThreadItem thread={thread} prevThreadUserId={threadList[index - 1]?.userId} />
-            </Wrapper>
-          ))}
+          {threadList?.map((thread: Thread, index: number, arr: Thread[]) => {
+            if (thread.isDeleted) {
+              if (thread.subCount > 0) {
+                const deletedThread = { ...thread, content: 'This message was deleted.' };
+                return (
+                  <Wrapper id={`thread-${thread.id}`} key={thread.id}>
+                    <ThreadItem thread={deletedThread} prevThreadUserId={arr[index - 1]?.userId} />
+                  </Wrapper>
+                );
+              }
+              return;
+            }
+            return (
+              <Wrapper id={`thread-${thread.id}`} key={thread.id}>
+                <ThreadItem thread={thread} prevThreadUserId={arr[index - 1]?.userId} />
+              </Wrapper>
+            );
+          })}
         </>
       )}
       <Bottom ref={bottomRef} />

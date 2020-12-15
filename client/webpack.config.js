@@ -53,7 +53,7 @@ module.exports = {
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg|webp)$/i,
         use: {
           loader: 'file-loader',
           options: {
@@ -84,6 +84,7 @@ module.exports = {
         keepClosingSlash: true,
         removeComments: true,
       },
+      favicon: './src/public/icon/slack.ico',
     }),
     new CleanWebpackPlugin(),
     new Dotenv({

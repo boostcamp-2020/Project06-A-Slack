@@ -15,15 +15,16 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 1.8rem;
+  font-size: 2.15rem;
   font-weight: bold;
   text-align: center;
-  margin: 3rem auto;
+  margin: 1rem auto 1rem auto;
+  color: #453841;
 `;
 
 const Form = styled.form`
   width: 25rem;
-  margin: 6rem auto;
+  margin: 2rem auto 0 auto;
 `;
 
 const SignupButton = styled(FormButton)`
@@ -39,7 +40,7 @@ const WarningBox = styled.div`
   ${flex('center', 'flex-start')};
 `;
 
-const regex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+const passwordRegex = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
 
 const SignupBox: React.FC = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,7 @@ const SignupBox: React.FC = () => {
     setPw(value);
     checkPassword(value, confirmPw);
 
-    if (!regex.test(value)) {
+    if (!passwordRegex.test(value)) {
       setIsValidPw(false);
     } else {
       setIsValidPw(true);

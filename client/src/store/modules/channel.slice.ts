@@ -38,6 +38,9 @@ const channelSlice = createSlice({
   name: 'channel',
   initialState,
   reducers: {
+    resetChannelState() {
+      return initialState;
+    },
     loadChannelsRequest() {},
     loadChannelsSuccess(state, action) {
       state.channelList = action.payload.channelList;
@@ -88,6 +91,9 @@ const channelSlice = createSlice({
     updateChannelUnread(state, { payload }: PayloadAction<{ channel: Channel }>) {
       const { channel } = payload;
       state.myChannelList = state.myChannelList.map((chan) => {
+        if (chan.id === state.current?.id) {
+          return chan;
+        }
         if (chan.id === channel.id) {
           return { ...chan, ...channel };
         }
@@ -122,11 +128,28 @@ const channelSlice = createSlice({
     ) {
       state.reloadMyChannelList = payload.reloadMyChannelList;
     },
+    replaceUserAfterUpdateUserProfile(
+      state,
+      { payload }: PayloadAction<{ changedJoinedUserInfo: JoinedUser }>,
+    ) {
+      const { changedJoinedUserInfo } = payload;
+      state.users = state.users.map((u) => {
+        if (u.userId === changedJoinedUserInfo.userId) {
+          return {
+            ...u,
+            displayName: changedJoinedUserInfo.displayName,
+            image: changedJoinedUserInfo.image,
+          };
+        }
+        return u;
+      });
+    },
   },
 });
 
 export const CHANNEL = channelSlice.name;
 export const {
+  resetChannelState,
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,
@@ -147,5 +170,6 @@ export const {
   updateChannelTopic,
   updateChannelUsers,
   setReloadMyChannelListFlag,
+  replaceUserAfterUpdateUserProfile,
 } = channelSlice.actions;
 export default channelSlice.reducer;

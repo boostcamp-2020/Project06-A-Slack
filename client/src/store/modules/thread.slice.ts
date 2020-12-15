@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EmojiOfThread, Thread, ThreadResponse } from '@/types';
+import { EmojiOfThread, JoinedUser, Thread, ThreadResponse } from '@/types';
 
 interface ThreadState {
   threadList: Thread[] | null;
@@ -47,6 +47,9 @@ const threadSlice = createSlice({
   name: 'thread',
   initialState: threadListState,
   reducers: {
+    resetThreadState() {
+      return threadListState;
+    },
     getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
       state.loading = true;
       state.nextThreadId = null;
@@ -89,7 +92,14 @@ const threadSlice = createSlice({
         state.threadList = [action.payload.thread];
       }
     },
-    updateSubThreadInfo(
+    deleteThread(state, { payload }: PayloadAction<{ threadId: number }>) {
+      const { threadId } = payload;
+      const targetThread = state.threadList?.find((t) => t.id === threadId);
+      if (targetThread) {
+        targetThread.isDeleted = 1;
+      }
+    },
+    updateAddSubThreadInfo(
       state,
       { payload }: PayloadAction<{ threadId: number; subThreadUserId: number }>,
     ) {
@@ -113,6 +123,13 @@ const threadSlice = createSlice({
         }
       }
     },
+    updateDeleteSubThreadInfo(state, { payload }: PayloadAction<{ thread: Thread }>) {
+      const { thread } = payload;
+      if (state.threadList) {
+        const targetIdx = state.threadList?.findIndex((el) => el.id === thread.id);
+        state.threadList[targetIdx] = thread;
+      }
+    },
     setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
       state.canScroll = payload.canScroll;
     },
@@ -133,11 +150,30 @@ const threadSlice = createSlice({
         targetThread.emoji = payload.emoji;
       }
     },
+    replaceThreadsAfterUpdateUserProfile(
+      state,
+      { payload }: PayloadAction<{ changedJoinedUserInfo: JoinedUser }>,
+    ) {
+      const { changedJoinedUserInfo } = payload;
+      if (state.threadList) {
+        state.threadList = state.threadList.map((thread) => {
+          if (thread.userId === changedJoinedUserInfo.userId) {
+            return {
+              ...thread,
+              displayName: changedJoinedUserInfo.displayName,
+              image: changedJoinedUserInfo.image,
+            };
+          }
+          return thread;
+        });
+      }
+    },
   },
 });
 
 export const THREAD = threadSlice.name;
 export const {
+  resetThreadState,
   getThreadRequest,
   getThreadSuccess,
   getThreadFailure,
@@ -145,14 +181,17 @@ export const {
   createThreadSuccess,
   createThreadFailure,
   addThread,
+  deleteThread,
   setScrollable,
   changeEmojiOfThread,
-  updateSubThreadInfo,
+  updateAddSubThreadInfo,
+  updateDeleteSubThreadInfo,
   setFirstScrollUsed,
   resetNextThreadId,
   addThreadListRequest,
   addThreadListSuccess,
   addThreadListFailure,
+  replaceThreadsAfterUpdateUserProfile,
 } = threadSlice.actions; // action 나눠서 export 하기
 
 export default threadSlice.reducer;

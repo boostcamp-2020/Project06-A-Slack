@@ -3,13 +3,15 @@ import { useDispatch } from 'react-redux';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { useParams } from 'react-router-dom';
 import { useChannelState, useUserState } from '@/hooks';
-import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE, THREAD_SUBTYPE } from '@/utils/constants';
 import { PaperPlaneIcon } from '@/components';
 import { SubmitButton as SB } from '@/styles/shared';
 import styled from 'styled-components';
 import { flex } from '@/styles/mixin';
 import theme from '@/styles/theme';
 import { setScrollable } from '@/store/modules/thread.slice';
+import { Thread } from '@/types';
+import { getFormattedDate } from '@/utils/utils';
 
 interface ThreadInputBoxProps {
   inputBoxType: string;
@@ -107,6 +109,10 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
   const { current } = useChannelState();
 
   const sendMessage = () => {
+    if (!comment.trim()) {
+      return;
+    }
+
     if (userInfo) {
       const thread = {
         userId: userInfo.id,
@@ -126,12 +132,14 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
         subThreadUserId1: null,
         subThreadUserId2: null,
         subThreadUserId3: null,
+        createdAt: getFormattedDate(new Date()),
       };
       dispatch(
         sendMessageRequest({
           type: SOCKET_MESSAGE_TYPE.THREAD,
           thread,
           room: current?.name as string,
+          subType: THREAD_SUBTYPE.CREATE_THREAD,
         }),
       );
       if (!parentId) {
@@ -173,7 +181,6 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
       e.preventDefault();
       sendMessage();
       setComment('');
-      console.log('enter only, 여기서 전송 처리');
     }
   };
 

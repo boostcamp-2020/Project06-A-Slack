@@ -140,8 +140,9 @@ const ThreadListHeader = () => {
       )}
       {showUsersModalVisible && (
         <DimModal
+          width="520px"
           header={<ShowUsersModalHeader />}
-          body={<ShowUsersModalBody setShowUsersModalVisible={clickShowUsersModal} />}
+          body={<ShowUsersModalBody />}
           visible={showUsersModalVisible}
           setVisible={clickShowUsersModal}
         />

@@ -4,7 +4,11 @@ import { Thread } from '@/types';
 import { Link } from 'react-router-dom';
 import { Popover, ReactionIcon, CommentIcon, DotIcon, EmojiListModal } from '@/components';
 import { flex, hoverActive } from '@/styles/mixin';
+import { useDispatch } from 'react-redux';
 import theme from '@/styles/theme';
+import { sendMessageRequest } from '@/store/modules/socket.slice';
+import { SOCKET_MESSAGE_TYPE, THREAD_SUBTYPE } from '@/utils/constants';
+import { useChannelState, useUserState } from '@/hooks';
 
 const Container = styled.div`
   position: relative;
@@ -62,11 +66,26 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
   const [menuModalVisible, setMenuModalVisible] = useState(false);
   const [reactionModalVisible, setReactionModalVisible] = useState(false);
 
+  const { current } = useChannelState();
+  const dispatch = useDispatch();
+  const { userInfo } = useUserState();
+
   const openMenuModal = () => setMenuModalVisible(true);
   const openReactionModal = () => setReactionModalVisible(true);
 
   const popoverRef = useRef<HTMLDivElement>(null);
   const reactionBoxRef = useRef<HTMLDivElement>(null);
+
+  const clickDeleteMessage = () => {
+    dispatch(
+      sendMessageRequest({
+        type: SOCKET_MESSAGE_TYPE.THREAD,
+        room: current?.name as string,
+        subType: THREAD_SUBTYPE.DELETE_THREAD,
+        thread,
+      }),
+    );
+  };
 
   return (
     <Container>
@@ -80,9 +99,11 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
           </CommentBox>
         </Link>
       )}
-      <MoreActionBox onClick={openMenuModal} ref={popoverRef}>
-        <DotIcon color={theme.color.black5} />
-      </MoreActionBox>
+      {userInfo?.id === thread.userId && (
+        <MoreActionBox onClick={openMenuModal} ref={popoverRef}>
+          <DotIcon color={theme.color.black5} />
+        </MoreActionBox>
+      )}
       {menuModalVisible && popoverRef.current && (
         <Popover
           anchorEl={popoverRef.current}
@@ -93,7 +114,7 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
           setVisible={setMenuModalVisible}
         >
           <ModalListItem>Edit message</ModalListItem>
-          <ModalListItem>Delete message</ModalListItem>
+          <ModalListItem onClick={clickDeleteMessage}>Delete message</ModalListItem>
         </Popover>
       )}
       {reactionModalVisible && reactionBoxRef.current && (

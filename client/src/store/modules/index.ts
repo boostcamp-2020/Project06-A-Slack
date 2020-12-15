@@ -9,6 +9,7 @@ import socketSlice, { SOCKET } from './socket.slice';
 import emojiSlice, { EMOJI } from './emoji.slice';
 import findChannelSlice, { FIND_CHANNEL } from './findChannel.slice';
 import redirectSlice, { REDIRECT } from './redirect.slice';
+import duplicatedSlice, { DUPLICATED_CHANNEL } from './duplicatedChannel.slice';
 
 const rootReducer = combineReducers({
   [CHANNEL]: channelSlice,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   [EMOJI]: emojiSlice,
   [FIND_CHANNEL]: findChannelSlice,
   [REDIRECT]: redirectSlice,
+  [DUPLICATED_CHANNEL]: duplicatedSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -68,7 +68,7 @@ function* checkExistEmailFlow({ payload }: PayloadAction<{ email: string }>) {
 }
 
 function* debounceCheckExistEmailFlow() {
-  yield debounce(700, checkExistEmailRequest, checkExistEmailFlow);
+  yield debounce(300, checkExistEmailRequest, checkExistEmailFlow);
 }
 
 export default function* signupSaga() {

@@ -15,9 +15,11 @@ const SubThreadList: React.FC<SubThreadListProps> = ({ subThreadList }: SubThrea
 
   return (
     <Container>
-      {subThreadList?.map((thread: Thread) => (
-        <ThreadItem key={thread.id} thread={thread} />
-      ))}
+      {subThreadList?.map((thread: Thread) => {
+        if (!thread.isDeleted) {
+          return <ThreadItem key={thread.id} thread={thread} />;
+        }
+      })}
       <Bottom ref={bottomRef} />
     </Container>
   );

@@ -98,9 +98,12 @@ const ModalUserInfoBox = styled.div`
 `;
 
 const ModalUserName = styled.div`
+  width: 13rem;
   font-size: 0.95rem;
   font-weight: 800;
   color: ${(props) => props.theme.color.lightBlack};
+  white-space: pre-wrap;
+  word-break: break-all;
 `;
 
 const ModalUserStatus = styled.div`
