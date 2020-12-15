@@ -76,7 +76,6 @@ export const threadService = {
     parentId,
     userId,
   }: DeleteThreadParams): Promise<{ deletedThread?: Thread; parentThread?: Thread; err?: Error }> {
-    // const deletedId = await threadModel.deleteThread({ threadId: id });
     const conn = await pool.getConnection();
     try {
       await conn.beginTransaction();
@@ -116,8 +115,7 @@ export const threadService = {
 
       if (lengthOfsameUsersInSubThread === 0) {
         await conn.execute(
-          `
-        UPDATE thread SET sub_thread_user_id_${updateIndex + 1}=? WHERE id=?;`,
+          `UPDATE thread SET sub_thread_user_id_${updateIndex + 1}=? WHERE id=?;`,
           [null, parentId],
         );
       }

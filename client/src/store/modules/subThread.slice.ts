@@ -30,7 +30,6 @@ const subThreadSlice = createSlice({
     getSubThreadFailure(state, action) {},
     addSubThread(state, { payload }: PayloadAction<{ thread: Thread }>) {
       const { thread } = payload;
-      console.log(state.parentThread.id);
       if (state.parentThread.id === thread.parentId) {
         state.parentThread.subCount += 1;
         if (state.subThreadList?.length) {

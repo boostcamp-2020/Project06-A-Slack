@@ -61,7 +61,7 @@ export const CHANNEL_SUBTYPE = {
 };
 
 export const THREAD_SUBTYPE = {
-  CREATE_THREAD: 'create thread',
-  EDIT_THREAD: 'edit thread',
-  DELETE_THREAD: 'delete thread',
+  CREATE_THREAD: 'create_thread',
+  EDIT_THREAD: 'edit_thread',
+  DELETE_THREAD: 'delete_thread',
 };

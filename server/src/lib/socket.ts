@@ -322,7 +322,7 @@ export const bindSocketServer = (server: http.Server): void => {
                 });
               }
             } catch (err) {
-              console.log(err);
+              console.error(err);
             }
             return;
           }

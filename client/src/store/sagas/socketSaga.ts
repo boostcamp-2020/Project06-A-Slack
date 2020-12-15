@@ -93,7 +93,6 @@ function subscribeSocket(socket: Socket) {
         }
         if (subType === THREAD_SUBTYPE.DELETE_THREAD) {
           const { parentThread } = data;
-          console.log('come in here');
           if (thread.id) {
             if (thread.parentId !== null) {
               if (thread.emoji && thread.createdAt) {
@@ -119,10 +118,8 @@ function subscribeSocket(socket: Socket) {
                     },
                   }),
                 );
-                // emit(updateDeleteSubThreadInfoInSubThread)
               }
             }
-            console.log('delete main Thread');
             emit(deleteThread({ threadId: thread.id }));
             emit(deleteSubParentThread({ threadId: thread.id }));
           }
