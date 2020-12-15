@@ -13,6 +13,7 @@ export interface Thread {
   url: string;
   isEdited: number;
   isPinned: number;
+  isDeleted: number;
   createdAt: string;
   emoji: EmojiOfThread[];
   subCount: number;
@@ -34,6 +35,7 @@ export const initialThread: Thread = {
   url: '',
   isEdited: 0,
   isPinned: 0,
+  isDeleted: 0,
   createdAt: '',
   emoji: [],
   subCount: 0,

@@ -12,6 +12,17 @@ interface parentThreadProps {
 }
 
 const SubThreadList: React.FC<parentThreadProps> = ({ parentThread }: parentThreadProps) => {
+  if (parentThread.isDeleted) {
+    if (parentThread.subCount > 0) {
+      const deletedThread = { ...parentThread, content: 'This message was deleted.' };
+      return (
+        <Container id={`thread-${parentThread.id}`} key={parentThread.id}>
+          <ThreadItem key={parentThread.id} thread={deletedThread} isParentThreadOfRightSideBar />
+        </Container>
+      );
+    }
+  }
+
   return (
     <Container>
       <ThreadItem key={parentThread.id} thread={parentThread} isParentThreadOfRightSideBar />

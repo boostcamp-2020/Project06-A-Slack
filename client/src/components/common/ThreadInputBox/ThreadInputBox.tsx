@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { useParams } from 'react-router-dom';
 import { useChannelState, useUserState } from '@/hooks';
-import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { INPUT_BOX_TYPE, SOCKET_MESSAGE_TYPE, THREAD_SUBTYPE } from '@/utils/constants';
 import { PaperPlaneIcon } from '@/components';
 import { SubmitButton as SB } from '@/styles/shared';
 import styled from 'styled-components';
@@ -139,6 +139,7 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
           type: SOCKET_MESSAGE_TYPE.THREAD,
           thread,
           room: current?.name as string,
+          subType: THREAD_SUBTYPE.CREATE_THREAD,
         }),
       );
       if (!parentId) {
@@ -180,7 +181,6 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
       e.preventDefault();
       sendMessage();
       setComment('');
-      console.log('enter only, 여기서 전송 처리');
     }
   };
 
