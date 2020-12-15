@@ -24,13 +24,15 @@ export default () => {
 
           if (user) {
             done(undefined, {
-              user: { id: user.id, displayName: user.displayName, email: user.email },
+              id: user.id,
+              displayName: user.displayName,
+              email: user.email,
             });
             return;
           }
 
           const [{ insertId }] = await userModel.addOAuthUser({ email, displayName });
-          done(undefined, { user: { id: insertId, displayName, email } });
+          done(undefined, { id: insertId, displayName, email });
           return;
         } catch (err) {
           done(err, null);

@@ -9,7 +9,7 @@ const CIPHER_ALGORITHM = process.env.CIPHER_ALGORITHM as string;
 const CIPHER_KEY = process.env.CIPHER_KEY as string;
 const IV = process.env.IV as string;
 
-export const verifyJWT = (token: string, type: AuthToken) => {
+export const verifyJWT = (token: string, type: AuthToken): Promise<any> => {
   return new Promise((resolve, reject) => {
     jwt.verify(
       token,

@@ -19,7 +19,7 @@ const App = () => {
       <GlobalStyle />
       <BrowserRouter>
         <Switch>
-          <Route path="/" exact component={withAuth(HomePage)} />
+          <Route path="/" exact component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/verify" component={EmailVerifyPage} />
           <Route path="/signup" component={SignupPage} />
