@@ -62,6 +62,8 @@ const signupSlice = createSlice({
   reducers: {
     verifyEmailSendRequest(state, action: PayloadAction<VerifyEmailSendRequestPayload>) {
       state.verify.loading = true;
+      state.verify.verifyCode = null;
+      state.verify.err = null;
     },
     verifyEmailSendSuccess(state, action: PayloadAction<VerifyEmailSendSuccessPayload>) {
       const { verifyCode, email } = action.payload;

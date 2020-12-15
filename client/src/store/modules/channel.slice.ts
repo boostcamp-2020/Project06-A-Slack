@@ -38,6 +38,9 @@ const channelSlice = createSlice({
   name: 'channel',
   initialState,
   reducers: {
+    resetChannelState() {
+      return initialState;
+    },
     loadChannelsRequest() {},
     loadChannelsSuccess(state, action) {
       state.channelList = action.payload.channelList;
@@ -146,6 +149,7 @@ const channelSlice = createSlice({
 
 export const CHANNEL = channelSlice.name;
 export const {
+  resetChannelState,
   loadChannelsRequest,
   loadChannelsSuccess,
   loadChannelsFailure,

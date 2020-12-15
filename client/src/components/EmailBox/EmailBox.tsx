@@ -123,6 +123,12 @@ const EmailBox: React.FC = () => {
     }
   }, [checkExistEmail]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(resetCheckExistEmailState());
+    };
+  }, []);
+
   const warningMessage = !valid ? notValidEmailMessage : existEmailMessage;
 
   return (

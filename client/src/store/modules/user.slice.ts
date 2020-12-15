@@ -52,6 +52,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState: userState,
   reducers: {
+    resetUserState() {
+      return userState;
+    },
     getUserRequest(state, action: PayloadAction<{ userId: number }>) {},
     getUserSuccess(state, { payload }: PayloadAction<{ userInfo: User }>) {
       state.userInfo = payload.userInfo;
@@ -95,6 +98,7 @@ const userSlice = createSlice({
 
 export const USER = userSlice.name;
 export const {
+  resetUserState,
   getUserRequest,
   getUserSuccess,
   getUserFailure,
