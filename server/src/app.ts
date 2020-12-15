@@ -13,6 +13,8 @@ import { Error } from '@/types';
 import config from '@/config';
 import apiRouter from '@/routes/api';
 import { bindSocketServer } from '@/lib/socket';
+import passport from 'passport';
+import passportConfig from '@/lib/passport';
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -36,6 +38,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.use(passport.initialize());
+passportConfig();
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', apiRouter);
