@@ -1,19 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Thread } from '@/types/thread';
-import { flex } from '@/styles/mixin';
 import { useChannelState, useEmojiState, useUserState } from '@/hooks';
 import { useDispatch } from 'react-redux';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 
 const Container = styled.div`
-  ${flex('center', 'flex-start', 'row')};
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+`;
+
+const EmojiBox = styled.div`
+  cursor: pointer;
+  transition: 0.3;
+  &:hover {
+    transition: 0.3;
+    background-color: #b5e0fe;
+  }
+  border-radius: 5px;
 `;
 
 const Emoji = styled.img`
   width: 22px;
   height: 22px;
+  margin: 0.2rem;
+  border-radius: 5px;
   user-select: none;
   cursor: pointer;
 `;
@@ -46,12 +58,9 @@ const EmojiListModal: React.FC<EmojiListModalProps> = ({ thread }: EmojiListModa
     <Container>
       {emojiList?.map((emoji) => {
         return (
-          <Emoji
-            key={emoji.id}
-            src={emoji.url}
-            alt="emoji url"
-            onClick={() => clickEmojiHandler(Number(emoji.id))}
-          />
+          <EmojiBox key={emoji.id}>
+            <Emoji src={emoji.url} onClick={() => clickEmojiHandler(Number(emoji.id))} />
+          </EmojiBox>
         );
       })}
     </Container>
