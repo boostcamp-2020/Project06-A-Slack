@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import theme from '@/styles/theme';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { SOCKET_MESSAGE_TYPE, THREAD_SUBTYPE } from '@/utils/constants';
-import { useChannelState } from '@/hooks';
+import { useChannelState, useUserState } from '@/hooks';
 
 const Container = styled.div`
   position: relative;
@@ -68,6 +68,7 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
 
   const { current } = useChannelState();
   const dispatch = useDispatch();
+  const { userInfo } = useUserState();
 
   const openMenuModal = () => setMenuModalVisible(true);
   const openReactionModal = () => setReactionModalVisible(true);
@@ -98,9 +99,11 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
           </CommentBox>
         </Link>
       )}
-      <MoreActionBox onClick={openMenuModal} ref={popoverRef}>
-        <DotIcon color={theme.color.black5} />
-      </MoreActionBox>
+      {userInfo?.id === thread.userId && (
+        <MoreActionBox onClick={openMenuModal} ref={popoverRef}>
+          <DotIcon color={theme.color.black5} />
+        </MoreActionBox>
+      )}
       {menuModalVisible && popoverRef.current && (
         <Popover
           anchorEl={popoverRef.current}
