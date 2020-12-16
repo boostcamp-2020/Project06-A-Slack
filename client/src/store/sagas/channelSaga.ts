@@ -3,9 +3,6 @@ import { channelService } from '@/services';
 import { Channel, ChannelInfo, JoinedUser, User } from '@/types';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
-  loadChannelsRequest,
-  loadChannelsSuccess,
-  loadChannelsFailure,
   loadMyChannelsRequest,
   loadMyChannelsSuccess,
   loadMyChannelsFailure,
@@ -22,17 +19,6 @@ import {
 } from '@/store/modules/channel.slice';
 import { setRedirect } from '@/store/modules/redirect.slice';
 import { setLastChannel } from '@/store/modules/user.slice';
-
-function* loadChannels() {
-  try {
-    const { data, status } = yield call(channelService.getChannels);
-    if (status === 200) {
-      yield put(loadChannelsSuccess({ channelList: data.channelList }));
-    }
-  } catch (err) {
-    yield put(loadChannelsFailure(err));
-  }
-}
 
 function* loadMyChannels(action: PayloadAction<{ userId: number }>) {
   const { userId } = action.payload;
@@ -129,10 +115,6 @@ function* joinChannel({ payload: { users, channelId } }: PayloadAction<joinChann
   }
 }
 
-function* watchLoadChannels() {
-  yield takeEvery(loadChannelsRequest, loadChannels);
-}
-
 function* watchLoadMyChannels() {
   yield takeEvery(loadMyChannelsRequest, loadMyChannels);
 }
@@ -151,7 +133,6 @@ function* watchJoinChannel() {
 
 export default function* channelSaga() {
   yield all([
-    fork(watchLoadChannels),
     fork(watchLoadMyChannels),
     fork(watchCreateChannel),
     fork(watchLoadChannel),

@@ -58,7 +58,8 @@ instance.interceptors.response.use(
       console.log('요청 취소', err);
     } else {
       if (err.response.status === 401) {
-        if (err.response.config.url !== '/api/auth/login') {
+        const { url } = err.response.config;
+        if (url !== '/api/auth/login' || url !== '/api/oauth/google/signup') {
           window.location.href = '/login';
         }
       }

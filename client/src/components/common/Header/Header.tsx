@@ -7,6 +7,7 @@ import { useAuthState, useUserState } from '@/hooks';
 import { logoutRequest } from '@/store/modules/auth.slice';
 import { DimModal, UserStateIcon, ClockIcon, Popover } from '@/components';
 import theme from '@/styles/theme';
+import { useHistory } from 'react-router-dom';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 
 const Container = styled.div`
@@ -126,6 +127,7 @@ const TitleClockIcon = styled.div`
 const Header: React.FC = () => {
   const dispatch = useDispatch();
 
+  const history = useHistory();
   const { userId } = useAuthState();
   const { userInfo } = useUserState();
 
@@ -144,7 +146,11 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (userId) {
       dispatch(getUserRequest({ userId: Number(userId) }));
+      return;
     }
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    history.push('/login');
   }, [dispatch, userId]);
 
   const workspaceName = '부스트캠프 2020 멤버십';

@@ -4,7 +4,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { JoinedUser, Channel, User, ChannelInfo } from '@/types';
 
 interface ChannelState {
-  channelList: Channel[];
   myChannelList: Channel[];
   current: Channel | null;
   users: JoinedUser[];
@@ -12,7 +11,6 @@ interface ChannelState {
 }
 
 const initialState: ChannelState = {
-  channelList: [],
   myChannelList: [],
   current: null,
   users: [],
@@ -41,13 +39,6 @@ const channelSlice = createSlice({
     resetChannelState() {
       return initialState;
     },
-    loadChannelsRequest() {},
-    loadChannelsSuccess(state, action) {
-      state.channelList = action.payload.channelList;
-    },
-    loadChannelsFailure(state, action) {
-      // todo 에러처리
-    },
     loadMyChannelsRequest(state, action: PayloadAction<{ userId: number }>) {},
     loadMyChannelsSuccess(state, action: PayloadAction<{ myChannelList: Channel[] }>) {
       state.myChannelList = action.payload.myChannelList;
@@ -66,7 +57,6 @@ const channelSlice = createSlice({
     createChannelRequest(state, action: PayloadAction<{ channelInfo: ChannelInfo; user: User }>) {},
     createChannelSuccess(state, action: PayloadAction<{ channel: Channel }>) {
       const { channel } = action.payload;
-      state.channelList.push(channel);
       state.myChannelList.push(channel);
     },
     createChannelFailure(state, action: PayloadAction<{ err: Error }>) {
@@ -150,9 +140,6 @@ const channelSlice = createSlice({
 export const CHANNEL = channelSlice.name;
 export const {
   resetChannelState,
-  loadChannelsRequest,
-  loadChannelsSuccess,
-  loadChannelsFailure,
   loadMyChannelsRequest,
   loadMyChannelsSuccess,
   loadMyChannelsFailure,
