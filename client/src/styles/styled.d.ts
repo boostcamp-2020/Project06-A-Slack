@@ -53,6 +53,7 @@ declare module 'styled-components' {
       channelItemColor: string;
       channelBorder: string;
       threadHover: string;
+      googleColor: string;
     };
 
     size: {

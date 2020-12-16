@@ -1,6 +1,14 @@
 import { PoolOptions } from 'mysql2/promise';
 
 interface Config {
+  host: string;
+  oauth: {
+    google: {
+      clientID: string;
+      clientSecret: string;
+      callbackURL: string;
+    };
+  };
   jwtSecret: string;
   jwtRefreshSecret: string;
   devDB: PoolOptions;
@@ -13,6 +21,15 @@ interface Config {
 }
 
 const config: Config = {
+  host:
+    process.env.MODE === 'dev' ? (process.env.DEV_HOST as string) : (process.env.HOST as string),
+  oauth: {
+    google: {
+      clientID: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      callbackURL: 'http://localhost:3000/api/oauth/google/callback',
+    },
+  },
   jwtSecret: process.env.JWT_SECRET as string,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET as string,
   NODE_MAILER: {
