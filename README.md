@@ -5,7 +5,6 @@
 <br/>
 
 > 배포 주소 : https://boost-slack.ga/  
-> 회원가입이 번거로우신 분들을 위한 ID : a@a.co, b@b.co, c@c.co, d@d.co (PW : 123)
 
 <br/>
 
