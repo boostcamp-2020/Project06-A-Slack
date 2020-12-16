@@ -59,7 +59,7 @@ instance.interceptors.response.use(
     } else {
       if (err.response.status === 401) {
         const { url } = err.response.config;
-        if (url !== '/api/auth/login' || url !== '/api/oauth/google/signup') {
+        if (url !== '/api/auth/login' && url !== '/api/oauth/google/signup') {
           window.location.href = '/login';
         }
       }
