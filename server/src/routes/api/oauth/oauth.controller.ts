@@ -25,13 +25,7 @@ export const handleSuccess = async (req: Request, res: Response): Promise<void> 
   const { user }: any = req;
   // 비번 일치 할 때
   if (user) {
-    const accessToken = jwt.sign(user, config.jwtSecret, { expiresIn: TIME.FIVE_MINUTE });
-    const refreshToken = jwt.sign(user, config.jwtRefreshSecret, {
-      expiresIn: TIME.TWO_MONTH,
-    });
-    res.redirect(
-      `${config.host}?accessToken=${accessToken}&refreshToken=${refreshToken}&userId=${user.id}`,
-    );
+    res.redirect(`${config.host}/login?accessToken=${user.accessToken}`);
     return;
   }
   res.status(401).json({ message: ERROR_MESSAGE.GOOGLE_OAUTH_FAILED });
