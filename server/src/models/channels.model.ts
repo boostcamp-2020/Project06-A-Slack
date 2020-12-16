@@ -95,4 +95,29 @@ export const channelModel: Model = {
     const sql = `UPDATE user_channel SET unread = ? WHERE user_id = ? AND channel_id = ?;`;
     return pool.execute(sql, [unread, userId, channelId]);
   },
+  async setUserChannel({
+    userId,
+    channelId = 1,
+  }: {
+    userId: number;
+    channelId?: number;
+  }): Promise<{ err?: Error }> {
+    const conn = await pool.getConnection();
+    await conn.beginTransaction();
+    try {
+      const sql1 = `INSERT INTO user_channel (user_id, channel_id) VALUES (?, ?);`;
+      const sql2 = `UPDATE channel SET member_count = member_count + 1 WHERE id = ?;`;
+
+      conn.execute(sql1, [userId, channelId]);
+      conn.execute(sql2, [channelId]);
+      conn.commit();
+      return {};
+    } catch (err) {
+      console.error(err);
+      conn.rollback();
+      return { err };
+    } finally {
+      conn.release();
+    }
+  },
 };

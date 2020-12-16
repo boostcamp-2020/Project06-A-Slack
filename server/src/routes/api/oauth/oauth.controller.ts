@@ -6,7 +6,7 @@ import { ERROR_MESSAGE, TIME } from '@/utils/constants';
 import { User } from '@/types';
 import axios from 'axios';
 import { verifyRequestData } from '@/utils/utils';
-import { userModel } from '@/models';
+import { channelModel, userModel } from '@/models';
 
 /**
  * GET /api/oauth/google
@@ -67,6 +67,7 @@ export const googleSignup = async (
           userInfo = { email: user.email, displayName: user.displayName, id: user.id };
         } else {
           const [{ insertId }] = await userModel.addOAuthUser({ email, displayName: name });
+          await channelModel.setUserChannel({ userId: insertId });
           userInfo = { email, displayName: name, id: insertId };
         }
 
