@@ -208,9 +208,7 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
   useEffect(() => {
     console.log(secret);
     return () => {
-      if (!secret) {
-        setSecret((state) => false);
-      }
+      setSecret((state) => false);
       dispatch(resetDuplicateState());
     };
   }, []);
