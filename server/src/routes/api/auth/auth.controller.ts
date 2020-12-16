@@ -9,7 +9,7 @@ import {
   decrypt,
   sendEmail,
 } from '@/utils/utils';
-import { userModel } from '@/models';
+import { channelModel, userModel } from '@/models';
 import config from '@/config';
 import { TIME, TOKEN_TYPE, ERROR_MESSAGE } from '@/utils/constants';
 import isEmail from 'validator/lib/isEmail';
@@ -71,7 +71,8 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
   if (verifyRequestData([email, pw, displayName])) {
     try {
       const hashPw = await bcrypt.hash(pw, 10);
-      await userModel.addUser({ email, pw: hashPw, displayName });
+      const [{ insertId }] = await userModel.addUser({ email, pw: hashPw, displayName });
+      await channelModel.setUserChannel({ userId: insertId });
 
       res.status(200).end();
       return;

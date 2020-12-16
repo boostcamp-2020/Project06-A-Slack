@@ -1,7 +1,7 @@
 import config from '@/config';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import passport from 'passport';
-import { userModel } from '@/models';
+import { channelModel, userModel } from '@/models';
 import { User } from '@/types';
 
 export default () => {
@@ -32,6 +32,7 @@ export default () => {
           }
 
           const [{ insertId }] = await userModel.addOAuthUser({ email, displayName });
+          await channelModel.setUserChannel({ userId: insertId });
           done(undefined, { id: insertId, displayName, email });
           return;
         } catch (err) {

@@ -189,9 +189,6 @@ export const bindSocketServer = (server: http.Server): void => {
   const namespace = io.of('/');
 
   namespace.on(CONNECT, (socket: Socket) => {
-    console.log('메인 채널 연결됨 socketID : ', socket.id);
-    // io.to(socket.id).emit(MESSAGE, { socketId: socket.id });
-
     socket.on(MESSAGE, async (data: SocketEvent) => {
       if (isThreadEvent(data)) {
         const { type, subType, room, thread } = data;
@@ -381,14 +378,10 @@ export const bindSocketServer = (server: http.Server): void => {
     });
 
     socket.on(ENTER_ROOM, (data: RoomEvent) => {
-      console.log('enter');
-      console.dir(data, { depth: null });
       socket.join(data.room);
     });
 
     socket.on(LEAVE_ROOM, (data: RoomEvent) => {
-      console.log('leave');
-      console.dir(data, { depth: null });
       socket.leave(data.room);
     });
 
