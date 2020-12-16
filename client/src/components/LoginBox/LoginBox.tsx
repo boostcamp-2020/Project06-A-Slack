@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { darken } from 'polished';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import isEmail from 'validator/es/lib/isEmail';
-import { loginRequest, loginSuccess } from '@/store/modules/auth.slice';
+import { loginRequest } from '@/store/modules/auth.slice';
 import { FormButton, FormInput as Input, FormLabel as Label } from '@/styles/shared/form';
 import { WarningIcon, GoogleLogoIcon } from '@/components';
 import { IconBox, WarningText } from '@/components/EmailBox/EmailBox';
 import { flex } from '@/styles/mixin';
 import { useAuthState } from '@/hooks';
 import LoadingSvg from '@/public/icon/loading.svg';
-import config from '@/config';
-import { authService } from '@/services';
-import qs from 'qs';
 
 const Container = styled.div`
   width: 100%;
