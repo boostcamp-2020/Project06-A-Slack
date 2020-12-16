@@ -45,7 +45,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', apiRouter);
 app.all('*', (req, res) => {
   if (process.env.MODE === 'dev') {
-    res.redirect(process.env.DEV_URL as string);
+    res.redirect(config.clientHost);
     return;
   }
   res.sendFile(path.join(__dirname, '../../client/dist/index.html'));

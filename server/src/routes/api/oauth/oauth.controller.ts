@@ -23,9 +23,8 @@ export const handleAuth = passport.authenticate('google', {
 
 export const handleSuccess = async (req: Request, res: Response): Promise<void> => {
   const { user }: any = req;
-  // 비번 일치 할 때
   if (user) {
-    res.redirect(`${config.host}/login?accessToken=${user.accessToken}`);
+    res.redirect(`${config.clientHost}/login?accessToken=${user.accessToken}`);
     return;
   }
   res.status(401).json({ message: ERROR_MESSAGE.GOOGLE_OAUTH_FAILED });
