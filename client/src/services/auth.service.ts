@@ -1,5 +1,6 @@
 import API from '@/api';
 import { Service } from '@/types';
+import axios from 'axios';
 
 interface LoginParam {
   email: string;
@@ -28,5 +29,8 @@ export const authService: Service = {
   },
   checkExistEmail({ email }: { email: string }) {
     return API.post('/api/auth/email/check', { email });
+  },
+  signupWithGoogleOAuth({ accessToken }: { accessToken: string }) {
+    return axios.post('/api/oauth/google/signup', { accessToken });
   },
 };
