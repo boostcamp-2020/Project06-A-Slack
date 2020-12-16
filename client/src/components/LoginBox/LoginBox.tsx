@@ -4,13 +4,16 @@ import { useDispatch } from 'react-redux';
 import { darken } from 'polished';
 import { Link } from 'react-router-dom';
 import isEmail from 'validator/es/lib/isEmail';
-import { loginRequest } from '@/store/modules/auth.slice';
+import { loginRequest, loginSuccess } from '@/store/modules/auth.slice';
 import { FormButton, FormInput as Input, FormLabel as Label } from '@/styles/shared/form';
 import { WarningIcon, GoogleLogoIcon } from '@/components';
 import { IconBox, WarningText } from '@/components/EmailBox/EmailBox';
 import { flex } from '@/styles/mixin';
 import { useAuthState } from '@/hooks';
 import LoadingSvg from '@/public/icon/loading.svg';
+import { GoogleLogin } from 'react-google-login';
+import config from '@/config';
+import { authService } from '@/services';
 
 const Container = styled.div`
   width: 100%;
@@ -92,13 +95,14 @@ const Line = styled.hr`
   flex: 1;
 `;
 
-const GoogleLoginBox = styled.a`
+const GoogleLoginBox = styled.div`
   ${flex()};
   flex-shrink: 0;
   border: 2px solid ${(props) => props.theme.color.googleColor};
   border-radius: 5px;
   width: 25rem;
   height: 50px;
+  cursor: pointer;
 `;
 
 const GoogleText = styled.span`
@@ -137,6 +141,21 @@ const LoginBox: React.FC = () => {
     dispatch(loginRequest({ email, pw }));
   };
 
+  const handleGoogleOAuthSuccess = async (res: any) => {
+    const { data, status } = await authService.signupWithGoogleOAuth({
+      accessToken: res.accessToken,
+    });
+    const { accessToken, refreshToken, user } = data;
+    if (status === 200) {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('userId', user.id);
+      dispatch(
+        loginSuccess({ accessToken, refreshToken, userId: user.id ? Number(user.id) : null }),
+      );
+    }
+  };
+
   useEffect(() => {
     if (loginState.err?.response?.status === 401) {
       setLoginFailed(true);
@@ -147,10 +166,20 @@ const LoginBox: React.FC = () => {
     <Container>
       <Title>로그인</Title>
       <DescText>로그인하려면 사용하는 Google 계정이나 이메일 주소로 계속해 주세요.</DescText>
-      <GoogleLoginBox href="/api/oauth/google">
-        <GoogleLogoIcon size="18px" />
-        <GoogleText>Google로 계속</GoogleText>
-      </GoogleLoginBox>
+      <GoogleLogin
+        clientId={config.GOOGLE_CLIENT_ID}
+        buttonText="Google로 계속"
+        render={(renderProps) => (
+          <GoogleLoginBox onClick={renderProps.onClick}>
+            <GoogleLogoIcon size="18px" />
+            <GoogleText>Google로 계속</GoogleText>
+          </GoogleLoginBox>
+        )}
+        onSuccess={handleGoogleOAuthSuccess}
+        onFailure={(res: any) => {
+          alert('로그인 실패');
+        }}
+      />
       <LineWithText>
         <Line />
         <LineText>또는</LineText>

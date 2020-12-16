@@ -22,6 +22,8 @@ export const ERROR_MESSAGE = {
   ENCRYPT_DECRYPT_FAILED: '암호화/복호화 실패',
   EXIST_EMAIL: '존재하는 이메일',
   NOT_ALLOWED_FILE_TYPE: '허용되지 않은 파일타입',
+  GOOGLE_OAUTH_FAILED: '구글 OAuth 인증 실패',
+  GOOGLE_OAUTH_SIGNUP_FAILED: '구글 OAuth로 회원가입 실패',
 };
 
 export const USER_DEFAULT_PROFILE_URL =

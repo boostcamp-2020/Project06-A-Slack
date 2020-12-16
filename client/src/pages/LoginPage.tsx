@@ -5,16 +5,15 @@ import { useAuthState } from '@/hooks';
 
 const LoginPage: React.FC = () => {
   const { accessToken } = useAuthState();
+
+  if (accessToken) {
+    return <Redirect to="/" />;
+  }
+
   return (
     <>
-      {accessToken ? (
-        <Redirect to="/" />
-      ) : (
-        <>
-          <LogoBox />
-          <LoginBox />
-        </>
-      )}
+      <LogoBox />
+      <LoginBox />
     </>
   );
 };
