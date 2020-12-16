@@ -1,7 +1,8 @@
 import { PoolOptions } from 'mysql2/promise';
 
 interface Config {
-  host: string;
+  clientHost: string;
+  serverHost: string;
   oauth: {
     google: {
       clientID: string;
@@ -21,14 +22,22 @@ interface Config {
 }
 
 const config: Config = {
-  host:
-    process.env.MODE === 'dev' ? (process.env.DEV_HOST as string) : (process.env.HOST as string),
+  clientHost:
+    process.env.MODE === 'dev'
+      ? (process.env.DEV_CLIENT_HOST as string)
+      : (process.env.HOST as string),
+  serverHost:
+    process.env.MODE === 'dev'
+      ? (process.env.DEV_SERVER_HOST as string)
+      : (process.env.HOST as string),
   oauth: {
     google: {
       clientID: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       callbackURL: `${
-        process.env.MODE === 'dev' ? (process.env.DEV_HOST as string) : (process.env.HOST as string)
+        process.env.MODE === 'dev'
+          ? (process.env.DEV_SERVER_HOST as string)
+          : (process.env.HOST as string)
       }/api/oauth/google/callback`,
     },
   },
