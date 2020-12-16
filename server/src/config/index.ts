@@ -27,7 +27,9 @@ const config: Config = {
     google: {
       clientID: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      callbackURL: 'http://localhost:3000/api/oauth/google/callback',
+      callbackURL: `${
+        process.env.MODE === 'dev' ? (process.env.DEV_HOST as string) : (process.env.HOST as string)
+      }/api/oauth/google/callback`,
     },
   },
   jwtSecret: process.env.JWT_SECRET as string,
