@@ -29,6 +29,11 @@ const duplicatedChannelSlice = createSlice({
       state.loading = false;
       state.err = payload.err;
     },
+    resetDuplicateState(state) {
+      state.isDuplicated = false;
+      state.loading = false;
+      state.err = null;
+    },
   },
 });
 
@@ -37,5 +42,6 @@ export const {
   checkDuplicateRequest,
   checkDuplicateSuccess,
   checkDuplicateFailure,
+  resetDuplicateState,
 } = duplicatedChannelSlice.actions;
 export default duplicatedChannelSlice.reducer;

@@ -1,11 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { flex } from '@/styles/mixin';
 import styled from 'styled-components';
 import { useDuplicatedChannelState, useUserState } from '@/hooks';
 import { createChannelRequest } from '@/store/modules/channel.slice';
-import { checkDuplicateRequest } from '@/store/modules/duplicatedChannel.slice';
+import {
+  checkDuplicateRequest,
+  resetDuplicateState,
+} from '@/store/modules/duplicatedChannel.slice';
 import { useDispatch } from 'react-redux';
 import { PoundIcon, LockIcon } from '@/components';
 import theme from '@/styles/theme';
@@ -201,6 +204,13 @@ const CreateChannelModalBody: React.FC<CreateChannelModalBodyProps> = ({
     }
     setCreateChannelModalVisible((state) => !state);
   };
+
+  useEffect(() => {
+    return () => {
+      setSecret((state) => false);
+      dispatch(resetDuplicateState());
+    };
+  }, []);
 
   return (
     <Container>
