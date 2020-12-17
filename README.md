@@ -8,9 +8,9 @@
 
 <br/>
 
-## 데모 영상 🎞
+## 🎞 데모 영상 
 
-<a href="https://youtu.be/2yh584d_Fyk"><img width=500 src="https://user-images.githubusercontent.com/61396464/102493302-53dab600-40b6-11eb-9fb4-89329e9f4488.png"/></a>
+<a href="https://youtu.be/2yh584d_Fyk"><img width=650 src="https://user-images.githubusercontent.com/61396464/102493302-53dab600-40b6-11eb-9fb4-89329e9f4488.png"/></a>
 
 ## 🔎 프로젝트 소개
 
