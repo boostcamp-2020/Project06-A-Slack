@@ -10,6 +10,7 @@ interface ThreadState {
   nextThreadId: number | null;
   firstScrollUsed: boolean;
   prevTopThreadId: number | null;
+  gotoPreviousTopItemPosition: boolean;
 }
 
 const threadListState: ThreadState = {
@@ -19,6 +20,7 @@ const threadListState: ThreadState = {
   nextThreadId: null,
   firstScrollUsed: false,
   prevTopThreadId: null,
+  gotoPreviousTopItemPosition: false,
 };
 
 export interface addThreadRequestPayload {
@@ -80,6 +82,7 @@ const threadSlice = createSlice({
         state.threadList = threadList.concat(state.threadList);
       }
       state.nextThreadId = nextThreadId;
+      state.gotoPreviousTopItemPosition = true;
     },
     addThreadListFailure(state) {
       state.loading = false;
@@ -171,6 +174,12 @@ const threadSlice = createSlice({
         });
       }
     },
+    setGotoPreviousTopItemPosition(
+      state,
+      { payload }: PayloadAction<{ gotoPreviousTopItemPosition: boolean }>,
+    ) {
+      state.gotoPreviousTopItemPosition = payload.gotoPreviousTopItemPosition;
+    },
   },
 });
 
@@ -195,6 +204,7 @@ export const {
   addThreadListSuccess,
   addThreadListFailure,
   replaceThreadsAfterUpdateUserProfile,
-} = threadSlice.actions; // action 나눠서 export 하기
+  setGotoPreviousTopItemPosition,
+} = threadSlice.actions;
 
 export default threadSlice.reducer;

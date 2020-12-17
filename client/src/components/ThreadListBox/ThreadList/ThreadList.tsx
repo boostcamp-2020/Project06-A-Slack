@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import {
   addThreadListRequest,
   setFirstScrollUsed,
+  setGotoPreviousTopItemPosition,
   setScrollable,
 } from '@/store/modules/thread.slice';
 import { Thread } from '@/types';
@@ -56,6 +57,7 @@ const ThreadList = () => {
     nextThreadId,
     firstScrollUsed,
     prevTopThreadId,
+    gotoPreviousTopItemPosition,
   } = useThreadState();
 
   const onIntersect = ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
@@ -85,9 +87,10 @@ const ThreadList = () => {
         bottomRef.current?.scrollIntoView();
         dispatch(setScrollable({ canScrollToBottom: false }));
       }
-      if (prevTopThreadId && !canScrollToBottom) {
+      if (gotoPreviousTopItemPosition && prevTopThreadId && !canScrollToBottom) {
         const prevTopElement = document.getElementById(`thread-${prevTopThreadId}`);
         prevTopElement?.scrollIntoView();
+        dispatch(setGotoPreviousTopItemPosition({ gotoPreviousTopItemPosition: false }));
       }
     }
   }, [threadList?.length]);
