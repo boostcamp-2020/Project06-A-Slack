@@ -55,6 +55,7 @@ const threadSlice = createSlice({
       state.loading = true;
       state.nextThreadId = null;
       state.firstScrollUsed = false;
+      state.threadList = null;
     },
     getThreadSuccess(state, action: PayloadAction<getThreadSuccessPayload>) {
       const { threadList, nextThreadId } = action.payload;
