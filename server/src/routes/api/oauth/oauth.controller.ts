@@ -59,7 +59,9 @@ export const googleSignup = async (
         if (user) {
           userInfo = { email: user.email, displayName: user.displayName, id: user.id };
         } else {
-          const [{ insertId }] = await userModel.addOAuthUser({ email, displayName: name });
+          const [{ insertId }] = picture
+            ? await userModel.addOAuthUser({ email, displayName: name, image: picture })
+            : await userModel.addOAuthUser({ email, displayName: name });
           await channelModel.setUserChannel({ userId: insertId });
           userInfo = { email, displayName: name, id: insertId };
         }

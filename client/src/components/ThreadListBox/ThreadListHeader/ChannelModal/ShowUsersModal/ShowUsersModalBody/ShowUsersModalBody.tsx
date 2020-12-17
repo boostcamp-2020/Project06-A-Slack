@@ -66,7 +66,6 @@ const ShowUsersModalBody: React.FC = () => {
           <SearchedUserBox key={user.userId}>
             <ProfileImg src={user.image} />
             <UserName>{user.displayName}</UserName>
-            <Remove>Remove</Remove>
           </SearchedUserBox>
         ))}
       </SearchedUserContainer>
