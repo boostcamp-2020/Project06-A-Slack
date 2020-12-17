@@ -57,7 +57,7 @@ instance.interceptors.response.use(
     if (axios.isCancel(err)) {
       console.log('요청 취소', err);
     } else {
-      if (err.response.status === 401) {
+      if (err?.response?.status === 401) {
         const { url } = err.response.config;
         if (url !== '/api/auth/login' && url !== '/api/oauth/google/signup') {
           window.location.href = '/login';

@@ -68,7 +68,19 @@ export const userModel = {
     const sql = `INSERT INTO user (email, pw, display_name) VALUES (?, ?, ?);`;
     return pool.execute(sql, [email, pw, displayName]);
   },
-  addOAuthUser({ email, displayName }: { email: string; displayName: string }): any {
+  addOAuthUser({
+    email,
+    displayName,
+    image,
+  }: {
+    email: string;
+    displayName: string;
+    image?: string;
+  }): any {
+    if (image) {
+      const sql = `INSERT INTO user (email, display_name, image) VALUES (?, ?, ?);`;
+      return pool.execute(sql, [email, displayName, image]);
+    }
     const sql = `INSERT INTO user (email, display_name) VALUES (?, ?);`;
     return pool.execute(sql, [email, displayName]);
   },
