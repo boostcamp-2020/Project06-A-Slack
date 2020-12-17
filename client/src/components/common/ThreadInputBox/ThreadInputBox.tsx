@@ -143,7 +143,7 @@ const ThreadInputBox: React.FC<ThreadInputBoxProps> = ({ inputBoxType }: ThreadI
         }),
       );
       if (!parentId) {
-        dispatch(setScrollable({ canScroll: true }));
+        dispatch(setScrollable({ canScrollToBottom: true }));
       }
     }
   };

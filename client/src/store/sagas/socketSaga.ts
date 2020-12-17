@@ -92,7 +92,18 @@ function subscribeSocket(socket: Socket) {
             }
             return;
           }
-          emit(addThread({ thread }));
+          if (thread.id && thread.emoji && thread.createdAt) {
+            emit(
+              addThread({
+                thread: {
+                  ...thread,
+                  id: thread.id,
+                  createdAt: thread.createdAt,
+                  emoji: thread.emoji,
+                },
+              }),
+            );
+          }
           return;
         }
         if (subType === THREAD_SUBTYPE.DELETE_THREAD) {

@@ -5,7 +5,7 @@ import { EmojiOfThread, JoinedUser, Thread, ThreadResponse } from '@/types';
 
 interface ThreadState {
   threadList: Thread[] | null;
-  canScroll: boolean;
+  canScrollToBottom: boolean;
   loading: boolean;
   nextThreadId: number | null;
   firstScrollUsed: boolean;
@@ -14,7 +14,7 @@ interface ThreadState {
 
 const threadListState: ThreadState = {
   threadList: null,
-  canScroll: false,
+  canScrollToBottom: false,
   loading: false,
   nextThreadId: null,
   firstScrollUsed: false,
@@ -31,7 +31,7 @@ export interface getThreadRequestPayload {
 }
 export interface getThreadSuccessPayload {
   threadList: Thread[];
-  canScroll: boolean;
+  canScrollToBottom: boolean;
   nextThreadId: number | null;
 }
 
@@ -51,6 +51,7 @@ const threadSlice = createSlice({
       return threadListState;
     },
     getThreadRequest(state, action: PayloadAction<getThreadRequestPayload>) {
+      state.prevTopThreadId = null;
       state.loading = true;
       state.nextThreadId = null;
       state.firstScrollUsed = false;
@@ -85,11 +86,12 @@ const threadSlice = createSlice({
     createThreadRequest(state, action: PayloadAction<createThreadRequestPayload>) {},
     createThreadSuccess(state, action: PayloadAction<ThreadResponse>) {},
     createThreadFailure(state, action) {},
-    addThread(state, action) {
+    addThread(state, { payload }: PayloadAction<{ thread: Thread }>) {
+      const { thread } = payload;
       if (state.threadList?.length) {
-        state.threadList.push(action.payload.thread);
+        state.threadList.push(thread);
       } else {
-        state.threadList = [action.payload.thread];
+        state.threadList = [thread];
       }
     },
     deleteThread(state, { payload }: PayloadAction<{ threadId: number }>) {
@@ -130,8 +132,8 @@ const threadSlice = createSlice({
         state.threadList[targetIdx] = thread;
       }
     },
-    setScrollable(state, { payload }: PayloadAction<{ canScroll: boolean }>) {
-      state.canScroll = payload.canScroll;
+    setScrollable(state, { payload }: PayloadAction<{ canScrollToBottom: boolean }>) {
+      state.canScrollToBottom = payload.canScrollToBottom;
     },
     setFirstScrollUsed(state, { payload }: PayloadAction<{ firstScrollUsed: boolean }>) {
       state.firstScrollUsed = payload.firstScrollUsed;

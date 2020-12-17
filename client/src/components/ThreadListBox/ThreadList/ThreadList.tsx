@@ -51,7 +51,7 @@ const ThreadList = () => {
   const { userInfo } = useUserState();
   const {
     threadList,
-    canScroll,
+    canScrollToBottom,
     loading,
     nextThreadId,
     firstScrollUsed,
@@ -79,13 +79,13 @@ const ThreadList = () => {
     if (threadList) {
       if (
         threadList.length &&
-        canScroll &&
+        canScrollToBottom &&
         threadList[threadList.length - 1].userId === userInfo?.id
       ) {
         bottomRef.current?.scrollIntoView();
-        dispatch(setScrollable({ canScroll: false }));
+        dispatch(setScrollable({ canScrollToBottom: false }));
       }
-      if (prevTopThreadId && !canScroll) {
+      if (prevTopThreadId && !canScrollToBottom) {
         const prevTopElement = document.getElementById(`thread-${prevTopThreadId}`);
         prevTopElement?.scrollIntoView();
       }
