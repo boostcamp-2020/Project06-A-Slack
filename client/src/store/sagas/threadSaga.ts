@@ -22,7 +22,7 @@ function* getThreadList({ payload }: PayloadAction<getThreadRequestPayload>) {
     const { data, status } = yield call(threadService.getThreadList, { channelId });
     const { threadList, nextThreadId } = data;
     if (status === 200) {
-      yield put(getThreadSuccess({ threadList, canScroll: true, nextThreadId }));
+      yield put(getThreadSuccess({ threadList, canScrollToBottom: true, nextThreadId }));
     }
   } catch (err) {
     yield put(getThreadFailure(err));
