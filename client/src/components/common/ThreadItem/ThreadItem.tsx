@@ -44,9 +44,9 @@ const ContentBox = styled.div`
 
 const ContentTop = styled.div`
   ${flex('flex-end')};
+  margin-bottom: 0.3rem;
 `;
 const ContentBottom = styled.div`
-  margin-top: 0.3rem;
   white-space: pre-wrap;
   line-height: 1.45;
   ${flex('center', 'flex-start')}
@@ -140,7 +140,13 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
       !thread.isDeleted &&
       thread.subCount === 0 ? (
         <SameUserContainer onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-          <SameUserDateBox />
+          <SameUserDateBox>
+            {popupVisible && (
+              <DateTimeBox>
+                {get12HourTime(thread.createdAt).replace('AM', '').replace('PM', '')}
+              </DateTimeBox>
+            )}
+          </SameUserDateBox>
           <ContentBox>
             <ContentBottom>{thread.content}</ContentBottom>
             <EmojiBox thread={thread} />
