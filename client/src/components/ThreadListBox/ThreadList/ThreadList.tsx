@@ -70,7 +70,7 @@ const HorizontalDateInfoBox = styled.div`
   ${flex()};
   width: 100%;
   height: 40px;
-  margin: 1rem 0;
+  margin: 0.2rem 0;
 `;
 
 const Line = styled.hr`
@@ -189,11 +189,21 @@ const ThreadList = () => {
             const deletedThread = { ...thread, content: 'This message was deleted.' };
             const prevCreatedDate = index > 0 ? new Date(arr[index - 1].createdAt).getDate() : null;
             const currentCreatedDate = new Date(thread.createdAt).getDate();
-            const currentConvertedDateString = new Date(thread.createdAt).toLocaleString('en-US', {
+            const today = new Date();
+            const threadDate = new Date(thread.createdAt);
+            let currentConvertedDateString = threadDate.toLocaleString('en-US', {
               weekday: 'long',
               month: 'long',
               day: 'numeric',
             });
+            if (
+              today.getFullYear() === threadDate.getFullYear() &&
+              today.getMonth() === threadDate.getMonth() &&
+              today.getDate() === threadDate.getDate()
+            ) {
+              currentConvertedDateString = 'Today';
+            }
+
             if (thread.isDeleted) {
               if (thread.subCount > 0) {
                 return (
