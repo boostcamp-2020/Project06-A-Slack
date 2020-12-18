@@ -1,7 +1,5 @@
 # 팀 협업도구, 우리동네 슬랙 🚀
 
-<img src="https://assets.brandfolder.com/q7e86i-6b7f3s-5d18mu/v/12397564/original/Windows-Slack-client-for-media-kit.en-GB%202x.png" alt="drawing" height="40%" width="40%"/> <img src="https://assets.brandfolder.com/pl546j-7le8zk-btwjnu/original/Slack_RGB.png" alt="drawing" height="40%" width="40%"/>
-
 <br/>
 
 > 배포 주소 : https://boost-slack.ga/  
@@ -11,6 +9,8 @@
 ## 🎞 데모 영상 
 
 <a href="https://youtu.be/2yh584d_Fyk"><img width=650 src="https://user-images.githubusercontent.com/61396464/102493302-53dab600-40b6-11eb-9fb4-89329e9f4488.png"/></a>
+
+> 영상 클릭 시 링크로 이동됩니다.
 
 ## 🔎 프로젝트 소개
 
