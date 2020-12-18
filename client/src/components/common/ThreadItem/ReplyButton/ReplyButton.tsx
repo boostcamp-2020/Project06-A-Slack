@@ -98,7 +98,9 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
               />
             );
           })}
-          <ReplyCount>{thread.subCount} replies</ReplyCount>
+          <ReplyCount>
+            {thread.subCount === 1 ? `${thread.subCount} reply` : `${thread.subCount} replies`}
+          </ReplyCount>
         </LeftBox>
         <IconBox className="arrow-icon">
           <RightIcon size="13px" color={theme.color.black8} />
