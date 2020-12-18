@@ -8,11 +8,13 @@ import {
   setScrollable,
 } from '@/store/modules/thread.slice';
 import { Thread } from '@/types';
-import { ThreadItem } from '@/components';
-import { useInfinteScroll, useThreadState, useUserState } from '@/hooks';
+import { ThreadItem, LightIcon, LockIcon, PoundIcon } from '@/components';
+import { useChannelState, useInfinteScroll, useThreadState, useUserState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import loadingColorIcon from '@/public/icon/loading-color.svg';
 import { useParams } from 'react-router-dom';
+import theme from '@/styles/theme';
+import { ChannelLockIcon } from '@/components/common';
 
 const Container = styled.div`
   width: 100%;
@@ -40,8 +42,33 @@ const LoadingIcon = styled.img`
   padding-top: 5px;
 `;
 
+const ChannelInfoBox = styled.div`
+  margin: 30px 20px 48px 20px;
+  display: flex;
+`;
+
+const ChannelIconBox = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+  overflow: hidden;
+`;
+
+const ChannelInfoDesc = styled.div`
+  padding-top: 0.2rem;
+`;
+const ChannelNameBox = styled.span`
+  font-weight: 800;
+  color: ${(props) => props.theme.color.blue1};
+`;
+
+const ChannelInfoRightBox = styled.div`
+  margin-left: 0.5rem;
+`;
+
 const ThreadList = () => {
   const { channelId }: { channelId: string } = useParams();
+  const { current } = useChannelState();
 
   const dispatch = useDispatch();
 
@@ -99,6 +126,30 @@ const ThreadList = () => {
 
   return (
     <Container>
+      {(!nextThreadId || nextThreadId === -1) && (
+        <ChannelInfoBox>
+          {current && (
+            <>
+              <ChannelIconBox>
+                {current?.isPublic ? <LightIcon /> : <ChannelLockIcon size="36px" />}
+              </ChannelIconBox>
+              <ChannelInfoRightBox>
+                <ChannelInfoDesc>
+                  <ChannelNameBox>
+                    {current?.isPublic ? (
+                      <PoundIcon size="11px" color={theme.color.blue1} />
+                    ) : (
+                      <LockIcon size="11px" color={theme.color.blue1} />
+                    )}{' '}
+                    {current?.name}
+                  </ChannelNameBox>{' '}
+                  채널의 맨 첫 부분입니다.
+                </ChannelInfoDesc>
+              </ChannelInfoRightBox>
+            </>
+          )}
+        </ChannelInfoBox>
+      )}
       {threadList && (
         <>
           {nextThreadId && nextThreadId !== -1 && (
