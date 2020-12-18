@@ -113,7 +113,11 @@ const ThreadList = () => {
                 const deletedThread = { ...thread, content: 'This message was deleted.' };
                 return (
                   <Wrapper id={`thread-${thread.id}`} key={thread.id}>
-                    <ThreadItem thread={deletedThread} prevThreadUserId={arr[index - 1]?.userId} />
+                    <ThreadItem
+                      thread={deletedThread}
+                      prevThreadUserId={arr[index - 1]?.userId}
+                      prevThread={index > 0 ? arr[index - 1] : undefined}
+                    />
                   </Wrapper>
                 );
               }
@@ -121,7 +125,11 @@ const ThreadList = () => {
             }
             return (
               <Wrapper id={`thread-${thread.id}`} key={thread.id}>
-                <ThreadItem thread={thread} prevThreadUserId={arr[index - 1]?.userId} />
+                <ThreadItem
+                  thread={thread}
+                  prevThreadUserId={arr[index - 1]?.userId}
+                  prevThread={index > 0 ? arr[index - 1] : undefined}
+                />
               </Wrapper>
             );
           })}

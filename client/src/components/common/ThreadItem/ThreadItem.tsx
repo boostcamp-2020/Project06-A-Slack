@@ -134,7 +134,11 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
 
   return (
     <>
-      {isSameUser && !thread.isDeleted && thread.subCount === 0 ? (
+      {isSameUser &&
+      prevThread &&
+      prevThread?.subCount === 0 &&
+      !thread.isDeleted &&
+      thread.subCount === 0 ? (
         <SameUserContainer onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <SameUserDateBox />
           <ContentBox>
