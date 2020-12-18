@@ -20,14 +20,19 @@ interface IsSameUserStyleProp {
 // `;
 
 const Container = styled.div`
+  min-height: 40px;
   position: relative;
   display: flex;
   background-color: white;
   width: 100%;
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1.25rem 0.5rem 1.25rem;
   &:hover {
     background-color: ${(props) => props.theme.color.threadHover};
   }
+`;
+
+const SameUserContainer = styled(Container)`
+  padding: 0 1.25rem;
 `;
 
 const Popup = styled.div`
@@ -93,10 +98,15 @@ const DeletedItemImgBox = styled.div`
   border-radius: 5px;
 `;
 
+const SameUserDateBox = styled(DeletedItemImgBox)`
+  background-color: unset;
+`;
+
 interface ThreadItemProps {
   thread: Thread;
   isParentThreadOfRightSideBar?: boolean;
   prevThreadUserId?: number;
+  prevThread?: Thread;
 }
 const THIS_IS_FIRST_THREAD_OR_SUB_THREAD = 0;
 
@@ -120,6 +130,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   thread,
   isParentThreadOfRightSideBar,
   prevThreadUserId,
+  prevThread,
 }: ThreadItemProps) => {
   const isSameUser = prevThreadUserId === thread.userId;
 
@@ -134,40 +145,66 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   };
 
   return (
-    <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      {thread.isDeleted ? (
-        <DeletedItemImgBox>
-          <TrashIcon />
-        </DeletedItemImgBox>
+    <>
+      {isSameUser && !thread.isDeleted && thread.subCount === 0 ? (
+        <SameUserContainer onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <SameUserDateBox />
+          <ContentBox>
+            <ContentBottom>{thread.content}</ContentBottom>
+            <EmojiBox thread={thread} />
+            {thread.subCount > 0 && !isParentThreadOfRightSideBar && (
+              <ReplyButton thread={thread} />
+            )}
+          </ContentBox>
+          {popupVisible && (
+            <Popup>
+              <ThreadPopup
+                thread={thread}
+                isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
+              />
+            </Popup>
+          )}
+        </SameUserContainer>
       ) : (
-        <UserImgBox>
-          <UserImg src={thread.image} />
-        </UserImgBox>
+        <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {thread.isDeleted ? (
+            <DeletedItemImgBox>
+              <TrashIcon />
+            </DeletedItemImgBox>
+          ) : (
+            <UserImgBox>
+              <UserImg src={thread.image} />
+            </UserImgBox>
+          )}
+          <ContentBox>
+            {!thread.isDeleted && (
+              <ContentTop>
+                <UserNameBox>{thread.displayName}</UserNameBox>
+                <DateTimeBox>{get12HourTime(thread.createdAt)}</DateTimeBox>
+              </ContentTop>
+            )}
+            <ContentBottom>{thread.content}</ContentBottom>
+            <EmojiBox thread={thread} />
+            {thread.subCount > 0 && !isParentThreadOfRightSideBar && (
+              <ReplyButton thread={thread} />
+            )}
+          </ContentBox>
+          {popupVisible && (
+            <Popup>
+              <ThreadPopup
+                thread={thread}
+                isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
+              />
+            </Popup>
+          )}
+        </Container>
       )}
-      <ContentBox>
-        {!thread.isDeleted && (
-          <ContentTop>
-            <UserNameBox>{thread.displayName}</UserNameBox>
-            <DateTimeBox>{get12HourTime(thread.createdAt)}</DateTimeBox>
-          </ContentTop>
-        )}
-        <ContentBottom>{thread.content}</ContentBottom>
-        <EmojiBox thread={thread} />
-        {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
-      </ContentBox>
-      {popupVisible && (
-        <Popup>
-          <ThreadPopup
-            thread={thread}
-            isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
-          />
-        </Popup>
-      )}
-    </Container>
+    </>
   );
 };
 ThreadItem.defaultProps = {
   isParentThreadOfRightSideBar: false,
   prevThreadUserId: THIS_IS_FIRST_THREAD_OR_SUB_THREAD,
+  prevThread: undefined,
 };
 export default ThreadItem;

@@ -91,9 +91,11 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
 
   return (
     <Container>
-      <ReactionBox onClick={openReactionModal} ref={reactionBoxRef}>
-        <ReactionIcon size="23px" color={theme.color.black5} />
-      </ReactionBox>
+      {!thread.isDeleted && (
+        <ReactionBox onClick={openReactionModal} ref={reactionBoxRef}>
+          <ReactionIcon size="23px" color={theme.color.black5} />
+        </ReactionBox>
+      )}
       {!thread.parentId && !isParentThreadOfRightSideBar && (
         <Link to={`/client/1/${thread.channelId}/thread/${thread.id}`}>
           <CommentBox>
@@ -101,7 +103,7 @@ const ThreadPopup: React.FC<ThreadPopupProps> = ({
           </CommentBox>
         </Link>
       )}
-      {userInfo?.id === thread.userId && (
+      {userInfo?.id === thread.userId && !thread.isDeleted && (
         <MoreActionBox onClick={openMenuModal} ref={popoverRef}>
           <DotIcon color={theme.color.black5} />
         </MoreActionBox>
