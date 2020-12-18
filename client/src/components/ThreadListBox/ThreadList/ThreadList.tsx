@@ -172,7 +172,7 @@ const ThreadList = () => {
                   </Wrapper>
                 );
               }
-              return;
+              return null;
             }
             return (
               <Wrapper id={`thread-${thread.id}`} key={thread.id}>
