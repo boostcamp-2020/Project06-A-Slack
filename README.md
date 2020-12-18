@@ -8,7 +8,7 @@
 
 <a href="https://youtu.be/2yh584d_Fyk"><img width=650 src="https://user-images.githubusercontent.com/13213473/102566146-3e02da80-4122-11eb-8ea7-3f1395c7d72f.gif"/></a>
 
-영상 클릭 시 링크로 이동됩니다!
+클릭 시 영상 링크로 이동됩니다!
 
 <br/>
 
