@@ -20,7 +20,6 @@ interface IsSameUserStyleProp {
 // `;
 
 const Container = styled.div`
-  min-height: 40px;
   position: relative;
   display: flex;
   background-color: white;
@@ -38,6 +37,7 @@ const SameUserContainer = styled(Container)`
 const Popup = styled.div`
   display: none;
   position: absolute;
+  top: -0.5rem;
   right: 1rem;
   border-radius: 5px;
   ${Container}:hover & {
