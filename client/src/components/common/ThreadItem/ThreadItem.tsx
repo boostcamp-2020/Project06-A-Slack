@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import { Thread } from '@/types';
 import { flex, hoverUnderline } from '@/styles/mixin';
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
 import EmojiBox from './EmojiBox/EmojiBox';
 import { TrashIcon } from '../Icon';
-
-interface IsSameUserStyleProp {
-  isSameUserStyleProp: boolean;
-}
-
-// const SameUserBox = styled.div<IsSameUserStyleProp>`
-//   display: ${(props) => (props.isSameUserStyleProp ? 'flex' : 'block')};
-// `;
-
-// const NotSameUserBox = styled.div<IsSameUserStyleProp>`
-//   display: ${(props) => (props.isSameUserStyleProp ? 'block' : 'flex')};
-// `;
 
 const Container = styled.div`
   position: relative;
@@ -202,9 +190,11 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
     </>
   );
 };
+
 ThreadItem.defaultProps = {
   isParentThreadOfRightSideBar: false,
   prevThreadUserId: THIS_IS_FIRST_THREAD_OR_SUB_THREAD,
   prevThread: undefined,
 };
+
 export default ThreadItem;
