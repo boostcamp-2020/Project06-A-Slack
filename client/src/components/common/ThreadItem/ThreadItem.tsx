@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Thread } from '@/types';
 import { flex, hoverUnderline } from '@/styles/mixin';
 import ReplyButton from './ReplyButton/ReplyButton';
@@ -22,10 +22,18 @@ const SameUserContainer = styled(Container)`
   padding: 0 1.25rem;
 `;
 
-const Popup = styled.div`
+interface PopupProps {
+  isSubThread: boolean;
+}
+
+const Popup = styled.div<PopupProps>`
   display: none;
   position: absolute;
-  top: -0.5rem;
+  ${(props) =>
+    !props.isSubThread &&
+    css`
+      top: -0.5rem;
+    `};
   right: 1rem;
   border-radius: 5px;
   ${Container}:hover & {
@@ -158,7 +166,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
             )}
           </ContentBox>
           {popupVisible && (
-            <Popup>
+            <Popup isSubThread={!!thread.parentId || !!isParentThreadOfRightSideBar}>
               <ThreadPopup
                 thread={thread}
                 isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
@@ -191,7 +199,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
             )}
           </ContentBox>
           {popupVisible && (
-            <Popup>
+            <Popup isSubThread={!!thread.parentId || !!isParentThreadOfRightSideBar}>
               <ThreadPopup
                 thread={thread}
                 isParentThreadOfRightSideBar={isParentThreadOfRightSideBar}
