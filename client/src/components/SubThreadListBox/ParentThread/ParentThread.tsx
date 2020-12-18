@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { Thread } from '@/types';
 import { ThreadItem } from '@/components';
 
-const Container = styled.div`
-  background-color: orange;
-`;
+const Container = styled.div``;
 
 interface parentThreadProps {
   parentThread: Thread;

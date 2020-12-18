@@ -95,6 +95,7 @@ interface ThreadItemProps {
   isParentThreadOfRightSideBar?: boolean;
   prevThreadUserId?: number;
   prevThread?: Thread;
+  isFirstThreadOfDate?: boolean;
 }
 const THIS_IS_FIRST_THREAD_OR_SUB_THREAD = 0;
 
@@ -119,6 +120,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   isParentThreadOfRightSideBar,
   prevThreadUserId,
   prevThread,
+  isFirstThreadOfDate,
 }: ThreadItemProps) => {
   const isSameUser = prevThreadUserId === thread.userId;
 
@@ -135,6 +137,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
   return (
     <>
       {isSameUser &&
+      !isFirstThreadOfDate &&
       prevThread &&
       prevThread?.subCount === 0 &&
       !thread.isDeleted &&
@@ -205,6 +208,7 @@ ThreadItem.defaultProps = {
   isParentThreadOfRightSideBar: false,
   prevThreadUserId: THIS_IS_FIRST_THREAD_OR_SUB_THREAD,
   prevThread: undefined,
+  isFirstThreadOfDate: undefined,
 };
 
 export default ThreadItem;
