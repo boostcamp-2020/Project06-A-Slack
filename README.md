@@ -8,7 +8,7 @@
 
 ## 🎞 데모 영상 
 
-<a href="https://youtu.be/2yh584d_Fyk"><img width=650 src="https://user-images.githubusercontent.com/13213473/102566146-3e02da80-4122-11eb-8ea7-3f1395c7d72f.gif"/></a>
+<a href="https://youtu.be/2yh584d_Fyk" target="_blank"><img width=650 src="https://user-images.githubusercontent.com/13213473/102566146-3e02da80-4122-11eb-8ea7-3f1395c7d72f.gif"/></a>
 
 클릭 시 영상 링크로 이동합니다!
 
