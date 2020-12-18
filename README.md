@@ -4,6 +4,8 @@
 
 > 배포 주소 : https://boost-slack.ga/  
 
+<br/>
+
 ## 🎞 데모 영상 
 
 <a href="https://youtu.be/2yh584d_Fyk"><img width=650 src="https://user-images.githubusercontent.com/13213473/102566146-3e02da80-4122-11eb-8ea7-3f1395c7d72f.gif"/></a>
