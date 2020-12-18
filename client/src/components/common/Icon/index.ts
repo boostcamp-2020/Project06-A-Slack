@@ -15,3 +15,4 @@ export { default as PaperPlaneIcon } from './PaperPlaneIcon/PaperPlaneIcon';
 export { default as RightIcon } from './RightIcon/RightIcon';
 export { default as RightArrowLineIcon } from './RightArrowLineIcon/RightArrowLineIcon';
 export { default as GoogleLogoIcon } from './GoogleLogoIcon/GoogleLogoIcon';
+export { default as TrashIcon } from './TrashIcon/TrashIcon';

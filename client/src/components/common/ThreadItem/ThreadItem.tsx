@@ -5,6 +5,7 @@ import { flex, hoverUnderline } from '@/styles/mixin';
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
 import EmojiBox from './EmojiBox/EmojiBox';
+import { TrashIcon } from '../Icon';
 
 interface IsSameUserStyleProp {
   isSameUserStyleProp: boolean;
@@ -84,6 +85,14 @@ const DateTimeBox = styled.span`
   cursor: pointer;
 `;
 
+const DeletedItemImgBox = styled.div`
+  width: 2.25rem;
+  height: 2.25rem;
+  ${flex()};
+  background-color: ${(props) => props.theme.color.gray4};
+  border-radius: 5px;
+`;
+
 interface ThreadItemProps {
   thread: Thread;
   isParentThreadOfRightSideBar?: boolean;
@@ -126,14 +135,22 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
 
   return (
     <Container onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <UserImgBox>
-        <UserImg src={thread.image} />
-      </UserImgBox>
+      {thread.isDeleted ? (
+        <DeletedItemImgBox>
+          <TrashIcon />
+        </DeletedItemImgBox>
+      ) : (
+        <UserImgBox>
+          <UserImg src={thread.image} />
+        </UserImgBox>
+      )}
       <ContentBox>
-        <ContentTop>
-          <UserNameBox>{thread.displayName}</UserNameBox>
-          <DateTimeBox>{get12HourTime(thread.createdAt)}</DateTimeBox>
-        </ContentTop>
+        {!thread.isDeleted && (
+          <ContentTop>
+            <UserNameBox>{thread.displayName}</UserNameBox>
+            <DateTimeBox>{get12HourTime(thread.createdAt)}</DateTimeBox>
+          </ContentTop>
+        )}
         <ContentBottom>{thread.content}</ContentBottom>
         <EmojiBox thread={thread} />
         {thread.subCount > 0 && !isParentThreadOfRightSideBar && <ReplyButton thread={thread} />}
