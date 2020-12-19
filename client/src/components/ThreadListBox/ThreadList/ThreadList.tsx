@@ -8,11 +8,13 @@ import {
   setScrollable,
 } from '@/store/modules/thread.slice';
 import { Thread } from '@/types';
-import { ThreadItem } from '@/components';
-import { useInfinteScroll, useThreadState, useUserState } from '@/hooks';
+import { ThreadItem, LightIcon, LockIcon, PoundIcon } from '@/components';
+import { useChannelState, useInfinteScroll, useThreadState, useUserState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import loadingColorIcon from '@/public/icon/loading-color.svg';
 import { useParams } from 'react-router-dom';
+import theme from '@/styles/theme';
+import { ChannelLockIcon } from '@/components/common';
 
 const Container = styled.div`
   width: 100%;
@@ -40,8 +42,60 @@ const LoadingIcon = styled.img`
   padding-top: 5px;
 `;
 
+const ChannelInfoBox = styled.div`
+  margin: 30px 20px 48px 20px;
+  display: flex;
+`;
+
+const ChannelIconBox = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+  overflow: hidden;
+`;
+
+const ChannelInfoDesc = styled.div`
+  padding-top: 0.2rem;
+`;
+const ChannelNameBox = styled.span`
+  font-weight: 800;
+  color: ${(props) => props.theme.color.blue1};
+`;
+
+const ChannelInfoRightBox = styled.div`
+  margin-left: 0.5rem;
+`;
+
+const HorizontalDateInfoBox = styled.div`
+  ${flex()};
+  width: 100%;
+  height: 40px;
+  margin: 0.2rem 0;
+`;
+
+const Line = styled.hr`
+  border: none;
+  border-top: 1px solid ${(props) => props.theme.color.lightGray2};
+  flex: 1;
+`;
+
+const DateRoundBox = styled.div`
+  ${flex()};
+  border-radius: 999rem;
+  padding: 0.5rem 1rem;
+  flex-shrink: 0;
+  font-weight: bold;
+  font-size: 0.75rem;
+  color: ${(props) => props.theme.color.black4};
+  border: 1px solid ${(props) => props.theme.color.lightGray2};
+  box-shadow: 0 0 1px #d3d3d3 inset;
+  cursor: pointer;
+  user-select: none;
+`;
+
 const ThreadList = () => {
   const { channelId }: { channelId: string } = useParams();
+  const { current } = useChannelState();
 
   const dispatch = useDispatch();
 
@@ -99,6 +153,30 @@ const ThreadList = () => {
 
   return (
     <Container>
+      {(!nextThreadId || nextThreadId === -1) && (
+        <ChannelInfoBox>
+          {current && (
+            <>
+              <ChannelIconBox>
+                {current?.isPublic ? <LightIcon /> : <ChannelLockIcon size="36px" />}
+              </ChannelIconBox>
+              <ChannelInfoRightBox>
+                <ChannelInfoDesc>
+                  <ChannelNameBox>
+                    {current?.isPublic ? (
+                      <PoundIcon size="11px" color={theme.color.blue1} />
+                    ) : (
+                      <LockIcon size="11px" color={theme.color.blue1} />
+                    )}{' '}
+                    {current?.name}
+                  </ChannelNameBox>{' '}
+                  채널의 맨 첫 부분입니다.
+                </ChannelInfoDesc>
+              </ChannelInfoRightBox>
+            </>
+          )}
+        </ChannelInfoBox>
+      )}
       {threadList && (
         <>
           {nextThreadId && nextThreadId !== -1 && (
@@ -108,20 +186,78 @@ const ThreadList = () => {
             </LoadingBox>
           )}
           {threadList?.map((thread: Thread, index: number, arr: Thread[]) => {
+            const deletedThread = { ...thread, content: 'This message was deleted.' };
+            const prevCreatedDate = index > 0 ? new Date(arr[index - 1].createdAt).getDate() : null;
+            const currentCreatedDate = new Date(thread.createdAt).getDate();
+            const today = new Date();
+            const threadDate = new Date(thread.createdAt);
+            let currentConvertedDateString = threadDate.toLocaleString('en-US', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            });
+            if (
+              today.getFullYear() === threadDate.getFullYear() &&
+              today.getMonth() === threadDate.getMonth() &&
+              today.getDate() === threadDate.getDate()
+            ) {
+              currentConvertedDateString = 'Today';
+            }
+
             if (thread.isDeleted) {
               if (thread.subCount > 0) {
-                const deletedThread = { ...thread, content: 'This message was deleted.' };
                 return (
                   <Wrapper id={`thread-${thread.id}`} key={thread.id}>
-                    <ThreadItem thread={deletedThread} prevThreadUserId={arr[index - 1]?.userId} />
+                    {index === 0 ? (
+                      <HorizontalDateInfoBox>
+                        <Line />
+                        <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                        <Line />
+                      </HorizontalDateInfoBox>
+                    ) : (
+                      prevCreatedDate !== currentCreatedDate && (
+                        <HorizontalDateInfoBox>
+                          <Line />
+                          <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                          <Line />
+                        </HorizontalDateInfoBox>
+                      )
+                    )}
+
+                    <ThreadItem
+                      thread={deletedThread}
+                      prevThreadUserId={arr[index - 1]?.userId}
+                      prevThread={index > 0 ? arr[index - 1] : undefined}
+                      isFirstThreadOfDate={prevCreatedDate !== currentCreatedDate}
+                    />
                   </Wrapper>
                 );
               }
-              return;
+              return null;
             }
             return (
               <Wrapper id={`thread-${thread.id}`} key={thread.id}>
-                <ThreadItem thread={thread} prevThreadUserId={arr[index - 1]?.userId} />
+                {index === 0 ? (
+                  <HorizontalDateInfoBox>
+                    <Line />
+                    <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                    <Line />
+                  </HorizontalDateInfoBox>
+                ) : (
+                  prevCreatedDate !== currentCreatedDate && (
+                    <HorizontalDateInfoBox>
+                      <Line />
+                      <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                      <Line />
+                    </HorizontalDateInfoBox>
+                  )
+                )}
+                <ThreadItem
+                  thread={thread}
+                  prevThreadUserId={arr[index - 1]?.userId}
+                  prevThread={index > 0 ? arr[index - 1] : undefined}
+                  isFirstThreadOfDate={prevCreatedDate !== currentCreatedDate}
+                />
               </Wrapper>
             );
           })}

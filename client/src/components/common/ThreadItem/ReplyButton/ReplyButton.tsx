@@ -12,6 +12,7 @@ import theme from '@/styles/theme';
 const ReplyBox = styled.div`
   ${flex('center', 'space-between')};
   width: 30rem;
+  margin-top: 0.5rem;
   padding: 0.2rem 0.4rem;
   border-radius: 5px;
   border: 1px solid transparent;
