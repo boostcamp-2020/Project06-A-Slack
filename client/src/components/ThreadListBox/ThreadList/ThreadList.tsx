@@ -244,7 +244,25 @@ const ThreadList = () => {
                   </Wrapper>
                 );
               }
-              return null;
+              return (
+                <>
+                  {index === 0 ? (
+                    <HorizontalDateInfoBox>
+                      <Line />
+                      <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                      <Line />
+                    </HorizontalDateInfoBox>
+                  ) : (
+                    prevCreatedDate !== currentCreatedDate && (
+                      <HorizontalDateInfoBox>
+                        <Line />
+                        <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                        <Line />
+                      </HorizontalDateInfoBox>
+                    )
+                  )}
+                </>
+              );
             }
             return (
               <Wrapper id={`thread-${thread.id}`} key={thread.id}>
