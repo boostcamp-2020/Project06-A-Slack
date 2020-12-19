@@ -8,13 +8,21 @@ import {
   setScrollable,
 } from '@/store/modules/thread.slice';
 import { Thread } from '@/types';
-import { ThreadItem, LightIcon, LockIcon, PoundIcon } from '@/components';
+import {
+  ThreadItem,
+  LightIcon,
+  LockIcon,
+  PoundIcon,
+  ChannelLockIcon,
+  ConversationIcon,
+} from '@/components';
 import { useChannelState, useInfinteScroll, useThreadState, useUserState } from '@/hooks';
 import { flex } from '@/styles/mixin';
 import loadingColorIcon from '@/public/icon/loading-color.svg';
 import { useParams } from 'react-router-dom';
 import theme from '@/styles/theme';
-import { ChannelLockIcon } from '@/components/common';
+
+import { CHANNEL_TYPE } from '@/utils/constants';
 
 const Container = styled.div`
   width: 100%;
@@ -102,6 +110,7 @@ const ThreadList = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [observeTarget, setObserveTarget] = useState<HTMLDivElement | null>(null);
+  const CHANNEL_TYPE_NAME = current?.channelType === CHANNEL_TYPE.DM ? 'DM' : '채널';
 
   const { userInfo } = useUserState();
   const {
@@ -158,7 +167,9 @@ const ThreadList = () => {
           {current && (
             <>
               <ChannelIconBox>
-                {current?.isPublic ? <LightIcon /> : <ChannelLockIcon size="36px" />}
+                {current.channelType === CHANNEL_TYPE.DM && <ConversationIcon />}
+                {current.channelType === CHANNEL_TYPE.CHANNEL &&
+                  (current?.isPublic ? <LightIcon /> : <ChannelLockIcon size="36px" />)}
               </ChannelIconBox>
               <ChannelInfoRightBox>
                 <ChannelInfoDesc>
@@ -170,7 +181,7 @@ const ThreadList = () => {
                     )}{' '}
                     {current?.name}
                   </ChannelNameBox>{' '}
-                  채널의 맨 첫 부분입니다.
+                  {CHANNEL_TYPE_NAME}의 맨 첫 부분입니다.
                 </ChannelInfoDesc>
               </ChannelInfoRightBox>
             </>
@@ -233,7 +244,25 @@ const ThreadList = () => {
                   </Wrapper>
                 );
               }
-              return null;
+              return (
+                <>
+                  {index === 0 ? (
+                    <HorizontalDateInfoBox>
+                      <Line />
+                      <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                      <Line />
+                    </HorizontalDateInfoBox>
+                  ) : (
+                    prevCreatedDate !== currentCreatedDate && (
+                      <HorizontalDateInfoBox>
+                        <Line />
+                        <DateRoundBox>{currentConvertedDateString}</DateRoundBox>
+                        <Line />
+                      </HorizontalDateInfoBox>
+                    )
+                  )}
+                </>
+              );
             }
             return (
               <Wrapper id={`thread-${thread.id}`} key={thread.id}>

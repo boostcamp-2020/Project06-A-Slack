@@ -147,6 +147,7 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
       {isSameUser &&
       !isFirstThreadOfDate &&
       prevThread &&
+      !prevThread.isDeleted &&
       prevThread?.subCount === 0 &&
       !thread.isDeleted &&
       thread.subCount === 0 ? (
