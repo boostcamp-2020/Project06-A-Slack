@@ -245,7 +245,7 @@ const ThreadList = () => {
                 );
               }
               return (
-                <>
+                <Wrapper key={thread.id}>
                   {index === 0 ? (
                     <HorizontalDateInfoBox>
                       <Line />
@@ -261,7 +261,7 @@ const ThreadList = () => {
                       </HorizontalDateInfoBox>
                     )
                   )}
-                </>
+                </Wrapper>
               );
             }
             return (

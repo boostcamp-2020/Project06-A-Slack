@@ -168,7 +168,7 @@ const ThreadListHeader = () => {
             <>
               <UserImgBox onClick={clickShowUsersModal}>
                 {users.slice(0, 3).map((icon: JoinedUser, idx: number) => (
-                  <UserImg zIndex={users.length - idx} key={icon.userId} src={icon.image} />
+                  <UserImg zIndex={3 - idx} key={icon.userId} src={icon.image} />
                 ))}
                 <UserCount>{users?.length}</UserCount>
               </UserImgBox>
