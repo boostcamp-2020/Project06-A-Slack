@@ -18,3 +18,4 @@ export { default as GoogleLogoIcon } from './GoogleLogoIcon/GoogleLogoIcon';
 export { default as TrashIcon } from './TrashIcon/TrashIcon';
 export { default as LightIcon } from './LightIcon/LightIcon';
 export { default as ChannelLockIcon } from './ChannelLockIcon/ChannelLockIcon';
+export { default as ConversationIcon } from './ConversationIcon/ConversationIcon';
