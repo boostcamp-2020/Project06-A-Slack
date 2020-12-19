@@ -12,14 +12,13 @@ interface SubThreadListProps {
 
 const SubThreadList: React.FC<SubThreadListProps> = ({ subThreadList }: SubThreadListProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
-
   return (
     <Container>
-      {subThreadList?.map((thread: Thread) => {
-        if (!thread.isDeleted) {
+      {subThreadList
+        ?.filter((thread) => !thread.isDeleted)
+        .map((thread: Thread) => {
           return <ThreadItem key={thread.id} thread={thread} />;
-        }
-      })}
+        })}
       <Bottom ref={bottomRef} />
     </Container>
   );
