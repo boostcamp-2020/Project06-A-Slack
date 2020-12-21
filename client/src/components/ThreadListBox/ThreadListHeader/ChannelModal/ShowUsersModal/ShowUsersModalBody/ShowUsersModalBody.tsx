@@ -4,6 +4,7 @@ import { flex } from '@/styles/mixin';
 import { useChannelState } from '@/hooks';
 import { JoinedUser } from '@/types';
 import { CancelButton as CB } from '@/styles/shared';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 const Container = styled.div`
   padding: 0 4px;
@@ -64,7 +65,12 @@ const ShowUsersModalBody: React.FC = () => {
       <SearchedUserContainer>
         {users?.map((user: JoinedUser) => (
           <SearchedUserBox key={user.userId}>
-            <ProfileImg src={user.image} />
+            <ProfileImg
+              src={user.image}
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+              }}
+            />
             <UserName>{user.displayName}</UserName>
           </SearchedUserBox>
         ))}

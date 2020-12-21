@@ -8,6 +8,7 @@ import { logoutRequest } from '@/store/modules/auth.slice';
 import { DimModal, UserStateIcon, ClockIcon, Popover } from '@/components';
 import theme from '@/styles/theme';
 import { useHistory } from 'react-router-dom';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import { UserProfileModalHeader, UserProfileModalBody } from './UserProfileBox';
 
 const Container = styled.div`
@@ -183,7 +184,12 @@ const Header: React.FC = () => {
           setVisible={setMenuModalVisible}
         >
           <ModalUserProfileBox>
-            <ModalUserImage src={userInfo?.image} />
+            <ModalUserImage
+              src={userInfo?.image}
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+              }}
+            />
             <ModalUserInfoBox>
               <ModalUserName>{userInfo?.displayName}</ModalUserName>
               <ModalUserStatus>
@@ -201,7 +207,12 @@ const Header: React.FC = () => {
       )}
       <ProfileBox onMouseDown={toggleMenuModal} ref={ref}>
         <ProfileBackground />
-        <ProfileImg src={userInfo?.image} />
+        <ProfileImg
+          src={userInfo?.image}
+          onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+            e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+          }}
+        />
         <Icon>
           <UserStateIcon />
         </Icon>

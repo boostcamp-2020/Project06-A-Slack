@@ -95,7 +95,9 @@ const ReplyButton: React.FC<ReplyButtonProps> = ({ thread }: ReplyButtonProps) =
               <Profile
                 src={subThreadProfile === null ? USER_DEFAULT_PROFILE_URL : subThreadProfile}
                 key={`${thread.id}${subThreadUserId}`}
-                alt="subThreadUserImage"
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+                }}
               />
             );
           })}
