@@ -221,7 +221,13 @@ const UserProfileModalBody: React.FC<ProfileBodyProps> = ({ handleClose }: Profi
         </UserInfoBox>
         <ProfileImageBox>
           <ImageHeader>Phofile photo</ImageHeader>
-          <ProfileImage src={userInfo?.image as string} ref={profileImageRef} />
+          <ProfileImage
+            src={userInfo?.image as string}
+            ref={profileImageRef}
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+            }}
+          />
           <FileLabel>
             Upload an image
             <FileSelectInput
