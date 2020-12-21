@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { CHANNEL_TYPE } from '@/utils/constants';
+import { CHANNEL_TYPE, USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import { JoinedUser, Channel } from '@/types';
 import { Link, useParams } from 'react-router-dom';
 import {
@@ -168,7 +168,14 @@ const ThreadListHeader = () => {
             <>
               <UserImgBox onClick={clickShowUsersModal}>
                 {users.slice(0, 3).map((icon: JoinedUser, idx: number) => (
-                  <UserImg zIndex={3 - idx} key={icon.userId} src={icon.image} />
+                  <UserImg
+                    zIndex={3 - idx}
+                    key={icon.userId}
+                    src={icon.image}
+                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                      e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+                    }}
+                  />
                 ))}
                 <UserCount>{users?.length}</UserCount>
               </UserImgBox>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Thread } from '@/types';
 import { flex, hoverUnderline } from '@/styles/mixin';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
 import EmojiBox from './EmojiBox/EmojiBox';
@@ -183,7 +184,12 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
             </DeletedItemImgBox>
           ) : (
             <UserImgBox>
-              <UserImg src={thread.image} />
+              <UserImg
+                src={thread.image}
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+                }}
+              />
             </UserImgBox>
           )}
           <ContentBox>
