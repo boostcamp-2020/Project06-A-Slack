@@ -6,6 +6,7 @@ import { flex } from '@/styles/mixin';
 import { JoinedUser } from '@/types';
 import { RightArrowLineIcon } from '@/components';
 import theme from '@/styles/theme';
+import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 
 const Container = styled.div``;
 
@@ -135,7 +136,12 @@ export const DetailList: React.FC = () => {
         {memberBoxVisible &&
           users?.map((user: JoinedUser) => (
             <MemberItem key={user.userId} onClick={handleMemberClick}>
-              <MemberImg src={user.image} />
+              <MemberImg
+                src={user.image}
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+                }}
+              />
               <MemberInfo>{user.displayName}</MemberInfo>
             </MemberItem>
           ))}

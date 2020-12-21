@@ -5,7 +5,7 @@ import { searchUserRequest } from '@/store/modules/user.slice';
 import { useChannelState, useUserState } from '@/hooks';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
 import { JoinedUser, User } from '@/types';
-import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE } from '@/utils/constants';
+import { CHANNEL_SUBTYPE, SOCKET_MESSAGE_TYPE, USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { makeDMRoomName } from '@/utils/utils';
@@ -211,7 +211,12 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
       <SearchResultBox>
         {pickedUsers.map((user) => (
           <PickedUserBox key={user.id}>
-            <ProfileImg src={user.image} />
+            <ProfileImg
+              src={user.image}
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+              }}
+            />
             <UserName>{user.displayName}</UserName>
             <RemoveBox onClick={() => handleRemoveUser(user.id)}>
               <CloseIconBox />
@@ -230,7 +235,12 @@ const AddUsersModalBody: React.FC<AddUsersModalBodyProps> = ({
         <SearchedUserContainer>
           {searchedUserList?.map((user: User) => (
             <SearchedUserBox key={user.id} onClick={() => clickUser(user)}>
-              <ProfileImg src={user.image} />
+              <ProfileImg
+                src={user.image}
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
+                }}
+              />
               <UserName>{user.displayName}</UserName>
             </SearchedUserBox>
           ))}
