@@ -19,7 +19,8 @@
     "resolveJsonModule": true,
     "jsx": "react",
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "module": "ESNext"
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]
