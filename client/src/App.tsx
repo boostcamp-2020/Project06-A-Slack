@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { NotFoundPage } from '@/pages';
+import LoadingPage from '@/pages/LoadingPage';
 import theme from '@/styles/theme';
 import { GlobalStyle } from '@/styles';
 import { withAuth } from '@/hoc';
@@ -17,7 +17,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <BrowserRouter>
-        <Suspense fallback={<div>loading</div>}>
+        <Suspense fallback={<LoadingPage />}>
           <Switch>
             <Route path="/" exact component={withAuth(HomePage)} />
             <Route path="/login" component={LoginPage} />
