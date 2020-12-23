@@ -1,6 +1,11 @@
 import { css, createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
 
+import notoSansLightWoff from '@/fonts/NotoSansKR-Light.woff';
+import notoSansRegularWoff from '@/fonts/NotoSansKR-Regular.woff';
+import notoSansMediumWoff from '@/fonts/NotoSansKR-Medium.woff';
+import notoSansBoldWoff from '@/fonts/NotoSansKR-Bold.woff';
+
 const commonStyle = css`
   html {
     height: 100%;
@@ -63,7 +68,43 @@ const commonStyle = css`
   }
 `;
 
+const fontFace = css`
+  @font-face {
+    font-family: 'noto sans';
+    font-style: normal;
+    font-weight: 200;
+    src: url(${notoSansLightWoff}) format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'noto sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url(${notoSansRegularWoff}) format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'noto sans';
+    font-style: normal;
+    font-weight: 700;
+    src: url(${notoSansMediumWoff}) format('woff');
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'noto sans';
+    font-style: normal;
+    font-weight: 800;
+    src: url(${notoSansBoldWoff}) format('woff');
+    font-display: swap;
+  }
+
+  * {
+    font-family: 'noto sans', 'Noto Sans KR', '맑은 고딕', 'MalgunGothic', sans-serif;
+  }
+`;
+
 export const GlobalStyle = createGlobalStyle`
-  ${normalize}
-  ${commonStyle}
+  ${normalize};
+  ${commonStyle};
+  ${fontFace};
 `;
