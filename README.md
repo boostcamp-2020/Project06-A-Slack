@@ -2,7 +2,7 @@
 
 <br/>
 
-> 배포 주소 : https://boost-slack.ga/  
+> 배포 주소 : ~https://boost-slack.ga/~ (서버 반납)
 
 <br/>
 
