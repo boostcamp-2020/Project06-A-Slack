@@ -24,7 +24,7 @@ const Remove = styled(CB)`
 const SearchedUserContainer = styled.div`
   width: 100%;
   height: 15rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0 24px;
 `;
 
