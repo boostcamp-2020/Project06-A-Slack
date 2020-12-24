@@ -5,6 +5,7 @@ import { useChannelState } from '@/hooks';
 import { JoinedUser } from '@/types';
 import { CancelButton as CB } from '@/styles/shared';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
+import { LazyImage } from '@/components/common';
 
 const Container = styled.div`
   padding: 0 4px;
@@ -40,13 +41,6 @@ const SearchedUserBox = styled.div`
   }
 `;
 
-const ProfileImg = styled.img`
-  width: 2.25rem;
-  height: 2.25rem;
-  object-fit: cover;
-  border-radius: 5px;
-`;
-
 const UserName = styled.div`
   font-size: 1rem;
   margin: 0 0.7rem;
@@ -65,11 +59,12 @@ const ShowUsersModalBody: React.FC = () => {
       <SearchedUserContainer>
         {users?.map((user: JoinedUser) => (
           <SearchedUserBox key={user.userId}>
-            <ProfileImg
+            <LazyImage
+              width="36"
+              height="36"
               src={user.image}
-              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
-              }}
+              style={{ objectFit: 'cover', borderRadius: '5px' }}
+              errorImage={USER_DEFAULT_PROFILE_URL}
             />
             <UserName>{user.displayName}</UserName>
           </SearchedUserBox>
