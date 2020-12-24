@@ -53,10 +53,18 @@ const Title = styled.div`
   flex: 1;
 `;
 
-const Body = styled.div`
+interface BodyProps {
+  bodyScroll: boolean;
+}
+
+const Body = styled.div<BodyProps>`
   width: 100%;
   border-radius: 0 0 5px 5px;
-  overflow: auto;
+  ${(props) =>
+    props.bodyScroll &&
+    css`
+      overflow: auto;
+    `}
 `;
 
 const CloseIcon = styled.div`
@@ -70,6 +78,7 @@ interface DimModalProps {
   visible: boolean;
   setVisible: (a: any) => any;
   width?: string;
+  bodyScroll?: boolean;
 }
 
 const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
@@ -78,6 +87,7 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
   visible,
   setVisible,
   width,
+  bodyScroll = true,
 }: PropsWithChildren<DimModalProps>) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -101,7 +111,7 @@ const DimModal: React.FC<PropsWithChildren<DimModalProps>> = ({
             <ModalCloseBox handleClose={handleClose} />
           </CloseIcon>
         </Header>
-        <Body>{body}</Body>
+        <Body bodyScroll={bodyScroll}>{body}</Body>
       </Container>
     </DimLayer>
   );

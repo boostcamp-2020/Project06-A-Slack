@@ -3,10 +3,10 @@ import styled, { css } from 'styled-components';
 import { Thread } from '@/types';
 import { flex, hoverUnderline } from '@/styles/mixin';
 import { USER_DEFAULT_PROFILE_URL } from '@/utils/constants';
+import { TrashIcon, LazyImage } from '@/components';
 import ReplyButton from './ReplyButton/ReplyButton';
 import ThreadPopup from './ThreadPopup/ThreadPopup';
 import EmojiBox from './EmojiBox/EmojiBox';
-import { TrashIcon } from '../Icon';
 
 const Container = styled.div`
   position: relative;
@@ -184,11 +184,11 @@ const ThreadItem: React.FC<ThreadItemProps> = ({
             </DeletedItemImgBox>
           ) : (
             <UserImgBox>
-              <UserImg
+              <LazyImage
                 src={thread.image}
-                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                  e.currentTarget.src = USER_DEFAULT_PROFILE_URL;
-                }}
+                width="36"
+                height="36"
+                errorImage={USER_DEFAULT_PROFILE_URL}
               />
             </UserImgBox>
           )}

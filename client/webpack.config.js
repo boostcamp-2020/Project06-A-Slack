@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
@@ -99,16 +98,6 @@ module.exports = {
     runtimeChunk: {
       name: (entrypoint) => `runtime-${entrypoint.name}`,
     },
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          compress: {
-            drop_console: true,
-          },
-        },
-      }),
-    ],
   },
   devServer: {
     contentBase: path.join(__dirname, './dist'),
