@@ -10,3 +10,4 @@ export { default as Popover } from './Popover/Popover';
 export { default as CloseIconBox } from './CloseIconBox/CloseIconBox';
 export * from './AddUsersModal';
 export { default as LogoBox } from './LogoBox/LogoBox';
+export { default as LazyImage } from './LazyImage/LazyImage';

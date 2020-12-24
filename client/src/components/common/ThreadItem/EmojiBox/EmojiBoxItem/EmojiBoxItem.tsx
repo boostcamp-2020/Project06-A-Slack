@@ -6,6 +6,7 @@ import { useChannelState, useEmojiState, useUserState } from '@/hooks';
 import { useDispatch } from 'react-redux';
 import { SOCKET_MESSAGE_TYPE } from '@/utils/constants';
 import { sendMessageRequest } from '@/store/modules/socket.slice';
+import LazyImage from '@/components/common/LazyImage/LazyImage';
 import TooltipPopup from './TooltipPopup/TooltipPopup';
 
 interface ContainerProps {
@@ -107,10 +108,12 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
     return `${getEmojiName(emojiId)}`;
   };
 
-  const getEmojiUrl = (emojiId: number) => {
-    return emojiList?.find((emojiEl) => {
-      return emojiEl.id === emojiId;
-    })?.url;
+  const getEmojiUrl = (emojiId: number): string => {
+    return (
+      emojiList?.find((emojiEl) => {
+        return emojiEl.id === emojiId;
+      })?.url ?? 'https://via.placeholder.com/40'
+    );
   };
 
   const clickEmojiHandler = () => {
@@ -142,7 +145,17 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
       {ref.current && tooltipVisible && (
         <TooltipPopup anchorEl={ref.current} top={-10} left={-30}>
           <EmojiToolTip>
-            <TooltipImg src={getEmojiUrl(emoji.id)} />
+            <LazyImage
+              src={getEmojiUrl(emoji.id)}
+              width="36"
+              height="36"
+              style={{
+                marginBottom: '0.4rem',
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                padding: '4px',
+              }}
+            />
             <ToolTipDescribe>
               {getUserListNameInEmoji(emoji)}
               {`reacted with :${getToolTipDescribe(emoji.id)}:`}
@@ -151,7 +164,7 @@ const EmojiBoxItem: React.FC<EmojiBoxItemProps> = ({ emoji, thread }: EmojiBoxIt
         </TooltipPopup>
       )}
       <EmojiItem>
-        <img src={getEmojiUrl(emoji.id)} alt="emoji url" width="16px" height="16px" />
+        <LazyImage src={getEmojiUrl(emoji.id)} width="16px" height="16px" />
         {emoji.userList && <EmojiCount>{emoji.userList.length}</EmojiCount>}
       </EmojiItem>
     </Container>

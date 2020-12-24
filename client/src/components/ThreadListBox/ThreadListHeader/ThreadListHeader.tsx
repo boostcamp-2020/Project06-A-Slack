@@ -145,6 +145,7 @@ const ThreadListHeader = () => {
           body={<ShowUsersModalBody />}
           visible={showUsersModalVisible}
           setVisible={clickShowUsersModal}
+          bodyScroll={false}
         />
       )}
       <Container>
