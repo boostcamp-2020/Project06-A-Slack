@@ -5,10 +5,16 @@ module.exports = (api) => {
     [
       '@babel/preset-env',
       {
-        targets: '> 0.25%, not dead',
+        targets: {
+          edge: '17',
+          firefox: '60',
+          chrome: '58',
+          safari: '11.1',
+          ie: '11',
+        },
         useBuiltIns: 'usage',
         corejs: '3',
-        modules: false,
+        modules: 'cjs',
       },
     ],
     '@babel/preset-react',
@@ -16,7 +22,8 @@ module.exports = (api) => {
   ];
   const plugins = [
     ['@babel/plugin-transform-async-to-generator'],
-    ['@babel/plugin-transform-runtime'],
+    ['@babel/plugin-transform-runtime', { corejs: 3 }],
+    ['@babel/plugin-transform-arrow-functions'],
   ];
 
   return {

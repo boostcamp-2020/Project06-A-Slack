@@ -6,7 +6,7 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   devtool: 'source-map',
   entry: {
-    main: './src/index.tsx',
+    main: ['./src/index.tsx'],
   },
   resolve: {
     alias: {
@@ -27,7 +27,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            configFile: path.join(__dirname, 'babel.config.js'),
           },
         },
       },
@@ -38,7 +38,7 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env'],
+              configFile: path.join(__dirname, 'babel.config.js'),
             },
           },
           'ts-loader',
