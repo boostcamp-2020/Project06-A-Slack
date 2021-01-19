@@ -5,16 +5,10 @@ module.exports = (api) => {
     [
       '@babel/preset-env',
       {
-        targets: {
-          edge: '17',
-          firefox: '60',
-          chrome: '58',
-          safari: '11.1',
-          ie: '11',
-        },
+        targets: '> 0.25%, not dead',
         useBuiltIns: 'usage',
         corejs: '3',
-        modules: 'cjs',
+        modules: false,
       },
     ],
     '@babel/preset-react',
